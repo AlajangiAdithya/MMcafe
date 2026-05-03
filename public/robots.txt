@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /my-orders
+Disallow: /my-courses
+Disallow: /my-profile
+Disallow: /wishlist
+Disallow: /order-confirmation
+Disallow: /reset-password
+Disallow: /forgot-password

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mastermind Brews — Specialty coffee, online barista academy, and a hiring directory for trained baristas across India." />
+    <meta name="theme-color" content="#1a1a2e" />
+    <link rel="canonical" href="https://www.mastermindcafe.in/" />
+
+    <!-- Speed up the first connection to the services we always hit -->
+    <link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin />
+    <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
+    <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+    <link rel="dns-prefetch" href="https://api.razorpay.com" />
+    <link rel="dns-prefetch" href="https://iframe.mediadelivery.net" />
+    <link rel="dns-prefetch" href="https://vz-263567c0-2db.b-cdn.net" />
+
+    <meta property="og:site_name" content="Mastermind Brews" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mastermind Brews" />
+    <meta property="og:description" content="Premium coffee, continental food & online cafe academy in Mulund, Mumbai." />
+    <meta property="og:image" content="https://www.mastermindcafe.in/logo.png" />
+    <meta property="og:url" content="https://www.mastermindcafe.in/" />
+    <meta property="og:locale" content="en_IN" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mastermind Brews" />
+    <meta name="twitter:description" content="Premium coffee, continental food & online cafe academy in Mulund, Mumbai." />
+    <meta name="twitter:image" content="https://www.mastermindcafe.in/logo.png" />
+
+    <!-- <meta name="google-site-verification" content="PASTE_FROM_SEARCH_CONSOLE" /> -->
+
+    <title>Mastermind Brews</title>
+    <!-- Razorpay checkout is loaded on demand from src/lib/payments.js
+         and src/lib/razorpay.js when the user actually starts a payment.
+         Keeping it out of the initial HTML saves ~70KB of JS for every
+         visitor who never reaches a checkout page. -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

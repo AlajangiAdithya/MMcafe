@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Read(//c/Users/alaja/Desktop/New folder/MMCafe/**)",
+      "Bash(npm create:*)",
+      "Bash(cd /c/Users/alaja/Desktop/\"New folder\"/MMCafe)",
+      "Bash(cp -r \"/c/Users/alaja/Desktop/New folder/MMCafe-temp/\"* \"/c/Users/alaja/Desktop/New folder/MMCafe/\")",
+      "Bash(cp -r \"/c/Users/alaja/Desktop/New folder/MMCafe-temp/\".* \"/c/Users/alaja/Desktop/New folder/MMCafe/\")",
+      "Bash(rm -rf \"/c/Users/alaja/Desktop/New folder/MMCafe-temp\")",
+      "Bash(npm install:*)",
+      "Bash(cp logo.png public/logo.png)",
+      "Bash(mkdir -p src/components src/pages src/context src/lib)",
+      "Bash(cd:*)",
+      "Bash(npx vite:*)",
+      "Bash(node -e \"const l = require\\(''lucide-react''\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''youtube''\\)\\)\\)\")",
+      "Bash(node -e \"const l = require\\(''lucide-react''\\); const icons = [''Coffee'',''Instagram'',''Video'',''Mail'',''ShoppingCart'',''User'',''LogOut'',''Menu'',''X'',''ShoppingBag'',''Filter'',''Play'',''Lock'',''CheckCircle'',''Clock'',''Star'',''Plus'',''Minus'',''Trash2'',''BookOpen'',''ArrowRight'']; icons.forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")",
+      "Bash(node -e 'const l = require\\(\"\"lucide-react\"\"\\); const icons = [\"\"Coffee\"\",\"\"Instagram\"\",\"\"Video\"\",\"\"Mail\"\",\"\"ShoppingCart\"\",\"\"User\"\",\"\"LogOut\"\",\"\"Menu\"\",\"\"X\"\",\"\"ShoppingBag\"\",\"\"Filter\"\",\"\"Play\"\",\"\"Lock\"\",\"\"CheckCircle\"\",\"\"Clock\"\",\"\"Star\"\",\"\"Plus\"\",\"\"Minus\"\",\"\"Trash2\"\",\"\"BookOpen\"\",\"\"ArrowRight\"\"]; icons.forEach\\(i => console.log\\(i, typeof l[i] !== \"\"undefined\"\"\\)\\)')",
+      "WebFetch(domain:mastermindbikes.com)",
+      "WebFetch(domain:www.mastermindcafe.in)",
+      "WebSearch",
+      "WebFetch(domain:www.zomato.com)",
+      "WebFetch(domain:www.facebook.com)",
+      "WebFetch(domain:magicpin.in)",
+      "WebFetch(domain:restaurant-guru.in)",
+      "WebFetch(domain:www.lovethatdesign.com)",
+      "WebFetch(domain:cache.google.com)",
+      "WebFetch(domain:www.swiggy.com)",
+      "WebFetch(domain:www.justdial.com)",
+      "WebFetch(domain:web.archive.org)",
+      "WebFetch(domain:www.zoominfo.com)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
