@@ -1,8 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, ArrowRight, BookOpen } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
 import { getPublishedBlogPosts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
+import { AnimatedText } from '@/components/ui/animated-underline-text-one'
+import Loader from '@/components/ui/loader-4'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+}
 
 function formatDate(d) {
   if (!d) return ''
@@ -31,26 +44,32 @@ export default function Blog() {
     <div className="page-shell blog-page">
       <section className="page-hero">
         <div className="container">
-          <div className="section-label">Blog</div>
-          <h1 className="page-title">Notes from the Cafe</h1>
-          <p className="page-lede">Brew guides, behind-the-counter stories, and the occasional opinion about coffee.</p>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+            }}
+          >
+            <motion.div className="section-label" variants={fadeUp}>Blog</motion.div>
+            <motion.div variants={fadeUp}>
+              <AnimatedText
+                text="Notes from the Cafe"
+                textClassName="text-foreground"
+                underlineClassName="text-primary"
+              />
+            </motion.div>
+            <motion.p className="page-lede" variants={fadeUp}>Brew guides, behind-the-counter stories, and the occasional opinion about coffee.</motion.p>
+          </motion.div>
         </div>
       </section>
 
       <section className="blog-list-section">
         <div className="container">
           {loading ? (
-            <div className="blog-grid">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="blog-card blog-card-skeleton">
-                  <div className="blog-card-cover skeleton-block" />
-                  <div className="blog-card-body">
-                    <div className="skeleton-line skeleton-line-sm" />
-                    <div className="skeleton-line" />
-                    <div className="skeleton-line skeleton-line-sm" />
-                  </div>
-                </div>
-              ))}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+              <Loader />
             </div>
           ) : posts.length === 0 ? (
             <div className="empty-state">
@@ -59,28 +78,36 @@ export default function Blog() {
               <p>Check back soon - we are brewing the first one.</p>
             </div>
           ) : (
-            <div className="blog-grid">
+            <motion.div
+              className="blog-grid"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={staggerContainer}
+            >
               {posts.map(p => (
-                <Link key={p.id} to={`/blog/${p.slug}`} className="blog-card">
-                  <div className="blog-card-cover">
-                    {p.cover_image ? (
-                      <img src={p.cover_image} alt={p.title} loading="lazy" />
-                    ) : (
-                      <div className="blog-card-placeholder"><BookOpen size={28} /></div>
-                    )}
-                  </div>
-                  <div className="blog-card-body">
-                    <div className="blog-card-meta">
-                      <Calendar size={12} /> {formatDate(p.created_at)}
-                      {p.author_name && <span> · {p.author_name}</span>}
+                <motion.div key={p.id} variants={fadeUp}>
+                  <Link to={`/blog/${p.slug}`} className="blog-card">
+                    <div className="blog-card-cover">
+                      {p.cover_image ? (
+                        <img src={p.cover_image} alt={p.title} loading="lazy" />
+                      ) : (
+                        <div className="blog-card-placeholder"><BookOpen size={28} /></div>
+                      )}
                     </div>
-                    <h3 className="blog-card-title">{p.title}</h3>
-                    {p.excerpt && <p className="blog-card-excerpt">{p.excerpt}</p>}
-                    <span className="blog-card-link">Read post <ArrowRight size={14} /></span>
-                  </div>
-                </Link>
+                    <div className="blog-card-body">
+                      <div className="blog-card-meta">
+                        <Calendar size={12} /> {formatDate(p.created_at)}
+                        {p.author_name && <span> · {p.author_name}</span>}
+                      </div>
+                      <h3 className="blog-card-title">{p.title}</h3>
+                      {p.excerpt && <p className="blog-card-excerpt">{p.excerpt}</p>}
+                      <span className="blog-card-link">Read post <ArrowRight size={14} /></span>
+                    </div>
+                  </Link>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </section>

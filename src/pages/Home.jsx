@@ -1,16 +1,89 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ShoppingBag, BookOpen, ArrowRight, Play, Star, Award, Coffee, Truck, ChevronDown, Clock, MapPin, Phone, Mail, Globe, Package } from 'lucide-react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import toast from 'react-hot-toast'
+
+import { GridBackground } from '@/components/ui/grid-background'
+import { AnimatedText } from '@/components/ui/animated-underline-text-one'
+import { ParallaxFeatureSection } from '@/components/ui/parallax-scroll-feature-section'
+import { SocialLinks } from '@/components/ui/social-links'
+import VaporizeTextCycle, { Tag } from '@/components/ui/vapour-text-effect'
 
 const TESTIMONIALS = [
   { name: 'Aayushi Joshi', role: 'Google Review', initials: 'AJ', rating: 5, text: 'Loved that they offer gluten-free pizza options, vegan cheese, and a vegan menu. Highly recommended! 🌱 Special thanks to Deepak for his attentive service.' },
   { name: 'Tejal Rajak', role: 'Google Review', initials: 'TR', rating: 4, text: 'Visited this cute yet classy cafe. Ordered Mocha Cold and Peri Peri Paneer Pizza - both quite good. Staff is polite and chill, ambience is beautiful. A must visit in Mulund, and the best part is it being pet friendly. 😍' },
   { name: 'Rick Snyder', role: 'Google Review', initials: 'RS', rating: 5, text: 'The food was so good - huge variety on the menu. Iced matcha latte was perfect, the pesto & burrata pizza and nachos were fantastic. Shubham was our server and he was really friendly. Ask for him to serve you!' },
 ]
+
+const PARALLAX_FEATURES = [
+  {
+    id: 1,
+    title: 'Coffee Beans',
+    description: 'Single-origin beans directly sourced from Chikmagalur, Karnataka. Freshly roasted with exclusive Bean Rove profiles for a rich, complex flavour that elevates every cup.',
+    imageUrl: 'https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw',
+    reverse: false,
+    link: '/store',
+    ctaText: 'Shop Beans'
+  },
+  {
+    id: 2,
+    title: 'Coffee Powder',
+    description: 'Ground precisely for every brewing method — from espresso to French press. The same premium blends that power Mastermind Bicycle Cafe, now in your kitchen.',
+    imageUrl: 'https://lh3.googleusercontent.com/9NODaqOMcC9h2RNX0RzGciKNPeG8QNL_TgiIamED8u_oSuzVZ4TYc_zWSr0_MgKg7tzxSDsNlNH9UrTZlbu9LY45cKuWOZGssx_ZDT_Cpg=w1200-rw',
+    reverse: true,
+    link: '/store',
+    ctaText: 'Shop Powder'
+  },
+  {
+    id: 3,
+    title: 'Barista Training',
+    description: 'Learn from our certified baristas through professional HD video courses. From your first pull to latte art mastery — lifetime access on any device.',
+    imageUrl: 'https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw',
+    reverse: false,
+    link: '/workshop',
+    ctaText: 'View Academy'
+  },
+]
+
+const SOCIAL_LINKS = [
+  { platform: 'instagram', href: 'https://www.instagram.com/mastermindbicyclecafe/' },
+  { platform: 'mail', href: 'mailto:hello@mastermindcafe.in' },
+  { platform: 'website', href: 'https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund' },
+]
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+}
+
+function AnimatedSection({ children, className, delay = 0, style }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] } },
+      }}
+      className={className}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export default function Home() {
   usePageMeta({
@@ -20,6 +93,7 @@ export default function Home() {
   const { addItem } = useCart()
   const [featured, setFeatured] = useState([])
   const [featuredLoading, setFeaturedLoading] = useState(true)
+  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('mm-intro'))
 
   useEffect(() => {
     let cancelled = false
@@ -30,8 +104,62 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
+  const handleVaporizeEnd = useCallback(() => {
+    sessionStorage.setItem('mm-intro', '1')
+    setShowIntro(false)
+  }, [])
+
   return (
     <div className="home">
+      {/* ===== VAPOUR TEXT INTRO ===== */}
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            key="intro-overlay"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9999,
+              background: '#0a0908',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ width: '90vw', maxWidth: '900px', height: '100px' }}>
+              <VaporizeTextCycle
+                texts={["Ride Hard / Eat Easy"]}
+                font={{
+                  fontFamily: "'Yanone Kaffeesatz', sans-serif",
+                  fontSize: "68px",
+                  fontWeight: 600,
+                }}
+                color="rgb(248, 245, 242)"
+                spread={5}
+                density={7}
+                animation={{
+                  vaporizeDuration: 0.7,
+                  fadeInDuration: 0.1,
+                  waitDuration: 0.05,
+                }}
+                direction="left-to-right"
+                alignment="center"
+                tag={Tag.H1}
+                startDelay={400}
+                loop={false}
+                onVaporizeEnd={handleVaporizeEnd}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ===== SOCIAL LINKS (fixed sidebar) ===== */}
+      <SocialLinks links={SOCIAL_LINKS} floatingButtonColor="bg-zinc-800" />
+
       {/* ===== HERO ===== */}
       <section className="hero">
         <div className="hero-bg">
@@ -40,61 +168,79 @@ export default function Home() {
           }} />
           <div className="hero-gradient" />
         </div>
-        <div className="hero-content">
-          <div className="hero-badge">
+        <motion.div
+          className="hero-content"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+          }}
+        >
+          <motion.div
+            className="hero-badge"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
             <span className="dot" />
             From Mastermind Bicycle Cafe & Bar, Mumbai
-          </div>
-          <h1>
+          </motion.div>
+          <motion.h1
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
+          >
             Specialty Coffee<br />
             <span className="text-blue">Beans</span> &{' '}
             <span className="text-pink">Academy</span>
-          </h1>
-          <p className="hero-desc">
-            Directly sourced beans from Chikmagalur, Karnataka. The same specialty coffee that powers Mastermind Bicycle Cafe - now delivered to your doorstep, with barista training to match.
-          </p>
-          <div className="hero-btns">
+          </motion.h1>
+          <motion.p
+            className="hero-desc"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            Directly sourced beans from Chikmagalur, Karnataka. The same specialty coffee that powers Mastermind Bicycle Cafe — now delivered to your doorstep, with barista training to match.
+          </motion.p>
+          <motion.div
+            className="hero-btns"
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
             <Link to="/store" className="btn btn-primary">
               <ShoppingBag size={16} /> Shop Beans
             </Link>
             <Link to="/workshop" className="btn btn-outline">
               <BookOpen size={16} /> Join Workshop
             </Link>
-          </div>
-        </div>
-        <div className="hero-scroll">
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className="hero-scroll"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+        >
           Scroll
           <ChevronDown size={16} />
-        </div>
-      </section>
-
-      {/* ===== TAGLINE MARQUEE ===== */}
-      <section className="tagline-marquee" aria-hidden="true">
-        <div className="tagline-track">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i} className="tagline-item">
-              Ride Hard <span className="tagline-sep">/</span> Eat Easy <span className="tagline-dot">●</span>
-            </span>
-          ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ===== ABOUT STRIP ===== */}
       <section className="about-strip">
         <div className="container">
           <div className="about-grid">
-            <div className="about-image">
+            <AnimatedSection className="about-image">
               <img
                 src="https://lh3.googleusercontent.com/fMDJUXTml2Oy7acthKsu7XcqBLyoqnlilQCJruYAFRpyvyAPX7gruOfHokGvUH1PxP5DdFm_oCgsPDsYOv-AGGl9rJQpBlc-GWRXHjQx=w1200-rw"
                 alt="Mastermind Bicycle Cafe interior"
                 loading="lazy"
               />
               <div className="accent-line" />
-            </div>
-            <div className="about-text">
+            </AnimatedSection>
+            <AnimatedSection className="about-text" delay={0.2}>
               <div className="section-label">Our Story</div>
-              <h2>Born From A Dream Of Great Coffee</h2>
-              <p className="highlight">
+              <AnimatedText
+                text="Born From A Dream Of Great Coffee"
+                textClassName="text-foreground"
+                underlineClassName="text-primary"
+                style={{ marginBottom: '2rem' }}
+              />
+              <p className="highlight" style={{ marginTop: '2rem' }}>
                 Started by a businessman and his daughter who dreamt of a cafe that serves great coffee, always welcomes all, and makes one feel like in the by-lanes of Europe.
               </p>
               <p>
@@ -104,86 +250,59 @@ export default function Home() {
                 Now we're bringing that same passion online - premium coffee beans and powders delivered fresh, plus a barista academy to train the next generation of coffee artisans.
               </p>
               <div className="about-stats">
-                <div className="stat-item">
+                <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
                   <div className="stat-number">4.4<span className="stat-accent">★</span></div>
                   <div className="stat-label">Google Rating</div>
-                </div>
-                <div className="stat-item">
+                </motion.div>
+                <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
                   <div className="stat-number">500<span className="stat-accent">+</span></div>
                   <div className="stat-label">Reviews</div>
-                </div>
-                <div className="stat-item">
+                </motion.div>
+                <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
                   <div className="stat-number">6</div>
                   <div className="stat-label">Expert Courses</div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ===== CATEGORIES ===== */}
-      <section className="categories-band">
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">What We Offer</div>
-            <h2 className="section-title">From Our Cafe To Your Cup</h2>
-          </div>
-          <div className="categories-grid">
-            <Link to="/store" className="category-card">
-              <img
-                src="https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw"
-                alt="Coffee at Mastermind"
-                loading="lazy"
-              />
-              <div className="category-card-content">
-                <span>Store</span>
-                <h3>Coffee Beans</h3>
-                <p>Single-origin Karnataka beans, freshly roasted</p>
-              </div>
-            </Link>
-            <Link to="/store" className="category-card">
-              <img
-                src="https://lh3.googleusercontent.com/9NODaqOMcC9h2RNX0RzGciKNPeG8QNL_TgiIamED8u_oSuzVZ4TYc_zWSr0_MgKg7tzxSDsNlNH9UrTZlbu9LY45cKuWOZGssx_ZDT_Cpg=w1200-rw"
-                alt="Coffee Powder"
-                loading="lazy"
-              />
-              <div className="category-card-content">
-                <span>Store</span>
-                <h3>Coffee Powder</h3>
-                <p>Ground for every brewing method</p>
-              </div>
-            </Link>
-            <Link to="/workshop" className="category-card">
-              <img
-                src="https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw"
-                alt="Barista at Mastermind"
-                loading="lazy"
-              />
-              <div className="category-card-content">
-                <span>Academy</span>
-                <h3>Barista Training</h3>
-                <p>Learn from our certified baristas</p>
-              </div>
-            </Link>
-          </div>
+      {/* ===== PARALLAX FEATURE CATEGORIES ===== */}
+      <GridBackground className="min-h-0">
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <AnimatedSection style={{ textAlign: 'center', paddingTop: '80px' }}>
+            <div className="section-label" style={{ textAlign: 'center' }}>What We Offer</div>
+            <AnimatedText
+              text="From Our Cafe To Your Cup"
+              textClassName="text-foreground"
+              underlineClassName="text-primary"
+            />
+          </AnimatedSection>
+          <ParallaxFeatureSection sections={PARALLAX_FEATURES} />
         </div>
-      </section>
+      </GridBackground>
 
       {/* ===== FEATURED PRODUCTS ===== */}
       {(featuredLoading || featured.length > 0) && (
         <section className="featured-section">
           <div className="container">
             <div className="featured-header">
-              <div className="section-header" style={{ marginBottom: 0 }}>
+              <AnimatedSection className="section-header" style={{ marginBottom: 0 }}>
                 <div className="section-label">Featured</div>
                 <h2 className="section-title">Best Sellers</h2>
-              </div>
+              </AnimatedSection>
               <Link to="/store" className="btn btn-ghost">
                 View All <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="featured-grid">
+            <motion.div
+              className="featured-grid"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={staggerContainer}
+            >
               {featuredLoading
                 ? Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="featured-product featured-product-skeleton">
@@ -196,7 +315,7 @@ export default function Home() {
                     </div>
                   ))
                 : featured.map(product => (
-                    <div key={product.id} className="featured-product">
+                    <motion.div key={product.id} className="featured-product" variants={fadeUp}>
                       <div className="featured-product-image">
                         {product.image ? (
                           <img src={product.image} alt={product.name} />
@@ -227,20 +346,19 @@ export default function Home() {
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
-
 
       {/* ===== ACADEMY PREVIEW ===== */}
       <section className="academy-preview">
         <div className="academy-preview-glow" aria-hidden="true" />
         <div className="container">
           <div className="academy-preview-grid">
-            <div className="academy-preview-visual">
+            <AnimatedSection className="academy-preview-visual">
               <div className="academy-visual-frame">
                 <img
                   src="https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1000-rw"
@@ -248,33 +366,44 @@ export default function Home() {
                   loading="lazy"
                 />
                 <div className="academy-image-tint" />
-
-                <div className="academy-floating-card">
+                <motion.div
+                  className="academy-floating-card"
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 200 }}
+                >
                   <div className="academy-floating-card-icon"><Award size={18} /></div>
                   <div className="academy-floating-card-body">
                     <div className="academy-floating-card-num">6</div>
                     <div className="academy-floating-card-label">Expert Modules</div>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
-              <div className="academy-floating-stats">
-                <div className="academy-mini-stat">
+              <motion.div
+                className="academy-floating-stats"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                <motion.div className="academy-mini-stat" variants={fadeUp}>
                   <Star size={14} fill="currentColor" />
                   <span><strong>4.8</strong> Rating</span>
-                </div>
-                <div className="academy-mini-stat">
+                </motion.div>
+                <motion.div className="academy-mini-stat" variants={fadeUp}>
                   <Award size={14} />
                   <span><strong>Certified</strong> Baristas</span>
-                </div>
-                <div className="academy-mini-stat">
+                </motion.div>
+                <motion.div className="academy-mini-stat" variants={fadeUp}>
                   <Play size={14} fill="currentColor" />
                   <span><strong>HD</strong> Lessons</span>
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              </motion.div>
+            </AnimatedSection>
 
-            <div className="academy-preview-content">
+            <AnimatedSection className="academy-preview-content" delay={0.15}>
               <div className="section-label">
                 <span className="section-label-bar" /> Barista Academy
               </div>
@@ -286,53 +415,61 @@ export default function Home() {
                 Learn from the same baristas behind Mastermind Brews' acclaimed specialty coffee program. Professional video courses for every skill level, from your first pull to latte art mastery.
               </p>
 
-              <div className="academy-features">
-                <div className="academy-feature">
+              <motion.div
+                className="academy-features"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                <motion.div className="academy-feature" variants={fadeUp}>
                   <div className="academy-feature-icon"><Award size={20} /></div>
                   <div className="academy-feature-text">
                     <h4>Trained Baristas</h4>
                     <p>Techniques from our certified coffee team</p>
                   </div>
-                </div>
-                <div className="academy-feature">
+                </motion.div>
+                <motion.div className="academy-feature" variants={fadeUp}>
                   <div className="academy-feature-icon"><Play size={20} fill="currentColor" /></div>
                   <div className="academy-feature-text">
                     <h4>HD Video Lessons</h4>
                     <p>Pre-recorded courses, watch anywhere</p>
                   </div>
-                </div>
-                <div className="academy-feature">
+                </motion.div>
+                <motion.div className="academy-feature" variants={fadeUp}>
                   <div className="academy-feature-icon"><Coffee size={20} /></div>
                   <div className="academy-feature-text">
                     <h4>Bean Rove Profiles</h4>
                     <p>Our exclusive roasting methodology</p>
                   </div>
-                </div>
-                <div className="academy-feature">
+                </motion.div>
+                <motion.div className="academy-feature" variants={fadeUp}>
                   <div className="academy-feature-icon"><BookOpen size={20} /></div>
                   <div className="academy-feature-text">
                     <h4>Lifetime Access</h4>
                     <p>Buy once, learn forever - on any device</p>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               <div className="academy-cta-row">
                 <Link to="/workshop" className="btn btn-blue">
                   Browse Courses <ArrowRight size={14} />
                 </Link>
-                <Link to="/store" className="btn btn-ghost academy-ghost">
-                  Shop Beans <ArrowRight size={14} />
-                </Link>
               </div>
 
-              <div className="academy-chips">
-                <span className="academy-chip">Beginner Friendly</span>
-                <span className="academy-chip">Latte Art</span>
-                <span className="academy-chip">Espresso</span>
-                <span className="academy-chip">Brewing Science</span>
-              </div>
-            </div>
+              <motion.div
+                className="academy-chips"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={staggerContainer}
+              >
+                {['Beginner Friendly', 'Latte Art', 'Espresso', 'Brewing Science'].map(chip => (
+                  <motion.span key={chip} className="academy-chip" variants={fadeUp}>{chip}</motion.span>
+                ))}
+              </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -340,13 +477,19 @@ export default function Home() {
       {/* ===== TESTIMONIALS ===== */}
       <section className="testimonials-section">
         <div className="container">
-          <div className="section-header center">
+          <AnimatedSection className="section-header center">
             <div className="section-label">Testimonials</div>
             <h2 className="section-title">What Our Community Says</h2>
-          </div>
-          <div className="testimonials-grid">
+          </AnimatedSection>
+          <motion.div
+            className="testimonials-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+          >
             {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="testimonial-card">
+              <motion.div key={i} className="testimonial-card" variants={fadeUp}>
                 <div className="testimonial-stars">
                   {[...Array(t.rating)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
                 </div>
@@ -358,9 +501,9 @@ export default function Home() {
                     <div className="role">{t.role}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -368,41 +511,41 @@ export default function Home() {
       <section className="visit-section">
         <div className="container">
           <div className="visit-grid">
-            <div className="visit-info">
+            <AnimatedSection className="visit-info">
               <div className="section-label">Visit The Cafe</div>
               <h2 className="section-title">Drop By In Mulund</h2>
               <p className="section-desc">
                 One of the best cafes in Mulund - doors open every day, with European cafe vibes, specialty coffee and a menu that goes deep.
               </p>
               <div className="visit-details">
-                <div className="visit-detail">
+                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
                   <div className="visit-detail-icon"><Clock size={18} /></div>
                   <div>
                     <h4>Open All Days</h4>
                     <p>8:30 AM to 12 Midnight</p>
                   </div>
-                </div>
-                <div className="visit-detail">
+                </motion.div>
+                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
                   <div className="visit-detail-icon"><MapPin size={18} /></div>
                   <div>
                     <h4>Find Us</h4>
                     <p>Avior Corporate Park, Mulund West, Mumbai</p>
                   </div>
-                </div>
-                <div className="visit-detail">
+                </motion.div>
+                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
                   <div className="visit-detail-icon"><Phone size={18} /></div>
                   <div>
                     <h4>Call</h4>
                     <p><a href="tel:+918591850161">+91 85918 50161</a></p>
                   </div>
-                </div>
-                <div className="visit-detail">
+                </motion.div>
+                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}>
                   <div className="visit-detail-icon"><Mail size={18} /></div>
                   <div>
                     <h4>Email</h4>
                     <p><a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a></p>
                   </div>
-                </div>
+                </motion.div>
               </div>
               <div className="visit-socials">
                 <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" className="visit-social">
@@ -412,8 +555,8 @@ export default function Home() {
                   Get Directions <ArrowRight size={14} />
                 </a>
               </div>
-            </div>
-            <div className="visit-card">
+            </AnimatedSection>
+            <AnimatedSection className="visit-card" delay={0.2}>
               <div className="visit-card-image">
                 <img src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw" alt="Mastermind Bicycle Cafe" loading="lazy" />
                 <div className="visit-card-rating">
@@ -424,16 +567,16 @@ export default function Home() {
                   <div className="visit-card-rating-label">From 500+ guests</div>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ===== NEWSLETTER / CTA ===== */}
+      {/* ===== CTA ===== */}
       <section className="newsletter-section">
         <div className="newsletter-bg" />
         <div className="container">
-          <div className="newsletter-content">
+          <AnimatedSection className="newsletter-content">
             <div className="section-label">Get Started</div>
             <h2>Ready To Brew Like A Pro?</h2>
             <p>The same specialty coffee from Mastermind Bicycle Cafe - now available online, with courses to level up your skills.</p>
@@ -445,27 +588,34 @@ export default function Home() {
                 <BookOpen size={16} /> Start Learning
               </Link>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* ===== TRUST BAR ===== */}
       <section className="categories-band" style={{ padding: '48px 0' }}>
         <div className="container">
-          <div className="about-stats" style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'center', gap: '80px' }}>
-            <div className="stat-item" style={{ textAlign: 'center' }}>
+          <motion.div
+            className="about-stats"
+            style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'center', gap: '80px' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
               <div className="stat-number"><Truck size={24} style={{ display: 'inline' }} /></div>
               <div className="stat-label">Free Shipping Above ₹999</div>
-            </div>
-            <div className="stat-item" style={{ textAlign: 'center' }}>
+            </motion.div>
+            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
               <div className="stat-number"><Coffee size={24} style={{ display: 'inline' }} /></div>
               <div className="stat-label">Roasted in Chikmagalur</div>
-            </div>
-            <div className="stat-item" style={{ textAlign: 'center' }}>
+            </motion.div>
+            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
               <div className="stat-number"><Award size={24} style={{ display: 'inline' }} /></div>
               <div className="stat-label">Bean Rove Profiles</div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     </div>

@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react'
 import { Clock, Star, BookOpen, PlayCircle, Video, Info } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { getCourses, getEnrollments } from '../lib/database'
 import { useNavigate } from 'react-router-dom'
-import { CourseGridSkeleton } from '../components/Skeleton'
 import { usePageMeta } from '../lib/usePageMeta'
+import Loader from '@/components/ui/loader-4'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+}
 
 export default function Academy() {
   const { user } = useAuth()
@@ -44,8 +55,6 @@ export default function Academy() {
     return () => { cancelled = true; clearTimeout(timeoutId) }
   }, [reloadKey])
 
-  // Load enrollments to seed purchased Set whenever user is known.
-  // Reset is deferred to the next microtask so the effect body never sets state synchronously.
   useEffect(() => {
     let cancelled = false
     if (!user) {
@@ -66,14 +75,25 @@ export default function Academy() {
   return (
     <div className="academy-page">
       <div className="academy-hero">
-        <div className="section-label">Learn from the best</div>
-        <h1>Barista Academy</h1>
-        <p>Professional video courses to take your coffee skills to the next level</p>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+          }}
+        >
+          <motion.div className="section-label" variants={fadeUp}>Learn from the best</motion.div>
+          <motion.h1 variants={fadeUp}>Barista Academy</motion.h1>
+          <motion.p variants={fadeUp}>Professional video courses to take your coffee skills to the next level</motion.p>
+        </motion.div>
       </div>
 
       <div className="academy-container">
         {loading ? (
-          <CourseGridSkeleton count={6} />
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+            <Loader />
+          </div>
         ) : error ? (
           <div className="store-empty">
             <Video size={56} />
@@ -90,9 +110,15 @@ export default function Academy() {
             <p>New courses are being prepared. Please check back soon.</p>
           </div>
         ) : (
-          <div className="courses-grid">
+          <motion.div
+            className="courses-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={staggerContainer}
+          >
             {courses.map(course => (
-              <div
+              <motion.div
                 key={course.id}
                 className="course-card clickable"
                 onClick={() => goToCourse(course)}
@@ -104,6 +130,7 @@ export default function Academy() {
                     goToCourse(course)
                   }
                 }}
+                variants={fadeUp}
               >
                 <div className="course-image">
                   <img src={course.image} alt={course.title} loading="lazy" />
@@ -144,9 +171,9 @@ export default function Academy() {
                     </button>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

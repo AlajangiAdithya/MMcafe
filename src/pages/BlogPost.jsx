@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Calendar, ArrowLeft, BookOpen } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { getBlogPostBySlug } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
+import Loader from '@/components/ui/loader-4'
 
 function formatDate(d) {
   if (!d) return ''
@@ -42,10 +44,8 @@ export default function BlogPost() {
   if (loading) {
     return (
       <div className="page-shell blog-post-page">
-        <div className="container" style={{ padding: '60px 0' }}>
-          <div className="skeleton-line" style={{ width: '40%' }} />
-          <div className="skeleton-line" style={{ width: '70%', height: 32, marginTop: 16 }} />
-          <div className="skeleton-block" style={{ height: 320, marginTop: 24 }} />
+        <div className="container" style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+          <Loader />
         </div>
       </div>
     )
@@ -70,7 +70,12 @@ export default function BlogPost() {
 
   return (
     <div className="page-shell blog-post-page">
-      <article className="blog-post">
+      <motion.article
+        className="blog-post"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="container narrow">
           <Link to="/blog" className="blog-back">
             <ArrowLeft size={14} /> Back to blog
@@ -82,17 +87,27 @@ export default function BlogPost() {
           <h1 className="blog-post-title">{post.title}</h1>
           {post.excerpt && <p className="blog-post-excerpt">{post.excerpt}</p>}
           {post.cover_image && (
-            <div className="blog-post-cover">
+            <motion.div
+              className="blog-post-cover"
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
               <img src={post.cover_image} alt={post.title} />
-            </div>
+            </motion.div>
           )}
-          <div className="blog-post-body">
+          <motion.div
+            className="blog-post-body"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             {(post.content || '').split(/\n{2,}/).map((para, i) => (
               <p key={i}>{para}</p>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </article>
+      </motion.article>
     </div>
   )
 }

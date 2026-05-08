@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * shadcn/ui CSS variables mapped to MMCafe design tokens.
+ * Prefixed with --tw- to avoid collision with existing :root vars.
+ * Tailwind config references these via hsl(var(--tw-*)).
+ */
+:root {
+  --tw-background: 25 11% 3%;        /* #0a0908 */
+  --tw-foreground: 36 18% 89%;       /* #EAE6DF */
+
+  --tw-card: 24 10% 8%;              /* ~#16120F */
+  --tw-card-foreground: 36 18% 89%;
+
+  --tw-popover: 24 10% 8%;
+  --tw-popover-foreground: 36 18% 89%;
+
+  --tw-primary: 212 61% 57%;         /* #4A90D9 mm-blue */
+  --tw-primary-foreground: 27 33% 96%; /* #F8F5F2 */
+
+  --tw-secondary: 348 44% 49%;       /* #D4647A mm-pink */
+  --tw-secondary-foreground: 27 33% 96%;
+
+  --tw-muted: 24 10% 12%;            /* elevated bg */
+  --tw-muted-foreground: 33 8% 67%;  /* #B5AEA4 */
+
+  --tw-accent: 43 64% 52%;           /* #D4AF37 gold */
+  --tw-accent-foreground: 25 11% 3%;
+
+  --tw-destructive: 0 81% 56%;       /* #EA3335 */
+  --tw-destructive-foreground: 27 33% 96%;
+
+  --tw-border: 0 0% 100% / 0.08;
+  --tw-input: 0 0% 100% / 0.12;
+  --tw-ring: 212 61% 57%;            /* mm-blue */
+
+  --radius: 0.625rem;
+}

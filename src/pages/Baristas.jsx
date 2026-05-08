@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Coffee, Lock, Mail, Phone, MapPin, GraduationCap, Briefcase, Sparkles, ShieldCheck, ArrowRight, UserPlus, Search, BookOpen, Building2, Eye, Award, Users, Hourglass, UserCheck, ClipboardList, Pencil, Send } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import {
   hasBaristaAccess, grantBaristaAccess, getMyAssignedBaristas, markBaristaHired,
@@ -10,8 +11,39 @@ import {
 import { openRazorpay } from '../lib/razorpay'
 import { usePageMeta } from '../lib/usePageMeta'
 import toast from 'react-hot-toast'
+import Loader from '@/components/ui/loader-4'
 
 const ACCESS_PRICE = 500
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+}
+
+function AnimatedSection({ children, className, delay = 0, style }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] } },
+      }}
+      className={className}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export default function Baristas() {
   usePageMeta({
@@ -160,9 +192,8 @@ export default function Baristas() {
   if (authLoading || accessLoading) {
     return (
       <div className="page-shell">
-        <div className="container" style={{ padding: '80px 0' }}>
-          <div className="skeleton-line" style={{ width: '40%' }} />
-          <div className="skeleton-line" style={{ width: '70%', marginTop: 12, height: 28 }} />
+        <div className="container" style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+          <Loader />
         </div>
       </div>
     )
@@ -172,13 +203,22 @@ export default function Baristas() {
   const HeroSection = (
     <section className="page-hero baristas-hero">
       <div className="container">
-        <div className="section-label"><Coffee size={14} style={{ display: 'inline', marginRight: 6 }} /> The Barista Directory</div>
-        <h1 className="page-title">Where trained baristas meet hiring cafes.</h1>
-        <p className="page-lede">
-          A curated bridge between India&rsquo;s working baristas and the cafes that need them.
-          Baristas list themselves once and stay discoverable. Cafes pay a one-time fee to
-          browse verified profiles and reach out directly &mdash; no agencies, no commission.
-        </p>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+          }}
+        >
+          <motion.div className="section-label" variants={fadeUp}><Coffee size={14} style={{ display: 'inline', marginRight: 6 }} /> The Barista Directory</motion.div>
+          <motion.h1 className="page-title" variants={fadeUp}>Where trained baristas meet hiring cafes.</motion.h1>
+          <motion.p className="page-lede" variants={fadeUp}>
+            A curated bridge between India&rsquo;s working baristas and the cafes that need them.
+            Baristas list themselves once and stay discoverable. Cafes pay a one-time fee to
+            browse verified profiles and reach out directly &mdash; no agencies, no commission.
+          </motion.p>
+        </motion.div>
       </div>
     </section>
   )
@@ -196,37 +236,43 @@ export default function Baristas() {
           </p>
         </div>
 
-        <div className="discovered-card">
-          <ul className="discovered-perks">
-            <li>
+        <AnimatedSection className="discovered-card">
+          <motion.ul
+            className="discovered-perks"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+          >
+            <motion.li variants={fadeUp}>
               <div className="perk-icon"><Eye size={18} /></div>
               <div>
                 <strong>Stay visible</strong>
                 <span>Your profile sits in front of cafes actively looking to hire.</span>
               </div>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li variants={fadeUp}>
               <div className="perk-icon"><Award size={18} /></div>
               <div>
                 <strong>Showcase your craft</strong>
                 <span>Highlight your experience, training and skills &mdash; in plain words, no resume needed.</span>
               </div>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li variants={fadeUp}>
               <div className="perk-icon"><Briefcase size={18} /></div>
               <div>
                 <strong>Direct contact, no middleman</strong>
                 <span>Cafes reach you on your own email and phone. We don&rsquo;t take a cut.</span>
               </div>
-            </li>
-            <li>
+            </motion.li>
+            <motion.li variants={fadeUp}>
               <div className="perk-icon"><ShieldCheck size={18} /></div>
               <div>
                 <strong>Vetted listing &mdash; free to join</strong>
                 <span>We review every submission before it goes live. Listing is and stays free for baristas.</span>
               </div>
-            </li>
-          </ul>
+            </motion.li>
+          </motion.ul>
 
           <div className="discovered-cta">
             <Link to="/barista-signup" className="btn btn-primary btn-lg">
@@ -234,7 +280,7 @@ export default function Baristas() {
             </Link>
             <p className="discovered-foot">Takes about 3 minutes. We&rsquo;ll email you once you&rsquo;re live.</p>
           </div>
-        </div>
+        </AnimatedSection>
       </div>
     </section>
   )
@@ -246,26 +292,38 @@ export default function Baristas() {
           <h3>Keep exploring Mastermind Brews</h3>
           <p>The directory is one piece of what we do. Here&rsquo;s the rest.</p>
         </div>
-        <div className="cross-links-grid">
-          <Link to="/blog" className="cross-link-card">
-            <div className="cross-link-icon"><BookOpen size={20} /></div>
-            <h4>Read the blog</h4>
-            <p>Brewing guides, industry notes and stories from working baristas.</p>
-            <span className="cross-link-cta">Open blog <ArrowRight size={14} /></span>
-          </Link>
-          <Link to="/consultancy" className="cross-link-card">
-            <div className="cross-link-icon"><Building2 size={20} /></div>
-            <h4>Open or upgrade your cafe</h4>
-            <p>Hands-on consultancy for new cafes and existing teams that want to level up.</p>
-            <span className="cross-link-cta">See consultancy <ArrowRight size={14} /></span>
-          </Link>
-          <Link to="/academy" className="cross-link-card">
-            <div className="cross-link-icon"><GraduationCap size={20} /></div>
-            <h4>Train at the academy</h4>
-            <p>Structured barista courses &mdash; the same training many of these baristas took.</p>
-            <span className="cross-link-cta">Browse courses <ArrowRight size={14} /></span>
-          </Link>
-        </div>
+        <motion.div
+          className="cross-links-grid"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeUp}>
+            <Link to="/blog" className="cross-link-card">
+              <div className="cross-link-icon"><BookOpen size={20} /></div>
+              <h4>Read the blog</h4>
+              <p>Brewing guides, industry notes and stories from working baristas.</p>
+              <span className="cross-link-cta">Open blog <ArrowRight size={14} /></span>
+            </Link>
+          </motion.div>
+          <motion.div variants={fadeUp}>
+            <Link to="/consultancy" className="cross-link-card">
+              <div className="cross-link-icon"><Building2 size={20} /></div>
+              <h4>Open or upgrade your cafe</h4>
+              <p>Hands-on consultancy for new cafes and existing teams that want to level up.</p>
+              <span className="cross-link-cta">See consultancy <ArrowRight size={14} /></span>
+            </Link>
+          </motion.div>
+          <motion.div variants={fadeUp}>
+            <Link to="/academy" className="cross-link-card">
+              <div className="cross-link-icon"><GraduationCap size={20} /></div>
+              <h4>Train at the academy</h4>
+              <p>Structured barista courses &mdash; the same training many of these baristas took.</p>
+              <span className="cross-link-cta">Browse courses <ArrowRight size={14} /></span>
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )
@@ -435,17 +493,8 @@ export default function Baristas() {
       <section className="baristas-list-section">
         <div className="container">
           {listLoading ? (
-            <div className="baristas-grid">
-              {Array.from({ length: BARISTA_SLOTS_PER_CAFE }).map((_, i) => (
-                <div key={i} className="barista-card barista-card-text">
-                  <div style={{ padding: 22 }}>
-                    <div className="skeleton-line" style={{ width: '60%' }} />
-                    <div className="skeleton-line skeleton-line-sm" style={{ width: '40%', marginTop: 10 }} />
-                    <div className="skeleton-line" style={{ marginTop: 18 }} />
-                    <div className="skeleton-line skeleton-line-sm" />
-                  </div>
-                </div>
-              ))}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+              <Loader />
             </div>
           ) : baristas.length === 0 ? (
             <div className="empty-state">

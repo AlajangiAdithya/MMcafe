@@ -1,13 +1,24 @@
 import { useState, useEffect, useMemo } from 'react'
 import { ShoppingCart, Filter, Search, Star, Package } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProducts } from '../lib/database'
 import { supabase } from '../lib/supabase'
 import ProductDetailModal from '../components/ProductDetailModal'
 import WishlistButton from '../components/WishlistButton'
-import { ProductGridSkeleton } from '../components/Skeleton'
 import { usePageMeta } from '../lib/usePageMeta'
 import toast from 'react-hot-toast'
+import Loader from '@/components/ui/loader-4'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+}
 
 export default function Store() {
   const [products, setProducts] = useState([])
@@ -15,7 +26,7 @@ export default function Store() {
   const [error, setError] = useState(null)
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
-  const [reviewStats, setReviewStats] = useState({}) // { [productId]: {avg, count} }
+  const [reviewStats, setReviewStats] = useState({})
   const [selected, setSelected] = useState(null)
   const [reloadKey, setReloadKey] = useState(0)
   const { addItem } = useCart()
@@ -29,7 +40,6 @@ export default function Store() {
     let cancelled = false
     setLoading(true)
     setError(null)
-    // Hard timeout so the spinner can never spin forever.
     const timeoutId = setTimeout(() => {
       if (!cancelled) {
         setLoading(false)
@@ -50,7 +60,6 @@ export default function Store() {
     return () => { cancelled = true; clearTimeout(timeoutId) }
   }, [reloadKey])
 
-  // Batch-load review aggregates for visible products
   useEffect(() => {
     if (products.length === 0) return
     let cancelled = false
@@ -94,14 +103,25 @@ export default function Store() {
   return (
     <div className="store-page">
       <div className="store-hero">
-        <div className="section-label">Our Products</div>
-        <h1>The Store</h1>
-        <p>Hand-picked beans and freshly ground powders, roasted to perfection</p>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+          }}
+        >
+          <motion.div className="section-label" variants={fadeUp}>Our Products</motion.div>
+          <motion.h1 variants={fadeUp}>The Store</motion.h1>
+          <motion.p variants={fadeUp}>Hand-picked beans and freshly ground powders, roasted to perfection</motion.p>
+        </motion.div>
       </div>
 
       <div className="store-container">
         {loading ? (
-          <ProductGridSkeleton count={8} />
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
+            <Loader />
+          </div>
         ) : error ? (
           <div className="store-empty">
             <Package size={56} />
@@ -119,7 +139,12 @@ export default function Store() {
           </div>
         ) : (
           <>
-            <div className="filter-bar">
+            <motion.div
+              className="filter-bar"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <Filter size={16} />
               {['all', 'beans', 'powder'].map(f => (
                 <button
@@ -140,13 +165,19 @@ export default function Store() {
                   onChange={e => setSearch(e.target.value)}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="products-grid">
+            <motion.div
+              className="products-grid"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              variants={staggerContainer}
+            >
               {filtered.map(product => {
                 const stats = reviewStats[product.id]
                 return (
-                  <div
+                  <motion.div
                     key={product.id}
                     className="product-card clickable"
                     onClick={() => setSelected(product)}
@@ -158,6 +189,7 @@ export default function Store() {
                         setSelected(product)
                       }
                     }}
+                    variants={fadeUp}
                   >
                     <div className="product-image">
                       <img src={product.image} alt={product.name} loading="lazy" />
@@ -184,10 +216,10 @@ export default function Store() {
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )
               })}
-            </div>
+            </motion.div>
 
             {filtered.length === 0 && (
               <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--text-muted)' }}>

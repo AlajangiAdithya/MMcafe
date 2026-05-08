@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import './shadcn.css'
 import App from './App.jsx'
 import { installGlobalErrorHandlers } from './lib/errorLogger.js'
 import { installAnalytics } from './lib/analytics.js'
