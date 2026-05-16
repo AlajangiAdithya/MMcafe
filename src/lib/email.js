@@ -32,9 +32,18 @@ import emailjs from '@emailjs/browser'
 const SERVICE_ID         = import.meta.env.VITE_EMAILJS_SERVICE_ID || ''
 const TEMPLATE_ID        = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || ''
 const RESET_TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_RESET_TEMPLATE_ID || ''
+const STATUS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_STATUS_TEMPLATE_ID || ''
 const PUBLIC_KEY         = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
 const SITE_URL           = import.meta.env.VITE_SITE_URL || window.location.origin
 const LOGO_URL           = `${SITE_URL}/logo.png`
+
+const STATUS_HEADLINES = {
+  confirmed:  'We received your order',
+  processing: 'Your order is being prepared',
+  shipped:    'Your order is on the way',
+  delivered:  'Your order has been delivered',
+  cancelled:  'Your order has been cancelled',
+}
 
 /**
  * Check if EmailJS is configured.
@@ -151,6 +160,43 @@ export async function sendCourseEmail({
  *
  * Throws on failure so the caller can show a clear error.
  */
+/**
+ * Notify a customer that their order's status changed (e.g. shipped).
+ * Falls back to the standard order template when the dedicated status
+ * template is not configured. Fails silently — status updates must not
+ * block the admin UI.
+ */
+export async function sendOrderStatusEmail({ order, status, customerEmail, customerName }) {
+  if (!SERVICE_ID || !PUBLIC_KEY) return
+  const templateId = STATUS_TEMPLATE_ID || TEMPLATE_ID
+  if (!templateId) return
+  const headline = STATUS_HEADLINES[status] || `Your order status is now ${status}`
+  const items = Array.isArray(order?.items) ? order.items : []
+  try {
+    await emailjs.send(SERVICE_ID, templateId, {
+      to_email: customerEmail,
+      to_name: customerName || (customerEmail ? customerEmail.split('@')[0] : ''),
+      logo_url: LOGO_URL,
+      site_url: SITE_URL,
+      order_id: order?.id ? String(order.id) : '-',
+      status,
+      headline,
+      orders: items.map((i) => ({
+        name: i.name,
+        units: i.qty,
+        price: ((Number(i.price) || 0) * (Number(i.qty) || 0)).toLocaleString(),
+      })),
+      cost: {
+        shipping: 'N/A',
+        total: Number(order?.total || 0).toLocaleString(),
+      },
+    }, PUBLIC_KEY)
+    console.info(`Order status email sent (${status}) →`, customerEmail)
+  } catch (err) {
+    console.warn('Failed to send order status email:', err)
+  }
+}
+
 export async function sendPasswordResetEmail({ toEmail, toName = '', resetLink }) {
   if (!SERVICE_ID || !PUBLIC_KEY || !(RESET_TEMPLATE_ID || TEMPLATE_ID)) {
     throw new Error('Email service is not configured. Please contact support.')

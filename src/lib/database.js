@@ -161,6 +161,21 @@ export async function getOrdersForUser(userId) {
   return data || []
 }
 
+// Returns true if the user has at least one order containing the given product.
+// Used to gate review submission to actual buyers.
+export async function hasPurchasedProduct(userId, productId) {
+  if (!userId || !productId) return false
+  try {
+    const orders = await getOrdersForUser(userId)
+    return orders.some((o) => {
+      const items = Array.isArray(o?.items) ? o.items : []
+      return items.some((it) => Number(it?.id) === Number(productId))
+    })
+  } catch {
+    return false
+  }
+}
+
 export async function updateOrderStatus(orderId, status) {
   const { data, error } = await supabase
     .from('orders')

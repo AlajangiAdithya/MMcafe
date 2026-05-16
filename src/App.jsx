@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
@@ -9,6 +9,7 @@ import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
 import CookieConsent from './components/CookieConsent'
 import ErrorBoundary from './components/ErrorBoundary'
+import CommandPalette from './components/CommandPalette'
 import Home from './pages/Home'
 import './App.css'
 
@@ -72,9 +73,23 @@ export default function App() {
 function AppShell() {
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
+  const [paletteOpen, setPaletteOpen] = useState(false)
+
+  // Global ⌘K / Ctrl+K to open the search palette.
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPaletteOpen((o) => !o)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="app">
-      <Navbar />
+      <Navbar onOpenSearch={() => setPaletteOpen(true)} />
       <main className="main-content">
         <ErrorBoundary>
           <Suspense fallback={<RouteFallback />}>
@@ -114,6 +129,7 @@ function AppShell() {
       </main>
       {!isAdmin && <Footer />}
       <CartDrawer />
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
       <CookieConsent />
       <Toaster
         position="bottom-right"

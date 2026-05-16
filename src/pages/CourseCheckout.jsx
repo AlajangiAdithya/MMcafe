@@ -315,6 +315,25 @@ export default function CourseCheckout() {
               className="checkout-pay-btn"
             />
 
+            <div className="checkout-sticky-mobile">
+              <div className="checkout-sticky-mobile-total">
+                <span>{course.free ? 'Enrollment' : 'Total'}</span>
+                <strong>{course.free ? 'FREE' : `₹${grandTotal.toLocaleString()}`}</strong>
+              </div>
+              <button
+                type="button"
+                className="btn btn-blue"
+                onClick={handlePay}
+                disabled={loading}
+              >
+                {loading
+                  ? 'Processing…'
+                  : course.free
+                    ? 'Enroll now'
+                    : `Pay ₹${grandTotal.toLocaleString()}`}
+              </button>
+            </div>
+
             <p className="checkout-secure">
               <ShieldCheck size={14} />
               Server-verified payment via Razorpay. Your data is encrypted.

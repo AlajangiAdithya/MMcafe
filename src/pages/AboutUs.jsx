@@ -1,10 +1,20 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Coffee, Award, Users, Heart, ArrowRight } from 'lucide-react'
+import { Coffee, Award, Trophy, MapPin, Clock, ArrowRight, ExternalLink, Sparkles, Heart, Users } from 'lucide-react'
 import { motion, useInView } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import { GridBackground } from '@/components/ui/grid-background'
+
+function InstagramIcon({ size = 16 }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -39,12 +49,13 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function AboutUs() {
   usePageMeta({
     title: 'About Us',
-    description: 'The story behind Mastermind Brews - born from a love for great coffee and a welcoming space.',
+    description: 'Meet Mastermind Brews, Namrata Umesh, and the Mastermind Bicycle Cafe. The people and the place behind the coffee.',
   })
 
   return (
     <div className="page-shell about-page">
-      <section className="page-hero">
+      {/* ===== PAGE HERO ===== */}
+      <section className="page-hero about-hero">
         <div className="container">
           <motion.div
             initial="hidden"
@@ -54,47 +65,221 @@ export default function AboutUs() {
               visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
             }}
           >
-            <motion.div className="section-label" variants={fadeUp}>Our Story</motion.div>
-            <motion.h1 className="page-title" variants={fadeUp}>About Mastermind Brews</motion.h1>
+            <motion.div className="section-label" variants={fadeUp}>About Us</motion.div>
+            <motion.h1 className="page-title" variants={fadeUp}>
+              The People, The Place,<br />The <span className="text-blue">Coffee</span>.
+            </motion.h1>
             <motion.p className="page-lede" variants={fadeUp}>
-              Born from a dream of great coffee, welcoming spaces, and the slow art of doing things well.
+              Three stories that make Mastermind Brews: the brand, the brewer, and the cafe where it all began.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
-      <section className="about-strip">
+      {/* ===== INTRO 1 — MASTERMIND BREWS ===== */}
+      <section className="about-intro about-intro-brews">
         <div className="container">
-          <div className="about-grid">
-            <AnimatedSection className="about-image">
-              <img
-                src="https://lh3.googleusercontent.com/fMDJUXTml2Oy7acthKsu7XcqBLyoqnlilQCJruYAFRpyvyAPX7gruOfHokGvUH1PxP5DdFm_oCgsPDsYOv-AGGl9rJQpBlc-GWRXHjQx=w1200-rw"
-                alt="Mastermind Bicycle Cafe"
-                loading="lazy"
-              />
-              <div className="accent-line" />
+          <div className="about-intro-grid">
+            <AnimatedSection className="about-intro-media">
+              <div className="about-intro-frame">
+                <img
+                  src="https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw"
+                  alt="Mastermind Brews coffee beans"
+                  loading="lazy"
+                />
+                <span className="about-intro-chip"><Sparkles size={12} /> The Brand</span>
+              </div>
             </AnimatedSection>
-            <AnimatedSection className="about-text" delay={0.2}>
-              <div className="section-label">Who We Are</div>
-              <AnimatedText
-                text="A Cafe, An Academy, A Community"
-                textClassName="text-foreground"
-                underlineClassName="text-primary"
-              />
-              <p className="highlight" style={{ marginTop: '2rem' }}>
-                Started by a businessman and his daughter who dreamt of a cafe that serves great coffee, always welcomes all, and makes one feel like in the by-lanes of Europe.
+            <AnimatedSection className="about-intro-text" delay={0.15}>
+              <div className="about-intro-label">01 / Mastermind Brews</div>
+              <h2 className="about-intro-title">Specialty coffee, beyond the bar.</h2>
+              <p className="about-intro-lede">
+                Mastermind Brews is the online home for the beans, the brewing methods, and the barista craft we've been serving in Mumbai for years.
               </p>
               <p>
-                We sit in the heart of Mulund, Mumbai. Our beans come direct from Chikmagalur, Karnataka. Our roast profiles are crafted with Bean Rove. Our space is open to anyone who wants a good cup and a quiet hour.
+                We work with single-origin beans sourced directly from <strong>Chikmagalur, Karnataka</strong>, roasted with exclusive profiles by Bean Rove. The same coffee you'd order across our bar, now shipped to your kitchen.
               </p>
               <p>
-                Beyond serving coffee, we train baristas, consult with cafes, and now bring our beans, our courses, and our experience to readers and home brewers everywhere.
+                Alongside the beans, we run a barista academy of HD video courses, hands-on workshops, and a project arm that helps other cafes build coffee programs of their own.
               </p>
+              <div className="about-intro-stats">
+                <div>
+                  <strong>3</strong>
+                  <span>Beans · Academy · Projects</span>
+                </div>
+                <div>
+                  <strong>Bean Rove</strong>
+                  <span>Roast Partner</span>
+                </div>
+                <div>
+                  <strong>Chikmagalur</strong>
+                  <span>Single Origin</span>
+                </div>
+              </div>
+              <div className="about-intro-actions">
+                <Link to="/store" className="btn btn-primary">Shop Coffee <ArrowRight size={14} /></Link>
+                <Link to="/workshop" className="btn btn-outline">Learn Coffee</Link>
+              </div>
             </AnimatedSection>
           </div>
         </div>
       </section>
 
+      {/* ===== INTRO 2 — NAMRATA IS BREWING ===== */}
+      <section className="about-intro about-intro-namrata">
+        <div className="about-intro-glow" aria-hidden="true" />
+        <div className="container">
+          <div className="about-intro-grid reverse">
+            <AnimatedSection className="about-intro-media">
+              <div className="about-intro-frame portrait">
+                <img
+                  src="/namrata.jpg"
+                  alt="Namrata Umesh, founder of Mastermind Bicycle Cafe"
+                  loading="lazy"
+                />
+                <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
+                <motion.div
+                  className="about-namrata-badge"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 180 }}
+                >
+                  <div className="about-namrata-badge-icon"><Award size={18} /></div>
+                  <div className="about-namrata-badge-body">
+                    <div className="about-namrata-badge-num">4th</div>
+                    <div className="about-namrata-badge-label">Runner-Up<br />National Barista Championship</div>
+                  </div>
+                </motion.div>
+              </div>
+            </AnimatedSection>
+            <AnimatedSection className="about-intro-text" delay={0.15}>
+              <div className="about-intro-label about-intro-label-pink">02 / Namrata Is Brewing</div>
+              <h2 className="about-intro-title">From physiotherapy to championship coffee.</h2>
+              <p className="about-intro-lede">
+                Namrata Umesh is the founder of Mastermind Bicycle Cafe, and a professional barista who placed <strong>4th Runner-Up at the National Barista Championship</strong>.
+              </p>
+              <p>
+                A former physiotherapist, she switched lanes into coffee at the urging of her father, and built her craft from the bar up: espresso cremas, pour-overs, and the kind of details that quietly separate a good cup from a great one.
+              </p>
+              <p>
+                On her handle <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer" className="about-inline-link">@namrata_is_brewing</a>, she shares the techniques she teaches her own baristas, from dialing in espresso to pulling a clean pour-over at home.
+              </p>
+              <div className="about-namrata-creds">
+                <div className="about-namrata-cred">
+                  <Trophy size={16} />
+                  <div>
+                    <strong>National Barista Championship</strong>
+                    <span>Finalist · 4th Runner-Up</span>
+                  </div>
+                </div>
+                <div className="about-namrata-cred">
+                  <Coffee size={16} />
+                  <div>
+                    <strong>Founder, Mastermind Bicycle Cafe</strong>
+                    <span>Specialty Coffee · Mumbai</span>
+                  </div>
+                </div>
+                <div className="about-namrata-cred">
+                  <InstagramIcon size={16} />
+                  <div>
+                    <strong>@namrata_is_brewing</strong>
+                    <span>Coffee education & brewing tips</span>
+                  </div>
+                </div>
+              </div>
+              <div className="about-intro-actions">
+                <a
+                  href="https://www.instagram.com/namrata_is_brewing/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-blue"
+                >
+                  <InstagramIcon size={16} /> Follow @namrata_is_brewing
+                </a>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== INTRO 3 — MASTERMIND CAFE ===== */}
+      <section className="about-intro about-intro-cafe">
+        <div className="container">
+          <div className="about-intro-grid">
+            <AnimatedSection className="about-intro-media">
+              <div className="about-intro-frame">
+                <img
+                  src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw"
+                  alt="Mastermind Bicycle Cafe interior"
+                  loading="lazy"
+                />
+                <span className="about-intro-chip"><MapPin size={12} /> The Cafe</span>
+              </div>
+            </AnimatedSection>
+            <AnimatedSection className="about-intro-text" delay={0.15}>
+              <div className="about-intro-label about-intro-label-amber">03 / Mastermind Bicycle Cafe</div>
+              <h2 className="about-intro-title">A specialty coffee house. A community space.</h2>
+              <p className="about-intro-lede">
+                A cozy, pet-friendly cafe in Mulund, where manual brews, authentic South Indian food, and an active cycling community share the same room.
+              </p>
+              <p>
+                We're known for our <strong>manual brews, Malabar tiffins, matcha cocktails, gelato</strong>, and artisanal desserts. Espresso meets cycling culture, and the door is open to anyone who wants a good cup and a quiet hour.
+              </p>
+              <div className="about-cafe-grid">
+                <div className="about-cafe-card">
+                  <div className="about-cafe-card-icon"><MapPin size={16} /></div>
+                  <div>
+                    <strong>Mulund, Mumbai</strong>
+                    <span>Flagship · Avior Corporate Park</span>
+                  </div>
+                </div>
+                <div className="about-cafe-card">
+                  <div className="about-cafe-card-icon"><MapPin size={16} /></div>
+                  <div>
+                    <strong>Oberoi Eternia</strong>
+                    <span>Newer outlet</span>
+                  </div>
+                </div>
+                <div className="about-cafe-card">
+                  <div className="about-cafe-card-icon"><Clock size={16} /></div>
+                  <div>
+                    <strong>Open All Days</strong>
+                    <span>8:30 AM to 12 Midnight</span>
+                  </div>
+                </div>
+                <div className="about-cafe-card">
+                  <div className="about-cafe-card-icon"><Heart size={16} /></div>
+                  <div>
+                    <strong>Pet Friendly</strong>
+                    <span>Vegan & gluten-free options</span>
+                  </div>
+                </div>
+              </div>
+              <div className="about-intro-actions">
+                <a
+                  href="https://www.mastermindcafe.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  Visit Cafe Website <ExternalLink size={14} />
+                </a>
+                <a
+                  href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline"
+                >
+                  Get Directions
+                </a>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== VALUES ===== */}
       <GridBackground className="min-h-0">
         <section className="values-section" style={{ position: 'relative', zIndex: 1 }}>
           <div className="container">
@@ -121,7 +306,7 @@ export default function AboutUs() {
               <motion.div className="value-card" variants={fadeUp}>
                 <div className="value-icon"><Heart size={22} /></div>
                 <h3>Welcome All</h3>
-                <p>Pet friendly, vegan friendly, gluten-free options - because hospitality should not be selective.</p>
+                <p>Pet friendly, vegan friendly, gluten-free options, because hospitality should not be selective.</p>
               </motion.div>
               <motion.div className="value-card" variants={fadeUp}>
                 <div className="value-icon"><Award size={22} /></div>
@@ -131,7 +316,7 @@ export default function AboutUs() {
               <motion.div className="value-card" variants={fadeUp}>
                 <div className="value-icon"><Users size={22} /></div>
                 <h3>Build Community</h3>
-                <p>Cafes are third places. We work to keep ours warm, social, and a little bit unhurried.</p>
+                <p>Cafes are third places. We keep ours warm, social, and a little bit unhurried.</p>
               </motion.div>
             </motion.div>
           </div>
@@ -142,7 +327,7 @@ export default function AboutUs() {
         <div className="container">
           <AnimatedSection className="cta-card">
             <h2>Want to Visit, Learn or Hire?</h2>
-            <p>Drop by the cafe, browse the workshop, or get in touch for consultancy.</p>
+            <p>Drop by the cafe, browse the workshop, or get in touch about a project.</p>
             <div className="hero-btns">
               <Link to="/workshop" className="btn btn-primary">Browse Workshop <ArrowRight size={14} /></Link>
               <Link to="/contact" className="btn btn-outline">Contact Us</Link>

@@ -1,15 +1,25 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, Play, Star, Award, Coffee, Truck, ChevronDown, Clock, MapPin, Phone, Mail, Globe, Package } from 'lucide-react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { ShoppingBag, BookOpen, ArrowRight, Play, Star, Award, Coffee, Truck, ChevronDown, Clock, MapPin, Phone, Mail, Globe, Package, History, Check, Leaf, Flame, Users, Sparkles } from 'lucide-react'
+
+function Instagram({ size = 16 }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
+import { motion, useInView, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
-import { getFeaturedProducts } from '../lib/database'
+import { getFeaturedProducts, getProducts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
+import { useRecentlyViewed } from '../lib/useRecentlyViewed'
+import ProductDetailModal from '../components/ProductDetailModal'
 import toast from 'react-hot-toast'
 
-import { GridBackground } from '@/components/ui/grid-background'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
-import { ParallaxFeatureSection } from '@/components/ui/parallax-scroll-feature-section'
 import { SocialLinks } from '@/components/ui/social-links'
 import VaporizeTextCycle, { Tag } from '@/components/ui/vapour-text-effect'
 
@@ -19,34 +29,40 @@ const TESTIMONIALS = [
   { name: 'Rick Snyder', role: 'Google Review', initials: 'RS', rating: 5, text: 'The food was so good - huge variety on the menu. Iced matcha latte was perfect, the pesto & burrata pizza and nachos were fantastic. Shubham was our server and he was really friendly. Ask for him to serve you!' },
 ]
 
-const PARALLAX_FEATURES = [
+// Placeholder content — client will replace with real project case studies.
+const PROJECTS = [
   {
-    id: 1,
-    title: 'Coffee Beans',
-    description: 'Single-origin beans directly sourced from Chikmagalur, Karnataka. Freshly roasted with exclusive Bean Rove profiles for a rich, complex flavour that elevates every cup.',
-    imageUrl: 'https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw',
-    reverse: false,
-    link: '/store',
-    ctaText: 'Shop Beans'
+    title: 'Mastermind Bicycle Cafe',
+    location: 'Mulund, Mumbai',
+    summary: 'Our flagship cafe: a full coffee program, European-inspired menu, and a community space built from the ground up.',
+    image: 'https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw',
+    tag: 'Flagship',
   },
   {
-    id: 2,
-    title: 'Coffee Powder',
-    description: 'Ground precisely for every brewing method — from espresso to French press. The same premium blends that power Mastermind Bicycle Cafe, now in your kitchen.',
-    imageUrl: 'https://lh3.googleusercontent.com/9NODaqOMcC9h2RNX0RzGciKNPeG8QNL_TgiIamED8u_oSuzVZ4TYc_zWSr0_MgKg7tzxSDsNlNH9UrTZlbu9LY45cKuWOZGssx_ZDT_Cpg=w1200-rw',
-    reverse: true,
-    link: '/store',
-    ctaText: 'Shop Powder'
+    title: 'Bean Rove Roast Profiles',
+    location: 'Chikmagalur, Karnataka',
+    summary: 'Exclusive single-origin profiles roasted in partnership with Bean Rove, the same beans we serve and ship.',
+    image: 'https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw',
+    tag: 'Sourcing',
   },
   {
-    id: 3,
-    title: 'Barista Training',
-    description: 'Learn from our certified baristas through professional HD video courses. From your first pull to latte art mastery — lifetime access on any device.',
-    imageUrl: 'https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw',
-    reverse: false,
-    link: '/workshop',
-    ctaText: 'View Academy'
+    title: 'Barista Training Program',
+    location: 'Online & On-Site',
+    summary: 'Structured curriculum used to onboard cafe partners and individual baristas: espresso, milk craft, brewing science.',
+    image: 'https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw',
+    tag: 'Training',
   },
+]
+
+// Placeholder grid for the Instagram strip — client can swap these with
+// real post thumbnails or wire up the IG Basic Display API later.
+const INSTAGRAM_TILES = [
+  'https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w600-rw',
+  'https://lh3.googleusercontent.com/A959ZB5laMMAwx3johfA0IdN0LMU0pdhL9EmXBWTkEyVu1erfFJy4p7kJhUN4dzVZLPOTQWQ6-_PeE6Q-UwwbhnOooY2s1UXjLvE-xBZSw=w600-rw',
+  'https://lh3.googleusercontent.com/fMDJUXTml2Oy7acthKsu7XcqBLyoqnlilQCJruYAFRpyvyAPX7gruOfHokGvUH1PxP5DdFm_oCgsPDsYOv-AGGl9rJQpBlc-GWRXHjQx=w600-rw',
+  'https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w600-rw',
+  'https://lh3.googleusercontent.com/9NODaqOMcC9h2RNX0RzGciKNPeG8QNL_TgiIamED8u_oSuzVZ4TYc_zWSr0_MgKg7tzxSDsNlNH9UrTZlbu9LY45cKuWOZGssx_ZDT_Cpg=w600-rw',
+  'https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w600-rw',
 ]
 
 const SOCIAL_LINKS = [
@@ -93,7 +109,14 @@ export default function Home() {
   const { addItem } = useCart()
   const [featured, setFeatured] = useState([])
   const [featuredLoading, setFeaturedLoading] = useState(true)
-  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem('mm-intro'))
+  const prefersReducedMotion = useReducedMotion()
+  // Skip the vapor intro entirely for users who opt out of motion.
+  const [showIntro, setShowIntro] = useState(
+    () => !sessionStorage.getItem('mm-intro') && !prefersReducedMotion,
+  )
+  const [allProducts, setAllProducts] = useState([])
+  const [openProduct, setOpenProduct] = useState(null)
+  const { ids: recentIds } = useRecentlyViewed()
 
   useEffect(() => {
     let cancelled = false
@@ -103,6 +126,22 @@ export default function Home() {
       .finally(() => { if (!cancelled) setFeaturedLoading(false) })
     return () => { cancelled = true }
   }, [])
+
+  // Only fetch the full product list when we actually have something to show.
+  useEffect(() => {
+    if (recentIds.length < 3 || allProducts.length > 0) return
+    let cancelled = false
+    getProducts()
+      .then((rows) => { if (!cancelled) setAllProducts(rows) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [recentIds.length, allProducts.length])
+
+  const recentProducts = useMemo(() => {
+    if (allProducts.length === 0) return []
+    const map = new Map(allProducts.map((p) => [p.id, p]))
+    return recentIds.map((id) => map.get(id)).filter(Boolean)
+  }, [recentIds, allProducts])
 
   const handleVaporizeEnd = useCallback(() => {
     sessionStorage.setItem('mm-intro', '1')
@@ -184,28 +223,34 @@ export default function Home() {
             <span className="dot" />
             From Mastermind Bicycle Cafe & Bar, Mumbai
           </motion.div>
-          <motion.h1
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
+          <motion.div
+            className="hero-logo-wrap"
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            Specialty Coffee<br />
-            <span className="text-blue">Beans</span> &{' '}
-            <span className="text-pink">Academy</span>
+            <img src="/logo.png" alt="Mastermind Brews" className="hero-logo" />
+          </motion.div>
+          <motion.h1
+            className="hero-tagline"
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            Master Your <span className="text-blue">Mind</span>,<br />
+            Master Your <span className="text-pink">Brews</span>
           </motion.h1>
           <motion.p
-            className="hero-desc"
+            className="hero-kicker"
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
           >
-            Directly sourced beans from Chikmagalur, Karnataka. The same specialty coffee that powers Mastermind Bicycle Cafe — now delivered to your doorstep, with barista training to match.
+            Specialty single-origin beans from Chikmagalur, roasted with Bean Rove, plus a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
           </motion.p>
           <motion.div
             className="hero-btns"
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
           >
             <Link to="/store" className="btn btn-primary">
-              <ShoppingBag size={16} /> Shop Beans
+              <ShoppingBag size={16} /> Shop Coffee
             </Link>
             <Link to="/workshop" className="btn btn-outline">
-              <BookOpen size={16} /> Join Workshop
+              <BookOpen size={16} /> Learn Coffee
             </Link>
           </motion.div>
         </motion.div>
@@ -268,20 +313,157 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== PARALLAX FEATURE CATEGORIES ===== */}
-      <GridBackground className="min-h-0">
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <AnimatedSection style={{ textAlign: 'center', paddingTop: '80px' }}>
-            <div className="section-label" style={{ textAlign: 'center' }}>What We Offer</div>
-            <AnimatedText
-              text="From Our Cafe To Your Cup"
-              textClassName="text-foreground"
-              underlineClassName="text-primary"
-            />
+      {/* ===== WHAT WE OFFER ===== */}
+      <section className="offer-section">
+        <div className="offer-section-glow" aria-hidden="true" />
+        <div className="container">
+          <AnimatedSection className="section-header center">
+            <div className="section-label">What We Offer</div>
+            <h2 className="section-title">
+              Two Crafts. <span className="text-gradient">One Standard.</span>
+            </h2>
+            <p className="section-desc" style={{ margin: '14px auto 0', maxWidth: 620 }}>
+              Specialty coffee in a bag, and a barista academy in your pocket. Both built from the same Mulund bar that pours them daily.
+            </p>
           </AnimatedSection>
-          <ParallaxFeatureSection sections={PARALLAX_FEATURES} />
+
+          <motion.div
+            className="offer-pillars"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={staggerContainer}
+          >
+            <motion.article className="offer-pillar offer-pillar-pink" variants={fadeUp}>
+              <div className="offer-pillar-media">
+                <img
+                  src="https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw"
+                  alt="Coffee beans being roasted"
+                  loading="lazy"
+                />
+                <span className="offer-pillar-index">01</span>
+                <span className="offer-pillar-tag"><Coffee size={12} /> Beans &amp; Powder</span>
+                <div className="offer-pillar-media-fade" />
+              </div>
+              <div className="offer-pillar-body">
+                <h3 className="offer-pillar-title">Single-Origin From Chikmagalur</h3>
+                <p className="offer-pillar-desc">
+                  Specialty arabica, roasted with exclusive Bean Rove profiles and packed within 48 hours of roast. Whole bean or ground to your brew method.
+                </p>
+                <div className="offer-pillar-specs">
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Origin</span>
+                    <span className="offer-spec-value">Chikmagalur</span>
+                  </div>
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Roast</span>
+                    <span className="offer-spec-value">Bean Rove</span>
+                  </div>
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Grind</span>
+                    <span className="offer-spec-value">Custom</span>
+                  </div>
+                </div>
+                <ul className="offer-pillar-features">
+                  <li><Check size={14} /> 100% specialty grade arabica</li>
+                  <li><Check size={14} /> Roasted to order, shipped fresh</li>
+                  <li><Check size={14} /> Espresso, filter, French press grinds</li>
+                  <li><Check size={14} /> Free shipping above ₹999</li>
+                </ul>
+                <Link to="/store" className="btn btn-primary offer-pillar-cta">
+                  <ShoppingBag size={16} /> Shop Coffee <ArrowRight size={14} />
+                </Link>
+              </div>
+            </motion.article>
+
+            <motion.article className="offer-pillar offer-pillar-blue" variants={fadeUp}>
+              <div className="offer-pillar-media">
+                <img
+                  src="https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw"
+                  alt="Barista pulling an espresso shot"
+                  loading="lazy"
+                />
+                <span className="offer-pillar-index">02</span>
+                <span className="offer-pillar-tag"><BookOpen size={12} /> Barista Academy</span>
+                <div className="offer-pillar-media-fade" />
+              </div>
+              <div className="offer-pillar-body">
+                <h3 className="offer-pillar-title">Train With Our Champion Baristas</h3>
+                <p className="offer-pillar-desc">
+                  HD video lessons from the team behind Mastermind Brews. From your first pull to latte art mastery, on any device, anytime.
+                </p>
+                <div className="offer-pillar-specs">
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Format</span>
+                    <span className="offer-spec-value">HD Video</span>
+                  </div>
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Access</span>
+                    <span className="offer-spec-value">30 Days</span>
+                  </div>
+                  <div className="offer-spec">
+                    <span className="offer-spec-label">Modules</span>
+                    <span className="offer-spec-value">6 Courses</span>
+                  </div>
+                </div>
+                <ul className="offer-pillar-features">
+                  <li><Check size={14} /> Beginner to advanced tracks</li>
+                  <li><Check size={14} /> Espresso, milk craft, latte art, brewing</li>
+                  <li><Check size={14} /> Built by national-level baristas</li>
+                  <li><Check size={14} /> Watch on phone, tablet, or laptop</li>
+                </ul>
+                <Link to="/workshop" className="btn btn-blue offer-pillar-cta">
+                  <BookOpen size={16} /> Start Learning <ArrowRight size={14} />
+                </Link>
+              </div>
+            </motion.article>
+          </motion.div>
+
+          <motion.div
+            className="offer-trust-strip"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={staggerContainer}
+          >
+            <motion.div className="offer-trust-item" variants={fadeUp}>
+              <div className="offer-trust-icon"><Leaf size={18} /></div>
+              <div className="offer-trust-text">
+                <div className="offer-trust-num">100%</div>
+                <div className="offer-trust-label">Arabica</div>
+              </div>
+            </motion.div>
+            <motion.div className="offer-trust-item" variants={fadeUp}>
+              <div className="offer-trust-icon"><Flame size={18} /></div>
+              <div className="offer-trust-text">
+                <div className="offer-trust-num">48 hrs</div>
+                <div className="offer-trust-label">Roast to ship</div>
+              </div>
+            </motion.div>
+            <motion.div className="offer-trust-item" variants={fadeUp}>
+              <div className="offer-trust-icon"><Award size={18} /></div>
+              <div className="offer-trust-text">
+                <div className="offer-trust-num">4th Runner-Up</div>
+                <div className="offer-trust-label">National Barista Champ</div>
+              </div>
+            </motion.div>
+            <motion.div className="offer-trust-item" variants={fadeUp}>
+              <div className="offer-trust-icon"><Sparkles size={18} /></div>
+              <div className="offer-trust-text">
+                <div className="offer-trust-num">Bean Rove</div>
+                <div className="offer-trust-label">Exclusive profiles</div>
+              </div>
+            </motion.div>
+            <motion.div className="offer-trust-item" variants={fadeUp}>
+              <div className="offer-trust-icon"><Users size={18} /></div>
+              <div className="offer-trust-text">
+                <div className="offer-trust-num">500+</div>
+                <div className="offer-trust-label">Cafe regulars</div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </GridBackground>
+      </section>
 
       {/* ===== FEATURED PRODUCTS ===== */}
       {(featuredLoading || featured.length > 0) && (
@@ -351,6 +533,54 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+      )}
+
+      {/* ===== RECENTLY VIEWED ===== */}
+      {recentProducts.length >= 3 && (
+        <section className="recently-viewed-section">
+          <div className="container">
+            <div className="featured-header">
+              <AnimatedSection className="section-header" style={{ marginBottom: 0 }}>
+                <div className="section-label"><History size={12} style={{ display: 'inline', marginRight: 6 }} /> For You</div>
+                <h2 className="section-title">Recently Viewed</h2>
+              </AnimatedSection>
+              <Link to="/store" className="btn btn-ghost">
+                Back to Store <ArrowRight size={14} />
+              </Link>
+            </div>
+            <div className="recently-viewed-row">
+              {recentProducts.slice(0, 6).map((product) => (
+                <button
+                  type="button"
+                  key={product.id}
+                  className="recently-viewed-card"
+                  onClick={() => setOpenProduct(product)}
+                >
+                  <div className="recently-viewed-image">
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} loading="lazy" />
+                    ) : (
+                      <div className="featured-product-placeholder"><Package size={28} /></div>
+                    )}
+                  </div>
+                  <div className="recently-viewed-info">
+                    <span className="recently-viewed-category">{product.category}</span>
+                    <span className="recently-viewed-name">{product.name}</span>
+                    <span className="recently-viewed-price">₹{product.price}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {openProduct && (
+        <ProductDetailModal
+          product={openProduct}
+          onClose={() => setOpenProduct(null)}
+          allProducts={allProducts}
+        />
       )}
 
       {/* ===== ACADEMY PREVIEW ===== */}
@@ -474,48 +704,89 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TESTIMONIALS ===== */}
-      <section className="testimonials-section">
+      {/* ===== OUR PROJECTS ===== */}
+      <section className="projects-section">
         <div className="container">
           <AnimatedSection className="section-header center">
-            <div className="section-label">Testimonials</div>
-            <h2 className="section-title">What Our Community Says</h2>
+            <div className="section-label">Our Projects</div>
+            <h2 className="section-title">What We've Built</h2>
+            <p className="section-desc" style={{ margin: '12px auto 0', maxWidth: 600 }}>
+              From our flagship cafe to sourcing partnerships and training programs. A few of the projects that shape Mastermind Brews today.
+            </p>
           </AnimatedSection>
           <motion.div
-            className="testimonials-grid"
+            className="projects-grid"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
             variants={staggerContainer}
           >
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div key={i} className="testimonial-card" variants={fadeUp}>
-                <div className="testimonial-stars">
-                  {[...Array(t.rating)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
+            {PROJECTS.map((p, i) => (
+              <motion.article key={i} className="project-card" variants={fadeUp}>
+                <div className="project-card-image">
+                  <img src={p.image} alt={p.title} loading="lazy" />
+                  <span className="project-card-tag">{p.tag}</span>
                 </div>
-                <p className="testimonial-text">"{t.text}"</p>
-                <div className="testimonial-author">
-                  <div className="testimonial-avatar">{t.initials}</div>
-                  <div className="testimonial-author-info">
-                    <div className="name">{t.name}</div>
-                    <div className="role">{t.role}</div>
-                  </div>
+                <div className="project-card-body">
+                  <div className="project-card-location"><MapPin size={12} /> {p.location}</div>
+                  <h3 className="project-card-title">{p.title}</h3>
+                  <p className="project-card-summary">{p.summary}</p>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </motion.div>
+          <div style={{ textAlign: 'center', marginTop: 40 }}>
+            <Link to="/consultancy" className="btn btn-ghost">
+              See All Projects <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* Testimonials hidden for now — client wants Our Projects to take this slot. */}
+      {false && (
+        <section className="testimonials-section">
+          <div className="container">
+            <AnimatedSection className="section-header center">
+              <div className="section-label">Testimonials</div>
+              <h2 className="section-title">What Our Community Says</h2>
+            </AnimatedSection>
+            <motion.div
+              className="testimonials-grid"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={staggerContainer}
+            >
+              {TESTIMONIALS.map((t, i) => (
+                <motion.div key={i} className="testimonial-card" variants={fadeUp}>
+                  <div className="testimonial-stars">
+                    {[...Array(t.rating)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
+                  </div>
+                  <p className="testimonial-text">"{t.text}"</p>
+                  <div className="testimonial-author">
+                    <div className="testimonial-avatar">{t.initials}</div>
+                    <div className="testimonial-author-info">
+                      <div className="name">{t.name}</div>
+                      <div className="role">{t.role}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* ===== VISIT US ===== */}
       <section className="visit-section">
         <div className="container">
           <div className="visit-grid">
             <AnimatedSection className="visit-info">
-              <div className="section-label">Visit The Cafe</div>
-              <h2 className="section-title">Drop By In Mulund</h2>
+              <div className="section-label">Our Cafe</div>
+              <h2 className="section-title">Mastermind Bicycle Cafe, Mulund</h2>
               <p className="section-desc">
-                One of the best cafes in Mulund - doors open every day, with European cafe vibes, specialty coffee and a menu that goes deep.
+                One of the best cafes in Mulund. Doors open every day, with European cafe vibes, specialty coffee and a menu that goes deep. Visit us in person or explore the full cafe online.
               </p>
               <div className="visit-details">
                 <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
@@ -548,8 +819,11 @@ export default function Home() {
                 </motion.div>
               </div>
               <div className="visit-socials">
-                <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" className="visit-social">
-                  <Globe size={16} /> @mastermindbicyclecafe
+                <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="visit-social">
+                  <Globe size={16} /> mastermindcafe.in
+                </a>
+                <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="btn btn-blue btn-sm">
+                  Visit Cafe Website <ArrowRight size={14} />
                 </a>
                 <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">
                   Get Directions <ArrowRight size={14} />
@@ -568,6 +842,53 @@ export default function Home() {
                 </div>
               </div>
             </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== INSTAGRAM ===== */}
+      <section className="instagram-section">
+        <div className="container">
+          <AnimatedSection className="section-header center">
+            <div className="section-label"><Instagram size={12} style={{ display: 'inline', marginRight: 6 }} /> Instagram</div>
+            <h2 className="section-title">Follow @mastermindbicyclecafe</h2>
+            <p className="section-desc" style={{ margin: '12px auto 0', maxWidth: 560 }}>
+              Behind the bar, on the bike, behind the beans. Catch our daily moments and brew inspiration.
+            </p>
+          </AnimatedSection>
+          <motion.div
+            className="instagram-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+          >
+            {INSTAGRAM_TILES.map((src, i) => (
+              <motion.a
+                key={i}
+                href="https://www.instagram.com/mastermindbicyclecafe/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="instagram-tile"
+                variants={fadeUp}
+                aria-label="Open Instagram"
+              >
+                <img src={src} alt="" loading="lazy" />
+                <span className="instagram-tile-overlay">
+                  <Instagram size={22} />
+                </span>
+              </motion.a>
+            ))}
+          </motion.div>
+          <div style={{ textAlign: 'center', marginTop: 36 }}>
+            <a
+              href="https://www.instagram.com/mastermindbicyclecafe/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
+              <Instagram size={16} /> Follow on Instagram
+            </a>
           </div>
         </div>
       </section>

@@ -56,12 +56,6 @@ export default function Signup() {
       toast.error(emailErr)
       return
     }
-    const fix = suggestEmailFix(email)
-    if (fix) {
-      setTouched(t => ({ ...t, email: true }))
-      toast.error(`Did you mean ${fix}? Tap the suggestion below to fix it.`)
-      return
-    }
     if (password.length < 6) {
       toast.error('Password must be at least 6 characters')
       return
@@ -185,7 +179,7 @@ export default function Signup() {
                   </button>
                 )}
                 <span className="field-hint">
-                  Double-check this — we send order updates and password resets here. We don&rsquo;t verify by email.
+                  Double-check this. We send order updates and password resets here. We don&rsquo;t verify by email.
                 </span>
               </div>
 

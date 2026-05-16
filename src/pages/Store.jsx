@@ -6,9 +6,9 @@ import { getProducts } from '../lib/database'
 import { supabase } from '../lib/supabase'
 import ProductDetailModal from '../components/ProductDetailModal'
 import WishlistButton from '../components/WishlistButton'
+import { ProductGridSkeleton } from '../components/Skeleton'
 import { usePageMeta } from '../lib/usePageMeta'
 import toast from 'react-hot-toast'
-import Loader from '@/components/ui/loader-4'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -119,9 +119,7 @@ export default function Store() {
 
       <div className="store-container">
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-            <Loader />
-          </div>
+          <ProductGridSkeleton count={8} />
         ) : error ? (
           <div className="store-empty">
             <Package size={56} />
@@ -235,6 +233,7 @@ export default function Store() {
           product={selected}
           onClose={() => setSelected(null)}
           reviewStats={reviewStats[selected.id]}
+          allProducts={products}
         />
       )}
     </div>

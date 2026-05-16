@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Star, Send } from 'lucide-react'
+import { Star, Send, ShoppingBag } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { getReviews, addReview } from '../lib/database'
+import { getReviews, addReview, hasPurchasedProduct } from '../lib/database'
 import toast from 'react-hot-toast'
 
 function StarRow({ value, size = 14, onSelect }) {
@@ -28,6 +28,7 @@ export default function ProductReviews({ productId }) {
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [canReview, setCanReview] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -40,6 +41,16 @@ export default function ProductReviews({ productId }) {
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [productId])
+
+  // Only buyers may post — keeps the review wall honest.
+  useEffect(() => {
+    let active = true
+    if (!user) { setCanReview(false); return }
+    hasPurchasedProduct(user.id, productId).then((ok) => {
+      if (active) setCanReview(!!ok)
+    })
+    return () => { active = false }
+  }, [user, productId])
 
   const submit = async (e) => {
     e.preventDefault()
@@ -89,7 +100,9 @@ export default function ProductReviews({ productId }) {
         </ul>
       )}
 
-      {user ? (
+      {!user ? (
+        <p className="text-muted">Login to leave a review.</p>
+      ) : canReview ? (
         <form className="review-form" onSubmit={submit}>
           <div className="review-form-row">
             <label>Your rating:</label>
@@ -106,7 +119,10 @@ export default function ProductReviews({ productId }) {
           </button>
         </form>
       ) : (
-        <p className="text-muted">Login to leave a review.</p>
+        <p className="review-gated">
+          <ShoppingBag size={14} />
+          Only verified buyers can review this product. Place an order and come back here once it&rsquo;s delivered.
+        </p>
       )}
     </div>
   )

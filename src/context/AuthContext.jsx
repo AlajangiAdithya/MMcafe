@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { upsertProfile, checkIsAdmin } from '../lib/database'
+import { invalidateWishlistCache } from '../components/WishlistButton'
 
 const AuthContext = createContext({})
 
@@ -153,6 +154,9 @@ export function AuthProvider({ children }) {
   }
 
   const signOut = async () => {
+    // Clear cross-component caches before the auth state actually flips so
+    // nothing reads the previous user's data on the way out.
+    invalidateWishlistCache()
     try {
       await supabase.auth.signOut()
     } catch (e) {

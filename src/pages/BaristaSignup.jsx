@@ -55,7 +55,7 @@ const newCaptcha = () => {
 
 export default function BaristaSignup() {
   usePageMeta({
-    title: 'Get Discovered — Join the Barista Directory',
+    title: 'Get Discovered: Join the Barista Directory',
     description: 'Are you a barista? Submit your details and get discovered by hiring cafes. No fees, no resume needed.',
   })
 
@@ -99,12 +99,6 @@ export default function BaristaSignup() {
       if (emailErr) {
         setTouched(t => ({ ...t, email: true }))
         toast.error(emailErr)
-        return
-      }
-      const fix = suggestEmailFix(form.email)
-      if (fix) {
-        setTouched(t => ({ ...t, email: true }))
-        toast.error(`Did you mean ${fix}? Tap the suggestion to fix it.`)
         return
       }
     }
@@ -292,7 +286,7 @@ export default function BaristaSignup() {
                   value={form.experience_summary}
                   onChange={change('experience_summary')}
                   rows={4}
-                  placeholder="Where have you worked before? Cafes? Hotels? What did you do there? Write in simple words — even one or two lines is fine."
+                  placeholder="Where have you worked before? Cafes? Hotels? What did you do there? Write in simple words, even one or two lines is fine."
                   maxLength={1000}
                 />
                 <span className="field-hint">Don&rsquo;t worry about grammar. Just tell us your story.</span>
@@ -326,7 +320,7 @@ export default function BaristaSignup() {
                         value={value}
                         onChange={(e) => updateEducation(idx, e.target.value)}
                         placeholder={idx === 0
-                          ? 'e.g. Mastermind Brews Academy — Barista Foundation'
+                          ? 'e.g. Mastermind Brews Academy: Barista Foundation'
                           : 'e.g. SCA Foundation, Hotel Management Diploma…'}
                         maxLength={200}
                       />

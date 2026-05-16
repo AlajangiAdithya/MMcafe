@@ -1,13 +1,39 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { X, ShoppingCart, Package, Tag, Star } from 'lucide-react'
 import ProductReviews from './ProductReviews'
 import WishlistButton from './WishlistButton'
 import toast from 'react-hot-toast'
 import { useCart } from '../context/CartContext'
 import { motion, AnimatePresence } from 'framer-motion'
+import { pushRecentProduct } from '../lib/useRecentlyViewed'
 
-export default function ProductDetailModal({ product, onClose, reviewStats }) {
+export default function ProductDetailModal({ product, onClose, reviewStats, allProducts = [] }) {
   const { addItem } = useCart()
+
+  const related = useMemo(() => {
+    if (!product || !Array.isArray(allProducts) || allProducts.length === 0) return []
+    return allProducts
+      .filter((p) => p.id !== product.id && p.category === product.category && p.in_stock !== false)
+      .slice(0, 4)
+  }, [product, allProducts])
+
+  // Build the gallery: prefer `product.images[]` when populated, otherwise
+  // fall back to the single `product.image`. De-dupe so the same URL doesn't
+  // show twice when an admin sets both fields.
+  const gallery = useMemo(() => {
+    const list = []
+    if (Array.isArray(product?.images)) list.push(...product.images.filter(Boolean))
+    if (product?.image) list.push(product.image)
+    return Array.from(new Set(list))
+  }, [product?.id, product?.image, product?.images])
+
+  const [activeImg, setActiveImg] = useState(0)
+  useEffect(() => { setActiveImg(0) }, [product?.id])
+
+  // Record this open for "Recently viewed" on Home.
+  useEffect(() => {
+    if (product?.id != null) pushRecentProduct(product.id)
+  }, [product?.id])
 
   // Lock body scroll while open
   useEffect(() => {
@@ -54,8 +80,36 @@ export default function ProductDetailModal({ product, onClose, reviewStats }) {
           </button>
 
           <div className="detail-modal-media">
-            {product.image ? (
-              <img src={product.image} alt={product.name} />
+            {gallery.length > 0 ? (
+              <>
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={gallery[activeImg]}
+                    src={gallery[activeImg]}
+                    alt={product.name}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                  />
+                </AnimatePresence>
+                {gallery.length > 1 && (
+                  <div className="gallery-thumbs" role="tablist" aria-label="Product images">
+                    {gallery.map((src, i) => (
+                      <button
+                        key={src}
+                        type="button"
+                        role="tab"
+                        aria-selected={activeImg === i}
+                        className={`gallery-thumb ${activeImg === i ? 'active' : ''}`}
+                        onClick={() => setActiveImg(i)}
+                      >
+                        <img src={src} alt={`${product.name} ${i + 1}`} loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <div className="detail-modal-placeholder"><Package size={48} /></div>
             )}
@@ -104,6 +158,31 @@ export default function ProductDetailModal({ product, onClose, reviewStats }) {
               </button>
               <WishlistButton productId={product.id} className="wishlist-btn-lg" size={20} stopProp={false} />
             </div>
+
+            {related.length > 0 && (
+              <div className="detail-modal-section">
+                <h3>You might also like</h3>
+                <div className="related-products-row">
+                  {related.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className="related-product-card"
+                      onClick={() => {
+                        addItem(p)
+                        toast.success(`${p.name} added to cart`)
+                      }}
+                    >
+                      {p.image ? <img src={p.image} alt={p.name} loading="lazy" /> : <div className="related-product-img-empty"><Package size={20} /></div>}
+                      <div className="related-product-info">
+                        <span className="related-product-name">{p.name}</span>
+                        <span className="related-product-price">₹{p.price}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="detail-modal-section">
               <ProductReviews productId={product.id} />

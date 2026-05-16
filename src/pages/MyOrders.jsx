@@ -1,8 +1,51 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Package, ShoppingBag, ChevronDown, ChevronUp, MapPin } from 'lucide-react'
+import { Package, ShoppingBag, ChevronDown, ChevronUp, MapPin, CheckCircle2, Circle, XCircle, Truck, Inbox } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getOrdersForUser } from '../lib/database'
+
+const TIMELINE_STEPS = [
+  { id: 'confirmed', label: 'Confirmed', icon: CheckCircle2 },
+  { id: 'processing', label: 'Processing', icon: Inbox },
+  { id: 'shipped', label: 'Shipped', icon: Truck },
+  { id: 'delivered', label: 'Delivered', icon: Package },
+]
+
+function OrderTimeline({ status }) {
+  if (status === 'cancelled') {
+    return (
+      <div className="order-timeline order-timeline-cancelled" aria-label="Order cancelled">
+        <XCircle size={16} />
+        <span>Order cancelled</span>
+      </div>
+    )
+  }
+  const activeIndex = TIMELINE_STEPS.findIndex((s) => s.id === status)
+  const safeIndex = activeIndex === -1 ? 0 : activeIndex
+  return (
+    <ol className="order-timeline" aria-label={`Status: ${status}`}>
+      {TIMELINE_STEPS.map((step, i) => {
+        const Icon = step.icon
+        const done = i < safeIndex
+        const current = i === safeIndex
+        return (
+          <li
+            key={step.id}
+            className={`order-timeline-step ${done ? 'done' : ''} ${current ? 'current' : ''}`}
+          >
+            <span className="order-timeline-dot">
+              {done || current ? <Icon size={14} /> : <Circle size={12} />}
+            </span>
+            <span className="order-timeline-label">{step.label}</span>
+            {i < TIMELINE_STEPS.length - 1 && (
+              <span className="order-timeline-bar" aria-hidden="true" />
+            )}
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
 
 export default function MyOrders() {
   const { user, loading } = useAuth()
@@ -76,6 +119,10 @@ export default function MyOrders() {
 
                   {open && (
                     <div className="myorders-details">
+                      <div className="myorders-details-section">
+                        <h4>Status</h4>
+                        <OrderTimeline status={o.status} />
+                      </div>
                       <div className="myorders-details-section">
                         <h4>Items</h4>
                         <ul>

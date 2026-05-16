@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
@@ -33,8 +33,12 @@ export default function Checkout() {
   const [coupon, setCoupon] = useState(null) // { code, discount, message }
   const [couponBusy, setCouponBusy] = useState(false)
 
-  if (!user) { navigate('/login'); return null }
-  if (items.length === 0) { navigate('/store'); return null }
+  useEffect(() => {
+    if (!user) navigate('/login', { replace: true })
+    else if (items.length === 0) navigate('/store', { replace: true })
+  }, [user, items.length, navigate])
+
+  if (!user || items.length === 0) return null
 
   const subtotal = total
   const shipping = subtotal >= 999 ? 0 : 49
@@ -346,6 +350,23 @@ export default function Checkout() {
               disabled={loading}
               className="checkout-pay-btn"
             />
+
+            {/* Sticky mobile-only pay bar — visible while the user is still
+                filling out the address form. Hides on >= 760px via CSS. */}
+            <div className="checkout-sticky-mobile">
+              <div className="checkout-sticky-mobile-total">
+                <span>Total</span>
+                <strong>₹{grandTotal.toLocaleString()}</strong>
+              </div>
+              <button
+                type="button"
+                className="btn btn-blue"
+                onClick={handlePlaceOrder}
+                disabled={loading}
+              >
+                {loading ? 'Processing…' : `Pay ₹${grandTotal.toLocaleString()}`}
+              </button>
+            </div>
 
             <p className="checkout-secure">
               <ShieldCheck size={14} />

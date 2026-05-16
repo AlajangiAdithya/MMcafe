@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { installAnalytics } from '../lib/analytics'
 
 const STORAGE_KEY = 'mmcafe_consent_v1'
 
@@ -34,8 +35,9 @@ export default function CookieConsent() {
       )
     } catch { /* ignore */ }
     setShow(false)
-    // Reload so analytics scripts can pick up the new consent state.
-    if (decision.analytics) window.location.reload()
+    // installAnalytics is idempotent + checks consent itself, so calling it
+    // here picks up the just-saved consent without a hard reload.
+    if (decision.analytics) installAnalytics()
   }
 
   if (!show) return null

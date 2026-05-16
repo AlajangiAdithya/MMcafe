@@ -3,7 +3,7 @@ import { usePageMeta } from '../lib/usePageMeta'
 export default function PrivacyPolicy() {
   usePageMeta({
     title: 'Privacy Policy',
-    description: 'How Mastermind Brews collects, uses, stores, shares, and protects your data — DPDP Act 2023 compliant. Includes the Barista Directory data-sharing terms.',
+    description: 'How Mastermind Brews collects, uses, stores, shares, and protects your data. DPDP Act 2023 compliant. Includes the Barista Directory data-sharing terms.',
   })
   return (
     <div className="policy-page">

@@ -9,6 +9,7 @@ import {
 } from '../lib/database'
 import { isBunnyVideo, isBunnyConfigured } from '../lib/bunny'
 import FileUploader from './FileUploader'
+import { confirmAction } from './ConfirmDialog'
 import toast from 'react-hot-toast'
 
 const EMPTY_LESSON = {
@@ -69,7 +70,13 @@ export default function LessonsEditor({ courseId }) {
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this lesson?')) return
+    const ok = await confirmAction({
+      title: 'Delete lesson?',
+      message: 'The lesson and its video reference will be removed. This cannot be undone.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteLesson(id)
       toast.success('Lesson deleted')

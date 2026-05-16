@@ -24,7 +24,9 @@ import {
 } from '../lib/database'
 import FileUploader from '../components/FileUploader'
 import LessonsEditor from '../components/LessonsEditor'
+import { confirmAction } from '../components/ConfirmDialog'
 import { isBunnyVideo, isBunnyConfigured } from '../lib/bunny'
+import { sendOrderStatusEmail } from '../lib/email'
 import toast from 'react-hot-toast'
 
 const TABS = [
@@ -188,7 +190,13 @@ export default function Admin() {
   }
 
   const handleDeleteProduct = async (id) => {
-    if (!confirm('Delete this product?')) return
+    const ok = await confirmAction({
+      title: 'Delete product?',
+      message: 'This permanently removes the product from the store. Existing orders keep their snapshot.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteProduct(id)
       toast.success('Product deleted')
@@ -226,7 +234,13 @@ export default function Admin() {
   }
 
   const handleDeleteCourse = async (id) => {
-    if (!confirm('Delete this course?')) return
+    const ok = await confirmAction({
+      title: 'Delete course?',
+      message: 'This removes the course and all its lessons. Students who already enrolled keep nothing.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteCourse(id)
       toast.success('Course deleted')
@@ -237,11 +251,28 @@ export default function Admin() {
   }
 
   const handleOrderStatusChange = async (orderId, status) => {
+    const existing = orders.find(o => o.id === orderId)
+    const previousStatus = existing?.status
     // Optimistic UI
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o))
     try {
       await updateOrderStatus(orderId, status)
       toast.success(`Order #${orderId} → ${status}`)
+      // Fire-and-forget customer notification, only when the status actually
+      // changed. sendOrderStatusEmail silently no-ops when EmailJS isn't set up.
+      if (existing && previousStatus !== status) {
+        const email = existing.shipping_address?.email || existing.profiles?.email
+        const name = existing.shipping_address?.fullName
+          || `${existing.profiles?.first_name || ''} ${existing.profiles?.last_name || ''}`.trim()
+        if (email) {
+          sendOrderStatusEmail({
+            order: { ...existing, status },
+            status,
+            customerEmail: email,
+            customerName: name,
+          })
+        }
+      }
     } catch (err) {
       toast.error(err.message)
       loadData()
@@ -260,7 +291,13 @@ export default function Admin() {
   }
 
   const handleReviewDelete = async (id) => {
-    if (!confirm('Delete this review?')) return
+    const ok = await confirmAction({
+      title: 'Delete review?',
+      message: 'The reviewer will no longer see it. This cannot be undone.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteReview(id)
       toast.success('Review deleted')
@@ -298,7 +335,13 @@ export default function Admin() {
   }
 
   const handleDeleteCoupon = async (id) => {
-    if (!confirm('Delete this coupon?')) return
+    const ok = await confirmAction({
+      title: 'Delete coupon?',
+      message: 'Anyone who has the code will no longer be able to redeem it.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteCoupon(id)
       toast.success('Coupon deleted')
@@ -340,7 +383,13 @@ export default function Admin() {
   }
 
   const handleDeleteBlog = async (id) => {
-    if (!confirm('Delete this post?')) return
+    const ok = await confirmAction({
+      title: 'Delete blog post?',
+      message: 'The post will be removed and any inbound links will 404.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteBlogPost(id)
       toast.success('Post deleted')
@@ -375,7 +424,13 @@ export default function Admin() {
   }
 
   const handleDeleteBarista = async (id) => {
-    if (!confirm('Delete this barista submission?')) return
+    const ok = await confirmAction({
+      title: 'Delete barista submission?',
+      message: 'Their profile will be removed from the directory.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
     try {
       await deleteBarista(id)
       toast.success('Submission deleted')
@@ -399,13 +454,18 @@ export default function Admin() {
 
   const handleRevokeCafeAccess = async (cafe) => {
     const cafeName = [cafe.profile?.first_name, cafe.profile?.last_name].filter(Boolean).join(' ') || cafe.profile?.email || 'this cafe'
-    const reason = window.prompt(
-      `Revoke access for ${cafeName}?\n\n` +
-      `This removes their directory access immediately, drops their barista assignments, ` +
-      `and they'll have to pay again to come back.\n\n` +
-      `Reason (optional, e.g. "hire confirmed", "20 days passed"):`,
-      'hire confirmed'
-    )
+    const reason = await confirmAction({
+      title: `Revoke access for ${cafeName}?`,
+      message:
+        "This removes their directory access immediately, drops their barista assignments, " +
+        "and they'll have to pay again to come back.",
+      confirmLabel: 'Revoke access',
+      danger: true,
+      input: true,
+      inputLabel: 'Reason (optional)',
+      inputPlaceholder: 'e.g. hire confirmed, 20 days passed',
+      inputDefaultValue: 'hire confirmed',
+    })
     if (reason === null) return
     try {
       await adminRevokeCafeAccess(cafe.user_id, reason || null)
@@ -2555,7 +2615,7 @@ function MappingsTab({ paidCafes, baristas, onManage, onRevoke }) {
 
                 <div className="mapping-card-meta">
                   {cafe.profile?.email && <div><Mail size={12} /> {cafe.profile.email}</div>}
-                  <div>Paid ₹{cafe.amount ?? '—'} on {new Date(cafe.paid_at).toLocaleDateString()}</div>
+                  <div>Paid ₹{cafe.amount ?? '-'} on {new Date(cafe.paid_at).toLocaleDateString()}</div>
                   {cafe.expires_at && (
                     <div>
                       {status.kind === 'expired' ? 'Expired' : 'Expires'}: {new Date(cafe.expires_at).toLocaleDateString()}
@@ -2564,7 +2624,7 @@ function MappingsTab({ paidCafes, baristas, onManage, onRevoke }) {
                   {cafe.revoked_at && (
                     <div style={{ color: '#f87171' }}>
                       Revoked {new Date(cafe.revoked_at).toLocaleDateString()}
-                      {cafe.revoked_reason ? ` — ${cafe.revoked_reason}` : ''}
+                      {cafe.revoked_reason ? `: ${cafe.revoked_reason}` : ''}
                     </div>
                   )}
                 </div>
@@ -2637,7 +2697,7 @@ function CafeBriefBlock({ brief }) {
     return (
       <div className="mapping-brief mapping-brief-empty">
         <ClipboardList size={12} />
-        <span>No brief submitted yet — cafe hasn&rsquo;t told us what they need.</span>
+        <span>No brief submitted yet. Cafe hasn&rsquo;t told us what they need.</span>
       </div>
     )
   }
@@ -2855,7 +2915,7 @@ function BaristaDetailsModal({ barista, onClose }) {
             )}
             <div className="barista-details-row barista-details-row-full">
               <label>Experience summary</label>
-              <div className="barista-details-text">{b.experience_summary || '—'}</div>
+              <div className="barista-details-text">{b.experience_summary || '-'}</div>
             </div>
             <div className="barista-details-row barista-details-row-full">
               <label>Education</label>
@@ -2863,7 +2923,7 @@ function BaristaDetailsModal({ barista, onClose }) {
                 ? <ul className="barista-details-list">
                     {educationLines.map((line, i) => <li key={i}>{line}</li>)}
                   </ul>
-                : <div className="barista-details-text">—</div>}
+                : <div className="barista-details-text">-</div>}
             </div>
             <div className="barista-details-row barista-details-row-full">
               <label>Skills</label>
@@ -2871,7 +2931,7 @@ function BaristaDetailsModal({ barista, onClose }) {
                 ? <div className="barista-details-skills">
                     {skills.map((s, i) => <span key={i} className="skill-chip">{s}</span>)}
                   </div>
-                : <div className="barista-details-text">—</div>}
+                : <div className="barista-details-text">-</div>}
             </div>
           </div>
         </div>
@@ -2895,7 +2955,7 @@ function PaymentsTab({ orders, enrollments, paidCafes }) {
         id: `order-${o.id}`,
         type: 'order',
         when: o.created_at,
-        paymentId: o.payment_id || '—',
+        paymentId: o.payment_id || '-',
         amount: Number(o.total) || 0,
         who: fullName(o.profiles, o.user_id?.slice(0, 8) || 'Guest'),
         email: o.profiles?.email || '',
@@ -2908,9 +2968,9 @@ function PaymentsTab({ orders, enrollments, paidCafes }) {
         id: `enroll-${e.id}`,
         type: 'course',
         when: e.enrolled_at,
-        paymentId: e.payment_id || (e.courses?.free ? 'FREE' : '—'),
+        paymentId: e.payment_id || (e.courses?.free ? 'FREE' : '-'),
         amount: price,
-        who: fullName(e.profiles, '—'),
+        who: fullName(e.profiles, '-'),
         email: e.profiles?.email || '',
         detail: e.courses?.title || 'Course enrollment',
       })
@@ -2920,9 +2980,9 @@ function PaymentsTab({ orders, enrollments, paidCafes }) {
         id: `cafe-${c.user_id}-${c.payment_id || c.paid_at}`,
         type: 'directory',
         when: c.paid_at,
-        paymentId: c.payment_id || '—',
+        paymentId: c.payment_id || '-',
         amount: Number(c.amount) || 0,
-        who: fullName(c.profile, c.user_id?.slice(0, 8) || '—'),
+        who: fullName(c.profile, c.user_id?.slice(0, 8) || '-'),
         email: c.profile?.email || '',
         detail: `Directory access • ${accessStatus(c).label}`,
       })
@@ -3022,7 +3082,7 @@ function PaymentsTab({ orders, enrollments, paidCafes }) {
               <tbody>
                 {ctrl.slice.map(r => (
                   <tr key={r.id}>
-                    <td>{r.when ? new Date(r.when).toLocaleString() : '—'}</td>
+                    <td>{r.when ? new Date(r.when).toLocaleString() : '-'}</td>
                     <td><span className={`pill pill-type-${r.type}`}>{r.type}</span></td>
                     <td>
                       <div style={{ fontSize: '0.85rem', lineHeight: 1.4 }}>

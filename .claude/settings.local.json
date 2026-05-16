@@ -29,7 +29,13 @@
       "WebFetch(domain:www.justdial.com)",
       "WebFetch(domain:web.archive.org)",
       "WebFetch(domain:www.zoominfo.com)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git -C \"C:/Users/alaja/Desktop/New folder/MMCafe\" status)",
+      "Bash(git -C \"C:/Users/alaja/Desktop/New folder/MMCafe\" log --oneline -5)",
+      "Bash(git -C \"C:/Users/alaja/Desktop/New folder/MMCafe\" branch -a)",
+      "Bash(mkdir -p \"C:/Users/alaja/AppData/Local/Temp/mmcafe-extract\")",
+      "Bash(python -c ' *)",
+      "Bash(python *)"
     ]
   }
 }

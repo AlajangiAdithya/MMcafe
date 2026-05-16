@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { getCourses, getEnrollments } from '../lib/database'
 import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../lib/usePageMeta'
-import Loader from '@/components/ui/loader-4'
+import { CourseGridSkeleton } from '../components/Skeleton'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -91,9 +91,7 @@ export default function Academy() {
 
       <div className="academy-container">
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-            <Loader />
-          </div>
+          <CourseGridSkeleton count={6} />
         ) : error ? (
           <div className="store-empty">
             <Video size={56} />

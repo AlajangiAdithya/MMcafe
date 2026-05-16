@@ -48,18 +48,17 @@ export default function Footer() {
           <h4>Quick Links</h4>
           <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
-          <Link to="/store">Store</Link>
-          <Link to="/workshop">Workshop</Link>
-          <Link to="/consultancy">Consultancy</Link>
-          <Link to="/blog">Blog</Link>
+          <Link to="/store">Buy Coffee</Link>
+          <Link to="/workshop">Learn Coffee</Link>
+          <Link to="/consultancy">Our Projects</Link>
         </div>
 
         <div className="footer-col">
-          <h4>Baristas</h4>
-          <Link to="/baristas">Hire a Barista</Link>
-          <Link to="/barista-signup">Submit Your Profile</Link>
+          <h4>Account</h4>
           <Link to="/login">My Account</Link>
           <Link to="/signup">Sign Up</Link>
+          <Link to="/my-orders">My Orders</Link>
+          <Link to="/wishlist">Wishlist</Link>
         </div>
 
         <div className="footer-col">

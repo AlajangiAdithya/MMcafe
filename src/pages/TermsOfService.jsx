@@ -3,7 +3,7 @@ import { usePageMeta } from '../lib/usePageMeta'
 export default function TermsOfService() {
   usePageMeta({
     title: 'Terms & Conditions',
-    description: 'Terms of service for Mastermind Brews — orders, payments, courses, account use, and Barista Directory.',
+    description: 'Terms of service for Mastermind Brews: orders, payments, courses, account use, and Barista Directory.',
   })
   return (
     <div className="policy-page">

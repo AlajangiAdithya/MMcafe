@@ -10,6 +10,7 @@ import {
 } from '../lib/database'
 import { openRazorpay } from '../lib/razorpay'
 import { usePageMeta } from '../lib/usePageMeta'
+import { confirmAction } from '../components/ConfirmDialog'
 import toast from 'react-hot-toast'
 import Loader from '@/components/ui/loader-4'
 
@@ -124,7 +125,7 @@ export default function Baristas() {
       setBrief(saved)
       setBriefEditing(false)
       if (isFirstSave) {
-        toast.success(hasAccess ? 'Brief saved — we\u2019ll match within 24 hours' : 'Brief saved — pay to unlock your matches')
+        toast.success(hasAccess ? 'Brief saved. We\u2019ll match within 24 hours' : 'Brief saved. Pay to unlock your matches')
       } else {
         toast.success('Brief updated')
       }
@@ -134,12 +135,15 @@ export default function Baristas() {
   }
 
   const handleHire = async (b) => {
-    const ok = window.confirm(
-      `Mark ${b.full_name} as hired?\n\n` +
-      `Save their phone (${b.phone}) and email before continuing — once you confirm, ` +
-      `they'll be removed from your directory and won't be available to other cafes ` +
-      `anymore. (Our team keeps the record for our books.) This can't be undone.`
-    )
+    const ok = await confirmAction({
+      title: `Mark ${b.full_name} as hired?`,
+      message:
+        `Save their phone (${b.phone}) and email before continuing. Once you confirm, ` +
+        `they'll be removed from your directory and won't be available to other cafes anymore. ` +
+        `(Our team keeps the record for our books.) This can't be undone.`,
+      confirmLabel: 'Mark as hired',
+      danger: true,
+    })
     if (!ok) return
     setHiringId(b.id)
     try {
@@ -160,6 +164,11 @@ export default function Baristas() {
       return
     }
     setPaying(true)
+    // SECURITY: amount + payment_id are not yet server-verified for this flow.
+    // The corresponding `payment-order` / `payment-verify` edge-function branch
+    // for `kind: 'barista_access'` is pending. Once that ships, switch this
+    // call to `payAndVerify({ kind: 'barista_access' })` and delete
+    // grantBaristaAccess + its RPC.
     openRazorpay({
       amount: ACCESS_PRICE,
       name: 'Mastermind Brews',
@@ -357,7 +366,7 @@ export default function Baristas() {
             <ol className="hire-steps">
               <li className={step === 'brief' ? 'active' : (brief ? 'done' : '')}>
                 <span className="hire-step-num">1</span>
-                <div><strong>Tell us what you need</strong><span>Short brief — city, shift, budget</span></div>
+                <div><strong>Tell us what you need</strong><span>Short brief: city, shift, budget</span></div>
               </li>
               <li className={step === 'pay' ? 'active' : (hasAccess ? 'done' : '')}>
                 <span className="hire-step-num">2</span>
@@ -392,7 +401,7 @@ export default function Baristas() {
                 initial={null}
                 onSave={handleSaveBrief}
                 onCancel={null}
-                heading="Step 1 — Tell us what you need"
+                heading="Step 1: Tell us what you need"
                 subheading={`A quick brief so our team can hand-pick the right ${BARISTA_SLOTS_PER_CAFE} baristas for you. You'll pay on the next step.`}
                 submitLabel="Save brief & continue"
               />
@@ -410,7 +419,7 @@ export default function Baristas() {
                 )}
                 <div className="paywall-card">
                   <div className="paywall-icon"><Lock size={26} /></div>
-                  <h2>Step 2 — Unlock your {BARISTA_SLOTS_PER_CAFE} matches</h2>
+                  <h2>Step 2: Unlock your {BARISTA_SLOTS_PER_CAFE} matches</h2>
                   <p>
                     Your brief is saved. Pay once and our team will hand-pick
                     {' '}{BARISTA_SLOTS_PER_CAFE} verified baristas for your cafe.
@@ -451,11 +460,11 @@ export default function Baristas() {
   let matchHeading
   let matchSubcopy
   if (baristas.length === 0) {
-    matchHeading = `Brief received — we're matching now.`
-    matchSubcopy = `Our team is hand-picking ${BARISTA_SLOTS_PER_CAFE} verified baristas for your cafe. They'll appear here as soon as we assign them — usually within 24 hours.`
+    matchHeading = `Brief received. We're matching now.`
+    matchSubcopy = `Our team is hand-picking ${BARISTA_SLOTS_PER_CAFE} verified baristas for your cafe. They'll appear here as soon as we assign them, usually within 24 hours.`
   } else {
     matchHeading = `${baristas.length} of ${BARISTA_SLOTS_PER_CAFE} baristas matched for you.`
-    matchSubcopy = `Phone and email are below each profile. Tap to call or write directly — no middleman, no commission.`
+    matchSubcopy = `Phone and email are below each profile. Tap to call or write directly. No middleman, no commission.`
   }
 
   return (
@@ -589,14 +598,14 @@ function AccessExpiryBanner({ record }) {
     return (
       <p className="access-fineprint">
         Your access is active for <strong>{status.daysLeft} more day{status.daysLeft === 1 ? '' : 's'}</strong>.
-        Finalise your hire within this window — after that, you&rsquo;ll need to pay again to refresh your matches.
+        Finalise your hire within this window. After that, you&rsquo;ll need to pay again to refresh your matches.
       </p>
     )
   }
   if (status.kind === 'expiring') {
     return (
       <div className="access-banner access-banner-warn">
-        <strong>Heads up — only {status.daysLeft} day{status.daysLeft === 1 ? '' : 's'} left on your access.</strong>
+        <strong>Heads up: only {status.daysLeft} day{status.daysLeft === 1 ? '' : 's'} left on your access.</strong>
         <span>Finalise your hire soon, or you&rsquo;ll need to pay again to refresh your matches.</span>
       </div>
     )

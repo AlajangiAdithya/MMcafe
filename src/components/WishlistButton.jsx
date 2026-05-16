@@ -4,15 +4,20 @@ import { useAuth } from '../context/AuthContext'
 import { addToWishlist, removeFromWishlist, getWishlist } from '../lib/database'
 import toast from 'react-hot-toast'
 
-// Lightweight in-memory cache so multiple buttons share a single wishlist load
+// Lightweight in-memory cache so multiple buttons share a single wishlist load.
+// Reset whenever the active userId changes so user A's IDs never leak to user B.
 let cache = { userId: null, ids: null, promise: null }
 
 async function loadIds(userId) {
-  if (cache.userId === userId && cache.ids) return cache.ids
-  if (cache.promise && cache.userId === userId) return cache.promise
-  cache.userId = userId
+  if (cache.userId !== userId) {
+    cache = { userId, ids: null, promise: null }
+  }
+  if (cache.ids) return cache.ids
+  if (cache.promise) return cache.promise
   cache.promise = getWishlist(userId)
     .then((rows) => {
+      // Bail if a different user signed in while the request was in flight.
+      if (cache.userId !== userId) return new Set()
       cache.ids = new Set(rows.map((r) => r.product_id))
       return cache.ids
     })
@@ -28,7 +33,11 @@ export default function WishlistButton({ productId, className = '', size = 16, s
   const [busy, setBusy] = useState(false)
 
   useEffect(() => {
-    if (!user) { setActive(false); return }
+    if (!user) {
+      invalidateWishlistCache()
+      setActive(false)
+      return
+    }
     let cancelled = false
     loadIds(user.id).then((ids) => {
       if (!cancelled) setActive(ids.has(productId))

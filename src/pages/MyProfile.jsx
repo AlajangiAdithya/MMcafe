@@ -343,7 +343,7 @@ export default function MyProfile() {
                     value={deletionReason}
                     onChange={(e) => setDeletionReason(e.target.value)}
                     rows={3}
-                    placeholder="Help us improve — what made you decide to leave?"
+                    placeholder="Help us improve. What made you decide to leave?"
                     style={{ width: '100%', padding: 10, borderRadius: 8 }}
                   />
                 </div>
