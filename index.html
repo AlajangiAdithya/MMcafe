@@ -41,6 +41,31 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Clear any stale service worker left from a previous deployment.
+      // The project has no SW; if one is registered, it must be a leftover
+      // intercepting requests and breaking the app. Unregister + clear caches once.
+      (function () {
+        if (!('serviceWorker' in navigator)) return;
+        var FLAG = 'mmcafe_sw_cleaned_v1';
+        if (sessionStorage.getItem(FLAG)) return;
+        navigator.serviceWorker.getRegistrations().then(function (regs) {
+          if (!regs.length) { sessionStorage.setItem(FLAG, '1'); return; }
+          Promise.all(regs.map(function (r) { return r.unregister(); }))
+            .then(function () {
+              if (window.caches && caches.keys) {
+                return caches.keys().then(function (keys) {
+                  return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                });
+              }
+            })
+            .then(function () {
+              sessionStorage.setItem(FLAG, '1');
+              location.reload();
+            });
+        }).catch(function () {});
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

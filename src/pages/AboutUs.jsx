@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Coffee, Award, Trophy, MapPin, Clock, ArrowRight, ExternalLink, Sparkles, Heart, Users } from 'lucide-react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import { GridBackground } from '@/components/ui/grid-background'
@@ -49,29 +49,47 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function AboutUs() {
   usePageMeta({
     title: 'About Us',
-    description: 'Meet Mastermind Brews, Namrata Umesh, and the Mastermind Bicycle Cafe. The people and the place behind the coffee.',
+    description: 'Meet Mastermind Brews, Namrata Thakkar, and the Mastermind Bicycle Cafe. The people and the place behind the coffee.',
   })
+
+  const heroRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  })
+  
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 80])
 
   return (
     <div className="page-shell about-page">
-      {/* ===== PAGE HERO ===== */}
-      <section className="page-hero about-hero">
-        <div className="container">
-          <motion.div
+      {/* ===== PAGE HERO (100K PREMIUM UPGRADE) ===== */}
+      <section className="page-hero about-hero" ref={heroRef}>
+        <div className="hero-mesh-overlay" style={{ zIndex: 1 }} />
+        <div className="container" style={{ zIndex: 2, position: 'relative' }}>
+          <motion.div style={{ opacity: heroOpacity, y: heroY }}>
+            <motion.div
             initial="hidden"
             animate="visible"
             variants={{
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
             }}
+            className="about-hero-content"
           >
-            <motion.div className="section-label" variants={fadeUp}>About Us</motion.div>
+            <motion.div className="hero-badge" variants={fadeUp} style={{ marginBottom: 32 }}>
+              <span className="dot" />
+              <span className="hero-badge-text">Our Story</span>
+            </motion.div>
+            
             <motion.h1 className="page-title" variants={fadeUp}>
-              The People, The Place,<br />The <span className="text-blue">Coffee</span>.
+              The People, The Place,<br />The <span className="text-accent-glow">Coffee</span>.
             </motion.h1>
-            <motion.p className="page-lede" variants={fadeUp}>
+            
+            <motion.p className="page-lede" variants={fadeUp} style={{ margin: '0 auto' }}>
               Three stories that make Mastermind Brews: the brand, the brewer, and the cafe where it all began.
             </motion.p>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -134,33 +152,33 @@ export default function AboutUs() {
               <div className="about-intro-frame portrait">
                 <img
                   src="/namrata.jpg"
-                  alt="Namrata Umesh, founder of Mastermind Bicycle Cafe"
+                  alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
                   loading="lazy"
                 />
                 <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
-                <motion.div
-                  className="about-namrata-badge"
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 180 }}
-                >
-                  <div className="about-namrata-badge-icon"><Award size={18} /></div>
-                  <div className="about-namrata-badge-body">
-                    <div className="about-namrata-badge-num">4th</div>
-                    <div className="about-namrata-badge-label">Runner-Up<br />National Barista Championship</div>
-                  </div>
-                </motion.div>
               </div>
+              <motion.div
+                className="about-namrata-badge"
+                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 180 }}
+              >
+                <div className="about-namrata-badge-icon"><Award size={18} /></div>
+                <div className="about-namrata-badge-body">
+                  <div className="about-namrata-badge-num">4th Runner-Up</div>
+                  <div className="about-namrata-badge-label">National Barista Championship 2026</div>
+                </div>
+              </motion.div>
             </AnimatedSection>
             <AnimatedSection className="about-intro-text" delay={0.15}>
               <div className="about-intro-label about-intro-label-pink">02 / Namrata Is Brewing</div>
               <h2 className="about-intro-title">From physiotherapy to championship coffee.</h2>
               <p className="about-intro-lede">
-                Namrata Umesh is the founder of Mastermind Bicycle Cafe, and a professional barista who placed <strong>4th Runner-Up at the National Barista Championship</strong>.
+                Namrata Thakkar is the founder of Mastermind Bicycle Cafe, and a certified barista who placed <strong>4th Runner-Up at the National Barista Championship 2026</strong> at the India International Coffee Festival.
               </p>
               <p>
-                A former physiotherapist, she switched lanes into coffee at the urging of her father, and built her craft from the bar up: espresso cremas, pour-overs, and the kind of details that quietly separate a good cup from a great one.
+                A former physiotherapist, curiosity became learning, learning became obsession, and obsession became craft. She built her coffee from the bar up: extraction, flavour notes, balance, precision &mdash; the kind of details that quietly separate a good cup from a great one.
               </p>
               <p>
                 On her handle <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer" className="about-inline-link">@namrata_is_brewing</a>, she shares the techniques she teaches her own baristas, from dialing in espresso to pulling a clean pour-over at home.
@@ -169,8 +187,8 @@ export default function AboutUs() {
                 <div className="about-namrata-cred">
                   <Trophy size={16} />
                   <div>
-                    <strong>National Barista Championship</strong>
-                    <span>Finalist · 4th Runner-Up</span>
+                    <strong>National Barista Championship 2026</strong>
+                    <span>4th Runner-Up &middot; IICF 2026</span>
                   </div>
                 </div>
                 <div className="about-namrata-cred">
@@ -231,14 +249,7 @@ export default function AboutUs() {
                   <div className="about-cafe-card-icon"><MapPin size={16} /></div>
                   <div>
                     <strong>Mulund, Mumbai</strong>
-                    <span>Flagship · Avior Corporate Park</span>
-                  </div>
-                </div>
-                <div className="about-cafe-card">
-                  <div className="about-cafe-card-icon"><MapPin size={16} /></div>
-                  <div>
-                    <strong>Oberoi Eternia</strong>
-                    <span>Newer outlet</span>
+                    <span>Avior Corporate Park, LBS Marg</span>
                   </div>
                 </div>
                 <div className="about-cafe-card">

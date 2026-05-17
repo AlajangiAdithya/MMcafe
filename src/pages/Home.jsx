@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, Play, Star, Award, Coffee, Truck, ChevronDown, Clock, MapPin, Phone, Mail, Globe, Package, History, Check, Leaf, Flame, Users, Sparkles } from 'lucide-react'
+import { ShoppingBag, BookOpen, ArrowRight, Play, Star, Award, Coffee, Truck, ChevronDown, Clock, MapPin, Phone, Mail, Globe, Package, History, Check, Flame, Sparkles } from 'lucide-react'
 
 function Instagram({ size = 16 }) {
   return (
@@ -196,15 +196,13 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* ===== SOCIAL LINKS (fixed sidebar) ===== */}
-      <SocialLinks links={SOCIAL_LINKS} floatingButtonColor="bg-zinc-800" />
-
-      {/* ===== HERO ===== */}
+      {/* ===== HERO (100K PREMIUM UPGRADE) ===== */}
       <section className="hero">
         <div className="hero-bg">
           <div className="hero-bg-image" style={{
-            backgroundImage: 'url(https://lh3.googleusercontent.com/A959ZB5laMMAwx3johfA0IdN0LMU0pdhL9EmXBWTkEyVu1erfFJy4p7kJhUN4dzVZLPOTQWQ6-_PeE6Q-UwwbhnOooY2s1UXjLvE-xBZSw=w1920-rw)'
+            backgroundImage: 'url(/hero-bg.jpg)'
           }} />
+          <div className="hero-mesh-overlay" />
           <div className="hero-gradient" />
         </div>
         <motion.div
@@ -218,62 +216,74 @@ export default function Home() {
         >
           <motion.div
             className="hero-badge"
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+            variants={{ hidden: { opacity: 0, y: 30, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
           >
             <span className="dot" />
-            From Mastermind Bicycle Cafe & Bar, Mumbai
+            <span className="hero-badge-text">From Mastermind Bicycle Cafe & Bar, Mumbai</span>
           </motion.div>
+          
           <motion.div
             className="hero-logo-wrap"
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+            variants={{ hidden: { opacity: 0, y: 40, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } } }}
           >
             <img src="/logo.png" alt="Mastermind Brews" className="hero-logo" />
           </motion.div>
+
           <motion.h1
             className="hero-tagline"
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            Master Your <span className="text-blue">Mind</span>,<br />
-            Master Your <span className="text-pink">Brews</span>
+            <span className="hero-tagline-line">Master Your <span className="text-blue-glow">Mind</span>,</span>
+            <span className="hero-tagline-line">Master Your <span className="text-pink-glow">Brews</span></span>
           </motion.h1>
+
           <motion.p
             className="hero-kicker"
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
           >
             Specialty single-origin beans from Chikmagalur, roasted with Bean Rove, plus a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
           </motion.p>
+
           <motion.div
             className="hero-btns"
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            <Link to="/store" className="btn btn-primary">
-              <ShoppingBag size={16} /> Shop Coffee
+            <Link to="/store" className="btn btn-premium-primary">
+              <ShoppingBag size={18} /> Shop Coffee
             </Link>
-            <Link to="/workshop" className="btn btn-outline">
-              <BookOpen size={16} /> Learn Coffee
+            <Link to="/workshop" className="btn btn-premium-outline">
+              <BookOpen size={18} /> Learn Coffee
             </Link>
           </motion.div>
         </motion.div>
+        
         <motion.div
           className="hero-scroll"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          Scroll
-          <ChevronDown size={16} />
+          <div className="scroll-indicator">
+            <div className="scroll-dot" />
+          </div>
         </motion.div>
       </section>
+
 
       {/* ===== ABOUT STRIP ===== */}
       <section className="about-strip">
         <div className="container">
           <div className="about-grid">
-            <AnimatedSection className="about-image">
-              <img
-                src="https://lh3.googleusercontent.com/fMDJUXTml2Oy7acthKsu7XcqBLyoqnlilQCJruYAFRpyvyAPX7gruOfHokGvUH1PxP5DdFm_oCgsPDsYOv-AGGl9rJQpBlc-GWRXHjQx=w1200-rw"
-                alt="Mastermind Bicycle Cafe interior"
-                loading="lazy"
+            <AnimatedSection className="about-image about-image--video">
+              <video
+                src="/cafe-tour.mp4"
+                poster="/hero-bg.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="A tour through Mastermind Bicycle Cafe"
               />
               <div className="accent-line" />
             </AnimatedSection>
@@ -296,16 +306,16 @@ export default function Home() {
               </p>
               <div className="about-stats">
                 <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-                  <div className="stat-number">4.4<span className="stat-accent">★</span></div>
-                  <div className="stat-label">Google Rating</div>
+                  <div className="stat-number"><Coffee size={24} style={{ display: 'inline' }} /></div>
+                  <div className="stat-label">Chikmagalur Single Origin</div>
                 </motion.div>
                 <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
-                  <div className="stat-number">500<span className="stat-accent">+</span></div>
-                  <div className="stat-label">Reviews</div>
+                  <div className="stat-number"><Award size={24} style={{ display: 'inline' }} /></div>
+                  <div className="stat-label">Bean Rove Roast Profiles</div>
                 </motion.div>
                 <motion.div className="stat-item" initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
-                  <div className="stat-number">6</div>
-                  <div className="stat-label">Expert Courses</div>
+                  <div className="stat-number"><BookOpen size={24} style={{ display: 'inline' }} /></div>
+                  <div className="stat-label">Online Barista Academy</div>
                 </motion.div>
               </div>
             </AnimatedSection>
@@ -348,7 +358,7 @@ export default function Home() {
               <div className="offer-pillar-body">
                 <h3 className="offer-pillar-title">Single-Origin From Chikmagalur</h3>
                 <p className="offer-pillar-desc">
-                  Specialty arabica, roasted with exclusive Bean Rove profiles and packed within 48 hours of roast. Whole bean or ground to your brew method.
+                  Specialty coffee from Chikmagalur, roasted with exclusive Bean Rove profiles. Whole bean or ground to your brew method.
                 </p>
                 <div className="offer-pillar-specs">
                   <div className="offer-spec">
@@ -365,8 +375,8 @@ export default function Home() {
                   </div>
                 </div>
                 <ul className="offer-pillar-features">
-                  <li><Check size={14} /> 100% specialty grade arabica</li>
-                  <li><Check size={14} /> Roasted to order, shipped fresh</li>
+                  <li><Check size={14} /> Single-origin from Chikmagalur, Karnataka</li>
+                  <li><Check size={14} /> Roasted with Bean Rove profiles</li>
                   <li><Check size={14} /> Espresso, filter, French press grinds</li>
                   <li><Check size={14} /> Free shipping above ₹999</li>
                 </ul>
@@ -388,7 +398,7 @@ export default function Home() {
                 <div className="offer-pillar-media-fade" />
               </div>
               <div className="offer-pillar-body">
-                <h3 className="offer-pillar-title">Train With Our Champion Baristas</h3>
+                <h3 className="offer-pillar-title">Train With Our Baristas</h3>
                 <p className="offer-pillar-desc">
                   HD video lessons from the team behind Mastermind Brews. From your first pull to latte art mastery, on any device, anytime.
                 </p>
@@ -401,15 +411,11 @@ export default function Home() {
                     <span className="offer-spec-label">Access</span>
                     <span className="offer-spec-value">30 Days</span>
                   </div>
-                  <div className="offer-spec">
-                    <span className="offer-spec-label">Modules</span>
-                    <span className="offer-spec-value">6 Courses</span>
-                  </div>
                 </div>
                 <ul className="offer-pillar-features">
                   <li><Check size={14} /> Beginner to advanced tracks</li>
                   <li><Check size={14} /> Espresso, milk craft, latte art, brewing</li>
-                  <li><Check size={14} /> Built by national-level baristas</li>
+                  <li><Check size={14} /> Built by championship-trained baristas</li>
                   <li><Check size={14} /> Watch on phone, tablet, or laptop</li>
                 </ul>
                 <Link to="/workshop" className="btn btn-blue offer-pillar-cta">
@@ -427,38 +433,31 @@ export default function Home() {
             variants={staggerContainer}
           >
             <motion.div className="offer-trust-item" variants={fadeUp}>
-              <div className="offer-trust-icon"><Leaf size={18} /></div>
+              <div className="offer-trust-icon"><MapPin size={18} /></div>
               <div className="offer-trust-text">
-                <div className="offer-trust-num">100%</div>
-                <div className="offer-trust-label">Arabica</div>
+                <div className="offer-trust-num">Chikmagalur</div>
+                <div className="offer-trust-label">Single Origin</div>
               </div>
             </motion.div>
             <motion.div className="offer-trust-item" variants={fadeUp}>
               <div className="offer-trust-icon"><Flame size={18} /></div>
               <div className="offer-trust-text">
-                <div className="offer-trust-num">48 hrs</div>
-                <div className="offer-trust-label">Roast to ship</div>
+                <div className="offer-trust-num">Bean Rove</div>
+                <div className="offer-trust-label">Roast Partner</div>
               </div>
             </motion.div>
             <motion.div className="offer-trust-item" variants={fadeUp}>
               <div className="offer-trust-icon"><Award size={18} /></div>
               <div className="offer-trust-text">
                 <div className="offer-trust-num">4th Runner-Up</div>
-                <div className="offer-trust-label">National Barista Champ</div>
+                <div className="offer-trust-label">National Barista Championship 2026</div>
               </div>
             </motion.div>
             <motion.div className="offer-trust-item" variants={fadeUp}>
               <div className="offer-trust-icon"><Sparkles size={18} /></div>
               <div className="offer-trust-text">
-                <div className="offer-trust-num">Bean Rove</div>
-                <div className="offer-trust-label">Exclusive profiles</div>
-              </div>
-            </motion.div>
-            <motion.div className="offer-trust-item" variants={fadeUp}>
-              <div className="offer-trust-icon"><Users size={18} /></div>
-              <div className="offer-trust-text">
-                <div className="offer-trust-num">500+</div>
-                <div className="offer-trust-label">Cafe regulars</div>
+                <div className="offer-trust-num">Mulund</div>
+                <div className="offer-trust-label">Open every day</div>
               </div>
             </motion.div>
           </motion.div>
@@ -619,16 +618,16 @@ export default function Home() {
                 variants={staggerContainer}
               >
                 <motion.div className="academy-mini-stat" variants={fadeUp}>
-                  <Star size={14} fill="currentColor" />
-                  <span><strong>4.8</strong> Rating</span>
-                </motion.div>
-                <motion.div className="academy-mini-stat" variants={fadeUp}>
                   <Award size={14} />
                   <span><strong>Certified</strong> Baristas</span>
                 </motion.div>
                 <motion.div className="academy-mini-stat" variants={fadeUp}>
                   <Play size={14} fill="currentColor" />
                   <span><strong>HD</strong> Lessons</span>
+                </motion.div>
+                <motion.div className="academy-mini-stat" variants={fadeUp}>
+                  <BookOpen size={14} />
+                  <span><strong>Self-paced</strong> Learning</span>
                 </motion.div>
               </motion.div>
             </AnimatedSection>
@@ -642,7 +641,7 @@ export default function Home() {
                 Of <span className="text-gradient">Specialty Coffee</span>
               </h2>
               <p className="section-desc academy-desc">
-                Learn from the same baristas behind Mastermind Brews' acclaimed specialty coffee program. Professional video courses for every skill level, from your first pull to latte art mastery.
+                Learn from the same baristas behind Mastermind Brews' specialty coffee program. Professional video courses for every skill level, from your first pull to latte art mastery.
               </p>
 
               <motion.div
@@ -778,6 +777,54 @@ export default function Home() {
         </section>
       )}
 
+      {/* ===== FROM THE PRESS — Newspaper Menu Clipping ===== */}
+      <section className="press-section">
+        <div className="container">
+          <AnimatedSection className="press-row">
+            <motion.div
+              className="press-clipping-wrap"
+              initial={{ opacity: 0, y: 24, rotate: -3 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -1.8 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="press-tape press-tape-tl" aria-hidden="true" />
+              <span className="press-tape press-tape-tr" aria-hidden="true" />
+              <a
+                href="/mastermind-times.jpg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press-clipping"
+                aria-label="Open full Mastermind Times menu poster"
+              >
+                <img
+                  src="/mastermind-times.jpg"
+                  alt="Mastermind Times — a global culinary revolution menu poster"
+                  loading="lazy"
+                />
+              </a>
+            </motion.div>
+            <div className="press-copy">
+              <div className="section-label">From the Press</div>
+              <h2 className="press-title">
+                The <span className="text-gradient">Mastermind Times</span>
+              </h2>
+              <p className="press-desc">
+                A menu that travels &mdash; Asian, European, American, Mediterranean &mdash; all under one bicycle-cafe roof.
+              </p>
+              <a
+                href="/mastermind-times.jpg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press-cta"
+              >
+                Read the full edition <ArrowRight size={14} />
+              </a>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* ===== VISIT US ===== */}
       <section className="visit-section">
         <div className="container">
@@ -838,7 +885,7 @@ export default function Home() {
                     {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
                   </div>
                   <div className="visit-card-rating-score">4.5 / 5</div>
-                  <div className="visit-card-rating-label">From 500+ guests</div>
+                  <div className="visit-card-rating-label">On Google</div>
                 </div>
               </div>
             </AnimatedSection>

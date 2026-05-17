@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { Globe, Mail, Phone, MapPin, Clock, ArrowRight, Send } from 'lucide-react'
-import toast from 'react-hot-toast'
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -30,41 +28,8 @@ function XIcon({ size = 16 }) {
 }
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-
-  const onSubscribe = (e) => {
-    e.preventDefault()
-    if (!email) return
-    toast.success("Thanks — we'll keep you posted.")
-    setEmail('')
-  }
-
   return (
     <footer className="footer">
-      <div className="footer-newsletter">
-        <div className="footer-newsletter-inner">
-          <div className="footer-newsletter-copy">
-            <span className="eyebrow">The Brew Letter</span>
-            <h3 className="footer-newsletter-title">Coffee notes from the bar.</h3>
-            <p>New roasts, lesson drops, and the occasional cafe story — once a month, never more.</p>
-          </div>
-          <form className="footer-newsletter-form" onSubmit={onSubscribe}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              required
-              aria-label="Email address"
-            />
-            <button type="submit" className="footer-newsletter-submit" aria-label="Subscribe">
-              <span>Subscribe</span>
-              <ArrowRight size={14} />
-            </button>
-          </form>
-        </div>
-      </div>
-
       <div className="footer-main">
         <div className="footer-brand">
           <Link to="/" className="footer-brand-logo">
@@ -115,7 +80,7 @@ export default function Footer() {
             </div>
             <div className="footer-cafe-row">
               <Clock size={14} />
-              <span>Open daily &middot; 11 AM &ndash; 11 PM</span>
+              <span>Open daily &middot; 8:30 AM &ndash; 12 Midnight</span>
             </div>
             <div className="footer-cafe-row">
               <Phone size={14} />
