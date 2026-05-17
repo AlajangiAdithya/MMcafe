@@ -6,7 +6,7 @@
 
 import { hasAnalyticsConsent } from '../components/CookieConsent'
 
-const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
+const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-3GKT443PLT'
 
 let installed = false
 
