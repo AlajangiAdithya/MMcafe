@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Globe, Mail, Phone, MapPin } from 'lucide-react'
+import { useState } from 'react'
+import { Globe, Mail, Phone, MapPin, Clock, ArrowRight, Send } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -28,15 +30,50 @@ function XIcon({ size = 16 }) {
 }
 
 export default function Footer() {
+  const [email, setEmail] = useState('')
+
+  const onSubscribe = (e) => {
+    e.preventDefault()
+    if (!email) return
+    toast.success("Thanks — we'll keep you posted.")
+    setEmail('')
+  }
+
   return (
     <footer className="footer">
+      <div className="footer-newsletter">
+        <div className="footer-newsletter-inner">
+          <div className="footer-newsletter-copy">
+            <span className="eyebrow">The Brew Letter</span>
+            <h3 className="footer-newsletter-title">Coffee notes from the bar.</h3>
+            <p>New roasts, lesson drops, and the occasional cafe story — once a month, never more.</p>
+          </div>
+          <form className="footer-newsletter-form" onSubmit={onSubscribe}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email address"
+              required
+              aria-label="Email address"
+            />
+            <button type="submit" className="footer-newsletter-submit" aria-label="Subscribe">
+              <span>Subscribe</span>
+              <ArrowRight size={14} />
+            </button>
+          </form>
+        </div>
+      </div>
+
       <div className="footer-main">
         <div className="footer-brand">
-          <div className="footer-brand-logo">
+          <Link to="/" className="footer-brand-logo">
             <img src="/logo.png" alt="Mastermind Brews" />
             <span>Mastermind Brews</span>
-          </div>
-          <p>Specialty coffee beans from Chikmagalur, Karnataka, roasted by Bean Rove. From the team behind Mastermind Bicycle Cafe &amp; Bar in Mulund, Mumbai.</p>
+          </Link>
+          <p className="footer-brand-blurb">
+            Single-origin specialty coffee from Chikmagalur, roasted in partnership with Bean Rove. By the team behind Mastermind Bicycle Cafe &amp; Bar, Mulund.
+          </p>
           <div className="footer-social">
             <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon size={16} /></a>
             <a href="https://www.facebook.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FacebookIcon size={16} /></a>
@@ -45,39 +82,69 @@ export default function Footer() {
         </div>
 
         <div className="footer-col">
-          <h4>Quick Links</h4>
-          <Link to="/">Home</Link>
-          <Link to="/about">About Us</Link>
+          <h4>Shop</h4>
           <Link to="/store">Buy Coffee</Link>
           <Link to="/workshop">Learn Coffee</Link>
           <Link to="/consultancy">Our Projects</Link>
+          <Link to="/baristas">Hire Baristas</Link>
+        </div>
+
+        <div className="footer-col">
+          <h4>Company</h4>
+          <Link to="/about">About Us</Link>
+          <Link to="/blog">Journal</Link>
+          <Link to="/contact">Contact</Link>
+          <Link to="/barista-signup">Join the Network</Link>
         </div>
 
         <div className="footer-col">
           <h4>Account</h4>
-          <Link to="/login">My Account</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/login">Sign In</Link>
+          <Link to="/signup">Create Account</Link>
           <Link to="/my-orders">My Orders</Link>
           <Link to="/wishlist">Wishlist</Link>
         </div>
 
-        <div className="footer-col">
-          <h4>Get In Touch</h4>
-          <a href="tel:+918591850161"><Phone size={12} /> +91 85918 50161</a>
-          <a href="mailto:hello@mastermindcafe.in"><Mail size={12} /> hello@mastermindcafe.in</a>
-          <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer"><Globe size={12} /> mastermindcafe.in</a>
-          <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer"><MapPin size={12} /> Avior Corporate Park, Mulund West, Mumbai</a>
-        </div>
+        <aside className="footer-cafe-card">
+          <span className="eyebrow">Visit the Cafe</span>
+          <h4 className="footer-cafe-title">Mastermind<br/>Bicycle Cafe &amp; Bar</h4>
+          <div className="footer-cafe-meta">
+            <div className="footer-cafe-row">
+              <MapPin size={14} />
+              <span>Avior Corporate Park, LBS Marg, Mulund West, Mumbai</span>
+            </div>
+            <div className="footer-cafe-row">
+              <Clock size={14} />
+              <span>Open daily &middot; 11 AM &ndash; 11 PM</span>
+            </div>
+            <div className="footer-cafe-row">
+              <Phone size={14} />
+              <a href="tel:+918591850161">+91 85918 50161</a>
+            </div>
+            <div className="footer-cafe-row">
+              <Mail size={14} />
+              <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>
+            </div>
+          </div>
+          <a
+            href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-cafe-map"
+          >
+            Open in Maps <ArrowRight size={12} />
+          </a>
+        </aside>
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2026 Mastermind Bicycle Cafe & Bar. All rights reserved.</p>
+        <p>&copy; 2026 Mastermind Bicycle Cafe &amp; Bar. Crafted in Mulund, Mumbai.</p>
         <div className="footer-bottom-links">
-          <Link to="/privacy-policy">Privacy Policy</Link>
-          <Link to="/terms">Terms & Conditions</Link>
-          <Link to="/refund-policy">Return & Refund</Link>
-          <Link to="/shipping">Shipping & Delivery</Link>
-          <Link to="/contact">Contact Us</Link>
+          <Link to="/privacy-policy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <Link to="/refund-policy">Refunds</Link>
+          <Link to="/shipping">Shipping</Link>
+          <Link to="/contact">Contact</Link>
         </div>
       </div>
     </footer>

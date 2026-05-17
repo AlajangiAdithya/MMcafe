@@ -68,7 +68,7 @@ export default function Navbar({ onOpenSearch }) {
           <img src="/logo.png" alt="Mastermind Brews" />
           <div className="nav-logo-text">
             <span className="brand-name">Mastermind Brews</span>
-            <span className="brand-sub">Coffee &middot; Academy &middot; Hire</span>
+            <span className="brand-sub">Est. Mulund, Mumbai</span>
           </div>
         </Link>
 
