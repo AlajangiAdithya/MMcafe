@@ -9,3 +9,5 @@ Disallow: /wishlist
 Disallow: /order-confirmation
 Disallow: /reset-password
 Disallow: /forgot-password
+
+Sitemap: https://mastermindbrews.com/sitemap.xml
