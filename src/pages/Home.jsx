@@ -398,7 +398,7 @@ export default function Home() {
                 <div className="offer-pillar-media-fade" />
               </div>
               <div className="offer-pillar-body">
-                <h3 className="offer-pillar-title">Train With Our Baristas</h3>
+                <h3 className="offer-pillar-title">Train With Our Professional Baristas</h3>
                 <p className="offer-pillar-desc">
                   HD video lessons from the team behind Mastermind Brews. From your first pull to latte art mastery, on any device, anytime.
                 </p>

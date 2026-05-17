@@ -10600,6 +10600,7 @@ textarea:focus-visible {
   line-height: 1.08;
   color: var(--ink-100);
   letter-spacing: var(--ls-tight);
+  min-height: calc(1.08em * 2);
 }
 
 .offer-pillar-desc {
