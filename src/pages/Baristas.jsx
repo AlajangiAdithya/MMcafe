@@ -48,8 +48,9 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 
 export default function Baristas() {
   usePageMeta({
-    title: 'Barista Directory',
-    description: 'Browse trained baristas available for hire. One-time access pass for hiring cafes.',
+    title: 'Hire Trained Baristas in India · Barista Directory',
+    description: 'Browse profiles of trained baristas available for hire across India. One-time access pass for cafes, hotels and restaurants looking to staff up.',
+    keywords: 'hire baristas India, barista directory, cafe staffing, barista jobs, hire trained barista Mumbai, barista recruitment India',
   })
 
   const { user, loading: authLoading } = useAuth()

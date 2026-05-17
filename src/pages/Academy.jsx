@@ -27,8 +27,9 @@ export default function Academy() {
   const [reloadKey, setReloadKey] = useState(0)
 
   usePageMeta({
-    title: 'Barista Academy · Professional Coffee Courses',
-    description: 'HD video courses from certified baristas. Learn espresso, latte art, and coffee fundamentals at your pace.',
+    title: 'Online Barista Academy · Professional Coffee Courses',
+    description: 'HD video courses from certified baristas. Learn espresso, latte art, brewing methods and cafe fundamentals at your pace — anywhere in India.',
+    keywords: 'online barista course India, barista training online, espresso course, latte art classes, coffee certification India, learn coffee online',
   })
 
   useEffect(() => {

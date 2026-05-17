@@ -32,8 +32,9 @@ export default function Store() {
   const { addItem } = useCart()
 
   usePageMeta({
-    title: 'The Store · Premium Coffee Beans & Powder',
-    description: 'Hand-picked Karnataka coffee beans and freshly ground powders, roasted to perfection. Free shipping above ₹999.',
+    title: 'Buy Specialty Coffee Beans & Ground Coffee Online',
+    description: 'Hand-picked single-origin Karnataka coffee beans and freshly ground powders, roasted in partnership with Bean Rove. Free shipping above ₹999 across India.',
+    keywords: 'buy coffee beans online India, single origin coffee, Chikmagalur coffee, ground coffee India, specialty coffee shop, Mastermind Brews store',
   })
 
   useEffect(() => {

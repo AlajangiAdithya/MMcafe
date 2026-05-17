@@ -36,8 +36,9 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 
 export default function ContactUs() {
   usePageMeta({
-    title: 'Contact Us',
-    description: 'Get in touch with Mastermind Brews in Mulund, Mumbai. Email, phone, address and hours.',
+    title: 'Contact Mastermind Brews · Mulund, Mumbai',
+    description: 'Get in touch with Mastermind Brews and Mastermind Bicycle Cafe & Bar in Mulund West, Mumbai. Email, phone, address, opening hours and directions.',
+    keywords: 'contact Mastermind Brews, Mastermind Bicycle Cafe contact, cafe in Mulund West, coffee shop near me Mumbai',
   })
   return (
     <div className="policy-page">

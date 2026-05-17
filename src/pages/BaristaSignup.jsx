@@ -55,8 +55,9 @@ const newCaptcha = () => {
 
 export default function BaristaSignup() {
   usePageMeta({
-    title: 'Get Discovered: Join the Barista Directory',
-    description: 'Are you a barista? Submit your details and get discovered by hiring cafes. No fees, no resume needed.',
+    title: 'Join the Barista Directory · Get Hired by Cafes in India',
+    description: 'Are you a barista? Submit your details and get discovered by hiring cafes, hotels and restaurants across India. No fees, no resume needed.',
+    keywords: 'barista jobs India, barista signup, cafe jobs Mumbai, barista hiring directory, find barista job',
   })
 
   const [form, setForm] = useState(EMPTY)

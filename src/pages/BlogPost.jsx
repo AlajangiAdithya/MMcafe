@@ -21,6 +21,7 @@ export default function BlogPost() {
     title: post?.title || 'Blog',
     description: post?.excerpt,
     image: post?.cover_image,
+    type: post ? 'article' : 'website',
   })
 
   useEffect(() => {

@@ -24,8 +24,9 @@ function formatDate(d) {
 
 export default function Blog() {
   usePageMeta({
-    title: 'Blog',
-    description: 'Stories, brewing guides, and notes on coffee from the Mastermind Brews team.',
+    title: 'Coffee Journal · Brewing Guides, Stories & Cafe Notes',
+    description: 'Stories, brewing guides, latte-art tutorials and behind-the-scenes notes on coffee from the Mastermind Brews team in Mulund, Mumbai.',
+    keywords: 'coffee blog India, brewing guides, latte art tips, specialty coffee stories, Mastermind Brews journal',
   })
 
   const [posts, setPosts] = useState([])

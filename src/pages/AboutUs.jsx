@@ -48,8 +48,9 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 
 export default function AboutUs() {
   usePageMeta({
-    title: 'About Us',
-    description: 'Meet Mastermind Brews, Namrata Thakkar, and the Mastermind Bicycle Cafe. The people and the place behind the coffee.',
+    title: 'About Mastermind Brews · Our Story, Team & Cafe in Mulund',
+    description: 'Meet Mastermind Brews, founder Namrata Thakkar, and the Mastermind Bicycle Cafe & Bar in Mulund, Mumbai — the people and the place behind the coffee.',
+    keywords: 'about Mastermind Brews, Namrata Thakkar, Mastermind Bicycle Cafe, coffee roastery Mumbai, specialty coffee brand India',
   })
 
   const heroRef = useRef(null)

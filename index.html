@@ -3,10 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Mastermind Brews — Specialty coffee, online barista academy, and a hiring directory for trained baristas across India." />
+    <meta name="description" content="Mastermind Brews — single-origin specialty coffee from Chikmagalur, an online barista academy, and India's hiring directory for trained baristas. By Mastermind Bicycle Cafe & Bar, Mulund, Mumbai." />
+    <meta name="keywords" content="specialty coffee India, single origin coffee, Chikmagalur coffee beans, barista academy online, hire baristas India, cafe in Mulund, Mastermind Bicycle Cafe, coffee roasters Mumbai, online cafe course, espresso training" />
+    <meta name="author" content="Mastermind Brews" />
+    <meta name="publisher" content="Mastermind Bicycle Cafe & Bar" />
     <meta name="theme-color" content="#1a1a2e" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="rating" content="general" />
+    <meta name="distribution" content="global" />
+    <meta name="revisit-after" content="7 days" />
+
+    <!-- Geo targeting: helps local search surface the Mulund cafe -->
+    <meta name="geo.region" content="IN-MH" />
+    <meta name="geo.placename" content="Mulund West, Mumbai" />
+    <meta name="geo.position" content="19.1726;72.9568" />
+    <meta name="ICBM" content="19.1726, 72.9568" />
+
     <link rel="canonical" href="https://www.mastermindcafe.in/" />
+    <link rel="alternate" hreflang="en-IN" href="https://www.mastermindcafe.in/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.mastermindcafe.in/" />
 
     <!-- Speed up the first connection to the services we always hit -->
     <link rel="preconnect" href="https://lh3.googleusercontent.com" crossorigin />
@@ -20,20 +40,107 @@
 
     <meta property="og:site_name" content="Mastermind Brews" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mastermind Brews" />
-    <meta property="og:description" content="Premium coffee, continental food & online cafe academy in Mulund, Mumbai." />
+    <meta property="og:title" content="Mastermind Brews — Specialty Coffee, Barista Academy & Cafe in Mulund, Mumbai" />
+    <meta property="og:description" content="Single-origin Chikmagalur coffee, an online barista academy, and India's hiring directory for trained baristas. By Mastermind Bicycle Cafe & Bar, Mulund." />
     <meta property="og:image" content="https://www.mastermindcafe.in/logo.png" />
+    <meta property="og:image:secure_url" content="https://www.mastermindcafe.in/logo.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mastermind Brews logo — specialty coffee from Chikmagalur" />
     <meta property="og:url" content="https://www.mastermindcafe.in/" />
     <meta property="og:locale" content="en_IN" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Mastermind Brews" />
-    <meta name="twitter:description" content="Premium coffee, continental food & online cafe academy in Mulund, Mumbai." />
+    <meta name="twitter:site" content="@cafemastermind" />
+    <meta name="twitter:creator" content="@cafemastermind" />
+    <meta name="twitter:title" content="Mastermind Brews — Specialty Coffee, Barista Academy & Cafe in Mulund, Mumbai" />
+    <meta name="twitter:description" content="Single-origin Chikmagalur coffee, an online barista academy, and India's hiring directory for trained baristas." />
     <meta name="twitter:image" content="https://www.mastermindcafe.in/logo.png" />
+    <meta name="twitter:image:alt" content="Mastermind Brews logo — specialty coffee from Chikmagalur" />
 
     <!-- <meta name="google-site-verification" content="PASTE_FROM_SEARCH_CONSOLE" /> -->
 
-    <title>Mastermind Brews</title>
+    <title>Mastermind Brews — Specialty Coffee, Barista Academy & Cafe in Mulund, Mumbai</title>
+
+    <!-- ===== Structured data (JSON-LD) =====
+         Helps Google render rich results (sitelinks search box, knowledge
+         panel, local pack) for the brand and its physical cafe. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.mastermindcafe.in/#organization",
+          "name": "Mastermind Brews",
+          "alternateName": "Mastermind Bicycle Cafe & Bar",
+          "url": "https://www.mastermindcafe.in/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.mastermindcafe.in/logo.png",
+            "width": 512,
+            "height": 512
+          },
+          "email": "hello@mastermindcafe.in",
+          "telephone": "+91-85918-50161",
+          "sameAs": [
+            "https://www.instagram.com/mastermindbicyclecafe/",
+            "https://www.facebook.com/mastermindbicyclecafe/",
+            "https://x.com/cafemastermind"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.mastermindcafe.in/#website",
+          "url": "https://www.mastermindcafe.in/",
+          "name": "Mastermind Brews",
+          "description": "Specialty coffee, online barista academy, and a hiring directory for trained baristas across India.",
+          "publisher": { "@id": "https://www.mastermindcafe.in/#organization" },
+          "inLanguage": "en-IN",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.mastermindcafe.in/store?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": ["CafeOrCoffeeShop", "LocalBusiness"],
+          "@id": "https://www.mastermindcafe.in/#cafe",
+          "name": "Mastermind Bicycle Cafe & Bar",
+          "image": "https://www.mastermindcafe.in/logo.png",
+          "url": "https://www.mastermindcafe.in/",
+          "telephone": "+91-85918-50161",
+          "email": "hello@mastermindcafe.in",
+          "priceRange": "₹₹",
+          "servesCuisine": ["Specialty Coffee", "Continental", "Bakery"],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Avior Corporate Park, LBS Marg",
+            "addressLocality": "Mulund West",
+            "addressRegion": "Maharashtra",
+            "postalCode": "400080",
+            "addressCountry": "IN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 19.1726,
+            "longitude": 72.9568
+          },
+          "openingHoursSpecification": [{
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday", "Tuesday", "Wednesday", "Thursday",
+              "Friday", "Saturday", "Sunday"
+            ],
+            "opens": "08:30",
+            "closes": "00:00"
+          }],
+          "parentOrganization": { "@id": "https://www.mastermindcafe.in/#organization" }
+        }
+      ]
+    }
+    </script>
     <!-- Razorpay checkout is loaded on demand from src/lib/payments.js
          and src/lib/razorpay.js when the user actually starts a payment.
          Keeping it out of the initial HTML saves ~70KB of JS for every
