@@ -163,7 +163,7 @@ export async function sendCourseEmail({
 /**
  * Notify a customer that their order's status changed (e.g. shipped).
  * Falls back to the standard order template when the dedicated status
- * template is not configured. Fails silently — status updates must not
+ * template is not configured. Fails silently, status updates must not
  * block the admin UI.
  */
 export async function sendOrderStatusEmail({ order, status, customerEmail, customerName }) {

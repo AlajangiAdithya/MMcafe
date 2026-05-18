@@ -49,7 +49,7 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function AboutUs() {
   usePageMeta({
     title: 'About Mastermind Brews · Our Story, Team & Cafe in Mulund',
-    description: 'Meet Mastermind Brews, founder Namrata Thakkar, and the Mastermind Bicycle Cafe & Bar in Mulund, Mumbai — the people and the place behind the coffee.',
+    description: 'Meet Mastermind Brews, founder Namrata Thakkar, and the Mastermind Bicycle Cafe & Bar in Mulund, Mumbai, the people and the place behind the coffee.',
     keywords: 'about Mastermind Brews, Namrata Thakkar, Mastermind Bicycle Cafe, coffee roastery Mumbai, specialty coffee brand India',
   })
 
@@ -95,15 +95,15 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ===== INTRO 1 — MASTERMIND BREWS ===== */}
+      {/* ===== INTRO 1, MASTERMIND BREWS ===== */}
       <section className="about-intro about-intro-brews">
         <div className="container">
           <div className="about-intro-grid">
             <AnimatedSection className="about-intro-media">
-              <div className="about-intro-frame">
+              <div className="about-intro-frame image-portrait">
                 <img
-                  src="https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw"
-                  alt="Mastermind Brews coffee beans"
+                  src="/pour-over-coffee.jpg"
+                  alt="Barista pouring a slow Chemex brew at Mastermind"
                   loading="lazy"
                 />
                 <span className="about-intro-chip"><Sparkles size={12} /> The Brand</span>
@@ -113,13 +113,13 @@ export default function AboutUs() {
               <div className="about-intro-label">01 / Mastermind Brews</div>
               <h2 className="about-intro-title">Specialty coffee, beyond the bar.</h2>
               <p className="about-intro-lede">
-                Mastermind Brews is the online home for the beans, the brewing methods, and the barista craft we've been serving in Mumbai for years.
+                Everything we serve at the counter, carried into your kitchen, single-origin beans, the kit to brew them, and the craft behind a properly pulled cup.
               </p>
               <p>
-                We work with single-origin beans sourced directly from <strong>Chikmagalur, Karnataka</strong>, roasted with exclusive profiles by Bean Rove. The same coffee you'd order across our bar, now shipped to your kitchen.
+                Our beans travel directly from estates in <strong>Chikmagalur, Karnataka</strong>, roasted to exclusive profiles by Bean Rove. The same coffee that lands in our portafilters, sealed fresh, shipped to your door.
               </p>
               <p>
-                Alongside the beans, we run a barista academy of HD video courses, hands-on workshops, and a project arm that helps other cafes build coffee programs of their own.
+                Beyond the bag, a barista academy: HD video lessons, hands-on workshops in Mulund, and a consulting arm helping cafes across India build their own coffee programs from the ground up.
               </p>
               <div className="about-intro-stats">
                 <div>
@@ -144,7 +144,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ===== INTRO 2 — NAMRATA IS BREWING ===== */}
+      {/* ===== INTRO 2, NAMRATA IS BREWING ===== */}
       <section className="about-intro about-intro-namrata">
         <div className="about-intro-glow" aria-hidden="true" />
         <div className="container">
@@ -179,7 +179,7 @@ export default function AboutUs() {
                 Namrata Thakkar is the founder of Mastermind Bicycle Cafe, and a certified barista who placed <strong>4th Runner-Up at the National Barista Championship 2026</strong> at the India International Coffee Festival.
               </p>
               <p>
-                A former physiotherapist, curiosity became learning, learning became obsession, and obsession became craft. She built her coffee from the bar up: extraction, flavour notes, balance, precision &mdash; the kind of details that quietly separate a good cup from a great one.
+                A former physiotherapist, curiosity became learning, learning became obsession, and obsession became craft. She built her coffee from the bar up: extraction, flavour notes, balance, precision, the kind of details that quietly separate a good cup from a great one.
               </p>
               <p>
                 On her handle <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer" className="about-inline-link">@namrata_is_brewing</a>, she shares the techniques she teaches her own baristas, from dialing in espresso to pulling a clean pour-over at home.
@@ -222,12 +222,12 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ===== INTRO 3 — MASTERMIND CAFE ===== */}
+      {/* ===== INTRO 3, MASTERMIND CAFE ===== */}
       <section className="about-intro about-intro-cafe">
         <div className="container">
           <div className="about-intro-grid">
             <AnimatedSection className="about-intro-media">
-              <div className="about-intro-frame">
+              <div className="about-intro-frame image-natural">
                 <img
                   src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw"
                   alt="Mastermind Bicycle Cafe interior"
@@ -240,10 +240,10 @@ export default function AboutUs() {
               <div className="about-intro-label about-intro-label-amber">03 / Mastermind Bicycle Cafe</div>
               <h2 className="about-intro-title">A specialty coffee house. A community space.</h2>
               <p className="about-intro-lede">
-                A cozy, pet-friendly cafe in Mulund, where manual brews, authentic South Indian food, and an active cycling community share the same room.
+                In Mulund, the espresso machine and the bike rack share equal billing, a third place open from breakfast through midnight, every day of the week.
               </p>
               <p>
-                We're known for our <strong>manual brews, Malabar tiffins, matcha cocktails, gelato</strong>, and artisanal desserts. Espresso meets cycling culture, and the door is open to anyone who wants a good cup and a quiet hour.
+                The kitchen leans South Indian: <strong>Malabar tiffins</strong> at dawn, gelato in the afternoon, matcha cocktails after dark. Pets are welcome, conversations stay slow, and the cycling crew rolls in every weekend.
               </p>
               <div className="about-cafe-grid">
                 <div className="about-cafe-card">

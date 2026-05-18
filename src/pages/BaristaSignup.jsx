@@ -182,7 +182,7 @@ export default function BaristaSignup() {
             <motion.div className="signup-trust-row" variants={staggerContainer}>
               <motion.span className="signup-trust" variants={fadeUp}><ShieldCheck size={14} /> Free to list, free forever</motion.span>
               <motion.span className="signup-trust" variants={fadeUp}><Sparkles size={14} /> Takes about 3 minutes</motion.span>
-              <motion.span className="signup-trust" variants={fadeUp}><Coffee size={14} /> No middleman &mdash; cafes call you directly</motion.span>
+              <motion.span className="signup-trust" variants={fadeUp}><Coffee size={14} /> No middleman, cafes call you directly</motion.span>
             </motion.div>
           </motion.div>
         </div>
@@ -368,8 +368,8 @@ export default function BaristaSignup() {
               </div>
               <p className="form-note">
                 By submitting, you agree that <strong>Mastermind Brews</strong> may share the
-                details on this form &mdash; including your name, phone, email, location,
-                experience, training and skills &mdash; with cafes who pay for directory access.
+                details on this form, including your name, phone, email, location,
+                experience, training and skills, with cafes who pay for directory access.
                 Cafes contact you directly. We don&rsquo;t take any commission from your hire.
                 See our{' '}
                 <Link to="/privacy">Privacy Policy</Link>{' '}

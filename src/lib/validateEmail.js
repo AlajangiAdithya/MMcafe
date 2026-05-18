@@ -40,7 +40,7 @@ export function validateEmail(rawEmail) {
 
 // Common typo corrections. Returns a suggested fixed email (string) or null
 // if nothing looks off. Run this AFTER validateEmail returns null so the user
-// has a syntactically valid address — we're just catching .ccom / gmial / etc.
+// has a syntactically valid address, we're just catching .ccom / gmial / etc.
 // We never auto-correct; the suggestion is shown to the user to confirm.
 const TLD_FIXES = {
   ccom: 'com', cmo: 'com', con: 'com', vom: 'com', xom: 'com',

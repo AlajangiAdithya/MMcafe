@@ -6,12 +6,12 @@
 
 :root {
   /* ============================================================
-     MASTERMIND BREWS — REFINED ESPRESSO DESIGN SYSTEM
+     MASTERMIND BREWS, REFINED ESPRESSO DESIGN SYSTEM
      One brand color (amber), warm ivory ink, hairline borders.
      Legacy aliases preserved so existing classes still work.
      ============================================================ */
 
-  /* Surfaces — warmer, layered cocoa */
+  /* Surfaces, warmer, layered cocoa */
   --bg-primary:   #0c0a09;
   --bg-secondary: #15110d;
   --bg-tertiary:  #1c1814;
@@ -20,43 +20,43 @@
   --bg-surface:   rgba(34, 29, 24, 0.85);
   --bg-hover:     rgba(48, 40, 32, 0.88);
 
-  /* Ink — warm ivory family */
+  /* Ink, warm ivory family */
   --ink-100: #F4ECE0;
   --ink-200: #E2D6C5;
   --ink-300: #B8A89B;
   --ink-400: #8B7C6F;
   --ink-500: #5C5147;
 
-  /* Legacy aliases (do not remove — many components reference these) */
+  /* Legacy aliases (do not remove, many components reference these) */
   --white:          var(--ink-100);
   --text-primary:   var(--ink-200);
   --text-secondary: var(--ink-300);
   --text-muted:     var(--ink-400);
 
-  /* Hairlines — warm-tinted, not cold white */
+  /* Hairlines, warm-tinted, not cold white */
   --border:        rgba(244, 236, 224, 0.06);
   --border-light:  rgba(244, 236, 224, 0.12);
   --border-strong: rgba(244, 236, 224, 0.20);
 
-  /* SIGNATURE ACCENT — burnished amber. The one hot color. */
+  /* SIGNATURE ACCENT, burnished amber. The one hot color. */
   --accent:       #C9974A;
   --accent-soft:  #E8C896;
   --accent-deep:  #8F6A30;
   --accent-glow:  rgba(201, 151, 74, 0.18);
 
-  /* Brand secondaries — reserved for brand-moment text only (logo, tagline) */
+  /* Brand secondaries, reserved for brand-moment text only (logo, tagline) */
   --mm-blue:       #5B9BDB;
   --mm-blue-light: #82B5E5;
   --mm-pink:       #D67C8E;
   --mm-pink-light: #E8A0AE;
   --gold-accent:   var(--accent);
 
-  /* Functional — desaturated to harmonize with warm palette */
+  /* Functional, desaturated to harmonize with warm palette */
   --success: #6B9362;
   --error:   #C25C4A;
   --warning: #D4A047;
 
-  /* Typography stack — clean & readable on dark surfaces */
+  /* Typography stack, clean & readable on dark surfaces */
   --font-sans:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --font-poster:  'Yanone Kaffeesatz', sans-serif;
@@ -77,7 +77,7 @@
   --ls-wide:     0.08em;
   --ls-widest:   0.22em;
 
-  /* Spacing — 4pt grid */
+  /* Spacing, 4pt grid */
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
   --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
   --s-9: 96px; --s-10: 128px;
@@ -89,7 +89,7 @@
   --radius-xl:   22px;
   --radius-pill: 999px;
 
-  /* Elevation — warm-tinted shadows */
+  /* Elevation, warm-tinted shadows */
   --shadow-1: 0 1px 2px rgba(12, 8, 4, 0.30);
   --shadow-2: 0 4px 12px rgba(12, 8, 4, 0.35);
   --shadow-3: 0 12px 28px rgba(12, 8, 4, 0.45);
@@ -272,7 +272,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   outline-offset: 3px;
 }
 
-/* PRIMARY — warm ivory fill. The site's default CTA. */
+/* PRIMARY, warm ivory fill. The site's default CTA. */
 .btn-primary {
   background: var(--ink-100);
   color: #1a1208;
@@ -283,7 +283,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   box-shadow: var(--shadow-3);
 }
 
-/* ACCENT family (blue/gold/pink legacy aliases) — burnished amber */
+/* ACCENT family (blue/gold/pink legacy aliases), burnished amber */
 .btn-blue, .btn-gold, .btn-pink {
   background: var(--accent);
   color: #1a1208;
@@ -294,7 +294,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   box-shadow: var(--shadow-accent), var(--shadow-3);
 }
 
-/* OUTLINE — hairline ivory ghost */
+/* OUTLINE, hairline ivory ghost */
 .btn-outline {
   border: 1px solid var(--border-strong);
   color: var(--ink-100);
@@ -305,7 +305,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   border-color: var(--ink-100);
 }
 
-/* GHOST — link-style tertiary */
+/* GHOST, link-style tertiary */
 .btn-ghost {
   background: transparent;
   color: var(--ink-300);
@@ -680,15 +680,15 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .hero h1 .text-blue { color: var(--mm-blue); }
 .hero h1 .text-pink { color: var(--mm-pink); }
 
-.hero h1 .text-blue-glow { 
-  color: var(--mm-blue);
-  text-shadow: 0 0 24px rgba(91, 155, 219, 0.4);
+.hero h1 .text-blue-glow {
+  color: #0081D7;
+  text-shadow: 0 0 24px rgba(0, 129, 215, 0.4);
   position: relative;
   z-index: 1;
 }
-.hero h1 .text-pink-glow { 
-  color: var(--mm-pink);
-  text-shadow: 0 0 24px rgba(214, 124, 142, 0.4);
+.hero h1 .text-pink-glow {
+  color: #F74466;
+  text-shadow: 0 0 24px rgba(247, 68, 102, 0.4);
   position: relative;
   z-index: 1;
 }
@@ -844,7 +844,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 .hero-scroll {
   position: absolute;
-  bottom: 40px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -852,6 +852,10 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   align-items: center;
   gap: 12px;
   z-index: 5;
+  pointer-events: none;
+}
+@media (max-width: 768px), (max-height: 760px) {
+  .hero-scroll { display: none; }
 }
 
 .scroll-text {
@@ -3762,6 +3766,64 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-weight: 500;
   letter-spacing: var(--ls-tight);
   color: var(--ink-100);
+}
+
+.checkout-last-address-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-100);
+  background: rgba(0, 129, 215, 0.08);
+  border: 1px solid rgba(0, 129, 215, 0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .15s ease;
+}
+.checkout-last-address-btn:hover {
+  background: rgba(0, 129, 215, 0.16);
+  border-color: rgba(0, 129, 215, 0.45);
+}
+.checkout-last-address-btn:active { transform: scale(.97); }
+
+.checkout-stock-banner {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: rgba(247, 68, 102, 0.07);
+  border: 1px solid rgba(247, 68, 102, 0.3);
+  border-radius: 12px;
+  color: var(--ink-100);
+}
+.checkout-stock-banner > svg { color: #f74466; flex-shrink: 0; margin-top: 2px; }
+.checkout-stock-banner strong { display: block; margin-bottom: 6px; font-size: .95rem; }
+.checkout-stock-banner ul {
+  margin: 0 0 10px 16px;
+  padding: 0;
+  font-size: .82rem;
+  color: var(--ink-300);
+  line-height: 1.5;
+}
+.checkout-stock-banner li { margin-bottom: 2px; }
+
+.field-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--ink-300);
+}
+.field-hint-ok { color: var(--success, #2ecc71); }
+.field-hint-warn { color: #f0a500; }
+.field-hint .spin { animation: field-hint-spin .9s linear infinite; }
+@keyframes field-hint-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .checkout-form {
@@ -6801,7 +6863,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .menu-pages-grid > .menu-page-card:nth-child(8n+1):nth-last-child(-n+8) { transform-origin: left bottom; }
 .menu-pages-grid > .menu-page-card:nth-child(8n):nth-last-child(-n+8) { transform-origin: right bottom; }
 
-/* ===== FROM THE PRESS — Newspaper Menu Clipping ===== */
+/* ===== FROM THE PRESS, Newspaper Menu Clipping ===== */
 .press-section {
   padding: clamp(48px, 6vw, 72px) 0;
 }
@@ -7435,7 +7497,7 @@ textarea:focus-visible {
   line-height: 1.7;
 }
 
-/* ===== ABOUT PAGE — Three Intros ===== */
+/* ===== ABOUT PAGE, Three Intros ===== */
 .about-hero {
   padding: clamp(120px, 15vw, 180px) 0 clamp(80px, 10vw, 120px);
   text-align: center;
@@ -7554,6 +7616,13 @@ textarea:focus-visible {
 }
 
 .about-intro-frame.portrait { aspect-ratio: 4 / 5; }
+.about-intro-frame.image-portrait { aspect-ratio: 3 / 4; }
+.about-intro-frame.image-natural {
+  aspect-ratio: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
 
 .about-intro-frame img {
   width: 100%;
@@ -7561,6 +7630,11 @@ textarea:focus-visible {
   object-fit: cover;
   filter: saturate(0.92);
   transition: transform var(--dur-slow) var(--ease);
+}
+.about-intro-frame.image-natural img {
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 .about-intro-frame:hover img { transform: scale(1.03); }
 
@@ -7571,6 +7645,7 @@ textarea:focus-visible {
   background: linear-gradient(180deg, transparent 55%, rgba(12, 10, 9, 0.5));
   pointer-events: none;
 }
+.about-intro-frame.image-natural::after { display: none; }
 
 .about-intro-chip {
   position: absolute;
@@ -9137,7 +9212,7 @@ textarea:focus-visible {
   line-height: 1.5;
 }
 
-/* Admin mapping card brief block (admin sidebar uses light surfaces — keep this neutral) */
+/* Admin mapping card brief block (admin sidebar uses light surfaces, keep this neutral) */
 .mapping-brief {
   background: rgba(126, 195, 255, 0.08);
   border: 1px solid rgba(126, 195, 255, 0.18);
@@ -9309,7 +9384,7 @@ textarea:focus-visible {
 }
 
 /* ============================================================
-   ADMIN UI POLISH — gradients, soft shadows, rounded corners
+   ADMIN UI POLISH, gradients, soft shadows, rounded corners
    These overrides sit at the end of the file so they win the
    cascade without us having to rewrite the original blocks.
    ============================================================ */
@@ -9720,7 +9795,7 @@ textarea:focus-visible {
 }
 
 /* =============================================================
-   UI POLISH LAYER  (additive — no overrides of structural rules)
+   UI POLISH LAYER  (additive, no overrides of structural rules)
    Tightens up: lazy-route fallback, focus rings on primary
    buttons, card hover lift, image CLS prevention, mobile toast
    placement, cart drawer fade, cookie banner stacking.
@@ -9849,7 +9924,7 @@ textarea:focus-visible {
 }
 
 /* =============================================================
-   CARD SPACING — give the tile grids room to breathe
+   CARD SPACING, give the tile grids room to breathe
    The original design used 2px gaps for a "tile wall" look,
    which read as congested. These rules add real spacing between
    cards and a touch more padding inside, while keeping the flat
@@ -9868,7 +9943,7 @@ textarea:focus-visible {
 .course-info           { padding: 32px 30px; }
 .testimonial-card      { padding: 44px 36px; }
 
-/* Section vertical rhythm — give the "Best Sellers" header and
+/* Section vertical rhythm, give the "Best Sellers" header and
    the grid below it more separation from the section frame. */
 .featured-header   { margin-bottom: 56px; }
 
@@ -9883,7 +9958,7 @@ textarea:focus-visible {
   .course-info      { padding: 28px 26px; }
 }
 
-/* Mobile: single column — keep gaps but trim inner padding so
+/* Mobile: single column, keep gaps but trim inner padding so
    text doesn't waste horizontal space on small screens. */
 @media (max-width: 600px) {
   .featured-grid    { gap: 16px; }

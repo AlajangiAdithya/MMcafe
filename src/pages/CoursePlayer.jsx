@@ -61,7 +61,7 @@ export default function CoursePlayer() {
           enrolled = await isEnrolled(user.id, c.id)
         }
         if (!enrolled && !c.free) {
-          // isEnrolled returns false for both "never enrolled" and "expired" —
+          // isEnrolled returns false for both "never enrolled" and "expired" -
           // distinguish so we can route the user back to enroll again.
           const status = await getEnrollmentStatus(user.id, c.id).catch(() => null)
           if (status?.expired) {

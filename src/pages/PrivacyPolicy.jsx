@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
             <li>Email address</li>
             <li>Phone number</li>
             <li>Shipping and billing address</li>
-            <li>Payment information (processed securely via Razorpay &mdash; we do not store card or bank details on our servers)</li>
+            <li>Payment information (processed securely via Razorpay, we do not store card or bank details on our servers)</li>
           </ul>
 
           <h3>2.2 Baristas (Barista Directory submissions)</h3>
@@ -124,12 +124,12 @@ export default function PrivacyPolicy() {
             under Section 16 of the DPDP Act, 2023.
           </p>
 
-          <h3>5.1 Barista Directory &mdash; data sharing with hiring cafes</h3>
+          <h3>5.1 Barista Directory, data sharing with hiring cafes</h3>
           <p>
             <strong>Important:</strong> The Barista Directory is a paid hiring service.
             Where you have submitted your details as a barista (Section 2.2), your profile
-            &mdash; including <strong>your full name, phone number, email, city, years of
-            experience, experience summary, training and skills</strong> &mdash; will be made
+           , including <strong>your full name, phone number, email, city, years of
+            experience, experience summary, training and skills</strong>, will be made
             available for viewing and direct contact by any user of the Site who has paid
             the one-time access fee for directory access.
           </p>
@@ -182,7 +182,7 @@ export default function PrivacyPolicy() {
           <p>
             To exercise any of these rights, email{' '}
             <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>{' '}
-            with the subject line "Data Request &mdash; [Access/Correction/Deletion]".
+            with the subject line "Data Request, [Access/Correction/Deletion]".
             We will respond within 30 days. Note that withdrawal of consent for the
             Barista Directory takes effect from the date we remove your profile;
             information already disclosed to access purchasers cannot be recalled.
@@ -224,7 +224,7 @@ export default function PrivacyPolicy() {
             2023, the Grievance Officer designated to address data and content concerns is:
           </p>
           <div className="policy-contact">
-            <p><strong>Grievance Officer &mdash; Mastermind Brews</strong></p>
+            <p><strong>Grievance Officer, Mastermind Brews</strong></p>
             <p>Mastermind Bicycle Cafe & Bar</p>
             <p>Avior Corporate Park, LBS Marg, Mulund West, Mumbai - 400080, Maharashtra, India</p>
             <p>Email: <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a> (subject line: "Grievance")</p>

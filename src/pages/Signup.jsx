@@ -96,7 +96,7 @@ export default function Signup() {
           <div className="auth-visual-content">
             <Coffee size={40} />
             <h2>Join the Mastermind Brews Community</h2>
-            <p>Specialty coffee, barista courses, hiring directory &mdash; all in one place.</p>
+            <p>Specialty coffee, barista courses, hiring directory, all in one place.</p>
             <div className="auth-visual-features">
               <div className="auth-visual-feature">
                 <Check size={16} />

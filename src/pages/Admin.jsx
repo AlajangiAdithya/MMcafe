@@ -476,7 +476,7 @@ export default function Admin() {
     }
   }
 
-  // ===== ASSIGNMENT COUNTS (per barista — used by assign modal) =====
+  // ===== ASSIGNMENT COUNTS (per barista, used by assign modal) =====
   const baristaAssignmentCounts = useMemo(() => {
     const m = new Map()
     for (const c of paidCafes) {
@@ -2564,7 +2564,7 @@ function MappingsTab({ paidCafes, baristas, onManage, onRevoke }) {
         <AlertCircle size={16} />
         <span>
           Cafe access lasts <strong>{CAFE_ACCESS_DAYS} days</strong> from payment. Revoke manually
-          once a hire is confirmed &mdash; that drops their assignments so the same baristas
+          once a hire is confirmed, that drops their assignments so the same baristas
           can be matched elsewhere.
         </span>
       </div>
@@ -2724,7 +2724,7 @@ function CafeBriefBlock({ brief }) {
 
 // ===== ASSIGN BARISTAS MODAL =====
 function AssignBaristasForm({ cafe, baristas, counts, onSave, onClose }) {
-  // Hired baristas are filtered out — they're no longer available.
+  // Hired baristas are filtered out, they're no longer available.
   const approved = useMemo(
     () => baristas.filter(b => b.approved && !b.hired_at),
     [baristas],
@@ -2776,7 +2776,7 @@ function AssignBaristasForm({ cafe, baristas, counts, onSave, onClose }) {
         <div className="admin-info-banner" style={{ marginBottom: 12 }}>
           <AlertCircle size={16} />
           <span>
-            The same barista can be mapped to <strong>multiple cafes</strong> &mdash; reuse them
+            The same barista can be mapped to <strong>multiple cafes</strong>, reuse them
             freely if you don&rsquo;t have new approved baristas. The badge next to a name shows
             how many cafes already have them.
           </span>

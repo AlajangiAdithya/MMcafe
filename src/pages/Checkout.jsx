@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { payAndVerify, previewCoupon } from '../lib/payments'
 import { sendOrderEmail } from '../lib/email'
+import { getOrdersForUser, getProducts } from '../lib/database'
 import {
   MapPin, Phone, User, Home, Building2, Map, Hash, ShieldCheck,
-  ArrowLeft, Truck, Tag, X,
+  ArrowLeft, Truck, Tag, X, AlertCircle, RefreshCw, Check, Loader2,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import SlideButton from '../components/SlideButton'
@@ -33,10 +34,72 @@ export default function Checkout() {
   const [coupon, setCoupon] = useState(null) // { code, discount, message }
   const [couponBusy, setCouponBusy] = useState(false)
 
+  // Pincode lookup: { status: 'idle'|'loading'|'ok'|'error'|'unknown', label?: string }
+  const [pincodeLookup, setPincodeLookup] = useState({ status: 'idle' })
+
+  // Last-used address from prior orders (for one-tap fill)
+  const [lastAddress, setLastAddress] = useState(null)
+
+  // Stock issues found when comparing cart against current product stock
+  const [stockIssues, setStockIssues] = useState([])
+
   useEffect(() => {
     if (!user) navigate('/login', { replace: true })
     else if (items.length === 0) navigate('/store', { replace: true })
   }, [user, items.length, navigate])
+
+  // Pull most recent shipping address from prior orders so returning
+  // customers can fill the form in one tap.
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const orders = await getOrdersForUser(user.id)
+        if (cancelled) return
+        const recent = orders.find((o) => o?.shipping_address && typeof o.shipping_address === 'object')
+        if (recent?.shipping_address) setLastAddress(recent.shipping_address)
+      } catch { /* non-fatal */ }
+    })()
+    return () => { cancelled = true }
+  }, [user])
+
+  // Verify cart against live stock before allowing payment. Runs once on mount
+  // and again whenever cart items change.
+  useEffect(() => {
+    if (items.length === 0) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const products = await getProducts()
+        if (cancelled) return
+        const byId = new Map(products.map((p) => [p.id, p]))
+        const issues = []
+        for (const it of items) {
+          const p = byId.get(it.id)
+          if (!p) {
+            issues.push({ id: it.id, name: it.name, reason: 'no-longer-available' })
+            continue
+          }
+          if (p.in_stock === false) {
+            issues.push({ id: it.id, name: it.name, reason: 'out-of-stock' })
+            continue
+          }
+          if (typeof p.stock_quantity === 'number' && p.stock_quantity >= 0 && it.qty > p.stock_quantity) {
+            issues.push({
+              id: it.id,
+              name: it.name,
+              reason: 'low-stock',
+              available: p.stock_quantity,
+              requested: it.qty,
+            })
+          }
+        }
+        setStockIssues(issues)
+      } catch { /* non-fatal */ }
+    })()
+    return () => { cancelled = true }
+  }, [items])
 
   if (!user || items.length === 0) return null
 
@@ -62,6 +125,52 @@ export default function Checkout() {
   const update = (field, value) => {
     setAddress((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }))
+  }
+
+  // India Post free API: returns post office data for a 6-digit pin.
+  // We only fill state/city if they are still blank, never overwrite typed input.
+  const lookupPincode = useCallback(async (pin) => {
+    setPincodeLookup({ status: 'loading' })
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`)
+      const data = await res.json()
+      const row = Array.isArray(data) ? data[0] : null
+      const po = row?.PostOffice?.[0]
+      if (row?.Status === 'Success' && po) {
+        setAddress((prev) => ({
+          ...prev,
+          state: prev.state.trim() ? prev.state : (po.State || ''),
+          city: prev.city.trim() ? prev.city : (po.District || po.Block || ''),
+        }))
+        setPincodeLookup({ status: 'ok', label: `${po.District || ''}, ${po.State || ''}`.replace(/^,\s*/, '') })
+      } else {
+        setPincodeLookup({ status: 'unknown' })
+      }
+    } catch {
+      setPincodeLookup({ status: 'error' })
+    }
+  }, [])
+
+  const updatePincode = (raw) => {
+    const value = raw.replace(/\D/g, '').slice(0, 6)
+    update('pincode', value)
+    if (value.length === 6) lookupPincode(value)
+    else setPincodeLookup({ status: 'idle' })
+  }
+
+  const useLastAddress = () => {
+    if (!lastAddress) return
+    setAddress((prev) => ({
+      fullName: lastAddress.fullName || prev.fullName,
+      phone: lastAddress.phone || prev.phone,
+      line1: lastAddress.line1 || prev.line1,
+      line2: lastAddress.line2 || prev.line2,
+      city: lastAddress.city || prev.city,
+      state: lastAddress.state || prev.state,
+      pincode: lastAddress.pincode || prev.pincode,
+    }))
+    setErrors({})
+    toast.success('Last used address filled')
   }
 
   const applyCoupon = async () => {
@@ -90,6 +199,10 @@ export default function Checkout() {
   }
 
   const handlePlaceOrder = () => {
+    if (stockIssues.length > 0) {
+      toast.error('Please update your cart before placing the order')
+      return
+    }
     if (!validate()) {
       toast.error('Please fill in all required fields')
       return
@@ -158,7 +271,44 @@ export default function Checkout() {
             <div className="checkout-section-header">
               <MapPin size={20} />
               <h2>Shipping Address</h2>
+              {lastAddress && (
+                <button
+                  type="button"
+                  className="checkout-last-address-btn"
+                  onClick={useLastAddress}
+                  title="Fill with your last used delivery address"
+                >
+                  <RefreshCw size={14} /> Use last address
+                </button>
+              )}
             </div>
+
+            {stockIssues.length > 0 && (
+              <div className="checkout-stock-banner" role="alert">
+                <AlertCircle size={18} />
+                <div>
+                  <strong>Some items need attention</strong>
+                  <ul>
+                    {stockIssues.map((s) => (
+                      <li key={s.id}>
+                        {s.name}: {
+                          s.reason === 'out-of-stock' ? 'currently out of stock' :
+                          s.reason === 'no-longer-available' ? 'no longer available' :
+                          `only ${s.available} left, you have ${s.requested} in cart`
+                        }
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => navigate('/cart')}
+                  >
+                    Edit cart
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="checkout-form">
               <div className="checkout-row">
@@ -168,7 +318,7 @@ export default function Checkout() {
                     <User size={16} />
                     <input
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="Enter your full name"
                       value={address.fullName}
                       onChange={(e) => update('fullName', e.target.value)}
                     />
@@ -181,7 +331,7 @@ export default function Checkout() {
                     <Phone size={16} />
                     <input
                       type="tel"
-                      placeholder="9876543210"
+                      placeholder="Enter 10-digit mobile number"
                       value={address.phone}
                       onChange={(e) => update('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                     />
@@ -196,7 +346,7 @@ export default function Checkout() {
                   <Home size={16} />
                   <input
                     type="text"
-                    placeholder="House/Flat no., Building name"
+                    placeholder="Enter house or flat number and building name"
                     value={address.line1}
                     onChange={(e) => update('line1', e.target.value)}
                   />
@@ -210,7 +360,7 @@ export default function Checkout() {
                   <Building2 size={16} />
                   <input
                     type="text"
-                    placeholder="Street, Area, Landmark (optional)"
+                    placeholder="Enter street, area or landmark (optional)"
                     value={address.line2}
                     onChange={(e) => update('line2', e.target.value)}
                   />
@@ -224,7 +374,7 @@ export default function Checkout() {
                     <Building2 size={16} />
                     <input
                       type="text"
-                      placeholder="Mumbai"
+                      placeholder="Enter your city"
                       value={address.city}
                       onChange={(e) => update('city', e.target.value)}
                     />
@@ -237,7 +387,7 @@ export default function Checkout() {
                     <Map size={16} />
                     <input
                       type="text"
-                      placeholder="Maharashtra"
+                      placeholder="Enter your state"
                       value={address.state}
                       onChange={(e) => update('state', e.target.value)}
                     />
@@ -250,12 +400,28 @@ export default function Checkout() {
                     <Hash size={16} />
                     <input
                       type="text"
-                      placeholder="400080"
+                      placeholder="Enter 6-digit pincode"
                       value={address.pincode}
-                      onChange={(e) => update('pincode', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      onChange={(e) => updatePincode(e.target.value)}
+                      inputMode="numeric"
                     />
                   </div>
                   {errors.pincode && <span className="field-error">{errors.pincode}</span>}
+                  {!errors.pincode && pincodeLookup.status === 'loading' && (
+                    <span className="field-hint">
+                      <Loader2 size={12} className="spin" /> Looking up location…
+                    </span>
+                  )}
+                  {!errors.pincode && pincodeLookup.status === 'ok' && (
+                    <span className="field-hint field-hint-ok">
+                      <Check size={12} /> {pincodeLookup.label}
+                    </span>
+                  )}
+                  {!errors.pincode && pincodeLookup.status === 'unknown' && (
+                    <span className="field-hint field-hint-warn">
+                      Couldn't find that pincode. Please check and enter city/state manually.
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -299,7 +465,7 @@ export default function Checkout() {
                 <div className="checkout-coupon-row">
                   <input
                     type="text"
-                    placeholder="WELCOME10"
+                    placeholder="Enter coupon code"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                   />
@@ -343,15 +509,17 @@ export default function Checkout() {
 
             <SlideButton
               variant="blue"
-              label={`Slide to Pay ₹${grandTotal.toLocaleString()}`}
+              label={stockIssues.length > 0
+                ? 'Resolve cart issues to continue'
+                : `Slide to Pay ₹${grandTotal.toLocaleString()}`}
               onConfirm={handlePlaceOrder}
               loading={loading}
               status={loading ? 'loading' : 'idle'}
-              disabled={loading}
+              disabled={loading || stockIssues.length > 0}
               className="checkout-pay-btn"
             />
 
-            {/* Sticky mobile-only pay bar — visible while the user is still
+            {/* Sticky mobile-only pay bar, visible while the user is still
                 filling out the address form. Hides on >= 760px via CSS. */}
             <div className="checkout-sticky-mobile">
               <div className="checkout-sticky-mobile-total">
@@ -362,9 +530,9 @@ export default function Checkout() {
                 type="button"
                 className="btn btn-blue"
                 onClick={handlePlaceOrder}
-                disabled={loading}
+                disabled={loading || stockIssues.length > 0}
               >
-                {loading ? 'Processing…' : `Pay ₹${grandTotal.toLocaleString()}`}
+                {loading ? 'Processing…' : stockIssues.length > 0 ? 'Cart needs review' : `Pay ₹${grandTotal.toLocaleString()}`}
               </button>
             </div>
 

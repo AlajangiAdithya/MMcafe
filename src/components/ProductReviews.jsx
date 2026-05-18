@@ -42,7 +42,7 @@ export default function ProductReviews({ productId }) {
     return () => { active = false }
   }, [productId])
 
-  // Only buyers may post — keeps the review wall honest.
+  // Only buyers may post, keeps the review wall honest.
   useEffect(() => {
     let active = true
     if (!user) { setCanReview(false); return }

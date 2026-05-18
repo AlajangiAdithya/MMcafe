@@ -41,7 +41,7 @@ function setLink(rel, href, extraAttrs = {}) {
  * @param {string} [opts.image]       Absolute URL recommended for OG
  * @param {string} [opts.keywords]    Comma-separated keywords for this page
  * @param {string} [opts.canonical]   Absolute URL; defaults to current pathname under SITE_ORIGIN
- * @param {string} [opts.type]        OG type — 'website' (default) or 'article'
+ * @param {string} [opts.type]        OG type, 'website' (default) or 'article'
  */
 export function usePageMeta({ title, description, image, keywords, canonical, type = 'website' }) {
   useEffect(() => {

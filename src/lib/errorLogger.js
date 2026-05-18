@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
 
 // Best-effort, fire-and-forget error logger. Writes to the error_logs table.
-// Failures are swallowed — logging must never break the app.
+// Failures are swallowed, logging must never break the app.
 
 let lastSent = 0
 let recentKeys = new Map() // key -> timestamp, for de-duping bursts

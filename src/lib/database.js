@@ -242,7 +242,7 @@ export async function getAllEnrollments() {
 }
 
 export async function addEnrollment({ userId, courseId, paymentId = null }) {
-  // Bump enrolled_at on re-enrollment — the SQL trigger recomputes expires_at
+  // Bump enrolled_at on re-enrollment, the SQL trigger recomputes expires_at
   // to enrolled_at + 30 days. ignoreDuplicates: false so the row actually updates.
   const { data, error } = await supabase
     .from('enrollments')
@@ -663,7 +663,7 @@ export async function deleteBarista(id) {
   if (error) throw error
 }
 
-// ===== BARISTA ACCESS (paid pass — 20-day window) =====
+// ===== BARISTA ACCESS (paid pass, 20-day window) =====
 export const CAFE_ACCESS_DAYS = 20
 export const COURSE_ACCESS_DAYS = 30
 
@@ -696,10 +696,10 @@ export async function hasBaristaAccess(userId) {
 }
 
 export async function grantBaristaAccess({ userId, paymentId, amount }) {
-  // Goes through a SECURITY DEFINER RPC — the table's RLS lets users INSERT
+  // Goes through a SECURITY DEFINER RPC, the table's RLS lets users INSERT
   // their own row but not UPDATE it (so they can't clear admin's revoke).
   // The RPC handles both first-time grant and re-payment via on-conflict.
-  // userId param is kept for backwards compat but ignored — the RPC reads
+  // userId param is kept for backwards compat but ignored, the RPC reads
   // auth.uid() server-side, which is the only safe source of truth.
   void userId
   const { error } = await supabase.rpc('grant_barista_access', {

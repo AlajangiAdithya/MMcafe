@@ -7,6 +7,41 @@
 
 import { supabase } from './supabase'
 
+// Razorpay surfaces a structured error object on payment.failed:
+//   { code, description, source, step, reason, metadata }
+// We map the noisy codes/reasons to short, customer-readable lines.
+function humanizeRazorpayError(err) {
+  if (!err) return 'Payment failed. Please try again.'
+  const reason = (err.reason || '').toLowerCase()
+  const code = (err.code || '').toUpperCase()
+  const desc = err.description || ''
+
+  const reasonMap = {
+    payment_failed: 'Payment failed. Please try again or use a different method.',
+    payment_cancelled: 'Payment was cancelled.',
+    payment_pending: 'Payment is pending. We will confirm shortly.',
+    international_transaction_not_allowed: 'International cards are not accepted. Please use an Indian card or UPI.',
+    invalid_card: 'The card details look invalid. Please re-check the number, expiry and CVV.',
+    card_declined: 'Your card was declined by the bank. Try a different card or UPI.',
+    insufficient_funds: 'Insufficient funds on this card. Try a different method.',
+    incorrect_otp: 'The OTP you entered was incorrect. Please retry.',
+    bank_error: 'Your bank could not process this payment. Please try again or use UPI.',
+    upi_failed: 'The UPI payment failed. Please retry or use a different UPI ID.',
+    network_error: 'Network error during payment. Check your connection and retry.',
+    gateway_error: 'Payment gateway is having trouble. Please retry in a moment.',
+  }
+  if (reason && reasonMap[reason]) return reasonMap[reason]
+
+  const codeMap = {
+    BAD_REQUEST_ERROR: 'Something looked off with the payment request. Please retry.',
+    GATEWAY_ERROR: 'Payment gateway is having trouble. Please retry in a moment.',
+    SERVER_ERROR: 'Server hiccup while processing the payment. Please retry.',
+  }
+  if (code && codeMap[code]) return codeMap[code]
+
+  return desc || 'Payment failed. Please try again.'
+}
+
 let scriptPromise = null
 function loadRazorpay() {
   if (typeof window === 'undefined') return Promise.reject(new Error('No window'))
@@ -92,7 +127,7 @@ export async function payAndVerify(opts) {
       },
       modal: { ondismiss: () => onFailure?.('Payment cancelled') },
     })
-    rzp.on('payment.failed', (r) => onFailure?.(r?.error?.description || 'Payment failed'))
+    rzp.on('payment.failed', (r) => onFailure?.(humanizeRazorpayError(r?.error)))
     rzp.open()
   } catch (e) {
     onFailure?.(e.message || 'Could not start payment')

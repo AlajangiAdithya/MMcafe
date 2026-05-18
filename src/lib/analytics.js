@@ -3,7 +3,7 @@
 // Loads gtag.js on boot with default consent denied for all four v2
 // parameters, then sends a consent('update', ...) once the user clicks
 // Accept/Reject in the cookie banner. This is the consent-mode flow Google
-// requires for EEA traffic — see:
+// requires for EEA traffic, see:
 // https://developers.google.com/tag-platform/security/guides/consent
 
 import { hasAnalyticsConsent } from '../components/CookieConsent'

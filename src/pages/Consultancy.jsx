@@ -69,7 +69,7 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function Consultancy() {
   usePageMeta({
     title: 'Cafe Consultancy · Menu Design, Operations & Barista Training',
-    description: 'End-to-end cafe consultancy from the team behind Mastermind Brews — menu design, operations, barista training and quality audits for cafes across India.',
+    description: 'End-to-end cafe consultancy from the team behind Mastermind Brews, menu design, operations, barista training and quality audits for cafes across India.',
     keywords: 'cafe consultancy India, restaurant consultant, menu design, cafe setup, barista training program, coffee shop consulting Mumbai',
   })
 

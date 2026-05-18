@@ -226,7 +226,7 @@ export default function Baristas() {
           <motion.p className="page-lede" variants={fadeUp}>
             A curated bridge between India&rsquo;s working baristas and the cafes that need them.
             Baristas list themselves once and stay discoverable. Cafes pay a one-time fee to
-            browse verified profiles and reach out directly &mdash; no agencies, no commission.
+            browse verified profiles and reach out directly, no agencies, no commission.
           </motion.p>
         </motion.div>
       </div>
@@ -241,7 +241,7 @@ export default function Baristas() {
           <h2>Get discovered by hiring cafes.</h2>
           <p>
             Submit your profile once. Cafe owners and managers across the country browse this
-            directory when they&rsquo;re hiring &mdash; your name, experience and skills land
+            directory when they&rsquo;re hiring, your name, experience and skills land
             in front of real opportunities, not job-board noise.
           </p>
         </div>
@@ -265,7 +265,7 @@ export default function Baristas() {
               <div className="perk-icon"><Award size={18} /></div>
               <div>
                 <strong>Showcase your craft</strong>
-                <span>Highlight your experience, training and skills &mdash; in plain words, no resume needed.</span>
+                <span>Highlight your experience, training and skills, in plain words, no resume needed.</span>
               </div>
             </motion.li>
             <motion.li variants={fadeUp}>
@@ -278,7 +278,7 @@ export default function Baristas() {
             <motion.li variants={fadeUp}>
               <div className="perk-icon"><ShieldCheck size={18} /></div>
               <div>
-                <strong>Vetted listing &mdash; free to join</strong>
+                <strong>Vetted listing, free to join</strong>
                 <span>We review every submission before it goes live. Listing is and stays free for baristas.</span>
               </div>
             </motion.li>
@@ -286,7 +286,7 @@ export default function Baristas() {
 
           <div className="discovered-cta">
             <Link to="/barista-signup" className="btn btn-primary btn-lg">
-              Get discovered &mdash; submit your profile <ArrowRight size={16} />
+              Get discovered, submit your profile <ArrowRight size={16} />
             </Link>
             <p className="discovered-foot">Takes about 3 minutes. We&rsquo;ll email you once you&rsquo;re live.</p>
           </div>
@@ -329,7 +329,7 @@ export default function Baristas() {
             <Link to="/academy" className="cross-link-card">
               <div className="cross-link-icon"><GraduationCap size={20} /></div>
               <h4>Train at the academy</h4>
-              <p>Structured barista courses &mdash; the same training many of these baristas took.</p>
+              <p>Structured barista courses, the same training many of these baristas took.</p>
               <span className="cross-link-cta">Browse courses <ArrowRight size={14} /></span>
             </Link>
           </motion.div>
@@ -359,7 +359,7 @@ export default function Baristas() {
               <p>
                 Tell us what you need, pay once, and our team hand-picks
                 <strong> {BARISTA_SLOTS_PER_CAFE} verified barista profiles</strong> for your cafe
-                &mdash; full name, phone, email, location, experience, training and skills.
+               , full name, phone, email, location, experience, training and skills.
                 No browsing through hundreds of resumes.
               </p>
             </div>
@@ -383,7 +383,7 @@ export default function Baristas() {
               <div className="paywall-card">
                 <div className="paywall-icon"><Lock size={26} /></div>
                 <h2>Login to start</h2>
-                <p>Create an account or log in &mdash; takes seconds. Then tell us what you need and we&rsquo;ll match {BARISTA_SLOTS_PER_CAFE} baristas for you.</p>
+                <p>Create an account or log in, takes seconds. Then tell us what you need and we&rsquo;ll match {BARISTA_SLOTS_PER_CAFE} baristas for you.</p>
                 <Link to="/login?redirect=/baristas" className="btn btn-primary full-width">
                   Login to continue <ArrowRight size={14} />
                 </Link>
@@ -428,7 +428,7 @@ export default function Baristas() {
                   <ul className="paywall-benefits">
                     <li><Users size={16} /> {BARISTA_SLOTS_PER_CAFE} hand-picked profiles matched to your brief</li>
                     <li><ShieldCheck size={16} /> Every barista vetted before assignment</li>
-                    <li><Briefcase size={16} /> Direct phone &amp; email &mdash; no middleman</li>
+                    <li><Briefcase size={16} /> Direct phone &amp; email, no middleman</li>
                     <li><Sparkles size={16} /> {CAFE_ACCESS_DAYS}-day window to finalise your hire</li>
                   </ul>
                   <div className="paywall-price">
@@ -513,7 +513,7 @@ export default function Baristas() {
               <p>
                 We received your access payment. Our team is reviewing baristas and will
                 assign your {BARISTA_SLOTS_PER_CAFE} profiles shortly. You&rsquo;ll see them
-                here on this page &mdash; no need to refresh repeatedly.
+                here on this page, no need to refresh repeatedly.
               </p>
             </div>
           ) : (

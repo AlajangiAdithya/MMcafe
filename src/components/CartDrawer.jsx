@@ -10,7 +10,7 @@ export default function CartDrawer() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  // Lock body scroll while open + close on Escape. Pure UX polish — no
+  // Lock body scroll while open + close on Escape. Pure UX polish, no
   // change to cart state or open/close semantics from the consumer side.
   useEffect(() => {
     if (!isOpen) return

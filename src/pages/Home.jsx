@@ -29,20 +29,20 @@ const TESTIMONIALS = [
   { name: 'Rick Snyder', role: 'Google Review', initials: 'RS', rating: 5, text: 'The food was so good - huge variety on the menu. Iced matcha latte was perfect, the pesto & burrata pizza and nachos were fantastic. Shubham was our server and he was really friendly. Ask for him to serve you!' },
 ]
 
-// Placeholder content — client will replace with real project case studies.
+// Placeholder content, client will replace with real project case studies.
 const PROJECTS = [
   {
     title: 'Mastermind Bicycle Cafe',
     location: 'Mulund, Mumbai',
     summary: 'Our flagship cafe: a full coffee program, European-inspired menu, and a community space built from the ground up.',
-    image: 'https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw',
+    image: '/project-cafe.jpg',
     tag: 'Flagship',
   },
   {
     title: 'Bean Rove Roast Profiles',
     location: 'Chikmagalur, Karnataka',
     summary: 'Exclusive single-origin profiles roasted in partnership with Bean Rove, the same beans we serve and ship.',
-    image: 'https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw',
+    image: '/project-beans.jpg',
     tag: 'Sourcing',
   },
   {
@@ -54,7 +54,7 @@ const PROJECTS = [
   },
 ]
 
-// Placeholder grid for the Instagram strip — client can swap these with
+// Placeholder grid for the Instagram strip, client can swap these with
 // real post thumbnails or wire up the IG Basic Display API later.
 const INSTAGRAM_TILES = [
   'https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w600-rw',
@@ -348,8 +348,8 @@ export default function Home() {
             <motion.article className="offer-pillar offer-pillar-pink" variants={fadeUp}>
               <div className="offer-pillar-media">
                 <img
-                  src="https://lh3.googleusercontent.com/csYL5joKIL4Oz1VMMoGVBqLQMUwHqHLMVCmwzc_G8o_kddGd-uqCqyER8gXLs_oLgaQMnlIK-KQARysDbwXusuLWqK9I3zgauCwtLKvQKA=w1200-rw"
-                  alt="Coffee beans being roasted"
+                  src="/offer-beans.jpg"
+                  alt="Coffee estate in Chikmagalur, Karnataka"
                   loading="lazy"
                 />
                 <span className="offer-pillar-index">01</span>
@@ -390,8 +390,8 @@ export default function Home() {
             <motion.article className="offer-pillar offer-pillar-blue" variants={fadeUp}>
               <div className="offer-pillar-media">
                 <img
-                  src="https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw"
-                  alt="Barista pulling an espresso shot"
+                  src="/offer-academy.png"
+                  alt="Barista pouring a tasting brew into a cup"
                   loading="lazy"
                 />
                 <span className="offer-pillar-index">02</span>
@@ -591,24 +591,11 @@ export default function Home() {
             <AnimatedSection className="academy-preview-visual">
               <div className="academy-visual-frame">
                 <img
-                  src="https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1000-rw"
-                  alt="Barista at Mastermind Brews"
+                  src="/academy-feature.jpg"
+                  alt="Mastermind barista pouring a craft pint at the bar"
                   loading="lazy"
                 />
                 <div className="academy-image-tint" />
-                <motion.div
-                  className="academy-floating-card"
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 200 }}
-                >
-                  <div className="academy-floating-card-icon"><Award size={18} /></div>
-                  <div className="academy-floating-card-body">
-                    <div className="academy-floating-card-num">6</div>
-                    <div className="academy-floating-card-label">Expert Modules</div>
-                  </div>
-                </motion.div>
               </div>
 
               <motion.div
@@ -743,7 +730,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials hidden for now — client wants Our Projects to take this slot. */}
+      {/* Testimonials hidden for now, client wants Our Projects to take this slot. */}
       {false && (
         <section className="testimonials-section">
           <div className="container">
@@ -778,7 +765,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* ===== FROM THE PRESS — Newspaper Menu Clipping ===== */}
+      {/* ===== FROM THE PRESS, Newspaper Menu Clipping ===== */}
       <section className="press-section">
         <div className="container">
           <AnimatedSection className="press-row">
@@ -800,7 +787,7 @@ export default function Home() {
               >
                 <img
                   src="/mastermind-times.jpg"
-                  alt="Mastermind Times — a global culinary revolution menu poster"
+                  alt="Mastermind Times, a global culinary revolution menu poster"
                   loading="lazy"
                 />
               </a>
@@ -811,7 +798,7 @@ export default function Home() {
                 The <span className="text-gradient">Mastermind Times</span>
               </h2>
               <p className="press-desc">
-                A menu that travels &mdash; Asian, European, American, Mediterranean &mdash; all under one bicycle-cafe roof.
+                A menu that travels, Asian, European, American, Mediterranean, all under one bicycle-cafe roof.
               </p>
               <a
                 href="/mastermind-times.jpg"
@@ -880,7 +867,7 @@ export default function Home() {
             </AnimatedSection>
             <AnimatedSection className="visit-card" delay={0.2}>
               <div className="visit-card-image">
-                <img src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw" alt="Mastermind Bicycle Cafe" loading="lazy" />
+                <img src="/cafe-food.png" alt="Mastermind Bicycle Cafe, handcrafted pasta with wine" loading="lazy" style={{ objectPosition: 'center bottom' }} />
                 <div className="visit-card-rating">
                   <div className="visit-card-rating-stars">
                     {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}

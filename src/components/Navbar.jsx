@@ -52,7 +52,7 @@ export default function Navbar({ onOpenSearch }) {
   }, [])
 
   // Client scope: only show Home, About, Buy Coffee, Learn Coffee, Our Projects.
-  // Blog/Baristas routes still exist — just hidden from primary nav for now.
+  // Blog/Baristas routes still exist, just hidden from primary nav for now.
   const links = [
     { to: '/', label: 'Home' },
     { to: '/about', label: 'About Us' },

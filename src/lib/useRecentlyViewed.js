@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 // Tracks the last N products a visitor opened, in localStorage. Used by Home
 // to surface a "Recently viewed" strip and by the command palette as a small
-// recency boost. Lives entirely on the client — no DB roundtrip.
+// recency boost. Lives entirely on the client, no DB roundtrip.
 
 const KEY = 'mm.recent.v1'
 const MAX = 8

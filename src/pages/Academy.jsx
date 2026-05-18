@@ -28,7 +28,7 @@ export default function Academy() {
 
   usePageMeta({
     title: 'Online Barista Academy · Professional Coffee Courses',
-    description: 'HD video courses from certified baristas. Learn espresso, latte art, brewing methods and cafe fundamentals at your pace — anywhere in India.',
+    description: 'HD video courses from certified baristas. Learn espresso, latte art, brewing methods and cafe fundamentals at your pace, anywhere in India.',
     keywords: 'online barista course India, barista training online, espresso course, latte art classes, coffee certification India, learn coffee online',
   })
 
