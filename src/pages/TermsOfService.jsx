@@ -1,4 +1,5 @@
 import { usePageMeta } from '../lib/usePageMeta'
+import PolicyLayout from '../components/PolicyLayout'
 
 export default function TermsOfService() {
   usePageMeta({
@@ -6,11 +7,11 @@ export default function TermsOfService() {
     description: 'Terms of service for Mastermind Brews: orders, payments, courses, account use, and Barista Directory.',
   })
   return (
-    <div className="policy-page">
-      <div className="policy-container">
-        <h1>Terms & Conditions</h1>
-        <p className="policy-updated">Last updated: 30 April 2026</p>
-
+    <PolicyLayout
+      eyebrow="Legal · Mastermind Brews"
+      title="Terms & Conditions"
+      updated="Last updated: 30 April 2026"
+    >
         <section>
           <h2>1. Introduction</h2>
           <p>
@@ -196,7 +197,6 @@ export default function TermsOfService() {
             <p>Phone: <a href="tel:+918591850161">+91 85918 50161</a></p>
           </div>
         </section>
-      </div>
-    </div>
+    </PolicyLayout>
   )
 }

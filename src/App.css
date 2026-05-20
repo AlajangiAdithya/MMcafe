@@ -11,14 +11,24 @@
      Legacy aliases preserved so existing classes still work.
      ============================================================ */
 
-  /* Surfaces, warmer, layered cocoa */
-  --bg-primary:   #0c0a09;
-  --bg-secondary: #15110d;
-  --bg-tertiary:  #1c1814;
-  --bg-card:      rgba(28, 24, 20, 0.72);
-  --bg-elevated:  rgba(40, 34, 28, 0.78);
-  --bg-surface:   rgba(34, 29, 24, 0.85);
-  --bg-hover:     rgba(48, 40, 32, 0.88);
+  /* Surfaces — true coffee browns. Like a fresh-poured espresso in lamplight. */
+  --bg-primary:   #1c130c;   /* espresso */
+  --bg-secondary: #241810;   /* dark roast */
+  --bg-tertiary:  #2c1f15;   /* mocha */
+  --bg-card:      rgba(58, 41, 28, 0.72);
+  --bg-elevated:  rgba(74, 53, 36, 0.78);
+  --bg-surface:   rgba(64, 45, 30, 0.85);
+  --bg-hover:     rgba(86, 62, 42, 0.88);
+
+  /* Coffee semantic palette (new — usable across components) */
+  --coffee-espresso: #1c130c;
+  --coffee-dark:     #2c1f15;
+  --coffee-mocha:    #3a2818;
+  --coffee-roast:    #5b3a22;
+  --coffee-caramel:  #a87145;
+  --coffee-latte:    #d9b899;
+  --coffee-foam:     #efe1cf;
+  --coffee-cream:    #f8efe2;
 
   /* Ink, warm ivory family */
   --ink-100: #F4ECE0;
@@ -119,9 +129,10 @@ body {
   font-size: 16px;
   line-height: 1.75;
   background:
-    radial-gradient(ellipse 80% 50% at 80% 0%, rgba(201, 151, 74, 0.05) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 60% at 20% 30%, rgba(28, 24, 20, 0.8) 0%, transparent 60%),
-    var(--bg-primary);
+    radial-gradient(ellipse 90% 60% at 80% -10%, rgba(168, 113, 69, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 10% 30%, rgba(91, 58, 34, 0.40) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 70% at 50% 110%, rgba(44, 31, 21, 0.85) 0%, transparent 60%),
+    linear-gradient(180deg, var(--coffee-espresso) 0%, var(--coffee-dark) 50%, var(--coffee-espresso) 100%);
   background-attachment: fixed;
   color: var(--ink-200);
   -webkit-font-smoothing: antialiased;
@@ -130,12 +141,50 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Subtle paper-grain overlay on the entire viewport — like the texture
+   of a kraft coffee bag. Pure CSS noise, very low cost. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image:
+    radial-gradient(circle at 25% 35%, rgba(255, 220, 180, 0.4) 0.5px, transparent 1px),
+    radial-gradient(circle at 75% 65%, rgba(180, 130, 80, 0.4) 0.5px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(255, 220, 180, 0.3) 0.5px, transparent 1px);
+  background-size: 3px 3px, 4px 4px, 5px 5px;
+}
+
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
 img { max-width: 100%; display: block; }
 ul { list-style: none; }
 
 ::selection { background: var(--accent); color: #1a1208; }
+
+/* ===== CUSTOM COFFEE CURSOR =====
+   Bean for the default arrow, cup for any interactive element.
+   PNG hotspot coordinates are SVG-native; browsers handle scaling. */
+html, body {
+  cursor: url('/cursor/bean.svg') 14 14, auto;
+}
+a, button, [role="button"], .btn, .nav-link, .cart-btn, .icon-btn,
+input[type="submit"], input[type="button"], summary, label[for], select,
+.signup-btn, .login-btn, .surface--interactive {
+  cursor: url('/cursor/cup.svg') 16 16, pointer;
+}
+input[type="text"], input[type="email"], input[type="password"],
+input[type="number"], input[type="search"], input[type="tel"],
+input[type="url"], textarea {
+  cursor: text;
+}
+@media (hover: none), (pointer: coarse) {
+  /* Don't override the system cursor on touch devices */
+  html, body, a, button, .btn { cursor: auto; }
+}
 
 .app { min-height: 100vh; display: flex; flex-direction: column; }
 .main-content { flex: 1; padding-top: var(--nav-height); }
@@ -344,7 +393,10 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   color: var(--ink-100);
 }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR — Japanese coffee shop, white-on-brown =====
+   Solid coffee-roast bar at the top of the page. White ivory typography,
+   minimal divider rules, no glassmorphism noise. Inspired by
+   ueshimacoffeecompany.com and japanesecoffeeco.com. */
 .navbar {
   position: fixed;
   top: 0;
@@ -352,18 +404,39 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   right: 0;
   z-index: 100;
   height: var(--nav-height);
+  background: linear-gradient(180deg, #3a2818 0%, #2c1f15 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(168, 113, 69, 0.10) inset,
+              0 8px 24px rgba(12, 8, 4, 0.35);
   transition: height var(--dur-base) var(--ease),
               background-color var(--dur-base) var(--ease),
-              border-color var(--dur-base) var(--ease),
-              backdrop-filter var(--dur-base) var(--ease);
+              border-color var(--dur-base) var(--ease);
 }
 
 .navbar.scrolled {
   height: 64px;
-  background: rgba(12, 10, 9, 0.78);
-  backdrop-filter: blur(28px) saturate(1.4);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
-  border-bottom: 1px solid var(--border-light);
+  background: linear-gradient(180deg, rgba(44, 31, 21, 0.92) 0%, rgba(28, 19, 12, 0.92) 100%);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Thin gold hairline at the bottom of the bar — like the gold leaf on
+   a tea-house storefront. */
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(217, 184, 153, 0.0) 8%,
+    rgba(217, 184, 153, 0.35) 50%,
+    rgba(217, 184, 153, 0.0) 92%,
+    transparent 100%);
+  pointer-events: none;
 }
 
 .nav-container {
@@ -400,10 +473,10 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 .nav-logo-text .brand-name {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.05rem;
-  letter-spacing: 0.005em;
-  color: var(--ink-100);
+  font-weight: 600;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+  color: #fff;
 }
 
 .nav-logo-text .brand-sub {
@@ -411,7 +484,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-weight: 600;
   letter-spacing: var(--ls-widest);
   text-transform: uppercase;
-  color: var(--ink-400);
+  color: var(--coffee-latte);
   margin-top: 5px;
 }
 
@@ -424,33 +497,35 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 }
 
 .nav-link {
-  padding: 10px 16px;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: var(--ls-widest);
+  padding: 10px 18px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.78);
   transition: color var(--dur-fast) var(--ease);
   position: relative;
   white-space: nowrap;
 }
+/* Underline reveal — thin gold hairline, draws from center on hover.
+   Cleaner and more Japanese-coffee than a dot. */
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: 4px;
   left: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: translateX(-50%) scale(0);
+  transform: translateX(-50%) scaleX(0);
+  width: calc(100% - 36px);
+  height: 1px;
+  background: var(--coffee-latte);
+  transform-origin: center;
   transition: transform var(--dur-base) var(--ease);
-  box-shadow: 0 0 12px var(--accent-glow);
 }
-.nav-link:hover { color: var(--ink-100); }
-.nav-link:hover::after { transform: translateX(-50%) scale(1); }
-.nav-link.active { color: var(--ink-100); }
-.nav-link.active::after { transform: translateX(-50%) scale(1); }
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after,
+.nav-link.active::after { transform: translateX(-50%) scaleX(1); }
+.nav-link.active { color: #fff; }
 
 .nav-actions {
   display: flex;
@@ -466,14 +541,14 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.82);
   border-radius: var(--radius-md);
   transition: background-color var(--dur-fast) var(--ease),
               color var(--dur-fast) var(--ease);
 }
 .cart-btn:hover {
-  color: var(--ink-100);
-  background: var(--bg-hover);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .cart-badge {
@@ -504,7 +579,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .user-email {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   max-width: 100px;
@@ -522,46 +597,46 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-weight: 600;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.82);
   border-radius: var(--radius-md);
   transition: color var(--dur-fast) var(--ease),
               background-color var(--dur-fast) var(--ease);
 }
 .login-btn:hover {
-  color: var(--ink-100);
-  background: var(--bg-hover);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .auth-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding-left: 6px;
-  margin-left: 4px;
-  border-left: 1px solid var(--border);
+  padding-left: 10px;
+  margin-left: 6px;
+  border-left: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .signup-btn {
-  padding: 10px 20px;
+  padding: 10px 22px;
   font-size: 10.5px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  background: var(--accent);
-  color: #1a1208;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-accent);
+  background: #fff;
+  color: var(--coffee-espresso);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
   transition: background-color var(--dur-fast) var(--ease),
               transform var(--dur-fast) var(--ease),
               box-shadow var(--dur-fast) var(--ease);
 }
 .signup-btn:hover {
-  background: var(--accent-soft);
+  background: var(--coffee-cream);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-accent), var(--shadow-2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
 }
 
-.mobile-menu-btn { display: none; z-index: 101; }
+.mobile-menu-btn { display: none; z-index: 101; color: #fff; }
 
 /* ===== HERO ===== */
 .hero {
@@ -4292,10 +4367,32 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 /* ===== FOOTER ===== */
 .footer {
+  position: relative;
   background:
-    linear-gradient(180deg, transparent 0%, var(--bg-secondary) 30%, var(--bg-secondary) 100%);
-  border-top: 1px solid var(--border);
+    linear-gradient(180deg,
+      transparent 0%,
+      rgba(28, 19, 12, 0.85) 12%,
+      var(--coffee-espresso) 30%,
+      #160e08 100%);
+  border-top: 1px solid rgba(168, 113, 69, 0.20);
   margin-top: var(--section-gap);
+  isolation: isolate;
+}
+/* Gold hairline at the top — mirrors the one under the navbar */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(217, 184, 153, 0.0) 8%,
+    rgba(217, 184, 153, 0.42) 50%,
+    rgba(217, 184, 153, 0.0) 92%,
+    transparent 100%);
+  pointer-events: none;
 }
 
 .footer-main {
@@ -4325,13 +4422,13 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 .footer-brand-logo span {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.08rem;
-  color: var(--ink-100);
+  font-weight: 600;
+  font-size: 1.10rem;
+  color: #fff;
 }
 
 .footer-brand-blurb {
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.74);
   font-size: 0.92rem;
   line-height: 1.75;
 }
@@ -4348,17 +4445,19 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-light);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.82);
   transition: color var(--dur-fast) var(--ease),
               border-color var(--dur-fast) var(--ease),
-              background-color var(--dur-fast) var(--ease);
+              background-color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
 }
 .footer-social a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(201, 151, 74, 0.06);
+  border-color: var(--coffee-latte);
+  color: #fff;
+  background: rgba(217, 184, 153, 0.10);
+  transform: translateY(-2px);
 }
 
 .footer-col h4 {
@@ -4367,7 +4466,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-weight: 700;
   letter-spacing: var(--ls-widest);
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--coffee-latte);
   margin-bottom: 22px;
 }
 
@@ -4375,38 +4474,45 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   display: block;
   padding: 7px 0;
   font-size: 0.94rem;
-  color: var(--ink-200);
+  color: rgba(255, 255, 255, 0.78);
   transition: color var(--dur-fast) var(--ease),
               transform var(--dur-fast) var(--ease);
   font-weight: 400;
 }
-.footer-col a:hover { color: var(--accent-soft); transform: translateX(3px); }
+.footer-col a:hover { color: #fff; transform: translateX(3px); }
 
-/* Cafe card */
+/* Cafe card — white-on-brown, like a printed business card pinned
+   to the wall of the cafe. */
 .footer-cafe-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: var(--radius-lg);
   padding: 28px;
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(8px);
 }
 .footer-cafe-card::before {
   content: '';
   position: absolute;
   inset: 0 0 auto 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+  background: linear-gradient(90deg, transparent, var(--coffee-latte) 50%, transparent);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
-.footer-cafe-card .eyebrow { margin-bottom: 14px; }
+.footer-cafe-card .eyebrow {
+  margin-bottom: 14px;
+  color: var(--coffee-latte);
+}
+.footer-cafe-card .eyebrow::before {
+  background: linear-gradient(90deg, transparent, var(--coffee-latte) 30%);
+}
 .footer-cafe-title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.6rem;
   line-height: 1.08;
   letter-spacing: var(--ls-tight);
-  color: var(--ink-100);
+  color: #fff;
   margin-bottom: 20px;
 }
 .footer-cafe-meta {
@@ -4414,48 +4520,48 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   flex-direction: column;
   gap: 10px;
   padding-top: 14px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 .footer-cafe-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   font-size: 0.86rem;
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.78);
   line-height: 1.5;
 }
 .footer-cafe-row svg {
-  color: var(--accent);
+  color: var(--coffee-latte);
   flex-shrink: 0;
   margin-top: 3px;
 }
 .footer-cafe-row a {
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.78);
   transition: color var(--dur-fast) var(--ease);
 }
-.footer-cafe-row a:hover { color: var(--accent-soft); }
+.footer-cafe-row a:hover { color: #fff; }
 .footer-cafe-map {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   margin-top: 18px;
-  padding: 9px 14px;
+  padding: 9px 16px;
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid rgba(201, 151, 74, 0.35);
+  color: var(--coffee-espresso);
+  background: var(--coffee-foam);
+  border: 1px solid var(--coffee-foam);
   border-radius: var(--radius-pill);
   transition: background-color var(--dur-fast) var(--ease),
               color var(--dur-fast) var(--ease),
-              border-color var(--dur-fast) var(--ease);
+              transform var(--dur-fast) var(--ease);
 }
 .footer-cafe-map:hover {
-  background: var(--accent);
-  color: #1a1208;
-  border-color: var(--accent);
+  background: #fff;
+  transform: translateY(-1px);
 }
 
 .footer-bottom {
@@ -4465,14 +4571,14 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   flex-wrap: wrap;
   gap: 16px;
 }
 
 .footer-bottom p {
   font-size: 12px;
-  color: var(--ink-400);
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.02em;
 }
 
@@ -4488,10 +4594,10 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-weight: 600;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--ink-400);
+  color: rgba(255, 255, 255, 0.62);
   transition: color var(--dur-fast) var(--ease);
 }
-.footer-bottom-links a:hover { color: var(--accent-soft); }
+.footer-bottom-links a:hover { color: var(--coffee-latte); }
 
 @media (max-width: 1100px) {
   .footer-main {
@@ -4819,6 +4925,236 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   padding: 14px 18px;
   border: 1px solid var(--border);
   color: var(--ink-200);
+}
+
+/* ============================================================
+   POLICY EDITORIAL LAYOUT — inspired by kamalaire.com
+   Two-column: sticky TOC sidebar (left) + serif-style body (right).
+   The page header is a full-bleed brown panel with a thin gold rule.
+   ============================================================ */
+.policy-editorial {
+  min-height: 80vh;
+  padding-bottom: var(--section-gap);
+}
+.policy-editorial-header {
+  position: relative;
+  padding: clamp(56px, 8vw, 96px) 0 clamp(36px, 5vw, 56px);
+  background: linear-gradient(180deg, rgba(58, 41, 28, 0.32) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(217, 184, 153, 0.20);
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+.policy-editorial-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 184, 153, 0.45) 50%, transparent);
+}
+.policy-editorial-eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--coffee-latte);
+  margin-bottom: 16px;
+}
+.policy-editorial-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink-100);
+  margin: 0 0 14px;
+  max-width: 800px;
+}
+.policy-editorial-updated {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--ink-400);
+  margin: 0;
+}
+
+/* Grid: sticky TOC + reading column */
+.policy-editorial-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: clamp(40px, 5vw, 72px);
+  align-items: start;
+}
+
+/* Sticky table of contents — like a book's index pinned to the margin */
+.policy-editorial-toc {
+  position: sticky;
+  top: calc(var(--nav-height) + 24px);
+  align-self: start;
+  max-height: calc(100vh - var(--nav-height) - 48px);
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 184, 153, 0.25) transparent;
+}
+.policy-editorial-toc::-webkit-scrollbar { width: 6px; }
+.policy-editorial-toc::-webkit-scrollbar-thumb {
+  background: rgba(217, 184, 153, 0.20);
+  border-radius: 999px;
+}
+.policy-editorial-toc-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--coffee-latte);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(217, 184, 153, 0.18);
+}
+.policy-editorial-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+.policy-editorial-toc li { margin: 0; }
+.policy-editorial-toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 9px 12px;
+  margin: 1px 0;
+  border-left: 2px solid transparent;
+  color: var(--ink-300);
+  font-size: 13px;
+  line-height: 1.45;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              background-color var(--dur-fast) var(--ease);
+}
+.policy-editorial-toc .toc-num {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-400);
+  min-width: 22px;
+}
+.policy-editorial-toc .toc-label { flex: 1; }
+.policy-editorial-toc a:hover {
+  color: var(--ink-100);
+  background: rgba(217, 184, 153, 0.06);
+  border-left-color: rgba(217, 184, 153, 0.45);
+}
+.policy-editorial-toc li.is-active a {
+  color: #fff;
+  background: rgba(217, 184, 153, 0.10);
+  border-left-color: var(--coffee-latte);
+}
+.policy-editorial-toc li.is-active .toc-num { color: var(--coffee-latte); }
+
+/* Reading column — measured line length, generous leading */
+.policy-editorial-body {
+  max-width: 720px;
+  font-family: var(--font-sans);
+  font-size: 1.025rem;
+  line-height: 1.85;
+  color: var(--ink-200);
+}
+.policy-editorial-body section {
+  margin: 0 0 56px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(217, 184, 153, 0.12);
+  scroll-margin-top: calc(var(--nav-height) + 32px);
+}
+.policy-editorial-body section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.policy-editorial-body h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  color: var(--ink-100);
+  margin: 0 0 22px;
+  scroll-margin-top: calc(var(--nav-height) + 32px);
+}
+.policy-editorial-body h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.18rem;
+  letter-spacing: -0.01em;
+  color: var(--ink-100);
+  margin: 32px 0 12px;
+}
+.policy-editorial-body p {
+  margin: 0 0 16px;
+  color: var(--ink-200);
+}
+.policy-editorial-body ul,
+.policy-editorial-body ol {
+  margin: 14px 0 20px 24px;
+  padding: 0;
+  list-style: disc;
+}
+.policy-editorial-body ol { list-style: decimal; }
+.policy-editorial-body li {
+  margin: 0 0 10px;
+  color: var(--ink-200);
+  line-height: 1.78;
+}
+.policy-editorial-body li::marker { color: var(--coffee-caramel); }
+.policy-editorial-body a {
+  color: var(--coffee-latte);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(217, 184, 153, 0.45);
+  transition: color var(--dur-fast) var(--ease),
+              text-decoration-color var(--dur-fast) var(--ease);
+}
+.policy-editorial-body a:hover {
+  color: var(--coffee-foam);
+  text-decoration-color: var(--coffee-foam);
+}
+.policy-editorial-body strong { color: var(--ink-100); font-weight: 600; }
+.policy-editorial-body em { color: var(--ink-200); }
+.policy-editorial-body .policy-contact {
+  background: linear-gradient(180deg, rgba(58, 41, 28, 0.40) 0%, rgba(44, 31, 21, 0.40) 100%);
+  border: 1px solid rgba(217, 184, 153, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin: 20px 0 0;
+}
+.policy-editorial-body .policy-contact p { margin-bottom: 6px; }
+.policy-editorial-body .policy-contact p:last-child { margin-bottom: 0; }
+
+@media (max-width: 920px) {
+  .policy-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .policy-editorial-toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 20px;
+    background: rgba(58, 41, 28, 0.30);
+    border: 1px solid rgba(217, 184, 153, 0.16);
+    border-radius: var(--radius-lg);
+  }
+  .policy-editorial-body { max-width: 100%; }
 }
 
 .policy-table th {
@@ -5895,7 +6231,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   padding: 8px 12px;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--ink-300);
+  color: rgba(255, 255, 255, 0.82);
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
@@ -5905,8 +6241,8 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
               color var(--dur-fast) var(--ease);
 }
 .user-trigger:hover {
-  background: var(--bg-hover);
-  color: var(--ink-100);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
 }
 .user-menu { position: relative; }
 .user-dropdown {
@@ -9832,6 +10168,81 @@ textarea:focus-visible {
   .route-fallback-spinner span { animation: none; opacity: 0.7; }
 }
 
+/* ============================================================
+   COFFEE LOADER — global Suspense fallback
+   Steaming cup with brew-filling animation. Replaces the
+   generic three-dot spinner so every route change feels on-brand.
+   ============================================================ */
+.coffee-loader-screen {
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.coffee-loader-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.coffee-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.coffee-loader-svg {
+  width: 96px;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.45));
+}
+.coffee-loader-svg .steam {
+  fill: none;
+  stroke: rgba(239, 225, 207, 0.7);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.coffee-loader-svg .steam-1 { animation: steamRise 2.4s ease-in-out infinite; }
+.coffee-loader-svg .steam-2 { animation: steamRise 2.4s ease-in-out infinite 0.4s; }
+.coffee-loader-svg .steam-3 { animation: steamRise 2.4s ease-in-out infinite 0.8s; }
+.coffee-loader-svg .brew {
+  transform-origin: center bottom;
+  animation: brewFill 2.4s ease-in-out infinite;
+}
+.coffee-loader-svg .crema {
+  animation: cremaShift 2.4s ease-in-out infinite;
+}
+.coffee-loader-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--coffee-latte);
+  margin: 0;
+}
+@keyframes steamRise {
+  0%   { opacity: 0; transform: translateY(8px) scale(0.9); }
+  35%  { opacity: 0.9; }
+  100% { opacity: 0; transform: translateY(-22px) scale(1.1); }
+}
+@keyframes brewFill {
+  0%, 100% { transform: scaleY(0.55); }
+  50%      { transform: scaleY(1);    }
+}
+@keyframes cremaShift {
+  0%, 100% { opacity: 0.4; transform: translateX(-2px); }
+  50%      { opacity: 0.85; transform: translateX(2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coffee-loader-svg .steam,
+  .coffee-loader-svg .brew,
+  .coffee-loader-svg .crema { animation: none; opacity: 0.7; }
+}
+
 /* ---- Focus rings: rounded for buttons, never on mouse click ---- */
 .btn:focus-visible,
 .icon-btn:focus-visible,
@@ -10821,4 +11232,179 @@ textarea:focus-visible {
   .offer-spec-value { font-size: 17px; }
   .offer-trust-strip { grid-template-columns: 1fr; padding: 18px 20px; }
   .offer-pillar-cta { align-self: stretch; justify-content: center; }
+}
+
+/* ============================================================
+   INTERACTIVITY LAYER — Kamchukarrr-inspired motion polish
+   Soft cursor follower, scroll reveal, magnetic CTA.
+   All animations respect prefers-reduced-motion.
+   ============================================================ */
+
+/* --- Steam-puff cursor follower (sits BEHIND custom coffee cursor) --- */
+.cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(239, 225, 207, 0.35) 0%, rgba(239, 225, 207, 0) 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  will-change: transform;
+}
+
+/* --- Scroll-triggered reveal --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 720ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .cursor-trail { display: none; }
+}
+
+/* --- Sheen-on-hover for any element marked .has-sheen --- */
+.has-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.has-sheen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.18) 50%, transparent 100%);
+  transform: skewX(-22deg);
+  transition: left 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.has-sheen:hover::before { left: 125%; }
+
+/* --- Soft hover lift for product/course/feature cards --- */
+.surface,
+.product-card,
+.course-card,
+.feature-card {
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.product-card:hover,
+.course-card:hover,
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 50px rgba(12, 8, 4, 0.42);
+}
+
+/* --- Primary CTA: subtle pulse halo to draw the eye --- */
+.btn-premium-primary,
+.signup-btn {
+  position: relative;
+}
+.btn-premium-primary::after,
+.signup-btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(217, 184, 153, 0.32) 0%, transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 320ms ease;
+  pointer-events: none;
+}
+.btn-premium-primary:hover::after,
+.signup-btn:hover::after {
+  opacity: 1;
+}
+
+/* --- Smooth scroll already enabled on <html>, but add momentum easing
+       on Safari/iOS for the kamchukarrr "buttery" feel --- */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   HERO STEAM MOTIF + PARALLAX SUPPORT
+   The steaming cup SVG sits behind the hero text. Three steam
+   wisps drift upward and fade, like a fresh latte at the cafe.
+   ============================================================ */
+.hero-steam-motif {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(320px, 38vw, 560px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.45));
+  will-change: transform;
+}
+.hero-steam-motif .hero-steam-wisps {
+  fill: none;
+  stroke: rgba(239, 225, 207, 0.7);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.hero-steam-motif .hero-steam-1 { animation: heroSteamRise 4.5s ease-in-out infinite; }
+.hero-steam-motif .hero-steam-2 { animation: heroSteamRise 4.5s ease-in-out infinite 1.1s; }
+.hero-steam-motif .hero-steam-3 { animation: heroSteamRise 4.5s ease-in-out infinite 2.2s; }
+@keyframes heroSteamRise {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.92); }
+  20%  { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-44px) scale(1.06); }
+}
+/* The .hero-parallax class is added to the hero bg image so the JS
+   parallax handler can target it. Pure transform-based, no layout. */
+.hero-parallax {
+  will-change: transform;
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-steam-motif .hero-steam-1,
+  .hero-steam-motif .hero-steam-2,
+  .hero-steam-motif .hero-steam-3 { animation: none; opacity: 0.6; }
+  .hero-parallax { transform: none !important; }
+}
+
+/* ============================================================
+   PAGE SCROLL PROGRESS BAR
+   A 2px gold bar at the very top of the viewport that fills as
+   the user scrolls. Adds a "you're moving through the site"
+   feedback signal like kamchukarrr.com.
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--coffee-caramel), var(--coffee-latte), var(--coffee-foam));
+  z-index: 200;
+  transition: width 80ms linear;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(217, 184, 153, 0.5);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none; }
 }

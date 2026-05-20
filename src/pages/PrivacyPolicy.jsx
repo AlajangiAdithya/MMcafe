@@ -1,4 +1,5 @@
 import { usePageMeta } from '../lib/usePageMeta'
+import PolicyLayout from '../components/PolicyLayout'
 
 export default function PrivacyPolicy() {
   usePageMeta({
@@ -6,11 +7,11 @@ export default function PrivacyPolicy() {
     description: 'How Mastermind Brews collects, uses, stores, shares, and protects your data. DPDP Act 2023 compliant. Includes the Barista Directory data-sharing terms.',
   })
   return (
-    <div className="policy-page">
-      <div className="policy-container">
-        <h1>Privacy Policy</h1>
-        <p className="policy-updated">Last updated: 30 April 2026</p>
-
+    <PolicyLayout
+      eyebrow="Legal · DPDP Act 2023"
+      title="Privacy Policy"
+      updated="Last updated: 30 April 2026"
+    >
         <section>
           <h2>1. Introduction</h2>
           <p>
@@ -246,7 +247,6 @@ export default function PrivacyPolicy() {
             <p>Phone: <a href="tel:+918591850161">+91 85918 50161</a></p>
           </div>
         </section>
-      </div>
-    </div>
+    </PolicyLayout>
   )
 }

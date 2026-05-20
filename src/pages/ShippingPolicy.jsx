@@ -1,4 +1,5 @@
 import { usePageMeta } from '../lib/usePageMeta'
+import PolicyLayout from '../components/PolicyLayout'
 
 export default function ShippingPolicy() {
   usePageMeta({
@@ -6,11 +7,11 @@ export default function ShippingPolicy() {
     description: 'Shipping, delivery times, and coverage areas for Mastermind Brews orders.',
   })
   return (
-    <div className="policy-page">
-      <div className="policy-container">
-        <h1>Shipping & Delivery Policy</h1>
-        <p className="policy-updated">Last updated: 15 April 2026</p>
-
+    <PolicyLayout
+      eyebrow="Legal · Mastermind Brews"
+      title="Shipping & Delivery Policy"
+      updated="Last updated: 15 April 2026"
+    >
         <section>
           <h2>1. Shipping Coverage</h2>
           <p>
@@ -124,7 +125,6 @@ export default function ShippingPolicy() {
             <p>Phone: <a href="tel:+918591850161">+91 85918 50161</a></p>
           </div>
         </section>
-      </div>
-    </div>
+    </PolicyLayout>
   )
 }

@@ -1,4 +1,5 @@
 import { usePageMeta } from '../lib/usePageMeta'
+import PolicyLayout from '../components/PolicyLayout'
 
 export default function RefundPolicy() {
   usePageMeta({
@@ -6,11 +7,11 @@ export default function RefundPolicy() {
     description: 'Return and refund policy for Mastermind Brews orders, academy courses, and barista directory access.',
   })
   return (
-    <div className="policy-page">
-      <div className="policy-container">
-        <h1>Return & Refund Policy</h1>
-        <p className="policy-updated">Last updated: 30 April 2026</p>
-
+    <PolicyLayout
+      eyebrow="Legal · Mastermind Brews"
+      title="Return & Refund Policy"
+      updated="Last updated: 30 April 2026"
+    >
         <section>
           <h2>1. Overview</h2>
           <p>
@@ -142,7 +143,6 @@ export default function RefundPolicy() {
             <p>Phone: <a href="tel:+918591850161">+91 85918 50161</a></p>
           </div>
         </section>
-      </div>
-    </div>
+    </PolicyLayout>
   )
 }

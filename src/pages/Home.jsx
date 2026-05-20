@@ -17,6 +17,7 @@ import { getFeaturedProducts, getProducts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import { useRecentlyViewed } from '../lib/useRecentlyViewed'
 import ProductDetailModal from '../components/ProductDetailModal'
+import Reveal from '../components/Reveal'
 import toast from 'react-hot-toast'
 
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
@@ -149,6 +150,33 @@ export default function Home() {
     setShowIntro(false)
   }, [])
 
+  // Hero parallax — translate the background image and steam motif at
+  // different speeds so the scene feels layered. Pure rAF + transform,
+  // no library, GPU-friendly. Disabled when user prefers reduced motion.
+  useEffect(() => {
+    if (prefersReducedMotion) return
+    if (typeof window === 'undefined') return
+    let raf = 0
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY
+        const bg = document.querySelector('.hero-parallax')
+        const steam = document.querySelector('.hero-steam-motif')
+        if (bg) bg.style.transform = `translate3d(0, ${y * 0.28}px, 0) scale(1.08)`
+        if (steam) steam.style.transform = `translate3d(0, ${y * -0.12}px, 0)`
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [prefersReducedMotion])
+
   return (
     <div className="home">
       {/* ===== VAPOUR TEXT INTRO ===== */}
@@ -197,12 +225,41 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* ===== HERO (100K PREMIUM UPGRADE) ===== */}
+      {/* ===== HERO — parallax layers + steaming-cup motif ===== */}
       <section className="hero">
         <div className="hero-bg">
-          <div className="hero-bg-image" style={{
+          <div className="hero-bg-image hero-parallax" style={{
             backgroundImage: 'url(/hero-bg.jpg)'
           }} />
+          {/* Steaming cup silhouette behind the hero copy. Faint, decorative,
+              drifts up like real steam. */}
+          <svg
+            className="hero-steam-motif"
+            viewBox="0 0 320 360"
+            aria-hidden="true"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <g className="hero-steam-wisps">
+              <path className="hero-steam-1" d="M120 180 Q108 150 124 122 Q140 94 124 64 Q108 34 124 8" />
+              <path className="hero-steam-2" d="M160 180 Q148 150 164 122 Q180 94 164 64 Q148 34 164 8" />
+              <path className="hero-steam-3" d="M200 180 Q188 150 204 122 Q220 94 204 64 Q188 34 204 8" />
+            </g>
+            <ellipse cx="160" cy="332" rx="120" ry="10" fill="rgba(0,0,0,0.35)" />
+            <path
+              d="M52 210 H268 V288 Q268 320 232 326 H88 Q52 320 52 288 Z"
+              fill="none"
+              stroke="rgba(217, 184, 153, 0.42)"
+              strokeWidth="2"
+            />
+            <ellipse cx="160" cy="212" rx="106" ry="10" fill="rgba(168, 113, 69, 0.18)" stroke="rgba(217, 184, 153, 0.32)" strokeWidth="1.4" />
+            <path
+              d="M268 232 Q320 232 320 280 Q320 326 268 326"
+              fill="none"
+              stroke="rgba(217, 184, 153, 0.42)"
+              strokeWidth="6"
+              strokeLinecap="round"
+            />
+          </svg>
           <div className="hero-mesh-overlay" />
           <div className="hero-gradient" />
         </div>
@@ -548,12 +605,12 @@ export default function Home() {
                 Back to Store <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="recently-viewed-row">
+            <Reveal as="div" className="recently-viewed-row">
               {recentProducts.slice(0, 6).map((product) => (
                 <button
                   type="button"
                   key={product.id}
-                  className="recently-viewed-card"
+                  className="recently-viewed-card has-sheen"
                   onClick={() => setOpenProduct(product)}
                 >
                   <div className="recently-viewed-image">
@@ -570,7 +627,7 @@ export default function Home() {
                   </div>
                 </button>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -709,7 +766,7 @@ export default function Home() {
             variants={staggerContainer}
           >
             {PROJECTS.map((p, i) => (
-              <motion.article key={i} className="project-card" variants={fadeUp}>
+              <motion.article key={i} className="project-card has-sheen" variants={fadeUp}>
                 <div className="project-card-image">
                   <img src={p.image} alt={p.title} loading="lazy" />
                   <span className="project-card-tag">{p.tag}</span>
@@ -782,7 +839,7 @@ export default function Home() {
                 href="/mastermind-times.jpg"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="press-clipping"
+                className="press-clipping has-sheen"
                 aria-label="Open full Mastermind Times menu poster"
               >
                 <img
@@ -904,7 +961,7 @@ export default function Home() {
                 href="https://www.instagram.com/mastermindbicyclecafe/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="instagram-tile"
+                className="instagram-tile has-sheen"
                 variants={fadeUp}
                 aria-label="Open Instagram"
               >

@@ -10,6 +10,9 @@ import CartDrawer from './components/CartDrawer'
 import CookieConsent from './components/CookieConsent'
 import ErrorBoundary from './components/ErrorBoundary'
 import CommandPalette from './components/CommandPalette'
+import CoffeeLoader from './components/CoffeeLoader'
+import CursorTrail from './components/CursorTrail'
+import ScrollProgress from './components/ScrollProgress'
 import Home from './pages/Home'
 import './App.css'
 
@@ -45,16 +48,7 @@ const Baristas = lazy(() => import('./pages/Baristas'))
 const BaristaSignup = lazy(() => import('./pages/BaristaSignup'))
 
 function RouteFallback() {
-  // Mirror the typical page header + content rhythm so swapping in the real
-  // page doesn't cause a layout shift. Height matches `100vh - nav` so the
-  // footer doesn't pop into view, then back out, when the chunk arrives.
-  return (
-    <div className="route-fallback">
-      <div className="route-fallback-spinner" aria-label="Loading">
-        <span /><span /><span />
-      </div>
-    </div>
-  )
+  return <CoffeeLoader label="Brewing your page…" />
 }
 
 export default function App() {
@@ -89,6 +83,8 @@ function AppShell() {
 
   return (
     <div className="app">
+      <ScrollProgress />
+      <CursorTrail />
       <Navbar onOpenSearch={() => setPaletteOpen(true)} />
       <main className="main-content">
         <ErrorBoundary>
