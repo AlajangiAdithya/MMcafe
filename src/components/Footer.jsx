@@ -29,7 +29,14 @@ function XIcon({ size = 16 }) {
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer footer--editorial">
+      <div className="footer-colophon" aria-hidden="true">
+        <span className="footer-colophon-en">SPECIALTY COFFEE</span>
+        <span className="footer-colophon-rule" />
+        <span className="footer-colophon-en">MUMBAI, INDIA</span>
+        <span className="footer-colophon-rule" />
+        <span className="footer-colophon-en">EST. 2020</span>
+      </div>
       <div className="footer-main">
         <div className="footer-brand">
           <Link to="/" className="footer-brand-logo">

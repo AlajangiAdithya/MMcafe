@@ -35,7 +35,11 @@
       "Bash(git -C \"C:/Users/alaja/Desktop/New folder/MMCafe\" branch -a)",
       "Bash(mkdir -p \"C:/Users/alaja/AppData/Local/Temp/mmcafe-extract\")",
       "Bash(python -c ' *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(npm run *)",
+      "Read(//tmp/**)",
+      "Bash(npx eslint *)",
+      "Bash(taskkill /F /IM node.exe)"
     ]
   }
 }

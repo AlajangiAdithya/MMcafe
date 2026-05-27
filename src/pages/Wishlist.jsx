@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Heart, ShoppingCart, Trash2, Package } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import { getWishlist, removeFromWishlist } from '../lib/database'
+import Reveal from '../components/Reveal'
 import toast from 'react-hot-toast'
 
 export default function Wishlist() {
@@ -50,25 +52,30 @@ export default function Wishlist() {
   return (
     <div className="myorders-page">
       <div className="container">
-        <div className="myorders-header">
+        <motion.div
+          className="myorders-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
           <h1><Heart size={20} /> Wishlist</h1>
           <p>{rows.length} saved item{rows.length === 1 ? '' : 's'}</p>
-        </div>
+        </motion.div>
 
         {rows.length === 0 ? (
-          <div className="myorders-empty">
+          <Reveal className="myorders-empty">
             <Heart size={48} />
             <h3>Your wishlist is empty</h3>
             <p>Tap the heart on any product to save it here.</p>
             <Link to="/store" className="btn btn-blue">Visit Store</Link>
-          </div>
+          </Reveal>
         ) : (
           <div className="products-grid">
-            {rows.map((r) => {
+            {rows.map((r, idx) => {
               const p = r.products
               if (!p) return null
               return (
-                <div key={r.id} className="product-card">
+                <Reveal key={r.id} className="product-card" delay={Math.min(idx * 60, 360)}>
                   <div className="product-image">
                     {p.image
                       ? <img src={p.image} alt={p.name} loading="lazy" />
@@ -90,7 +97,7 @@ export default function Wishlist() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               )
             })}
           </div>

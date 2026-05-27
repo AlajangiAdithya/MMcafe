@@ -15,13 +15,26 @@ export default function Navbar({ onOpenSearch }) {
   const accountRef = useRef(null)
   const prefersReducedMotion = useReducedMotion()
 
-  // Lock body scroll when the mobile drawer is open
+  // Lock body scroll + ESC-to-close when the mobile drawer is open
   useEffect(() => {
     if (!menuOpen) return
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = prev }
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
   }, [menuOpen])
+
+  // ESC closes the desktop account dropdown
+  useEffect(() => {
+    if (!accountOpen) return
+    const onKey = (e) => { if (e.key === 'Escape') setAccountOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [accountOpen])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -68,11 +81,21 @@ export default function Navbar({ onOpenSearch }) {
           <img src="/logo.png" alt="Mastermind Brews" />
           <div className="nav-logo-text">
             <span className="brand-name">Mastermind Brews</span>
-            <span className="brand-sub">Est. Mulund, Mumbai</span>
+            <span className="brand-sub">
+              <span className="brand-sub-dot" aria-hidden="true" />
+              Mumbai, India
+            </span>
           </div>
         </Link>
 
-        <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+        <button
+          type="button"
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav-drawer"
+        >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
@@ -104,6 +127,10 @@ export default function Navbar({ onOpenSearch }) {
               />
               <motion.div
                 key="mobile-drawer"
+                id="mobile-nav-drawer"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Site navigation"
                 className="nav-mobile-drawer"
                 initial={prefersReducedMotion ? { opacity: 0 } : { x: '100%' }}
                 animate={prefersReducedMotion ? { opacity: 1 } : { x: 0 }}
@@ -197,16 +224,20 @@ export default function Navbar({ onOpenSearch }) {
                 </Link>
               )}
               <button
+                type="button"
                 className="user-trigger"
                 onClick={() => setAccountOpen(o => !o)}
+                aria-haspopup="menu"
+                aria-expanded={accountOpen}
+                aria-controls="user-account-menu"
               >
                 <span className="user-email">
                   {user.user_metadata?.first_name || user.email?.split('@')[0]}
                 </span>
-                <ChevronDown size={14} />
+                <ChevronDown size={14} style={{ transform: accountOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
               </button>
               {accountOpen && (
-                <div className="user-dropdown">
+                <div id="user-account-menu" role="menu" className="user-dropdown">
                   <Link to="/my-orders" className="user-dropdown-item">
                     <Package size={14} /> My Orders
                   </Link>

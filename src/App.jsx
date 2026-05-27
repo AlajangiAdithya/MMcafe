@@ -13,8 +13,12 @@ import CommandPalette from './components/CommandPalette'
 import CoffeeLoader from './components/CoffeeLoader'
 import CursorTrail from './components/CursorTrail'
 import ScrollProgress from './components/ScrollProgress'
+import GlobalScrollReveal from './components/GlobalScrollReveal'
+import SmoothScroll from './components/SmoothScroll'
 import Home from './pages/Home'
 import './App.css'
+import './styles/scroll-effects.css'
+import './styles/animation-tokens.css'
 
 // Lazy-load every non-critical route. Home stays eager because it's the
 // landing page; everything else is split into its own chunk so the initial
@@ -83,42 +87,45 @@ function AppShell() {
 
   return (
     <div className="app">
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      {/* SmoothScroll removed — using native browser scroll */}
       <ScrollProgress />
+      <GlobalScrollReveal />
       <CursorTrail />
       <Navbar onOpenSearch={() => setPaletteOpen(true)} />
-      <main className="main-content">
+      <main id="main-content" className="main-content" tabIndex={-1}>
         <ErrorBoundary>
           <Suspense fallback={<RouteFallback />}>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/store" element={<Store />} />
-                <Route path="/workshop" element={<Academy />} />
-                <Route path="/academy" element={<Navigate to="/workshop" replace />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/consultancy" element={<Consultancy />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/baristas" element={<Baristas />} />
-                <Route path="/barista-signup" element={<BaristaSignup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                <Route path="/my-orders" element={<MyOrders />} />
-                <Route path="/my-courses" element={<MyCourses />} />
-                <Route path="/my-profile" element={<MyProfile />} />
-                <Route path="/course/:courseId" element={<CourseDetail />} />
-                <Route path="/course/:courseId/checkout" element={<CourseCheckout />} />
-                <Route path="/learn/:courseId" element={<CoursePlayer />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/refund-policy" element={<RefundPolicy />} />
-                <Route path="/shipping" element={<ShippingPolicy />} />
-                <Route path="/contact" element={<ContactUs />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/store" element={<Store />} />
+              <Route path="/workshop" element={<Academy />} />
+              <Route path="/academy" element={<Navigate to="/workshop" replace />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/consultancy" element={<Consultancy />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/baristas" element={<Baristas />} />
+              <Route path="/barista-signup" element={<BaristaSignup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/my-orders" element={<MyOrders />} />
+              <Route path="/my-courses" element={<MyCourses />} />
+              <Route path="/my-profile" element={<MyProfile />} />
+              <Route path="/course/:courseId" element={<CourseDetail />} />
+              <Route path="/course/:courseId/checkout" element={<CourseCheckout />} />
+              <Route path="/learn/:courseId" element={<CoursePlayer />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/shipping" element={<ShippingPolicy />} />
+              <Route path="/contact" element={<ContactUs />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

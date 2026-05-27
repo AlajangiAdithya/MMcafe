@@ -101,24 +101,53 @@ export default function Store() {
     toast.success(`${product.name} added to cart`)
   }
 
-  return (
-    <div className="store-page">
-      <div className="store-hero">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
-          }}
-        >
-          <motion.div className="section-label" variants={fadeUp}>Our Products</motion.div>
-          <motion.h1 variants={fadeUp}>The Store</motion.h1>
-          <motion.p variants={fadeUp}>Hand-picked beans and freshly ground powders, roasted to perfection</motion.p>
-        </motion.div>
-      </div>
+  const productCount = filtered.length
 
-      <div className="store-container">
+  return (
+    <div className="store-page store-page--siatra">
+      <header className="siatra-hero">
+        <div className="siatra-hero-inner">
+          <motion.span
+            className="siatra-hero-eyebrow"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="siatra-hero-eyebrow-line" />
+            Shop · Coffee Collection
+            <span className="siatra-hero-eyebrow-line" />
+          </motion.span>
+          <motion.h1
+            className="siatra-hero-title"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Beans & powders, <em>roasted into shape.</em>
+          </motion.h1>
+          <motion.p
+            className="siatra-hero-lede"
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Hand-picked single-origin from Chikmagalur, roasted with Bean Rove.
+            The same coffee we pour at the bar — sealed fresh, shipped to your door.
+          </motion.p>
+          <motion.div
+            className="siatra-hero-meta"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span><em>{productCount}</em> {productCount === 1 ? 'product' : 'products'} in store</span>
+            <span><em>Free shipping</em> on orders ₹999+</span>
+            <span><em>Roasted</em> weekly · shipped within 48h</span>
+          </motion.div>
+        </div>
+      </header>
+
+      <div className="siatra-shell">
         {loading ? (
           <ProductGridSkeleton count={8} />
         ) : error ? (
@@ -139,46 +168,53 @@ export default function Store() {
         ) : (
           <>
             <motion.div
-              className="filter-bar"
-              initial={{ opacity: 0, y: 20 }}
+              className="siatra-controls"
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.55, delay: 0.32 }}
             >
-              <Filter size={16} />
-              {['all', 'beans', 'powder'].map(f => (
-                <button
-                  key={f}
-                  className={`filter-btn ${filter === f ? 'active' : ''}`}
-                  onClick={() => setFilter(f)}
-                >
-                  {f === 'all' ? 'All' : f === 'beans' ? 'Beans' : 'Powder'}
-                </button>
-              ))}
-              <div style={{ flex: 1 }} />
-              <div className="input-group" style={{ marginBottom: 0, maxWidth: 240, padding: '8px 14px' }}>
-                <Search size={16} />
+              <div className="siatra-filter">
+                <span id="siatra-filter-label" className="siatra-filter-label"><Filter size={13} aria-hidden="true" /> Filter</span>
+                <div className="siatra-filter-chips" role="group" aria-labelledby="siatra-filter-label">
+                  {['all', 'beans', 'powder'].map(f => (
+                    <button
+                      type="button"
+                      key={f}
+                      className={`siatra-chip ${filter === f ? 'is-active' : ''}`}
+                      onClick={() => setFilter(f)}
+                      aria-pressed={filter === f}
+                    >
+                      {f === 'all' ? 'All' : f === 'beans' ? 'Whole Bean' : 'Ground'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <label className="siatra-search">
+                <span className="visually-hidden">Search products</span>
+                <Search size={14} aria-hidden="true" />
                 <input
-                  type="text"
-                  placeholder="Search products..."
+                  type="search"
+                  placeholder="Search the collection"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
+                  aria-label="Search products"
                 />
-              </div>
+              </label>
             </motion.div>
 
             <motion.div
-              className="products-grid"
+              className="siatra-grid"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-40px' }}
               variants={staggerContainer}
             >
-              {filtered.map(product => {
+              {filtered.map((product, i) => {
                 const stats = reviewStats[product.id]
                 return (
-                  <motion.div
+                  <motion.article
                     key={product.id}
-                    className="product-card clickable"
+                    className="siatra-card"
                     onClick={() => setSelected(product)}
                     role="button"
                     tabIndex={0}
@@ -190,39 +226,58 @@ export default function Store() {
                     }}
                     variants={fadeUp}
                   >
-                    <div className="product-image">
-                      <img src={product.image} alt={product.name} loading="lazy" />
-                      <span className="product-badge">{product.category}</span>
-                      <WishlistButton productId={product.id} className="product-wishlist" />
+                    <div className="siatra-card-media">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} loading="lazy" />
+                      ) : (
+                        <div className="siatra-card-placeholder"><Package size={36} /></div>
+                      )}
+                      <span className="siatra-card-num">0{(i + 1).toString().slice(-2)}</span>
+                      <span className="siatra-card-tag">{product.category}</span>
+                      <WishlistButton productId={product.id} className="siatra-card-wish" />
+                      <div className="siatra-card-shade" aria-hidden="true" />
                     </div>
-                    <div className="product-info">
-                      <h3>{product.name}</h3>
-                      <span className="product-weight">{product.weight}</span>
+                    <div className="siatra-card-body">
+                      <div className="siatra-card-head">
+                        <h3 className="siatra-card-name">{product.name}</h3>
+                        {product.weight && <span className="siatra-card-weight">{product.weight}</span>}
+                      </div>
                       {stats && stats.count > 0 && (
-                        <div className="product-rating">
-                          <Star size={12} fill="currentColor" />
+                        <div className="siatra-card-rating">
+                          <Star size={11} fill="currentColor" />
                           <span>{stats.avg.toFixed(1)}</span>
-                          <span className="text-muted">({stats.count})</span>
+                          <span className="siatra-card-rating-count">({stats.count})</span>
                         </div>
                       )}
-                      <div className="product-bottom">
-                        <span className="product-price">₹{product.price}</span>
+                      <div className="siatra-card-foot">
+                        <span className="siatra-card-price">₹{product.price}</span>
                         <button
-                          className="add-to-cart-btn"
+                          className="siatra-card-add"
                           onClick={e => handleAdd(e, product)}
+                          aria-label={`Add ${product.name} to cart`}
                         >
-                          <ShoppingCart size={14} /> Add
+                          <ShoppingCart size={13} /> Add
                         </button>
                       </div>
                     </div>
-                  </motion.div>
+                  </motion.article>
                 )
               })}
             </motion.div>
 
             {filtered.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--text-muted)' }}>
-                <p>No products found matching your search.</p>
+              <div className="siatra-empty">
+                <p>No products match {search ? <>“<strong>{search}</strong>”</> : 'this filter'}.</p>
+                {(search || filter !== 'all') && (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => { setSearch(''); setFilter('all') }}
+                    style={{ marginTop: 14 }}
+                  >
+                    Clear filters
+                  </button>
+                )}
               </div>
             )}
           </>

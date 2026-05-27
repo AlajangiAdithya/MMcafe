@@ -18,6 +18,27 @@ import { usePageMeta } from '../lib/usePageMeta'
 import { useRecentlyViewed } from '../lib/useRecentlyViewed'
 import ProductDetailModal from '../components/ProductDetailModal'
 import Reveal from '../components/Reveal'
+import Magnetic from '../components/Magnetic'
+import TiltCard from '../components/TiltCard'
+import Spotlight from '../components/Spotlight'
+import DragScroller from '../components/DragScroller'
+import HorizontalProjects from '../components/HorizontalProjects'
+import ProjectSlides from '../components/ProjectSlides'
+import StackCards from '../components/StackCards'
+import ZoomCTA from '../components/ZoomCTA'
+import SectionLabel from '../components/SectionLabel'
+import MarqueeStrip from '../components/MarqueeStrip'
+import ChapterRail from '../components/ChapterRail'
+import KineticHeading from '../components/KineticHeading'
+import FeaturedSlider from '../components/FeaturedSlider'
+import TedyScroll from '../components/TedyScroll'
+import PressReveal from '../components/PressReveal'
+import CountUp from '../components/CountUp'
+import ViewportVideo from '../components/ViewportVideo'
+import MaskReveal from '../components/MaskReveal'
+import FloatingBeans from '../components/FloatingBeans'
+import SteamWisps from '../components/SteamWisps'
+import { MOTION } from '../lib/motionConfig'
 import toast from 'react-hot-toast'
 
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
@@ -30,33 +51,102 @@ const TESTIMONIALS = [
   { name: 'Rick Snyder', role: 'Google Review', initials: 'RS', rating: 5, text: 'The food was so good - huge variety on the menu. Iced matcha latte was perfect, the pesto & burrata pizza and nachos were fantastic. Shubham was our server and he was really friendly. Ask for him to serve you!' },
 ]
 
-// Placeholder content, client will replace with real project case studies.
+// Project case studies — each card carries a tag, a short summary, and
+// three numeric facts. The numbers anchor the abstract claims and give
+// the scroll-pinned cards something to read against the photo.
 const PROJECTS = [
   {
     title: 'Mastermind Bicycle Cafe',
     location: 'Mulund, Mumbai',
-    summary: 'Our flagship cafe: a full coffee program, European-inspired menu, and a community space built from the ground up.',
+    summary: 'Our flagship cafe: a full coffee program, European-inspired menu, and a community space built from the ground up. Open every day, 8:30 AM to midnight.',
     image: '/project-cafe.jpg',
     tag: 'Flagship',
+    year: '2020',
+    metrics: [
+      { label: 'Seats', value: '64' },
+      { label: 'Open', value: '7 days' },
+      { label: 'Google', value: '4.5★' },
+    ],
+    chips: ['Specialty Coffee', 'European Menu', 'Pet Friendly'],
   },
   {
     title: 'Bean Rove Roast Profiles',
     location: 'Chikmagalur, Karnataka',
-    summary: 'Exclusive single-origin profiles roasted in partnership with Bean Rove, the same beans we serve and ship.',
+    summary: 'Exclusive single-origin profiles roasted in partnership with Bean Rove — the same beans we serve at the bar and ship to homes across India.',
     image: '/project-beans.jpg',
     tag: 'Sourcing',
+    year: '2021',
+    metrics: [
+      { label: 'Altitude', value: '1,400m' },
+      { label: 'Profiles', value: '04' },
+      { label: 'Origin', value: 'Single' },
+    ],
+    chips: ['Hand-Picked', 'Honey & Washed', 'Small Batch'],
   },
   {
     title: 'Barista Training Program',
     location: 'Online & On-Site',
-    summary: 'Structured curriculum used to onboard cafe partners and individual baristas: espresso, milk craft, brewing science.',
+    summary: 'A structured curriculum used to onboard cafe partners and individual baristas. From the first espresso pull to latte art mastery and brewing science.',
     image: 'https://lh3.googleusercontent.com/2W1cw4DDp8TacRRBjH3H-MzLWOVy9G0KtXUwK6DFgFEGj7BSZflh05ehZYX6xBsl39qcqKzdFuDysC0J-m1J6Fy6af4sU-rCuFAQDmEo=w1200-rw',
     tag: 'Training',
+    year: '2023',
+    metrics: [
+      { label: 'Format', value: 'HD Video' },
+      { label: 'Tracks', value: '06' },
+      { label: 'Access', value: 'Lifetime' },
+    ],
+    chips: ['Espresso', 'Milk Craft', 'Latte Art', 'Brewing Science'],
   },
 ]
 
-// Placeholder grid for the Instagram strip, client can swap these with
-// real post thumbnails or wire up the IG Basic Display API later.
+// Curated "A Look Inside" gallery — each card represents a chapter of the
+// Mastermind story. Title, kicker, and longer caption together carry the
+// editorial voice from estate to espresso to cup.
+const TEDY_GALLERY = [
+  {
+    image: '/hero-bg.jpg',
+    kicker: 'The Origin',
+    title: 'Chikmagalur Elevation',
+    caption: 'Sourced from pristine altitudes in Karnataka\'s coffee belt. Cultivated under natural shade, deeply rooted in Indian coffee heritage.',
+    meta: 'CH. 01',
+  },
+  {
+    image: '/offer-beans.jpg',
+    kicker: 'The Harvest',
+    title: 'Hand-Picked Precision',
+    caption: 'Only the deepest crimson cherries make the cut. Washed, honey-processed, and sun-dried to lock in maximum sweetness.',
+    meta: 'CH. 02',
+  },
+  {
+    image: '/mastermind-times.jpg',
+    kicker: 'The Roast',
+    title: 'Bean Rove Profiles',
+    caption: 'Small-batch roasting designed to articulate unique terroir. Cupped rigorously in our lab before it ever hits the hopper.',
+    meta: 'CH. 03',
+  },
+  {
+    image: '/project-beans.jpg',
+    kicker: 'The Craft',
+    title: 'Surgical Extraction',
+    caption: 'Dialled in line with the day\'s ambient humidity. From precise 9-bar espressos to slow V60 pours, every parameter is controlled.',
+    meta: 'CH. 04',
+  },
+  {
+    image: '/offer-academy.png',
+    kicker: 'The Academy',
+    title: 'Next Gen Baristas',
+    caption: 'Passing on the craft through high-definition modules. We train the next generation of competitive professionals and home brewers.',
+    meta: 'CH. 05',
+  },
+  {
+    image: '/project-cafe.jpg',
+    kicker: 'The Cafe',
+    title: 'Mulund\'s Quiet Corner',
+    caption: 'A slice of European hospitality in Mumbai. Sip your brew beneath bicycle rafters and let the afternoon stretch into evening.',
+    meta: 'CH. 06',
+  },
+]
+
 const INSTAGRAM_TILES = [
   'https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w600-rw',
   'https://lh3.googleusercontent.com/A959ZB5laMMAwx3johfA0IdN0LMU0pdhL9EmXBWTkEyVu1erfFJy4p7kJhUN4dzVZLPOTQWQ6-_PeE6Q-UwwbhnOooY2s1UXjLvE-xBZSw=w600-rw',
@@ -70,6 +160,25 @@ const SOCIAL_LINKS = [
   { platform: 'instagram', href: 'https://www.instagram.com/mastermindbicyclecafe/' },
   { platform: 'mail', href: 'mailto:hello@mastermindcafe.in' },
   { platform: 'website', href: 'https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund' },
+]
+
+const MARQUEE_TERMS = [
+  { en: 'ROASTED IN CHIKMAGALUR' },
+  { en: 'SPECIALTY COFFEE' },
+  { en: 'ONE CUP AT A TIME' },
+  { en: 'BEAN ROVE PROFILES' },
+  { en: 'OPEN ALL DAYS · 08:30 – 24:00' },
+  { en: 'CRAFTED BY HAND' },
+]
+
+const CHAPTERS = [
+  { id: 'origin', num: '01', label: 'Origin' },
+  { id: 'offer', num: '02', label: 'Offer' },
+  { id: 'bestsellers', num: '03', label: 'Bestsellers' },
+  { id: 'projects', num: '04', label: 'Projects' },
+  { id: 'academy', num: '05', label: 'Academy' },
+  { id: 'visit', num: '06', label: 'Visit' },
+  { id: 'gram', num: '07', label: 'Gram' },
 ]
 
 const fadeUp = {
@@ -152,7 +261,8 @@ export default function Home() {
 
   // Hero parallax — translate the background image and steam motif at
   // different speeds so the scene feels layered. Pure rAF + transform,
-  // no library, GPU-friendly. Disabled when user prefers reduced motion.
+  // GPU-friendly. Intensities live in MOTION.parallax (motionConfig.js).
+  // Disabled when user prefers reduced motion.
   useEffect(() => {
     if (prefersReducedMotion) return
     if (typeof window === 'undefined') return
@@ -165,8 +275,12 @@ export default function Home() {
         const y = window.scrollY
         const bg = document.querySelector('.hero-parallax')
         const steam = document.querySelector('.hero-steam-motif')
-        if (bg) bg.style.transform = `translate3d(0, ${y * 0.28}px, 0) scale(1.08)`
-        if (steam) steam.style.transform = `translate3d(0, ${y * -0.12}px, 0)`
+        const fg = document.querySelector('.hero-content--ed')
+        if (bg) bg.style.transform = `translate3d(0, ${y * MOTION.parallax.intensity}px, 0) scale(1.08)`
+        if (steam) steam.style.transform = `translate3d(0, ${y * -MOTION.parallax.steamIntensity}px, 0)`
+        // Subtle counter-parallax on the foreground content — it drifts UP
+        // slightly slower than the page so the scene feels layered.
+        if (fg) fg.style.transform = `translate3d(0, ${y * -MOTION.parallax.foregroundIntensity}px, 0)`
         ticking = false
       })
     }
@@ -177,8 +291,31 @@ export default function Home() {
     }
   }, [prefersReducedMotion])
 
+  // Add `.is-in` to .about-intro-frame and .section-vignette nodes as they
+  // scroll into view so CSS-only effects (Ken Burns, vignette) can fire.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (prefersReducedMotion) return
+    const targets = document.querySelectorAll('.about-intro-frame, .section-vignette')
+    if (targets.length === 0) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in', 'in-view')
+            io.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -6% 0px' },
+    )
+    targets.forEach((t) => io.observe(t))
+    return () => io.disconnect()
+  }, [prefersReducedMotion])
+
   return (
-    <div className="home">
+    <div className="home home--editorial">
+      <ChapterRail chapters={CHAPTERS} />
       {/* ===== VAPOUR TEXT INTRO ===== */}
       <AnimatePresence>
         {showIntro && (
@@ -224,135 +361,90 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* ===== HERO — parallax layers + steaming-cup motif ===== */}
-      <section className="hero">
-        <div className="hero-bg">
-          <div className="hero-bg-image hero-parallax" style={{
-            backgroundImage: 'url(/hero-bg.jpg)'
-          }} />
-          {/* Steaming cup silhouette behind the hero copy. Faint, decorative,
-              drifts up like real steam. */}
-          <svg
-            className="hero-steam-motif"
-            viewBox="0 0 320 360"
-            aria-hidden="true"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <g className="hero-steam-wisps">
-              <path className="hero-steam-1" d="M120 180 Q108 150 124 122 Q140 94 124 64 Q108 34 124 8" />
-              <path className="hero-steam-2" d="M160 180 Q148 150 164 122 Q180 94 164 64 Q148 34 164 8" />
-              <path className="hero-steam-3" d="M200 180 Q188 150 204 122 Q220 94 204 64 Q188 34 204 8" />
-            </g>
-            <ellipse cx="160" cy="332" rx="120" ry="10" fill="rgba(0,0,0,0.35)" />
-            <path
-              d="M52 210 H268 V288 Q268 320 232 326 H88 Q52 320 52 288 Z"
-              fill="none"
-              stroke="rgba(217, 184, 153, 0.42)"
-              strokeWidth="2"
-            />
-            <ellipse cx="160" cy="212" rx="106" ry="10" fill="rgba(168, 113, 69, 0.18)" stroke="rgba(217, 184, 153, 0.32)" strokeWidth="1.4" />
-            <path
-              d="M268 232 Q320 232 320 280 Q320 326 268 326"
-              fill="none"
-              stroke="rgba(217, 184, 153, 0.42)"
-              strokeWidth="6"
-              strokeLinecap="round"
-            />
-          </svg>
-          <div className="hero-mesh-overlay" />
-          <div className="hero-gradient" />
+      {/* ===== HERO — Cinematic Centered ===== */}
+      <section className="hero hero--editorial hero--cinematic hero--split" data-chapter="hero" style={{ position: 'relative', width: '100%', height: '100vh', marginTop: 'calc(-1 * var(--nav-height))', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+          <img src="/hero-bg.jpg" alt="Atmospheric coffee brewing" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', filter: 'brightness(0.3) blur(2px)', transform: 'scale(1.05)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,12,10,0.1) 0%, rgba(14,12,10,0.8) 100%)' }} />
         </div>
+
+        <Link to="/store" className="hero-split-link hero-split-link--left" aria-label="Buy Coffee">
+          <span className="hero-split-hint">
+            <ShoppingBag size={18} aria-hidden="true" />
+            <span>Click here to Buy Coffee</span>
+          </span>
+        </Link>
+
+        <Link to="/workshop" className="hero-split-link hero-split-link--right" aria-label="Learn Coffee">
+          <span className="hero-split-hint">
+            <BookOpen size={18} aria-hidden="true" />
+            <span>Click here to Learn Coffee</span>
+          </span>
+        </Link>
+
         <motion.div
           className="hero-content"
           initial="hidden"
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.4 } },
           }}
+          style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', pointerEvents: 'none', padding: '0 6vw' }}
         >
-          <motion.div
-            className="hero-badge"
-            variants={{ hidden: { opacity: 0, y: 30, scale: 0.9 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            <span className="dot" />
-            <span className="hero-badge-text">From Mastermind Bicycle Cafe & Bar, Mumbai</span>
-          </motion.div>
-          
-          <motion.div
-            className="hero-logo-wrap"
-            variants={{ hidden: { opacity: 0, y: 40, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            <img src="/logo.png" alt="Mastermind Brews" className="hero-logo" />
-          </motion.div>
-
           <motion.h1
-            className="hero-tagline"
-            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } } }}
+            className="hero-display-split"
+            style={{ color: '#FBF5EB', textShadow: '0 4px 20px rgba(0,0,0,0.6)', maxWidth: '1100px', margin: '0 auto 2rem', fontSize: 'clamp(2rem, 4.4vw, 3.6rem)', lineHeight: 1.15, whiteSpace: 'nowrap' }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            <span className="hero-tagline-line">Master Your <span className="text-blue-glow">Mind</span>,</span>
-            <span className="hero-tagline-line">Master Your <span className="text-pink-glow">Brews</span></span>
+            A quiet ritual, <span className="italic-accent" style={{ color: 'var(--accent)' }}>brewed with intent.</span>
           </motion.h1>
 
-          <motion.p
-            className="hero-kicker"
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            Specialty single-origin beans from Chikmagalur, roasted with Bean Rove, plus a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
-          </motion.p>
-
-          <motion.div
-            className="hero-btns"
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            <Link to="/store" className="btn btn-premium-primary">
-              <ShoppingBag size={18} /> Shop Coffee
-            </Link>
-            <Link to="/workshop" className="btn btn-premium-outline">
-              <BookOpen size={18} /> Learn Coffee
-            </Link>
-          </motion.div>
-        </motion.div>
-        
-        <motion.div
-          className="hero-scroll"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="scroll-indicator">
-            <div className="scroll-dot" />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+            <div aria-hidden="true" style={{ position: 'absolute', width: '720px', height: '720px', maxWidth: '120vw', maxHeight: '70vh', borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,168,88,0.45) 0%, rgba(201,151,74,0.22) 28%, rgba(201,151,74,0.08) 50%, rgba(201,151,74,0) 72%)', filter: 'blur(8px)', pointerEvents: 'none' }} />
+            <motion.img
+              src="/logo.png"
+              alt="Mastermind Brews Logo"
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }}
+              style={{ position: 'relative', width: '100%', maxWidth: '480px', filter: 'drop-shadow(0 0 60px rgba(217, 168, 88, 0.85)) drop-shadow(0 0 130px rgba(201, 151, 74, 0.6)) drop-shadow(0 0 200px rgba(201, 151, 74, 0.4))' }}
+            />
           </div>
+
+          <motion.p
+            style={{ color: 'rgba(251, 245, 235, 0.85)', maxWidth: '720px', margin: '0 auto', fontSize: '1rem', lineHeight: 1.6 }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            Single-origin beans from Chikmagalur, roasted alongside Bean Rove — <br/>
+            and a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
+          </motion.p>
         </motion.div>
       </section>
 
 
+      <MarqueeStrip items={MARQUEE_TERMS} variant="paper" tall />
+
       {/* ===== ABOUT STRIP ===== */}
-      <section className="about-strip">
+      <section className="about-strip about-strip--editorial">
         <div className="container">
           <div className="about-grid">
             <AnimatedSection className="about-image about-image--video">
-              <video
-                src="/cafe-tour.mp4"
-                poster="/hero-bg.jpg"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label="A tour through Mastermind Bicycle Cafe"
-              />
+              <MaskReveal variant="up">
+                <ViewportVideo
+                  src="/cafe-tour.mp4"
+                  poster="/hero-bg.jpg"
+                  autoPlay
+                  loop
+                  preload="metadata"
+                  aria-label="A tour through Mastermind Bicycle Cafe"
+                />
+              </MaskReveal>
               <div className="accent-line" />
             </AnimatedSection>
             <AnimatedSection className="about-text" delay={0.2}>
-              <div className="section-label">Our Story</div>
-              <AnimatedText
-                text="Born From A Dream Of Great Coffee"
-                textClassName="text-foreground"
-                underlineClassName="text-primary"
-                style={{ marginBottom: '2rem' }}
-              />
+              <SectionLabel number="001" label="OUR STORY" />
+              <KineticHeading as="h2" className="ed-display ed-display--lg">
+                Born From A Dream Of Great Coffee
+              </KineticHeading>
               <p className="highlight" style={{ marginTop: '2rem' }}>
                 Started by a businessman and his daughter who dreamt of a cafe that serves great coffee, always welcomes all, and makes one feel like in the by-lanes of Europe.
               </p>
@@ -382,14 +474,16 @@ export default function Home() {
       </section>
 
       {/* ===== WHAT WE OFFER ===== */}
-      <section className="offer-section">
+      <section className="offer-section section-vignette" data-chapter="offer">
         <div className="offer-section-glow" aria-hidden="true" />
+        <FloatingBeans count={6} seed={21} />
+        <Spotlight color="rgba(201, 151, 74, 0.10)" size={760} />
         <div className="container">
           <AnimatedSection className="section-header center">
-            <div className="section-label">What We Offer</div>
-            <h2 className="section-title">
-              Two Crafts. <span className="text-gradient">One Standard.</span>
-            </h2>
+            <SectionLabel number="002" label="WHAT WE OFFER" align="center" />
+            <KineticHeading as="h2" className="ed-display ed-display--xl">
+              Two Crafts. One Standard.
+            </KineticHeading>
             <p className="section-desc" style={{ margin: '14px auto 0', maxWidth: 620 }}>
               Specialty coffee in a bag, and a barista academy in your pocket. Both built from the same Mulund bar that pours them daily.
             </p>
@@ -402,13 +496,17 @@ export default function Home() {
             viewport={{ once: true, margin: '-80px' }}
             variants={staggerContainer}
           >
-            <motion.article className="offer-pillar offer-pillar-pink" variants={fadeUp}>
+            <TiltCard as={motion.article} className="offer-pillar offer-pillar-pink" max={7} variants={fadeUp}>
               <div className="offer-pillar-media">
-                <img
-                  src="/offer-beans.jpg"
-                  alt="Coffee estate in Chikmagalur, Karnataka"
-                  loading="lazy"
-                />
+                  <motion.img
+                    src="/offer-beans.jpg"
+                    alt="Coffee estate in Chikmagalur, Karnataka"
+                    loading="lazy"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 <span className="offer-pillar-index">01</span>
                 <span className="offer-pillar-tag"><Coffee size={12} /> Beans &amp; Powder</span>
                 <div className="offer-pillar-media-fade" />
@@ -438,19 +536,25 @@ export default function Home() {
                   <li><Check size={14} /> Espresso, filter, French press grinds</li>
                   <li><Check size={14} /> Free shipping above ₹999</li>
                 </ul>
-                <Link to="/store" className="btn btn-primary offer-pillar-cta">
-                  <ShoppingBag size={16} /> Shop Coffee <ArrowRight size={14} />
-                </Link>
+                <Magnetic strength={0.3}>
+                  <Link to="/store" className="btn btn-primary offer-pillar-cta">
+                    <ShoppingBag size={16} /> Shop Coffee <ArrowRight size={14} />
+                  </Link>
+                </Magnetic>
               </div>
-            </motion.article>
+            </TiltCard>
 
-            <motion.article className="offer-pillar offer-pillar-blue" variants={fadeUp}>
+            <TiltCard as={motion.article} className="offer-pillar offer-pillar-blue" max={7} variants={fadeUp}>
               <div className="offer-pillar-media">
-                <img
-                  src="/offer-academy.png"
-                  alt="Barista pouring a tasting brew into a cup"
-                  loading="lazy"
-                />
+                  <motion.img
+                    src="/offer-academy.png"
+                    alt="Barista pouring a tasting brew into a cup"
+                    loading="lazy"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 <span className="offer-pillar-index">02</span>
                 <span className="offer-pillar-tag"><BookOpen size={12} /> Barista Academy</span>
                 <div className="offer-pillar-media-fade" />
@@ -476,11 +580,13 @@ export default function Home() {
                   <li><Check size={14} /> Built by championship-trained baristas</li>
                   <li><Check size={14} /> Watch on phone, tablet, or laptop</li>
                 </ul>
-                <Link to="/workshop" className="btn btn-blue offer-pillar-cta">
-                  <BookOpen size={16} /> Start Learning <ArrowRight size={14} />
-                </Link>
+                <Magnetic strength={0.3}>
+                  <Link to="/workshop" className="btn btn-blue offer-pillar-cta">
+                    <BookOpen size={16} /> Start Learning <ArrowRight size={14} />
+                  </Link>
+                </Magnetic>
               </div>
-            </motion.article>
+            </TiltCard>
           </motion.div>
 
           <motion.div
@@ -522,75 +628,116 @@ export default function Home() {
         </div>
       </section>
 
+
+
       {/* ===== FEATURED PRODUCTS ===== */}
       {(featuredLoading || featured.length > 0) && (
-        <section className="featured-section">
+        <section className="featured-section featured-section--editorial" data-chapter="bestsellers">
           <div className="container">
-            <div className="featured-header">
+            <div className="featured-header featured-header--editorial">
               <AnimatedSection className="section-header" style={{ marginBottom: 0 }}>
-                <div className="section-label">Featured</div>
-                <h2 className="section-title">Best Sellers</h2>
+                <SectionLabel number="003" label="BEST SELLERS" />
+                <KineticHeading as="h2" className="ed-display ed-display--lg">
+                  Daily Brews · Bagged
+                </KineticHeading>
               </AnimatedSection>
-              <Link to="/store" className="btn btn-ghost">
-                View All <ArrowRight size={14} />
-              </Link>
+              <Magnetic strength={0.3}>
+                <Link to="/store" className="btn btn-ghost">
+                  View All <ArrowRight size={14} />
+                </Link>
+              </Magnetic>
             </div>
-            <motion.div
-              className="featured-grid"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
-              variants={staggerContainer}
-            >
-              {featuredLoading
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="featured-product featured-product-skeleton">
-                      <div className="featured-product-image skeleton-block" />
-                      <div className="featured-product-info">
-                        <div className="skeleton-line skeleton-line-sm" />
-                        <div className="skeleton-line" />
-                        <div className="skeleton-line skeleton-line-sm" />
+            {featuredLoading ? (
+              <div className="featured-grid">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="featured-product featured-product-skeleton">
+                    <div className="featured-product-image skeleton-block" />
+                    <div className="featured-product-info">
+                      <div className="skeleton-line skeleton-line-sm" />
+                      <div className="skeleton-line" />
+                      <div className="skeleton-line skeleton-line-sm" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <motion.div
+                className="featured-grid"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-80px' }}
+                variants={staggerContainer}
+              >
+                {featured.map((product) => (
+                  <motion.article
+                    key={product.id}
+                    className="featured-product has-sheen"
+                    variants={fadeUp}
+                    onClick={() => setOpenProduct(product)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setOpenProduct(product)
+                      }
+                    }}
+                  >
+                    <div className="featured-product-image">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} loading="lazy" />
+                      ) : (
+                        <div className="featured-product-placeholder"><Package size={36} /></div>
+                      )}
+                      <div className="featured-product-overlay" />
+                      <div className="featured-product-quick">
+                        <button
+                          type="button"
+                          className="btn btn-blue btn-sm full-width"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            addItem(product)
+                            toast.success(`${product.name} added`)
+                          }}
+                        >
+                          <ShoppingBag size={14} /> Add to cart
+                        </button>
                       </div>
                     </div>
-                  ))
-                : featured.map(product => (
-                    <motion.div key={product.id} className="featured-product" variants={fadeUp}>
-                      <div className="featured-product-image">
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} />
-                        ) : (
-                          <div className="featured-product-placeholder"><Package size={32} /></div>
-                        )}
-                        <div className="featured-product-overlay" />
-                        <div className="featured-product-quick">
-                          <button
-                            className="btn btn-primary btn-sm full-width"
-                            onClick={() => { addItem(product); toast.success(`${product.name} added`) }}
-                          >
-                            Add to Cart
-                          </button>
-                        </div>
+                    <div className="featured-product-info">
+                      <div className="featured-product-category">{product.category}</div>
+                      <div className="featured-product-name">{product.name}</div>
+                      {product.weight && <div className="featured-product-weight">{product.weight}</div>}
+                      <div className="featured-product-bottom">
+                        <span className="featured-product-price">₹{product.price}</span>
+                        <button
+                          type="button"
+                          className="add-btn"
+                          aria-label={`Add ${product.name} to cart`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            addItem(product)
+                            toast.success(`${product.name} added`)
+                          }}
+                        >
+                          <ShoppingBag size={16} />
+                        </button>
                       </div>
-                      <div className="featured-product-info">
-                        <div className="featured-product-category">{product.category}</div>
-                        <div className="featured-product-name">{product.name}</div>
-                        <div className="featured-product-weight">{product.weight}</div>
-                        <div className="featured-product-bottom">
-                          <span className="featured-product-price">₹{product.price}</span>
-                          <button
-                            className="add-btn"
-                            onClick={() => { addItem(product); toast.success(`Added to cart`) }}
-                          >
-                            <ShoppingBag size={16} />
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-            </motion.div>
+                    </div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            )}
           </div>
         </section>
       )}
+
+      {/* ===== TEDY-STYLE PINNED GALLERY ===== */}
+      <TedyScroll
+        items={TEDY_GALLERY}
+        eyebrow="A LOOK INSIDE"
+        heading={<>From estate to <em>espresso</em>.</>}
+      />
 
       {/* ===== RECENTLY VIEWED ===== */}
       {recentProducts.length >= 3 && (
@@ -640,397 +787,80 @@ export default function Home() {
         />
       )}
 
-      {/* ===== ACADEMY PREVIEW ===== */}
-      <section className="academy-preview">
-        <div className="academy-preview-glow" aria-hidden="true" />
-        <div className="container">
-          <div className="academy-preview-grid">
-            <AnimatedSection className="academy-preview-visual">
-              <div className="academy-visual-frame">
-                <img
-                  src="/academy-feature.jpg"
-                  alt="Mastermind barista pouring a craft pint at the bar"
-                  loading="lazy"
-                />
-                <div className="academy-image-tint" />
-              </div>
 
-              <motion.div
-                className="academy-floating-stats"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div className="academy-mini-stat" variants={fadeUp}>
-                  <Award size={14} />
-                  <span><strong>Certified</strong> Baristas</span>
-                </motion.div>
-                <motion.div className="academy-mini-stat" variants={fadeUp}>
-                  <Play size={14} fill="currentColor" />
-                  <span><strong>HD</strong> Lessons</span>
-                </motion.div>
-                <motion.div className="academy-mini-stat" variants={fadeUp}>
-                  <BookOpen size={14} />
-                  <span><strong>Self-paced</strong> Learning</span>
-                </motion.div>
-              </motion.div>
-            </AnimatedSection>
 
-            <AnimatedSection className="academy-preview-content" delay={0.15}>
-              <div className="section-label">
-                <span className="section-label-bar" /> Barista Academy
-              </div>
-              <h2 className="section-title academy-title">
-                Master The Art<br />
-                Of <span className="text-gradient">Specialty Coffee</span>
-              </h2>
-              <p className="section-desc academy-desc">
-                Learn from the same baristas behind Mastermind Brews' specialty coffee program. Professional video courses for every skill level, from your first pull to latte art mastery.
-              </p>
 
-              <motion.div
-                className="academy-features"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                <motion.div className="academy-feature" variants={fadeUp}>
-                  <div className="academy-feature-icon"><Award size={20} /></div>
-                  <div className="academy-feature-text">
-                    <h4>Trained Baristas</h4>
-                    <p>Techniques from our certified coffee team</p>
-                  </div>
-                </motion.div>
-                <motion.div className="academy-feature" variants={fadeUp}>
-                  <div className="academy-feature-icon"><Play size={20} fill="currentColor" /></div>
-                  <div className="academy-feature-text">
-                    <h4>HD Video Lessons</h4>
-                    <p>Pre-recorded courses, watch anywhere</p>
-                  </div>
-                </motion.div>
-                <motion.div className="academy-feature" variants={fadeUp}>
-                  <div className="academy-feature-icon"><Coffee size={20} /></div>
-                  <div className="academy-feature-text">
-                    <h4>Bean Rove Profiles</h4>
-                    <p>Our exclusive roasting methodology</p>
-                  </div>
-                </motion.div>
-                <motion.div className="academy-feature" variants={fadeUp}>
-                  <div className="academy-feature-icon"><BookOpen size={20} /></div>
-                  <div className="academy-feature-text">
-                    <h4>Lifetime Access</h4>
-                    <p>Buy once, learn forever - on any device</p>
-                  </div>
-                </motion.div>
-              </motion.div>
 
-              <div className="academy-cta-row">
-                <Link to="/workshop" className="btn btn-blue">
-                  Browse Courses <ArrowRight size={14} />
-                </Link>
-              </div>
+      {/* ===== FROM THE PRESS — two-act scroll choreography ===== */}
+      <PressReveal image="/mastermind-times.jpg" />
 
-              <motion.div
-                className="academy-chips"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={staggerContainer}
-              >
-                {['Beginner Friendly', 'Latte Art', 'Espresso', 'Brewing Science'].map(chip => (
-                  <motion.span key={chip} className="academy-chip" variants={fadeUp}>{chip}</motion.span>
-                ))}
-              </motion.div>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
 
-      {/* ===== OUR PROJECTS ===== */}
-      <section className="projects-section">
-        <div className="container">
-          <AnimatedSection className="section-header center">
-            <div className="section-label">Our Projects</div>
-            <h2 className="section-title">What We've Built</h2>
-            <p className="section-desc" style={{ margin: '12px auto 0', maxWidth: 600 }}>
-              From our flagship cafe to sourcing partnerships and training programs. A few of the projects that shape Mastermind Brews today.
-            </p>
-          </AnimatedSection>
-          <motion.div
-            className="projects-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            variants={staggerContainer}
-          >
-            {PROJECTS.map((p, i) => (
-              <motion.article key={i} className="project-card has-sheen" variants={fadeUp}>
-                <div className="project-card-image">
-                  <img src={p.image} alt={p.title} loading="lazy" />
-                  <span className="project-card-tag">{p.tag}</span>
-                </div>
-                <div className="project-card-body">
-                  <div className="project-card-location"><MapPin size={12} /> {p.location}</div>
-                  <h3 className="project-card-title">{p.title}</h3>
-                  <p className="project-card-summary">{p.summary}</p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
-          <div style={{ textAlign: 'center', marginTop: 40 }}>
-            <Link to="/consultancy" className="btn btn-ghost">
-              See All Projects <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Testimonials hidden for now, client wants Our Projects to take this slot. */}
-      {false && (
-        <section className="testimonials-section">
-          <div className="container">
-            <AnimatedSection className="section-header center">
-              <div className="section-label">Testimonials</div>
-              <h2 className="section-title">What Our Community Says</h2>
-            </AnimatedSection>
-            <motion.div
-              className="testimonials-grid"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
-              variants={staggerContainer}
-            >
-              {TESTIMONIALS.map((t, i) => (
-                <motion.div key={i} className="testimonial-card" variants={fadeUp}>
-                  <div className="testimonial-stars">
-                    {[...Array(t.rating)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
-                  </div>
-                  <p className="testimonial-text">"{t.text}"</p>
-                  <div className="testimonial-author">
-                    <div className="testimonial-avatar">{t.initials}</div>
-                    <div className="testimonial-author-info">
-                      <div className="name">{t.name}</div>
-                      <div className="role">{t.role}</div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
+      <ZoomCTA
+        pre="Follow the daily brew"
+        handle="@mastermindbicyclecafe"
+        post="for cafe, coffee & community"
+        photos={INSTAGRAM_TILES}
+      />
 
-      {/* ===== FROM THE PRESS, Newspaper Menu Clipping ===== */}
-      <section className="press-section">
-        <div className="container">
-          <AnimatedSection className="press-row">
-            <motion.div
-              className="press-clipping-wrap"
-              initial={{ opacity: 0, y: 24, rotate: -3 }}
-              whileInView={{ opacity: 1, y: 0, rotate: -1.8 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="press-tape press-tape-tl" aria-hidden="true" />
-              <span className="press-tape press-tape-tr" aria-hidden="true" />
-              <a
-                href="/mastermind-times.jpg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="press-clipping has-sheen"
-                aria-label="Open full Mastermind Times menu poster"
-              >
-                <img
-                  src="/mastermind-times.jpg"
-                  alt="Mastermind Times, a global culinary revolution menu poster"
-                  loading="lazy"
-                />
-              </a>
-            </motion.div>
-            <div className="press-copy">
-              <div className="section-label">From the Press</div>
-              <h2 className="press-title">
-                The <span className="text-gradient">Mastermind Times</span>
-              </h2>
-              <p className="press-desc">
-                A menu that travels, Asian, European, American, Mediterranean, all under one bicycle-cafe roof.
-              </p>
-              <a
-                href="/mastermind-times.jpg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="press-cta"
-              >
-                Read the full edition <ArrowRight size={14} />
-              </a>
+      {/* ===== CAFE INVITATION — full-bleed image with overlay copy ===== */}
+      <section className="cafe-block-section" data-chapter="gram">
+        <div
+          className="cafe-block-bg"
+          style={{ backgroundImage: 'url(/cafe-press-bg.jpg)' }}
+          aria-hidden="true"
+        />
+        <div className="cafe-block-overlay" aria-hidden="true" />
+        <motion.div
+          className="cafe-block-inner"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="cafe-block-eyebrow" style={{ color: 'var(--accent)' }}>A Visit Worth Bookmarking</span>
+          <h2 className="cafe-block-title" style={{ color: '#c9974a' }}>
+            Mulund&rsquo;s quiet <em>European</em> corner.
+          </h2>
+          <p className="cafe-block-desc" style={{ color: 'rgba(251, 245, 235, 0.8)' }}>
+            Step inside the bicycle cafe &mdash; a marble counter, slow mornings, evenings that stretch. We pour what we roast and feed what we love.
+          </p>
+          <div className="cafe-block-meta" style={{ color: 'rgba(251, 245, 235, 0.8)' }}>
+            <div className="cafe-block-meta-item">
+              <Clock size={14} />
+              <span>Open Daily · 8:30 AM &ndash; 12 Midnight</span>
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ===== VISIT US ===== */}
-      <section className="visit-section">
-        <div className="container">
-          <div className="visit-grid">
-            <AnimatedSection className="visit-info">
-              <div className="section-label">Our Cafe</div>
-              <h2 className="section-title">Mastermind Bicycle Cafe, Mulund</h2>
-              <p className="section-desc">
-                One of the best cafes in Mulund. Doors open every day, with European cafe vibes, specialty coffee and a menu that goes deep. Visit us in person or explore the full cafe online.
-              </p>
-              <div className="visit-details">
-                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-                  <div className="visit-detail-icon"><Clock size={18} /></div>
-                  <div>
-                    <h4>Open All Days</h4>
-                    <p>8:30 AM to 12 Midnight</p>
-                  </div>
-                </motion.div>
-                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
-                  <div className="visit-detail-icon"><MapPin size={18} /></div>
-                  <div>
-                    <h4>Find Us</h4>
-                    <p>Avior Corporate Park, Mulund West, Mumbai</p>
-                  </div>
-                </motion.div>
-                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
-                  <div className="visit-detail-icon"><Phone size={18} /></div>
-                  <div>
-                    <h4>Call</h4>
-                    <p><a href="tel:+918591850161">+91 85918 50161</a></p>
-                  </div>
-                </motion.div>
-                <motion.div className="visit-detail" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}>
-                  <div className="visit-detail-icon"><Mail size={18} /></div>
-                  <div>
-                    <h4>Email</h4>
-                    <p><a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a></p>
-                  </div>
-                </motion.div>
-              </div>
-              <div className="visit-socials">
-                <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="visit-social">
-                  <Globe size={16} /> mastermindcafe.in
-                </a>
-                <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="btn btn-blue btn-sm">
-                  Visit Cafe Website <ArrowRight size={14} />
-                </a>
-                <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">
-                  Get Directions <ArrowRight size={14} />
-                </a>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection className="visit-card" delay={0.2}>
-              <div className="visit-card-image">
-                <img src="/cafe-food.png" alt="Mastermind Bicycle Cafe, handcrafted pasta with wine" loading="lazy" style={{ objectPosition: 'center bottom' }} />
-                <div className="visit-card-rating">
-                  <div className="visit-card-rating-stars">
-                    {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
-                  </div>
-                  <div className="visit-card-rating-score">4.5 / 5</div>
-                  <div className="visit-card-rating-label">On Google</div>
-                </div>
-              </div>
-            </AnimatedSection>
+            <div className="cafe-block-meta-item">
+              <MapPin size={14} />
+              <span>Avior Corporate Park, Mulund West</span>
+            </div>
+            <div className="cafe-block-meta-item">
+              <Star size={14} fill="currentColor" />
+              <span>4.5 / 5 · Google · 2,400+ reviews</span>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* ===== INSTAGRAM ===== */}
-      <section className="instagram-section">
-        <div className="container">
-          <AnimatedSection className="section-header center">
-            <div className="section-label"><Instagram size={12} style={{ display: 'inline', marginRight: 6 }} /> Instagram</div>
-            <h2 className="section-title">Follow @mastermindbicyclecafe</h2>
-            <p className="section-desc" style={{ margin: '12px auto 0', maxWidth: 560 }}>
-              Behind the bar, on the bike, behind the beans. Catch our daily moments and brew inspiration.
-            </p>
-          </AnimatedSection>
-          <motion.div
-            className="instagram-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            variants={staggerContainer}
-          >
-            {INSTAGRAM_TILES.map((src, i) => (
-              <motion.a
-                key={i}
-                href="https://www.instagram.com/mastermindbicyclecafe/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="instagram-tile has-sheen"
-                variants={fadeUp}
-                aria-label="Open Instagram"
-              >
-                <img src={src} alt="" loading="lazy" />
-                <span className="instagram-tile-overlay">
-                  <Instagram size={22} />
-                </span>
-              </motion.a>
-            ))}
-          </motion.div>
-          <div style={{ textAlign: 'center', marginTop: 36 }}>
+          <div className="cafe-block-ctas">
+            <a
+              href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cafe-block-cta cafe-block-cta--primary"
+            >
+              Get Directions <ArrowRight size={14} />
+            </a>
             <a
               href="https://www.instagram.com/mastermindbicyclecafe/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary"
+              className="cafe-block-cta cafe-block-cta--ghost"
             >
-              <Instagram size={16} /> Follow on Instagram
+              <Instagram size={14} /> @mastermindbicyclecafe
             </a>
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* ===== CTA ===== */}
-      <section className="newsletter-section">
-        <div className="newsletter-bg" />
-        <div className="container">
-          <AnimatedSection className="newsletter-content">
-            <div className="section-label">Get Started</div>
-            <h2>Ready To Brew Like A Pro?</h2>
-            <p>The same specialty coffee from Mastermind Bicycle Cafe - now available online, with courses to level up your skills.</p>
-            <div className="hero-btns">
-              <Link to="/store" className="btn btn-primary">
-                <ShoppingBag size={16} /> Shop Store
-              </Link>
-              <Link to="/workshop" className="btn btn-outline">
-                <BookOpen size={16} /> Start Learning
-              </Link>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
 
-      {/* ===== TRUST BAR ===== */}
-      <section className="categories-band" style={{ padding: '48px 0' }}>
-        <div className="container">
-          <motion.div
-            className="about-stats"
-            style={{ borderTop: 'none', paddingTop: 0, justifyContent: 'center', gap: '80px' }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
-              <div className="stat-number"><Truck size={24} style={{ display: 'inline' }} /></div>
-              <div className="stat-label">Free Shipping Above ₹999</div>
-            </motion.div>
-            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
-              <div className="stat-number"><Coffee size={24} style={{ display: 'inline' }} /></div>
-              <div className="stat-label">Roasted in Chikmagalur</div>
-            </motion.div>
-            <motion.div className="stat-item" style={{ textAlign: 'center' }} variants={fadeUp}>
-              <div className="stat-number"><Award size={24} style={{ display: 'inline' }} /></div>
-              <div className="stat-label">Bean Rove Profiles</div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   )
 }

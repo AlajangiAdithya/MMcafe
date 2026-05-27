@@ -1,0 +1,743 @@
+/* ============================================================
+   LIGHT THEME + GOLD ACCENT — site-wide token override
+   Loaded after App.css so these :root rules win.
+   ============================================================ */
+:root {
+  /* Surfaces — warm ivory / paper tones, the new base */
+  --bg-primary:   #fbf6ec;   /* cream paper */
+  --bg-secondary: #f5ecd9;   /* light latte */
+  --bg-tertiary:  #ede0c4;   /* pale gold-cream */
+  --bg-card:      rgba(255, 252, 245, 0.94);
+  --bg-elevated:  rgba(255, 255, 255, 0.96);
+  --bg-surface:   rgba(255, 252, 245, 0.92);
+  --bg-hover:     rgba(245, 236, 217, 0.96);
+
+  /* Coffee semantic palette — keep semantic names, flip lightness */
+  --coffee-espresso: #fbf6ec;
+  --coffee-dark:     #f5ecd9;
+  --coffee-mocha:    #ede0c4;
+  --coffee-roast:    #c9974a;
+  --coffee-caramel:  #a87145;
+  --coffee-latte:    #d9b899;
+  --coffee-foam:     #efe1cf;
+  --coffee-cream:    #f8efe2;
+
+  /* Ink — dark on light, warm */
+  --ink-100: #1a1208;
+  --ink-200: #2a1f12;
+  --ink-300: #4a3a26;
+  --ink-400: #6e5a3f;
+  --ink-500: #8a7558;
+
+  --white:          #ffffff;
+  --text-primary:   #1a1208;
+  --text-secondary: #4a3a26;
+  --text-muted:     #6e5a3f;
+
+  /* Borders — warm gold-tinted hairlines */
+  --border:        rgba(201, 151, 74, 0.16);
+  --border-light:  rgba(201, 151, 74, 0.24);
+  --border-strong: rgba(201, 151, 74, 0.42);
+
+  /* GOLD — the only hot color, slightly tuned */
+  --accent:       #c9974a;
+  --accent-soft:  #e8c896;
+  --accent-deep:  #8f6a30;
+  --accent-glow:  rgba(201, 151, 74, 0.22);
+
+  --mm-blue:       #c9974a;
+  --mm-blue-light: #e8c896;
+  --mm-pink:       #b67d2e;
+  --mm-pink-light: #e8c896;
+  --gold-accent:   var(--accent);
+
+  --shadow-1: 0 1px 2px rgba(80, 50, 10, 0.06);
+  --shadow-2: 0 4px 12px rgba(80, 50, 10, 0.08);
+  --shadow-3: 0 12px 28px rgba(80, 50, 10, 0.12);
+  --shadow-4: 0 24px 60px rgba(80, 50, 10, 0.18);
+  --shadow-accent: 0 12px 36px rgba(201, 151, 74, 0.28);
+}
+
+/* Body — swap the dark coffee gradient for warm cream */
+body {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% -10%, rgba(232, 200, 150, 0.32) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 30%, rgba(201, 151, 74, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 70% at 50% 110%, rgba(232, 200, 150, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, #fbf6ec 0%, #fff8e7 50%, #fbf6ec 100%) !important;
+  color: var(--ink-200) !important;
+}
+body::before {
+  opacity: 0.04 !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Section backgrounds that were dark in the original theme */
+.offer-section,
+.featured-section,
+.featured-section--editorial,
+.academy-preview,
+.academy-preview--editorial,
+.projects-section,
+.projects-section--editorial,
+.testimonials-section,
+.visit-section,
+.visit-section--editorial,
+.instagram-section,
+.instagram-section--editorial,
+.newsletter-section,
+.newsletter-section--editorial,
+.press-section,
+.recently-viewed-section,
+.categories-band,
+.about-strip,
+.about-strip--editorial,
+.about-intro,
+.values-section,
+.cta-section,
+.page-shell,
+.about-page,
+.page-hero,
+.about-hero {
+  background: transparent !important;
+  color: var(--ink-200);
+}
+
+/* Cards on light surface */
+.product-card,
+.course-card,
+.blog-card,
+.mycourse-card,
+.myorders-card,
+.testimonial-card,
+.value-card,
+.contact-card,
+.feature-card,
+.recently-viewed-card,
+.offer-trust-item,
+.stat-item,
+.visit-detail,
+.visit-card,
+.about-cafe-card,
+.about-namrata-cred,
+.academy-feature,
+.academy-mini-stat,
+.cta-card,
+.press-clipping,
+.press-clipping-wrap,
+.featured-product {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light) !important;
+  color: var(--ink-200);
+  box-shadow: var(--shadow-2);
+}
+
+/* Offer pillar cards — keep their natural styling for images to render */
+.offer-pillar {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light) !important;
+  color: var(--ink-200);
+  box-shadow: var(--shadow-2);
+  overflow: visible;
+}
+.offer-pillar .offer-pillar-media {
+  overflow: hidden;
+}
+.offer-pillar .offer-pillar-media img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.product-card:hover,
+.course-card:hover,
+.featured-product:hover,
+.offer-pillar:hover,
+.recently-viewed-card:hover {
+  background: #ffffff !important;
+  box-shadow: var(--shadow-3) !important;
+  border-color: var(--border-strong) !important;
+}
+
+/* Generic text colors inside content areas */
+.section-title,
+.section-header h2,
+.about-intro-title,
+.press-title,
+.page-title,
+.hero-tagline,
+h1, h2, h3, h4 {
+  color: var(--ink-100) !important;
+}
+.section-desc,
+.about-intro-lede,
+p {
+  color: var(--ink-300);
+}
+
+/* Hero — cinematic dark overlay, NOT cream */
+.hero {
+  background: transparent !important;
+}
+.hero--cinematic {
+  background: #0e0c0a !important;
+}
+.hero-bg-image {
+  opacity: 0.45 !important;
+}
+.hero-gradient {
+  background: linear-gradient(180deg, rgba(14, 12, 10, 0.1) 0%, rgba(14, 12, 10, 0.8) 100%) !important;
+}
+.hero-mesh-overlay {
+  opacity: 0.35 !important;
+}
+.hero--cinematic .hero-content,
+.hero--cinematic .hero-content * {
+  color: #fbf5eb;
+}
+.hero--cinematic .hero-content h1 {
+  color: #fbf5eb !important;
+}
+.hero--cinematic .hero-content p {
+  color: rgba(251, 245, 235, 0.85) !important;
+}
+.text-blue-glow, .text-pink-glow, .text-accent-glow, .text-gradient {
+  background: linear-gradient(135deg, #c9974a 0%, #e8c478 50%, #b67d2e 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Navbar — dark espresso theme with cream-toned contrast items */
+.navbar,
+.navbar.scrolled {
+  background: linear-gradient(180deg, #14100B 0%, #1C140D 100%) !important;
+  border-bottom: 1px solid rgba(201, 151, 74, 0.22) !important;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  color: #F4E9D6 !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45) !important;
+}
+.navbar.scrolled {
+  background: linear-gradient(180deg, rgba(15, 11, 7, 0.92) 0%, rgba(24, 17, 11, 0.92) 100%) !important;
+}
+.navbar .nav-link,
+.navbar a,
+.navbar button {
+  color: rgba(244, 233, 214, 0.82) !important;
+}
+.navbar .brand-name {
+  color: #F4E9D6 !important;
+}
+.navbar .brand-sub {
+  color: #D9A858 !important;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active,
+.navbar a:hover,
+.navbar button:hover {
+  color: #FFF7E6 !important;
+}
+.navbar .signup-btn {
+  color: #2a1c10 !important;
+}
+
+/* Footer — keep DARK, do NOT make light */
+.footer {
+  background: linear-gradient(180deg, transparent 0%, rgba(28, 19, 12, 0.85) 12%, #2a1c10 30%, #160e08 100%) !important;
+  color: #fbf5eb !important;
+  border-top: 1px solid rgba(168, 113, 69, 0.20);
+}
+.footer *:not(.footer-cafe-map) {
+  color: rgba(255, 255, 255, 0.82);
+}
+.footer h4, .footer-brand-logo span, .footer-cafe-title {
+  color: #ffffff !important;
+}
+.footer .eyebrow, .footer-col h4 {
+  color: #d9b899 !important;
+}
+.footer a:hover { color: #ffffff !important; }
+.footer-colophon-en { color: #c9974a !important; }
+.footer-colophon-rule { background: rgba(168, 113, 69, 0.3) !important; }
+.footer-cafe-map {
+  color: #2a1c10 !important;
+  background: #fbf5eb !important;
+  border: 1px solid #fbf5eb !important;
+}
+
+/* Buttons */
+.btn {
+  transition: all 0.3s ease;
+}
+.btn-primary,
+.btn-blue {
+  background: linear-gradient(135deg, #c9974a 0%, #b67d2e 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 6px 18px rgba(201, 151, 74, 0.32);
+}
+.btn-primary:hover,
+.btn-blue:hover {
+  background: linear-gradient(135deg, #d4a056 0%, #c9974a 100%) !important;
+  box-shadow: 0 10px 24px rgba(201, 151, 74, 0.42);
+  transform: translateY(-2px);
+}
+.btn-outline,
+.btn-premium-outline {
+  background: transparent !important;
+  border: 1.5px solid var(--accent) !important;
+  color: var(--accent) !important;
+}
+.btn-outline:hover,
+.btn-premium-outline:hover {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+}
+.btn-premium-primary {
+  background: linear-gradient(135deg, #c9974a 0%, #b67d2e 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 32px rgba(201, 151, 74, 0.38);
+}
+.btn-ghost {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid transparent !important;
+}
+.btn-ghost:hover {
+  background: rgba(201, 151, 74, 0.10) !important;
+}
+
+/* Section labels & chips */
+.section-label,
+.about-intro-label,
+.offer-pillar-tag,
+.offer-pillar-index,
+.about-intro-chip,
+.featured-product-category,
+.recently-viewed-category {
+  color: var(--accent) !important;
+  background: rgba(201, 151, 74, 0.10) !important;
+  border-color: var(--border-light) !important;
+}
+
+/* Marquee */
+.marquee-strip {
+  background: #f5ecd9 !important;
+  color: var(--ink-200) !important;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.marquee-strip.variant-dark {
+  background: linear-gradient(90deg, #c9974a 0%, #b67d2e 100%) !important;
+  color: #ffffff !important;
+}
+.marquee-strip.variant-accent {
+  background: linear-gradient(90deg, #c9974a 0%, #e8c478 50%, #c9974a 100%) !important;
+  color: #ffffff !important;
+}
+
+/* Newsletter / CTA sections (were dark) */
+.newsletter-section,
+.newsletter-section--editorial {
+  background: linear-gradient(135deg, #fbf6ec 0%, #f5ecd9 50%, #fbf6ec 100%) !important;
+}
+.newsletter-bg { opacity: 0.4 !important; }
+.cta-card {
+  background: #ffffff !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: var(--shadow-3) !important;
+}
+
+/* Inputs */
+input, textarea, select {
+  background: #ffffff !important;
+  color: var(--ink-100) !important;
+  border: 1px solid var(--border-light) !important;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* Modals & overlays */
+.modal-overlay, .cart-drawer-overlay {
+  background: rgba(20, 14, 4, 0.45) !important;
+}
+.modal-content, .cart-drawer, .command-palette {
+  background: #ffffff !important;
+  color: var(--ink-100) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+/* Hide the heavy dark grain/noise on light theme */
+.section-noise, .surface-noise { display: none !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #f5ecd9 !important; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-deep); }
+
+/* ============================================================
+   HERO LOGO XL — tagline removed, logo dominates the stage
+   ============================================================ */
+.hero-logo-wrap--xl {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 30px 80px rgba(201, 151, 74, 0.32));
+}
+.hero-logo--xl {
+  width: clamp(280px, 52vw, 680px);
+  height: auto;
+  max-height: 64vh;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-logo-wrap--xl:hover .hero-logo--xl {
+  transform: scale(1.02);
+}
+.hero .hero-content { gap: 22px; align-items: center; }
+@media (max-width: 768px) {
+  .hero-logo--xl { width: 78vw; max-height: 46vh; }
+}
+
+/* ============================================================
+   STACK CARDS — sticky stacking for WHAT WE OFFER
+   ============================================================ */
+.stack-cards {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 60px 0 80px;
+}
+.stack-card-wrap {
+  position: relative;
+  height: 90vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.stack-card {
+  position: sticky;
+  width: 100%;
+  max-width: 980px;
+  border-radius: 24px;
+  overflow: hidden;
+  transform-origin: center top;
+  will-change: transform;
+  background: #ffffff;
+  box-shadow: 0 30px 80px rgba(80, 50, 10, 0.14);
+  border: 1px solid var(--border-light);
+}
+.stack-card > * {
+  width: 100%;
+  margin: 0;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+.stack-card .offer-pillar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+@media (max-width: 900px) {
+  .stack-card-wrap { height: auto; padding: 18px 0; }
+  .stack-card { position: relative; top: auto !important; transform: none !important; }
+}
+
+/* ============================================================
+   HORIZONTAL PROJECTS
+   ============================================================ */
+.projects-section--horizontal { padding-bottom: 0; }
+.hproj-section {
+  position: relative;
+  margin: 40px 0 0;
+}
+.hproj-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(180deg, #fbf6ec 0%, #fff8e7 50%, #fbf6ec 100%);
+}
+.hproj-track {
+  display: flex;
+  gap: 36px;
+  padding: 0 8vw;
+  will-change: transform;
+}
+.hproj-card {
+  flex: 0 0 min(78vw, 720px);
+  height: 78vh;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 80px rgba(80, 50, 10, 0.14);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.hproj-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 40px 90px rgba(80, 50, 10, 0.20);
+}
+.hproj-card-media {
+  position: relative;
+  flex: 0 0 62%;
+  overflow: hidden;
+}
+.hproj-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hproj-card:hover .hproj-card-media img { transform: scale(1.06); }
+.hproj-card-tag {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: rgba(255, 252, 245, 0.92);
+  color: var(--ink-100);
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-light);
+  font-weight: 600;
+}
+.hproj-card-arrow {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(201, 151, 74, 0.4);
+}
+.hproj-card-index {
+  position: absolute;
+  bottom: 14px;
+  left: 22px;
+  font-family: 'Yanone Kaffeesatz', serif;
+  font-size: 96px;
+  line-height: 0.9;
+  color: rgba(255, 252, 245, 0.96);
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+.hproj-card-body {
+  flex: 1 1 auto;
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+.hproj-card-location {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.hproj-card-title {
+  font-family: 'Yanone Kaffeesatz', serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: var(--ink-100);
+}
+.hproj-card-summary {
+  color: var(--ink-300);
+  line-height: 1.6;
+  margin: 0;
+}
+.hproj-progress {
+  position: absolute;
+  left: 8vw;
+  right: 8vw;
+  bottom: 36px;
+  height: 3px;
+  background: rgba(201, 151, 74, 0.20);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hproj-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #c9974a, #e8c478);
+  transform-origin: left;
+}
+@media (max-width: 768px) {
+  .hproj-sticky { height: auto; position: relative; }
+  .hproj-track { flex-direction: column; transform: none !important; padding: 24px; }
+  .hproj-card { flex: 1 1 auto; height: auto; min-height: 460px; }
+  .hproj-progress { display: none; }
+}
+
+/* ============================================================
+   ZOOM CTA — Instagram zoom-into-view
+   ============================================================ */
+.zoom-cta-section {
+  position: relative;
+  height: 180vh;
+  background: linear-gradient(180deg, #fbf6ec 0%, #fff5dc 50%, #fbf6ec 100%);
+}
+.zoom-cta-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.zoom-cta-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Yanone Kaffeesatz', serif;
+  letter-spacing: -0.02em;
+  will-change: transform, opacity, filter;
+  transform-origin: center center;
+  padding: 0 24px;
+}
+.zoom-cta-pre {
+  font-size: clamp(14px, 1.3vw, 18px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+.zoom-cta-handle {
+  font-size: clamp(48px, 9vw, 160px);
+  line-height: 0.95;
+  font-weight: 600;
+  background: linear-gradient(135deg, #c9974a 0%, #e8c478 50%, #b67d2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.zoom-cta-post {
+  font-size: clamp(14px, 1.3vw, 18px);
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  margin-top: 18px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   TEXT REVEAL
+   ============================================================ */
+.tr-paragraph {
+  display: block;
+  font-family: 'Yanone Kaffeesatz', serif;
+  font-size: clamp(28px, 3.4vw, 56px);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  margin: 0;
+  color: var(--ink-100);
+}
+.tr-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   NAMRATA SPOTLIGHT
+   ============================================================ */
+.about-intro-namrata--spotlight { padding-top: 120px; padding-bottom: 80px; }
+.namrata-spotlight {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+.namrata-spotlight-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+  font-weight: 700;
+}
+.namrata-spotlight-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(201, 151, 74, 0.22);
+}
+.namrata-spotlight-headline {
+  font-size: clamp(32px, 4.6vw, 68px);
+  line-height: 1.18;
+  font-weight: 500;
+  color: var(--ink-100);
+}
+
+/* ============================================================
+   ABOUT US PARALLAX SECTIONS
+   ============================================================ */
+.about-parallax-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.about-parallax-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -2;
+  opacity: 0.18;
+  filter: saturate(1.04);
+  pointer-events: none;
+}
+.about-parallax-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(251, 246, 236, 0.78) 0%, rgba(251, 246, 236, 0.62) 50%, rgba(251, 246, 236, 0.84) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+.about-parallax-section > .container { position: relative; z-index: 1; }
+@media (max-width: 768px) {
+  .about-parallax-bg { background-attachment: scroll; }
+}

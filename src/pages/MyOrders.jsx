@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Package, ShoppingBag, ChevronDown, ChevronUp, MapPin, CheckCircle2, Circle, XCircle, Truck, Inbox } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { getOrdersForUser } from '../lib/database'
+import Reveal from '../components/Reveal'
 
 const TIMELINE_STEPS = [
   { id: 'confirmed', label: 'Confirmed', icon: CheckCircle2 },
@@ -76,26 +78,31 @@ export default function MyOrders() {
   return (
     <div className="myorders-page">
       <div className="container">
-        <div className="myorders-header">
+        <motion.div
+          className="myorders-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
           <h1>My Orders</h1>
           <p>{orders.length} order{orders.length === 1 ? '' : 's'}</p>
-        </div>
+        </motion.div>
 
         {orders.length === 0 ? (
-          <div className="myorders-empty">
+          <Reveal className="myorders-empty">
             <ShoppingBag size={48} />
             <h3>No orders yet</h3>
             <p>Browse the store and place your first order.</p>
             <Link to="/store" className="btn btn-blue">Visit Store</Link>
-          </div>
+          </Reveal>
         ) : (
           <ul className="myorders-list">
-            {orders.map(o => {
+            {orders.map((o, idx) => {
               const items = o.items || []
               const addr = o.shipping_address || {}
               const open = expanded === o.id
               return (
-                <li key={o.id} className="myorders-card">
+                <Reveal as="li" key={o.id} className="myorders-card" delay={Math.min(idx * 60, 360)}>
                   <div className="myorders-row">
                     <div className="myorders-id">
                       <Package size={18} />
@@ -149,7 +156,7 @@ export default function MyOrders() {
                       </div>
                     </div>
                   )}
-                </li>
+                </Reveal>
               )
             })}
           </ul>

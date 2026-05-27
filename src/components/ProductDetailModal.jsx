@@ -60,22 +60,25 @@ export default function ProductDetailModal({ product, onClose, reviewStats, allP
 
   return (
     <AnimatePresence>
-      <motion.div 
-        className="detail-modal-overlay" 
+      <motion.div
+        className="detail-modal-overlay"
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <motion.div 
-          className="detail-modal" 
+        <motion.div
+          className="detail-modal"
           onClick={e => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label={product.name}
           initial={{ y: 50, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 20, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <button className="detail-modal-close" onClick={onClose} aria-label="Close">
+          <button type="button" className="detail-modal-close" onClick={onClose} aria-label="Close product details">
             <X size={20} />
           </button>
 

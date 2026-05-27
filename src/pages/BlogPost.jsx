@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { getBlogPostBySlug } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import Loader from '@/components/ui/loader-4'
+import Reveal from '../components/Reveal'
 
 function formatDate(d) {
   if (!d) return ''
@@ -104,7 +105,7 @@ export default function BlogPost() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             {(post.content || '').split(/\n{2,}/).map((para, i) => (
-              <p key={i}>{para}</p>
+              <Reveal key={i} as="p" delay={Math.min(i * 60, 360)}>{para}</Reveal>
             ))}
           </motion.div>
         </div>

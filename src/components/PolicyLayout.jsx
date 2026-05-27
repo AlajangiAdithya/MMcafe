@@ -57,6 +57,29 @@ export default function PolicyLayout({ eyebrow, title, updated, children }) {
     return () => observer.disconnect()
   }, [sections])
 
+  // Soft fade-up on scroll for every block inside the body. Adds the
+  // `reveal-in` class once an element scrolls into view.
+  useEffect(() => {
+    const root = contentRef.current
+    if (!root) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const targets = root.querySelectorAll('section, h2, h3, p, ul, ol, .policy-contact')
+    targets.forEach((el) => el.classList.add('reveal'))
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('reveal-in')
+            io.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    )
+    targets.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [children])
+
   return (
     <div className="policy-editorial">
       <header className="policy-editorial-header">

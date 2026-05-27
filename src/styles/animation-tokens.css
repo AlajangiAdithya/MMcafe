@@ -1,0 +1,358 @@
+/* ============================================================
+   ANIMATION TOKENS — global tunables.
+   Mirror of src/lib/motionConfig.js for non-Motion code paths.
+   Edit here OR motionConfig.js to dial the whole site.
+   ============================================================ */
+:root {
+  /* Durations */
+  --anim-fast: 200ms;
+  --anim-base: 420ms;
+  --anim-slow: 700ms;
+  --anim-mask: 900ms;
+  --anim-page: 420ms;
+
+  /* Easings */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Reveal */
+  --reveal-distance: 36px;
+  --reveal-stagger: 90ms;
+
+  /* Press */
+  --press-scale: 0.97;
+}
+
+/* ============================================================
+   BUTTON PRESS — subtle scale-down on active.
+   Applies to all `.btn` site-wide without changing markup.
+   ============================================================ */
+.btn {
+  transition:
+    transform var(--anim-fast) var(--ease-out),
+    box-shadow var(--anim-base) var(--ease-out),
+    background var(--anim-base) var(--ease-out),
+    color var(--anim-base) var(--ease-out) !important;
+  will-change: transform;
+}
+.btn:active {
+  transform: scale(var(--press-scale)) !important;
+}
+/* Restore hover translateY for the gold buttons (overridden by transition above) */
+.btn-primary:hover,
+.btn-blue:hover,
+.btn-premium-primary:hover {
+  transform: translateY(-2px) !important;
+}
+.btn-primary:active,
+.btn-blue:active,
+.btn-premium-primary:active {
+  transform: translateY(-1px) scale(var(--press-scale)) !important;
+}
+
+/* ============================================================
+   ANIMATED LINK UNDERLINE — left-to-right fill on hover.
+   Targets nav + footer + inline content links.
+   ============================================================ */
+.navbar .nav-link {
+  position: relative;
+}
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-out);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+   MASK REVEAL — clip-path wipe-from-bottom for images / video.
+   Used by <MaskReveal /> component.
+   Fills its parent so wrapped <img>/<video> with width/height: 100%
+   still size to the original container box.
+   ============================================================ */
+.mask-reveal {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  transition: clip-path var(--anim-mask) var(--ease-out),
+              -webkit-clip-path var(--anim-mask) var(--ease-out);
+  will-change: clip-path;
+}
+.mask-reveal > img,
+.mask-reveal > video,
+.mask-reveal > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mask-reveal.is-in {
+  clip-path: inset(0% 0 0 0);
+  -webkit-clip-path: inset(0% 0 0 0);
+}
+
+/* Diagonal sweep variant */
+.mask-reveal--diagonal {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transition: clip-path 1.1s var(--ease-out), -webkit-clip-path 1.1s var(--ease-out);
+}
+.mask-reveal--diagonal.is-in {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ============================================================
+   FLOATING BEANS — slow drifting decorative SVG dots.
+   Pure CSS, GPU-only.
+   ============================================================ */
+.floating-beans {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.floating-bean {
+  position: absolute;
+  width: 14px;
+  height: 18px;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  background: linear-gradient(135deg, #8B5A2B, #4A2C18);
+  opacity: 0.38;
+  filter: blur(0.2px) drop-shadow(0 2px 4px rgba(74, 44, 24, 0.18));
+  will-change: transform;
+  animation: bean-drift 22s ease-in-out infinite;
+}
+.floating-bean::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  background: rgba(26, 18, 8, 0.6);
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+@keyframes bean-drift {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%  { transform: translate3d(20px, -32px, 0) rotate(180deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+}
+
+/* ============================================================
+   STEAM WISPS — soft white plumes that rise behind hero copy.
+   ============================================================ */
+.steam-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.steam-wisp {
+  position: absolute;
+  bottom: -120px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 252, 245, 0.55) 0%, rgba(255, 252, 245, 0) 65%);
+  filter: blur(18px);
+  opacity: 0;
+  animation: steam-rise 14s linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes steam-rise {
+  0%   { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+  18%  { opacity: 0.55; }
+  100% { transform: translate3d(-30px, -120vh, 0) scale(1.6); opacity: 0; }
+}
+
+/* ============================================================
+   COUNT-UP — used by <CountUp />. Inherits text styles.
+   ============================================================ */
+.count-up { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   SCROLL-LINKED MARQUEE — let Lenis velocity nudge marquee speed.
+   The MarqueeStrip reads --marquee-vel from JS.
+   ============================================================ */
+.marquee-strip,
+.marquee-track,
+.marquee {
+  --marquee-vel: 1;
+}
+
+/* ============================================================
+   SECTION GLOW ON SCROLL — vignette sharpens when section is centered.
+   Subtle. Driven by an inView class set by IntersectionObserver.
+   ============================================================ */
+.section-vignette {
+  position: relative;
+  isolation: isolate;
+}
+.section-vignette::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(40, 25, 8, 0.10) 100%);
+  opacity: 0;
+  transition: opacity 800ms var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+.section-vignette.in-view::before { opacity: 1; }
+
+/* ============================================================
+   ENHANCED CARD LIFT — adds a sheen and stronger transform for
+   .featured-product, .signoff-card, .value-card on hover.
+   ============================================================ */
+.featured-product,
+.signoff-card,
+.value-card,
+.offer-trust-item,
+.visit-detail {
+  transition: transform 380ms var(--ease-out),
+              box-shadow 380ms var(--ease-out),
+              border-color 380ms var(--ease-out) !important;
+  will-change: transform;
+}
+.featured-product:hover,
+.signoff-card:hover,
+.value-card:hover,
+.offer-trust-item:hover,
+.visit-detail:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 30px 60px rgba(80, 50, 10, 0.18) !important;
+}
+
+/* Gentle scale on featured product images */
+.featured-product .featured-product-image img {
+  transition: transform 800ms var(--ease-out);
+}
+.featured-product:hover .featured-product-image img {
+  transform: scale(1.06);
+}
+
+/* ============================================================
+   GRADIENT SWEEP — subtle moving highlight across kinetic-heading
+   words once revealed. Tasteful, ~3s loop, low opacity.
+   ============================================================ */
+.kinetic-heading .kh-word-inner {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 40%,
+    rgba(201, 151, 74, 0.85) 50%,
+    currentColor 60%,
+    currentColor 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: heading-sheen 6s var(--ease-out) infinite;
+  animation-delay: 1.4s;
+}
+@keyframes heading-sheen {
+  0%, 30%   { background-position: 100% 0; }
+  60%, 100% { background-position: -100% 0; }
+}
+
+/* ============================================================
+   SCROLL INDICATOR PULSE — gentle attention on hero scroll cue.
+   ============================================================ */
+.scroll-indicator .scroll-dot {
+  animation: scroll-dot 1.8s var(--ease-out) infinite;
+}
+@keyframes scroll-dot {
+  0%   { transform: translateY(0); opacity: 0.9; }
+  60%  { transform: translateY(14px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+/* ============================================================
+   PAGE TRANSITION — used by <PageTransition />.
+   Backed by AnimatePresence; CSS here is a fallback baseline.
+   ============================================================ */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: linear-gradient(180deg, #1a1208 0%, #2a1f12 100%);
+  transform-origin: top;
+}
+
+/* ============================================================
+   ABOUT INTRO IMAGE LIFT — adds a soft Ken Burns on the
+   parallax intro frames while in view.
+   ============================================================ */
+.about-intro-frame {
+  overflow: hidden;
+  border-radius: inherit;
+}
+.about-intro-frame img {
+  transition: transform 12s linear;
+  will-change: transform;
+}
+.about-intro-frame.is-in img {
+  transform: scale(1.06);
+}
+
+/* ============================================================
+   STAT NUMBER POP — number scales gently as it counts up.
+   ============================================================ */
+.stat-pop {
+  display: inline-block;
+  transform-origin: center bottom;
+  animation: stat-pop 700ms var(--ease-spring);
+}
+@keyframes stat-pop {
+  0%   { transform: scale(0.86); }
+  60%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================
+   REDUCED MOTION — kill anything decorative.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .mask-reveal,
+  .mask-reveal--diagonal {
+    clip-path: inset(0 0 0 0) !important;
+    -webkit-clip-path: inset(0 0 0 0) !important;
+  }
+  .floating-beans,
+  .steam-layer,
+  .floating-bean,
+  .steam-wisp { display: none !important; }
+  .hero-parallax,
+  .hero-steam-motif,
+  .about-parallax-bg { transform: none !important; }
+}

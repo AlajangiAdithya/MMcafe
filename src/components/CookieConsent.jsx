@@ -41,7 +41,12 @@ export default function CookieConsent() {
   if (!show) return null
 
   return (
-    <div className="cookie-consent" role="dialog" aria-live="polite">
+    <div
+      className="cookie-consent"
+      role="region"
+      aria-label="Cookie consent"
+      aria-live="polite"
+    >
       <div className="cookie-consent-inner">
         <p className="cookie-consent-text">
           We use cookies for essential site features and, with your consent,
@@ -50,12 +55,14 @@ export default function CookieConsent() {
         </p>
         <div className="cookie-consent-actions">
           <button
+            type="button"
             className="btn btn-ghost"
             onClick={() => save({ essential: true, analytics: false })}
           >
             Reject non-essential
           </button>
           <button
+            type="button"
             className="btn btn-blue"
             onClick={() => save({ essential: true, analytics: true })}
           >

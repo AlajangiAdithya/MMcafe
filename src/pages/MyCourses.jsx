@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { PlayCircle, BookOpen, Clock, AlertCircle, RefreshCw } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { getEnrollments, COURSE_ACCESS_DAYS } from '../lib/database'
+import Reveal from '../components/Reveal'
 
 export default function MyCourses() {
   const { user, loading } = useAuth()
@@ -32,32 +34,37 @@ export default function MyCourses() {
   return (
     <div className="myorders-page">
       <div className="container">
-        <div className="myorders-header">
+        <motion.div
+          className="myorders-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
           <h1>My Courses</h1>
           <p>{enrollments.length} enrolled course{enrollments.length === 1 ? '' : 's'}</p>
           <p className="myorders-fineprint">
             Each enrollment gives you <strong>{COURSE_ACCESS_DAYS} days</strong> of access from the day you enrolled.
             After that, you&rsquo;ll need to enroll again to keep watching.
           </p>
-        </div>
+        </motion.div>
 
         {enrollments.length === 0 ? (
-          <div className="myorders-empty">
+          <Reveal className="myorders-empty">
             <BookOpen size={48} />
             <h3>No enrollments yet</h3>
             <p>Browse the academy to enroll in your first course.</p>
             <Link to="/academy" className="btn btn-blue">Browse Academy</Link>
-          </div>
+          </Reveal>
         ) : (
           <div className="mycourses-grid">
-            {enrollments.map(e => {
+            {enrollments.map((e, idx) => {
               const c = e.courses
               if (!c) return null
               const daysLeft = e.expires_at
                 ? Math.ceil((new Date(e.expires_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
                 : null
               return (
-                <div key={e.id} className={`mycourse-card ${e.expired ? 'mycourse-card-expired' : ''}`}>
+                <Reveal key={e.id} className={`mycourse-card ${e.expired ? 'mycourse-card-expired' : ''}`} delay={Math.min(idx * 60, 360)}>
                   <div className="mycourse-image">
                     {c.image && <img src={c.image} alt={c.title} />}
                     {e.expired && <span className="mycourse-expired-badge">Expired</span>}
@@ -84,7 +91,7 @@ export default function MyCourses() {
                       </Link>
                     )}
                   </div>
-                </div>
+                </Reveal>
               )
             })}
           </div>

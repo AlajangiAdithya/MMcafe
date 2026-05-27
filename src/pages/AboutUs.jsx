@@ -1,10 +1,15 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Coffee, Award, Trophy, MapPin, Clock, ArrowRight, ExternalLink, Sparkles, Heart, Users } from 'lucide-react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import { GridBackground } from '@/components/ui/grid-background'
+import TextReveal from '../components/TextReveal'
+import MaskReveal from '../components/MaskReveal'
+import CountUp from '../components/CountUp'
+import FloatingBeans from '../components/FloatingBeans'
+import SteamWisps from '../components/SteamWisps'
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -54,21 +59,46 @@ export default function AboutUs() {
   })
 
   const heroRef = useRef(null)
+  const reduced = useReducedMotion()
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"]
   })
-  
+
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 80])
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.04])
+
+  // Add `.is-in` to intro frames so the Ken Burns effect (CSS) fires on inView.
+  useEffect(() => {
+    if (reduced) return
+    if (typeof window === 'undefined') return
+    const targets = document.querySelectorAll('.about-intro-frame')
+    if (targets.length === 0) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in')
+            io.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -6% 0px' },
+    )
+    targets.forEach((t) => io.observe(t))
+    return () => io.disconnect()
+  }, [reduced])
 
   return (
     <div className="page-shell about-page">
       {/* ===== PAGE HERO (100K PREMIUM UPGRADE) ===== */}
       <section className="page-hero about-hero" ref={heroRef}>
         <div className="hero-mesh-overlay" style={{ zIndex: 1 }} />
+        <SteamWisps count={4} seed={9} />
+        <FloatingBeans count={8} seed={5} />
         <div className="container" style={{ zIndex: 2, position: 'relative' }}>
-          <motion.div style={{ opacity: heroOpacity, y: heroY }}>
+          <motion.div style={{ opacity: heroOpacity, y: heroY, scale: heroScale }}>
             <motion.div
             initial="hidden"
             animate="visible"
@@ -96,16 +126,23 @@ export default function AboutUs() {
       </section>
 
       {/* ===== INTRO 1, MASTERMIND BREWS ===== */}
-      <section className="about-intro about-intro-brews">
+      <section className="about-intro about-intro-brews about-parallax-section">
+        <div
+          className="about-parallax-bg"
+          aria-hidden="true"
+          style={{ backgroundImage: 'url(/pour-over-coffee.jpg)' }}
+        />
         <div className="container">
           <div className="about-intro-grid">
             <AnimatedSection className="about-intro-media">
               <div className="about-intro-frame image-portrait">
-                <img
-                  src="/pour-over-coffee.jpg"
-                  alt="Barista pouring a slow Chemex brew at Mastermind"
-                  loading="lazy"
-                />
+                <MaskReveal variant="up">
+                  <img
+                    src="/pour-over-coffee.jpg"
+                    alt="Barista pouring a slow Chemex brew at Mastermind"
+                    loading="lazy"
+                  />
+                </MaskReveal>
                 <span className="about-intro-chip"><Sparkles size={12} /> The Brand</span>
               </div>
             </AnimatedSection>
@@ -123,7 +160,7 @@ export default function AboutUs() {
               </p>
               <div className="about-intro-stats">
                 <div>
-                  <strong>3</strong>
+                  <strong><CountUp to={3} /></strong>
                   <span>Beans · Academy · Projects</span>
                 </div>
                 <div>
@@ -145,17 +182,29 @@ export default function AboutUs() {
       </section>
 
       {/* ===== INTRO 2, NAMRATA IS BREWING ===== */}
-      <section className="about-intro about-intro-namrata">
+      <section className="about-intro about-intro-namrata about-intro-namrata--spotlight">
         <div className="about-intro-glow" aria-hidden="true" />
         <div className="container">
+          <div className="namrata-spotlight">
+            <div className="namrata-spotlight-eyebrow">
+              <span className="namrata-spotlight-dot" />
+              02 / Namrata Is Brewing
+            </div>
+            <TextReveal
+              className="namrata-spotlight-headline"
+              text="From physiotherapy to championship coffee — Namrata Thakkar built Mastermind Brews bar-up, cup by cup, profile by profile."
+            />
+          </div>
           <div className="about-intro-grid reverse">
             <AnimatedSection className="about-intro-media">
               <div className="about-intro-frame portrait">
-                <img
-                  src="/namrata.jpg"
-                  alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
-                  loading="lazy"
-                />
+                <MaskReveal variant="diagonal">
+                  <img
+                    src="/namrata.jpg"
+                    alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
+                    loading="lazy"
+                  />
+                </MaskReveal>
                 <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
               </div>
               <motion.div
@@ -223,16 +272,23 @@ export default function AboutUs() {
       </section>
 
       {/* ===== INTRO 3, MASTERMIND CAFE ===== */}
-      <section className="about-intro about-intro-cafe">
+      <section className="about-intro about-intro-cafe about-parallax-section">
+        <div
+          className="about-parallax-bg"
+          aria-hidden="true"
+          style={{ backgroundImage: 'url(https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1600-rw)' }}
+        />
         <div className="container">
           <div className="about-intro-grid">
             <AnimatedSection className="about-intro-media">
               <div className="about-intro-frame image-natural">
-                <img
-                  src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw"
-                  alt="Mastermind Bicycle Cafe interior"
-                  loading="lazy"
-                />
+                <MaskReveal variant="up">
+                  <img
+                    src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw"
+                    alt="Mastermind Bicycle Cafe interior"
+                    loading="lazy"
+                  />
+                </MaskReveal>
                 <span className="about-intro-chip"><MapPin size={12} /> The Cafe</span>
               </div>
             </AnimatedSection>
@@ -293,7 +349,8 @@ export default function AboutUs() {
 
       {/* ===== VALUES ===== */}
       <GridBackground className="min-h-0">
-        <section className="values-section" style={{ position: 'relative', zIndex: 1 }}>
+        <section className="values-section section-vignette" style={{ position: 'relative', zIndex: 1 }}>
+          <FloatingBeans count={6} seed={33} />
           <div className="container">
             <AnimatedSection className="section-header center">
               <div className="section-label">What We Stand For</div>
