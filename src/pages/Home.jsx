@@ -362,10 +362,12 @@ export default function Home() {
         )}
       </AnimatePresence>
       {/* ===== HERO — Cinematic Centered ===== */}
-      <section className="hero hero--editorial hero--cinematic hero--split" data-chapter="hero" style={{ position: 'relative', width: '100%', height: '100vh', marginTop: 'calc(-1 * var(--nav-height))', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-          <img src="/hero-bg.jpg" alt="Atmospheric coffee brewing" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', filter: 'brightness(0.3) blur(2px)', transform: 'scale(1.05)' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,12,10,0.1) 0%, rgba(14,12,10,0.8) 100%)' }} />
+      <section className="hero hero--editorial hero--cinematic hero--split hero--v2" data-chapter="hero">
+        <div className="hero-v2-bg" aria-hidden="true">
+          <img src="/hero-bg.jpg" alt="" className="hero-v2-bg-img" />
+          <div className="hero-v2-bg-vignette" />
+          <div className="hero-v2-bg-gradient" />
+          <div className="hero-v2-bg-grain" />
         </div>
 
         <Link to="/store" className="hero-split-link hero-split-link--left" aria-label="Buy Coffee">
@@ -383,40 +385,57 @@ export default function Home() {
         </Link>
 
         <motion.div
-          className="hero-content"
+          className="hero-content hero-v2-content"
           initial="hidden"
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.4 } },
+            visible: { opacity: 1, transition: { staggerChildren: 0.14, delayChildren: 0.35 } },
           }}
-          style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center', pointerEvents: 'none', padding: '0 6vw' }}
         >
-          <motion.h1
-            className="hero-display-split"
-            style={{ color: '#FBF5EB', textShadow: '0 4px 20px rgba(0,0,0,0.6)', maxWidth: '1100px', margin: '0 auto 2rem', fontSize: 'clamp(2rem, 4.4vw, 3.6rem)', lineHeight: 1.15, whiteSpace: 'nowrap' }}
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }}
+          <motion.div
+            className="hero-v2-eyebrow"
+            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            A quiet ritual, <span className="italic-accent" style={{ color: 'var(--accent)' }}>brewed with intent.</span>
+            <span className="hero-v2-eyebrow-line" />
+            <span className="hero-v2-eyebrow-dot" />
+            <span className="hero-v2-eyebrow-text">EST. MULUND · MUMBAI</span>
+            <span className="hero-v2-eyebrow-dot" />
+            <span className="hero-v2-eyebrow-line" />
+          </motion.div>
+
+          <motion.h1
+            className="hero-display-split hero-v2-display"
+            variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            A quiet ritual,<br />
+            <em className="hero-v2-display-accent">brewed with intent.</em>
           </motion.h1>
 
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-            <div aria-hidden="true" style={{ position: 'absolute', width: '720px', height: '720px', maxWidth: '120vw', maxHeight: '70vh', borderRadius: '50%', background: 'radial-gradient(circle, rgba(217,168,88,0.45) 0%, rgba(201,151,74,0.22) 28%, rgba(201,151,74,0.08) 50%, rgba(201,151,74,0) 72%)', filter: 'blur(8px)', pointerEvents: 'none' }} />
-            <motion.img
-              src="/logo.png"
-              alt="Mastermind Brews Logo"
-              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }}
-              style={{ position: 'relative', width: '100%', maxWidth: '480px', filter: 'drop-shadow(0 0 60px rgba(217, 168, 88, 0.85)) drop-shadow(0 0 130px rgba(201, 151, 74, 0.6)) drop-shadow(0 0 200px rgba(201, 151, 74, 0.4))' }}
-            />
-          </div>
+          <motion.div
+            className="hero-v2-logo-mark"
+            variants={{ hidden: { opacity: 0, scale: 0.94 }, visible: { opacity: 1, scale: 1, transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            <span className="hero-v2-logo-glow" aria-hidden="true" />
+            <img src="/logo.png" alt="Mastermind Brews Logo" />
+          </motion.div>
 
           <motion.p
-            style={{ color: 'rgba(251, 245, 235, 0.85)', maxWidth: '720px', margin: '0 auto', fontSize: '1rem', lineHeight: 1.6 }}
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+            className="hero-v2-tagline"
+            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            Single-origin beans from Chikmagalur, roasted alongside Bean Rove — <br/>
-            and a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
+            Single-origin beans from Chikmagalur, roasted alongside Bean Rove —<br />
+            a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
           </motion.p>
+
+          <motion.div
+            className="hero-v2-scroll-cue"
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.4 } } }}
+            aria-hidden="true"
+          >
+            <span className="hero-v2-scroll-label">SCROLL</span>
+            <span className="hero-v2-scroll-line" />
+          </motion.div>
         </motion.div>
       </section>
 

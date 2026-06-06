@@ -182,8 +182,9 @@ export default function AboutUs() {
       </section>
 
       {/* ===== INTRO 2, NAMRATA IS BREWING ===== */}
-      <section className="about-intro about-intro-namrata about-intro-namrata--spotlight">
+      <section className="about-intro about-intro-namrata about-intro-namrata--spotlight about-intro-namrata--v2">
         <div className="about-intro-glow" aria-hidden="true" />
+        <div className="namrata-v2-bg" aria-hidden="true" />
         <div className="container">
           <div className="namrata-spotlight">
             <div className="namrata-spotlight-eyebrow">
@@ -195,20 +196,28 @@ export default function AboutUs() {
               text="From physiotherapy to championship coffee — Namrata Thakkar built Mastermind Brews bar-up, cup by cup, profile by profile."
             />
           </div>
-          <div className="about-intro-grid reverse">
-            <AnimatedSection className="about-intro-media">
-              <div className="about-intro-frame portrait">
-                <MaskReveal variant="diagonal">
-                  <img
-                    src="/namrata.jpg"
-                    alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
-                    loading="lazy"
-                  />
-                </MaskReveal>
-                <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
+          <div className="about-intro-grid reverse namrata-v2-grid">
+            <AnimatedSection className="about-intro-media namrata-v2-media">
+              <div className="namrata-v2-photo-stack">
+                <div className="namrata-v2-photo-glow" aria-hidden="true" />
+                <div className="namrata-v2-photo-aura" aria-hidden="true" />
+                <div className="about-intro-frame portrait namrata-v2-frame">
+                  <MaskReveal variant="up">
+                    <img
+                      src="/namrata.jpg"
+                      alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
+                      loading="lazy"
+                    />
+                  </MaskReveal>
+                  <span className="namrata-v2-corner namrata-v2-corner--tl" aria-hidden="true" />
+                  <span className="namrata-v2-corner namrata-v2-corner--tr" aria-hidden="true" />
+                  <span className="namrata-v2-corner namrata-v2-corner--bl" aria-hidden="true" />
+                  <span className="namrata-v2-corner namrata-v2-corner--br" aria-hidden="true" />
+                  <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
+                </div>
               </div>
               <motion.div
-                className="about-namrata-badge"
+                className="about-namrata-badge namrata-v2-badge"
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
