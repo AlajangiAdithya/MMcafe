@@ -5,7 +5,6 @@ import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'fr
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import { GridBackground } from '@/components/ui/grid-background'
-import TextReveal from '../components/TextReveal'
 import MaskReveal from '../components/MaskReveal'
 import CountUp from '../components/CountUp'
 import FloatingBeans from '../components/FloatingBeans'
@@ -182,20 +181,10 @@ export default function AboutUs() {
       </section>
 
       {/* ===== INTRO 2, NAMRATA IS BREWING ===== */}
-      <section className="about-intro about-intro-namrata about-intro-namrata--spotlight about-intro-namrata--v2">
+      <section className="about-intro about-intro-namrata about-intro-namrata--v2">
         <div className="about-intro-glow" aria-hidden="true" />
         <div className="namrata-v2-bg" aria-hidden="true" />
         <div className="container">
-          <div className="namrata-spotlight">
-            <div className="namrata-spotlight-eyebrow">
-              <span className="namrata-spotlight-dot" />
-              02 / Namrata Is Brewing
-            </div>
-            <TextReveal
-              className="namrata-spotlight-headline"
-              text="From physiotherapy to championship coffee — Namrata Thakkar built Mastermind Brews bar-up, cup by cup, profile by profile."
-            />
-          </div>
           <div className="about-intro-grid reverse namrata-v2-grid">
             <AnimatedSection className="about-intro-media namrata-v2-media">
               <div className="namrata-v2-photo-stack">

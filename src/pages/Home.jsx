@@ -361,8 +361,8 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* ===== HERO — Cinematic Centered ===== */}
-      <section className="hero hero--editorial hero--cinematic hero--split hero--v2" data-chapter="hero">
+      {/* ===== HERO — Logo Spotlight ===== */}
+      <section className="hero hero--editorial hero--cinematic hero--split hero--v2 hero--logo-only" data-chapter="hero">
         <div className="hero-v2-bg" aria-hidden="true">
           <img src="/hero-bg.jpg" alt="" className="hero-v2-bg-img" />
           <div className="hero-v2-bg-vignette" />
@@ -385,56 +385,23 @@ export default function Home() {
         </Link>
 
         <motion.div
-          className="hero-content hero-v2-content"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.14, delayChildren: 0.35 } },
-          }}
+          className="hero-content hero-v2-content hero-logo-only-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
           <motion.div
-            className="hero-v2-eyebrow"
-            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+            className="hero-logo-spotlight"
+            initial={{ opacity: 0, scale: 0.88, y: 14 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
-            <span className="hero-v2-eyebrow-line" />
-            <span className="hero-v2-eyebrow-dot" />
-            <span className="hero-v2-eyebrow-text">EST. MULUND · MUMBAI</span>
-            <span className="hero-v2-eyebrow-dot" />
-            <span className="hero-v2-eyebrow-line" />
-          </motion.div>
-
-          <motion.h1
-            className="hero-display-split hero-v2-display"
-            variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            A quiet ritual,<br />
-            <em className="hero-v2-display-accent">brewed with intent.</em>
-          </motion.h1>
-
-          <motion.div
-            className="hero-v2-logo-mark"
-            variants={{ hidden: { opacity: 0, scale: 0.94 }, visible: { opacity: 1, scale: 1, transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            <span className="hero-v2-logo-glow" aria-hidden="true" />
-            <img src="/logo.png" alt="Mastermind Brews Logo" />
-          </motion.div>
-
-          <motion.p
-            className="hero-v2-tagline"
-            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            Single-origin beans from Chikmagalur, roasted alongside Bean Rove —<br />
-            a barista academy from the team behind Mumbai's Mastermind Bicycle Cafe.
-          </motion.p>
-
-          <motion.div
-            className="hero-v2-scroll-cue"
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.4 } } }}
-            aria-hidden="true"
-          >
-            <span className="hero-v2-scroll-label">SCROLL</span>
-            <span className="hero-v2-scroll-line" />
+            <span className="hero-logo-spotlight-aura" aria-hidden="true" />
+            <span className="hero-logo-spotlight-halo" aria-hidden="true" />
+            <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--1" aria-hidden="true" />
+            <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--2" aria-hidden="true" />
+            <span className="hero-logo-spotlight-shine" aria-hidden="true" />
+            <img className="hero-logo-spotlight-img" src="/logo.png" alt="Mastermind Brews" />
           </motion.div>
         </motion.div>
       </section>
