@@ -138,8 +138,10 @@ export default function AboutUs() {
                 <MaskReveal variant="up">
                   <img
                     src="/pour-over-coffee.jpg"
-                    alt="Barista pouring a slow Chemex brew at Mastermind"
+                    alt="Barista pouring a slow Chemex brew with single-origin Chikmagalur coffee at Mastermind Brews"
                     loading="lazy"
+                    width="800"
+                    height="1000"
                   />
                 </MaskReveal>
                 <span className="about-intro-chip"><Sparkles size={12} /> The Brand</span>
@@ -194,8 +196,10 @@ export default function AboutUs() {
                   <MaskReveal variant="up">
                     <img
                       src="/namrata.jpg"
-                      alt="Namrata Thakkar, founder of Mastermind Bicycle Cafe"
+                      alt="Namrata Thakkar, founder and head roaster of Mastermind Brews and Mastermind Bicycle Cafe in Mulund, Mumbai"
                       loading="lazy"
+                      width="800"
+                      height="1000"
                     />
                   </MaskReveal>
                   <span className="namrata-v2-corner namrata-v2-corner--tl" aria-hidden="true" />
@@ -274,20 +278,30 @@ export default function AboutUs() {
         <div
           className="about-parallax-bg"
           aria-hidden="true"
-          style={{ backgroundImage: 'url(https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1600-rw)' }}
+          style={{ backgroundImage: 'url(/project-cafe.jpg)' }}
         />
         <div className="container">
           <div className="about-intro-grid">
             <AnimatedSection className="about-intro-media">
-              <div className="about-intro-frame image-natural">
-                <MaskReveal variant="up">
-                  <img
-                    src="https://lh3.googleusercontent.com/ObyGM3YfiJC4M2LPUP1rdV082_LsSN7ath2Sb3CRPa3rB5znuyR8orGk95j1OQcu-f1KxzfwDayEDvFFj8zmS8PxD6ZG_Oooc0HOAzDR=w1200-rw"
-                    alt="Mastermind Bicycle Cafe interior"
-                    loading="lazy"
-                  />
-                </MaskReveal>
-                <span className="about-intro-chip"><MapPin size={12} /> The Cafe</span>
+              <div className="about-photo-stack">
+                <span className="about-photo-glow" aria-hidden="true" />
+                <span className="about-photo-aura" aria-hidden="true" />
+                <div className="about-intro-frame about-photo-frame image-natural">
+                  <MaskReveal variant="up">
+                    <img
+                      src="/project-cafe.jpg"
+                      alt="Interior view of Mastermind Bicycle Cafe & Bar in Mulund, Mumbai with warm lighting and community seating"
+                      loading="lazy"
+                      width="1200"
+                      height="900"
+                    />
+                  </MaskReveal>
+                  <span className="about-photo-corner about-photo-corner--tl" aria-hidden="true" />
+                  <span className="about-photo-corner about-photo-corner--tr" aria-hidden="true" />
+                  <span className="about-photo-corner about-photo-corner--bl" aria-hidden="true" />
+                  <span className="about-photo-corner about-photo-corner--br" aria-hidden="true" />
+                  <span className="about-intro-chip"><MapPin size={12} /> The Cafe</span>
+                </div>
               </div>
             </AnimatedSection>
             <AnimatedSection className="about-intro-text" delay={0.15}>

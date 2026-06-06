@@ -7,8 +7,13 @@ import { useCart } from '../context/CartContext'
 import { getWishlist, removeFromWishlist } from '../lib/database'
 import Reveal from '../components/Reveal'
 import toast from 'react-hot-toast'
+import { usePageMeta } from '../lib/usePageMeta'
 
 export default function Wishlist() {
+  usePageMeta({
+    title: 'Your Wishlist',
+    description: 'Coffee blends, brewing gear, and barista courses you have saved for later at Mastermind Brews.',
+  })
   const { user, loading } = useAuth()
   const { addItem } = useCart()
   const navigate = useNavigate()

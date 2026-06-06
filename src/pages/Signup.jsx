@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Mail, Lock, Coffee, User, Eye, EyeOff, Check, X, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { validateEmail, suggestEmailFix } from '../lib/validateEmail'
+import { usePageMeta } from '../lib/usePageMeta'
 
 const getPasswordStrength = (password) => {
   let score = 0
@@ -19,6 +20,10 @@ const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent']
 const strengthColor = ['', '#EA3335', '#F2A73B', '#F2A73B', '#3AAA3A', '#4A90D9']
 
 export default function Signup() {
+  usePageMeta({
+    title: 'Create Your Account',
+    description: 'Create a Mastermind Brews account to order specialty coffee, enroll in barista academy courses, and save your favorite blends.',
+  })
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')

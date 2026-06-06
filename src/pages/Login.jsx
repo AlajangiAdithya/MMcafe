@@ -4,8 +4,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Mail, Lock, Coffee, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { validateEmail } from '../lib/validateEmail'
+import { usePageMeta } from '../lib/usePageMeta'
 
 export default function Login() {
+  usePageMeta({
+    title: 'Sign In',
+    description: 'Sign in to your Mastermind Brews account to track orders, manage your barista academy courses, and access your wishlist.',
+  })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)

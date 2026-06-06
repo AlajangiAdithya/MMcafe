@@ -15631,3 +15631,298 @@ html {
   }
 }
 
+/* ============================================================
+   HERO TAGLINE PILL — glass, high-contrast text
+   ============================================================ */
+.hero-tagline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 36px auto 0;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: rgba(20, 14, 9, 0.55);
+  backdrop-filter: blur(20px) saturate(1.45);
+  -webkit-backdrop-filter: blur(20px) saturate(1.45);
+  border: 1px solid rgba(217, 168, 88, 0.45);
+  box-shadow:
+    0 10px 30px -10px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #f7ecd9;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  position: relative;
+  z-index: 5;
+}
+.hero-tagline-pill-text {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  color: #f7ecd9;
+}
+.hero-tagline-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0c477, #c9974a);
+  box-shadow:
+    0 0 0 1px rgba(217, 168, 88, 0.35),
+    0 0 12px rgba(217, 168, 88, 0.7);
+  flex-shrink: 0;
+}
+@media (max-width: 720px) {
+  .hero-tagline-pill {
+    font-size: 9.5px;
+    padding: 10px 18px;
+    letter-spacing: 0.12em;
+    gap: 10px;
+    margin-top: 28px;
+    white-space: normal;
+    text-align: center;
+    max-width: 90vw;
+  }
+  .hero-tagline-pill-text { line-height: 1.5; }
+}
+@media (max-width: 420px) {
+  .hero-tagline-pill {
+    font-size: 9px;
+    padding: 9px 14px;
+  }
+}
+
+/* ============================================================
+   ABOUT PHOTO STACK — used by Cafe section, mirrors Namrata
+   ============================================================ */
+.about-photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  isolation: isolate;
+}
+.about-photo-glow {
+  position: absolute;
+  inset: -60px;
+  background:
+    radial-gradient(60% 60% at 35% 30%, rgba(217, 168, 88, 0.35), transparent 65%),
+    radial-gradient(50% 60% at 75% 80%, rgba(217, 168, 88, 0.22), transparent 70%);
+  filter: blur(40px);
+  z-index: -2;
+  pointer-events: none;
+  animation: aboutPhotoGlow 9s ease-in-out infinite alternate;
+}
+.about-photo-aura {
+  position: absolute;
+  inset: -18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg,
+    rgba(217, 168, 88, 0.22),
+    rgba(217, 168, 88, 0.04) 40%,
+    rgba(217, 168, 88, 0.18) 100%);
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
+}
+.about-parallax-section .about-intro-media .about-intro-frame.about-photo-frame {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(217, 168, 88, 0.4);
+  box-shadow:
+    0 30px 70px -28px rgba(0, 0, 0, 0.7),
+    0 12px 30px -16px rgba(217, 168, 88, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  background: #0e0907;
+}
+.about-photo-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.about-photo-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(217, 168, 88, 0.85);
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(217, 168, 88, 0.55));
+}
+.about-photo-corner--tl { top: 14px; left: 14px; border-right: none; border-bottom: none; border-top-left-radius: 6px; }
+.about-photo-corner--tr { top: 14px; right: 14px; border-left: none; border-bottom: none; border-top-right-radius: 6px; }
+.about-photo-corner--bl { bottom: 14px; left: 14px; border-right: none; border-top: none; border-bottom-left-radius: 6px; }
+.about-photo-corner--br { bottom: 14px; right: 14px; border-left: none; border-top: none; border-bottom-right-radius: 6px; }
+
+@keyframes aboutPhotoGlow {
+  0%   { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-photo-glow { animation: none !important; }
+}
+
+@media (max-width: 900px) {
+  .about-photo-stack { max-width: 460px; }
+  .about-photo-glow { inset: -40px; }
+  .about-photo-corner { width: 22px; height: 22px; }
+}
+@media (max-width: 600px) {
+  .about-photo-stack { max-width: 100%; }
+  .about-photo-corner { width: 18px; height: 18px; }
+}
+
+/* Darken the cafe parallax background so the photo stack pops */
+.about-intro-cafe .about-parallax-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(20, 14, 9, 0.55) 0%,
+    rgba(20, 14, 9, 0.35) 50%,
+    rgba(20, 14, 9, 0.6) 100%);
+  pointer-events: none;
+}
+.about-intro-cafe .about-parallax-bg { position: relative; }
+
+/* ============================================================
+   GLASSMORPHISM EXTENDED COVERAGE
+   forms, inputs, selects, badges, marquee, admin, checkout
+   ============================================================ */
+
+/* Form controls — light glass on cream pages */
+.form-input,
+.form-textarea,
+.form-select,
+input.form-control,
+select.form-control,
+textarea.form-control,
+input[type="text"]:not([data-no-glass]),
+input[type="email"]:not([data-no-glass]),
+input[type="password"]:not([data-no-glass]),
+input[type="search"]:not([data-no-glass]),
+input[type="tel"]:not([data-no-glass]),
+input[type="number"]:not([data-no-glass]),
+input[type="url"]:not([data-no-glass]),
+textarea:not([data-no-glass]),
+select:not([data-no-glass]) {
+  background: rgba(255, 251, 243, 0.6) !important;
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid rgba(217, 168, 88, 0.25) !important;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus,
+input.form-control:focus,
+select.form-control:focus,
+textarea.form-control:focus,
+input[type="text"]:focus:not([data-no-glass]),
+input[type="email"]:focus:not([data-no-glass]),
+input[type="password"]:focus:not([data-no-glass]),
+input[type="search"]:focus:not([data-no-glass]),
+input[type="tel"]:focus:not([data-no-glass]),
+input[type="number"]:focus:not([data-no-glass]),
+input[type="url"]:focus:not([data-no-glass]),
+textarea:focus:not([data-no-glass]),
+select:focus:not([data-no-glass]) {
+  background: rgba(255, 251, 243, 0.82) !important;
+  border-color: rgba(217, 168, 88, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(217, 168, 88, 0.15);
+  outline: none;
+}
+
+/* Section labels — refined glass pill */
+.section-label,
+.about-intro-label,
+.hero-badge,
+.product-badge,
+.course-badge,
+.eyebrow {
+  background: rgba(255, 251, 243, 0.6) !important;
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid rgba(217, 168, 88, 0.28);
+}
+
+/* Marquee strip glass */
+.marquee-strip,
+.marquee-strip--paper {
+  background: rgba(255, 251, 243, 0.55) !important;
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border-top: 1px solid rgba(217, 168, 88, 0.22);
+  border-bottom: 1px solid rgba(217, 168, 88, 0.22);
+}
+
+/* Admin sidebar & login forms */
+.admin-sidebar,
+.admin-shell-aside,
+.login-card,
+.signup-card,
+.auth-card,
+.checkout-summary,
+.checkout-card,
+.order-summary,
+.profile-card,
+.user-card {
+  background: rgba(255, 251, 243, 0.7) !important;
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(217, 168, 88, 0.22);
+  box-shadow:
+    0 14px 40px -16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Dropdowns / popovers */
+.dropdown-menu,
+.popover,
+.menu-panel,
+.user-menu,
+.notifications-panel,
+.toast,
+.tooltip {
+  background: rgba(255, 251, 243, 0.82) !important;
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(217, 168, 88, 0.28);
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.25);
+}
+
+/* Tab strips and segmented controls */
+.tab-list,
+.segmented-control,
+.filter-bar,
+.toolbar {
+  background: rgba(255, 251, 243, 0.5);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  border: 1px solid rgba(217, 168, 88, 0.18);
+  border-radius: 999px;
+}
+
+/* Defensive fallback (no backdrop-filter) */
+@supports not (backdrop-filter: blur(1px)) {
+  .form-input,
+  .form-textarea,
+  .form-select,
+  .marquee-strip,
+  .admin-sidebar,
+  .login-card,
+  .signup-card,
+  .auth-card,
+  .checkout-summary,
+  .dropdown-menu,
+  .popover,
+  .menu-panel,
+  .tab-list,
+  .segmented-control {
+    background: rgba(255, 251, 243, 0.95) !important;
+  }
+}
+

@@ -214,8 +214,9 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function Home() {
   usePageMeta({
     title: 'Specialty Coffee, Barista Academy & Cafe in Mulund, Mumbai',
-    description: 'Single-origin Chikmagalur coffee, continental food, baked goods & an online barista academy. Order online or visit Mastermind Bicycle Cafe & Bar in Mulund, Mumbai.',
-    keywords: 'specialty coffee Mumbai, single origin coffee India, Chikmagalur coffee beans, cafe in Mulund, Mastermind Bicycle Cafe, online barista academy, buy coffee beans online India',
+    description: 'Single-origin Chikmagalur coffee, continental food, baked goods, and an online barista academy. Order beans online or visit Mastermind Bicycle Cafe & Bar in Mulund, Mumbai.',
+    keywords: 'specialty coffee Mumbai, single origin coffee India, Chikmagalur coffee beans, cafe in Mulund, Mastermind Bicycle Cafe, online barista academy, buy coffee beans online India, espresso classes Mumbai, pour over coffee India',
+    image: 'https://www.mastermindcafe.in/hero-bg.jpg',
   })
   const { addItem } = useCart()
   const [featured, setFeatured] = useState([])
@@ -401,7 +402,18 @@ export default function Home() {
             <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--1" aria-hidden="true" />
             <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--2" aria-hidden="true" />
             <span className="hero-logo-spotlight-shine" aria-hidden="true" />
-            <img className="hero-logo-spotlight-img" src="/logo.png" alt="Mastermind Brews" />
+            <img className="hero-logo-spotlight-img" src="/logo.png" alt="Mastermind Brews — specialty coffee roastery and academy" />
+          </motion.div>
+
+          <motion.div
+            className="hero-tagline-pill"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
+          >
+            <span className="hero-tagline-pill-dot" aria-hidden="true" />
+            <span className="hero-tagline-pill-text">Specialty Coffee · Roastery &amp; Academy · Mulund, Mumbai</span>
+            <span className="hero-tagline-pill-dot" aria-hidden="true" />
           </motion.div>
         </motion.div>
       </section>
