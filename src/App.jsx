@@ -88,7 +88,6 @@ function AppShell() {
 
   return (
     <div className="app" style={{ position: 'relative' }}>
-      <FloatingBeans count={40} seed={42} tone="gold" />
       <a href="#main-content" className="skip-link">Skip to content</a>
       {/* SmoothScroll removed — using native browser scroll */}
       <ScrollProgress />
