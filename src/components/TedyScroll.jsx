@@ -44,7 +44,13 @@ export default function TedyScroll({ items = [], heading, eyebrow }) {
       <div className="tedy-sticky">
         <div className="tedy-header">
           {eyebrow && <span className="tedy-eyebrow">{eyebrow}</span>}
-          {heading && <h2 className="tedy-heading">{heading}</h2>}
+          {heading && (
+            <h2 className="tedy-heading" data-no-reveal style={{ opacity: 1, visibility: 'visible' }}>
+              <span style={{ color: '#FFFFFF', opacity: 1, display: 'inline-block', position: 'relative', zIndex: 10 }}>
+                {heading}
+              </span>
+            </h2>
+          )}
         </div>
         <motion.div className="tedy-track" ref={trackRef} style={{ x }}>
           {items.map((it, i) => (

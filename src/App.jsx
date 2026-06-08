@@ -14,6 +14,7 @@ import CoffeeLoader from './components/CoffeeLoader'
 import CursorTrail from './components/CursorTrail'
 import ScrollProgress from './components/ScrollProgress'
 import GlobalScrollReveal from './components/GlobalScrollReveal'
+import FloatingBeans from './components/FloatingBeans'
 import SmoothScroll from './components/SmoothScroll'
 import Home from './pages/Home'
 import './App.css'
@@ -86,7 +87,8 @@ function AppShell() {
   }, [])
 
   return (
-    <div className="app">
+    <div className="app" style={{ position: 'relative' }}>
+      <FloatingBeans count={40} seed={42} tone="gold" />
       <a href="#main-content" className="skip-link">Skip to content</a>
       {/* SmoothScroll removed — using native browser scroll */}
       <ScrollProgress />

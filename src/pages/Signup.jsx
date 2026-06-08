@@ -1,53 +1,30 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
-import { Mail, Lock, Coffee, User, Eye, EyeOff, Check, X, ArrowRight } from 'lucide-react'
+import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { validateEmail, suggestEmailFix } from '../lib/validateEmail'
+import { validateEmail } from '../lib/validateEmail'
 import { usePageMeta } from '../lib/usePageMeta'
-
-const getPasswordStrength = (password) => {
-  let score = 0
-  if (password.length >= 6) score++
-  if (password.length >= 10) score++
-  if (/[A-Z]/.test(password)) score++
-  if (/[0-9]/.test(password)) score++
-  if (/[^A-Za-z0-9]/.test(password)) score++
-  return score
-}
-
-const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent']
-const strengthColor = ['', '#EA3335', '#F2A73B', '#F2A73B', '#3AAA3A', '#4A90D9']
+import SteamWisps from '../components/SteamWisps'
 
 export default function Signup() {
   usePageMeta({
     title: 'Create Your Account',
     description: 'Create a Mastermind Brews account to order specialty coffee, enroll in barista academy courses, and save your favorite blends.',
   })
+  
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [touched, setTouched] = useState({})
-  const { signUpWithEmail, signInWithGoogle } = useAuth()
+  const { signUpWithEmail } = useAuth()
   const navigate = useNavigate()
 
-  const strength = getPasswordStrength(password)
-  const passwordsMatch = password && confirmPassword && password === confirmPassword
-  const passwordsMismatch = touched.confirmPassword && confirmPassword && password !== confirmPassword
   const emailError = touched.email && email ? validateEmail(email) : null
-  const emailSuggestion = touched.email && email && !emailError ? suggestEmailFix(email) : null
-
-  const requirements = [
-    { met: password.length >= 6, text: 'At least 6 characters' },
-    { met: /[A-Z]/.test(password), text: 'One uppercase letter' },
-    { met: /[0-9]/.test(password), text: 'One number' },
-    { met: /[^A-Za-z0-9]/.test(password), text: 'One special character' },
-  ]
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -81,239 +58,112 @@ export default function Signup() {
     }
   }
 
-  const handleGoogle = async () => {
-    try {
-      await signInWithGoogle()
-    } catch (err) {
-      toast.error(err.message)
-    }
-  }
-
   return (
     <div className="auth-page">
-      <div className="auth-split">
-        {/* Left - Visual Panel */}
-        <div className="auth-visual">
-          <div className="auth-visual-bg" style={{
-            backgroundImage: 'url(https://lh3.googleusercontent.com/BplIc-YsQ5v6OGoWyZ8u8xL5YXPpJNXofEAV5YdujfXFllG4EgdpIv3TTx0Z_OwnHbfEvn9JxqvWwCiK1OQs3Biih9g62-V_HcAaLxk=w1200-rw)'
-          }} />
-          <div className="auth-visual-overlay" />
-          <div className="auth-visual-content">
-            <Coffee size={40} />
-            <h2>Join the Mastermind Brews Community</h2>
-            <p>Specialty coffee, barista courses, hiring directory, all in one place.</p>
-            <div className="auth-visual-features">
-              <div className="auth-visual-feature">
-                <Check size={16} />
-                <span>Free shipping on orders above ₹999</span>
-              </div>
-              <div className="auth-visual-feature">
-                <Check size={16} />
-                <span>Exclusive member-only discounts</span>
-              </div>
-              <div className="auth-visual-feature">
-                <Check size={16} />
-                <span>Access to barista academy courses</span>
-              </div>
-            </div>
-          </div>
+      <div 
+        className="auth-page-bg" 
+        style={{ backgroundImage: 'url(/cafe-press-bg.jpg)' }} 
+      />
+      <div className="auth-page-overlay" />
+      
+      <SteamWisps count={6} seed={88} />
+
+      <div className="auth-glass-card" style={{ maxWidth: '520px' }}>
+        <div className="auth-glass-header">
+          <Link to="/" className="auth-glass-logo">
+            <img src="/logo.png" alt="Mastermind Brews" />
+          </Link>
+          <h1>Join the Community</h1>
+          <p>Start your Mastermind experience today</p>
         </div>
 
-        {/* Right - Form Panel */}
-        <div className="auth-form-panel">
-          <div className="auth-form-container">
-            <div className="auth-form-header">
-              <Link to="/" className="auth-logo">
-                <img src="/logo.png" alt="Mastermind Brews" />
-              </Link>
-              <h2>Create Your Account</h2>
-              <p>Start your specialty coffee journey today</p>
+        <form onSubmit={handleSubmit} className="auth-glass-form" noValidate>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="auth-glass-input-group">
+              <label>First Name</label>
+              <div className="auth-glass-input-wrapper">
+                <User className="icon" size={18} />
+                <input
+                  type="text"
+                  placeholder="Fill first name"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  required
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
-
-            <form onSubmit={handleSubmit} className="auth-form" noValidate>
-              <div className="auth-name-row">
-                <div className="auth-input-group">
-                  <label htmlFor="signup-first-name">First Name</label>
-                  <div className="input-group">
-                    <User size={16} aria-hidden="true" />
-                    <input
-                      id="signup-first-name"
-                      type="text"
-                      placeholder="John"
-                      value={firstName}
-                      onChange={e => setFirstName(e.target.value)}
-                      autoComplete="given-name"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="auth-input-group">
-                  <label htmlFor="signup-last-name">Last Name</label>
-                  <div className="input-group">
-                    <User size={16} aria-hidden="true" />
-                    <input
-                      id="signup-last-name"
-                      type="text"
-                      placeholder="Doe"
-                      value={lastName}
-                      onChange={e => setLastName(e.target.value)}
-                      autoComplete="family-name"
-                      required
-                    />
-                  </div>
-                </div>
+            <div className="auth-glass-input-group">
+              <label>Last Name</label>
+              <div className="auth-glass-input-wrapper">
+                <User className="icon" size={18} />
+                <input
+                  type="text"
+                  placeholder="Fill last name"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  required
+                  style={{ paddingLeft: '44px' }}
+                />
               </div>
-
-              <div className="auth-input-group">
-                <label htmlFor="signup-email">Email Address</label>
-                <div className={`input-group ${emailError ? 'input-error' : ''}`}>
-                  <Mail size={16} aria-hidden="true" />
-                  <input
-                    id="signup-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    onBlur={() => setTouched(t => ({ ...t, email: true }))}
-                    autoComplete="email"
-                    inputMode="email"
-                    aria-invalid={!!emailError}
-                    aria-describedby={emailError ? 'signup-email-error' : 'signup-email-hint'}
-                    required
-                  />
-                </div>
-                {emailError && <span id="signup-email-error" className="field-error" role="alert">{emailError}</span>}
-                {!emailError && emailSuggestion && (
-                  <button
-                    type="button"
-                    className="field-suggestion"
-                    onClick={() => setEmail(emailSuggestion)}
-                  >
-                    Did you mean <strong>{emailSuggestion}</strong>? Tap to use this.
-                  </button>
-                )}
-                <span id="signup-email-hint" className="field-hint">
-                  Double-check this. We send order updates and password resets here. We don&rsquo;t verify by email.
-                </span>
-              </div>
-
-              <div className="auth-input-group">
-                <label htmlFor="signup-password">Password</label>
-                <div className="input-group">
-                  <Lock size={16} aria-hidden="true" />
-                  <input
-                    id="signup-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a strong password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    onBlur={() => setTouched(t => ({ ...t, password: true }))}
-                    autoComplete="new-password"
-                    aria-describedby="signup-password-reqs"
-                    required
-                    minLength={6}
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    aria-pressed={showPassword}
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                {password && (
-                  <div className="password-strength">
-                    <div className="strength-bar">
-                      <div
-                        className="strength-fill"
-                        style={{
-                          width: `${(strength / 5) * 100}%`,
-                          background: strengthColor[strength]
-                        }}
-                      />
-                    </div>
-                    <span className="strength-label" style={{ color: strengthColor[strength] }}>
-                      {strengthLabel[strength]}
-                    </span>
-                  </div>
-                )}
-                {touched.password && password && (
-                  <div id="signup-password-reqs" className="password-requirements">
-                    {requirements.map((req, i) => (
-                      <div key={i} className={`requirement ${req.met ? 'met' : ''}`}>
-                        {req.met ? <Check size={12} aria-hidden="true" /> : <X size={12} aria-hidden="true" />}
-                        <span>{req.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="auth-input-group">
-                <label htmlFor="signup-confirm-password">Confirm Password</label>
-                <div className={`input-group ${passwordsMismatch ? 'input-error' : ''} ${passwordsMatch ? 'input-success' : ''}`}>
-                  <Lock size={16} aria-hidden="true" />
-                  <input
-                    id="signup-confirm-password"
-                    type={showConfirm ? 'text' : 'password'}
-                    placeholder="Re-enter your password"
-                    value={confirmPassword}
-                    onChange={e => setConfirmPassword(e.target.value)}
-                    onBlur={() => setTouched(t => ({ ...t, confirmPassword: true }))}
-                    autoComplete="new-password"
-                    aria-invalid={!!passwordsMismatch}
-                    aria-describedby={passwordsMismatch ? 'signup-confirm-error' : undefined}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowConfirm(!showConfirm)}
-                    aria-label={showConfirm ? 'Hide password' : 'Show password'}
-                    aria-pressed={showConfirm}
-                  >
-                    {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                {passwordsMismatch && (
-                  <span id="signup-confirm-error" className="field-error" role="alert">Passwords do not match</span>
-                )}
-                {passwordsMatch && (
-                  <span className="field-success">Passwords match</span>
-                )}
-              </div>
-
-              <button type="submit" className="btn btn-blue full-width auth-submit" disabled={loading}>
-                {loading ? (
-                  <span className="btn-loading">
-                    <span className="spinner" />
-                    Creating Account...
-                  </span>
-                ) : (
-                  <>Create Account <ArrowRight size={16} /></>
-                )}
-              </button>
-            </form>
-
-            <div className="divider"><span>or</span></div>
-
-            <button type="button" className="google-btn" onClick={handleGoogle} aria-label="Continue with Google">
-              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Continue with Google
-            </button>
-
-            <p className="toggle-auth">
-              Already have an account?
-              <Link to="/login">Sign In</Link>
-            </p>
+            </div>
           </div>
+
+          <div className="auth-glass-input-group">
+            <label>Email Address</label>
+            <div className="auth-glass-input-wrapper">
+              <Mail className="icon" size={18} />
+              <input
+                type="email"
+                placeholder="Fill email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                onBlur={() => setTouched(t => ({ ...t, email: true }))}
+                required
+              />
+            </div>
+            {emailError && <span className="field-error" style={{ color: '#d9534f', fontSize: '11px', marginTop: '4px', display: 'block', fontWeight: '600' }}>{emailError}</span>}
+          </div>
+
+          <div className="auth-glass-input-group">
+            <label>Password</label>
+            <div className="auth-glass-input-wrapper">
+              <Lock className="icon" size={18} />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Fill password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+              />
+              <button type="button" className="password-toggle-glass" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+          <div className="auth-glass-input-group">
+            <label>Confirm Password</label>
+            <div className="auth-glass-input-wrapper">
+              <Lock className="icon" size={18} />
+              <input
+                type="password"
+                placeholder="Fill confirm password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="btn auth-glass-submit" disabled={loading} style={{ marginTop: '12px' }}>
+            {loading ? 'Creating Account...' : 'Create Account'}
+          </button>
+        </form>
+
+        <div className="auth-glass-footer">
+          Already have an account?
+          <Link to="/login">Sign In</Link>
         </div>
       </div>
     </div>

@@ -28,7 +28,6 @@ import StackCards from '../components/StackCards'
 import ZoomCTA from '../components/ZoomCTA'
 import SectionLabel from '../components/SectionLabel'
 import MarqueeStrip from '../components/MarqueeStrip'
-import ChapterRail from '../components/ChapterRail'
 import KineticHeading from '../components/KineticHeading'
 import FeaturedSlider from '../components/FeaturedSlider'
 import TedyScroll from '../components/TedyScroll'
@@ -171,16 +170,6 @@ const MARQUEE_TERMS = [
   { en: 'CRAFTED BY HAND' },
 ]
 
-const CHAPTERS = [
-  { id: 'origin', num: '01', label: 'Origin' },
-  { id: 'offer', num: '02', label: 'Offer' },
-  { id: 'bestsellers', num: '03', label: 'Bestsellers' },
-  { id: 'projects', num: '04', label: 'Projects' },
-  { id: 'academy', num: '05', label: 'Academy' },
-  { id: 'visit', num: '06', label: 'Visit' },
-  { id: 'gram', num: '07', label: 'Gram' },
-]
-
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
@@ -316,7 +305,6 @@ export default function Home() {
 
   return (
     <div className="home home--editorial">
-      <ChapterRail chapters={CHAPTERS} />
       {/* ===== VAPOUR TEXT INTRO ===== */}
       <AnimatePresence>
         {showIntro && (
@@ -500,10 +488,9 @@ export default function Home() {
                     src="/offer-beans.jpg"
                     alt="Coffee estate in Chikmagalur, Karnataka"
                     loading="lazy"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 <span className="offer-pillar-index">01</span>
                 <span className="offer-pillar-tag"><Coffee size={12} /> Beans &amp; Powder</span>
@@ -548,10 +535,9 @@ export default function Home() {
                     src="/offer-academy.png"
                     alt="Barista pouring a tasting brew into a cup"
                     loading="lazy"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 <span className="offer-pillar-index">02</span>
                 <span className="offer-pillar-tag"><BookOpen size={12} /> Barista Academy</span>
@@ -733,8 +719,8 @@ export default function Home() {
       {/* ===== TEDY-STYLE PINNED GALLERY ===== */}
       <TedyScroll
         items={TEDY_GALLERY}
-        eyebrow="A LOOK INSIDE"
-        heading={<>From estate to <em>espresso</em>.</>}
+        eyebrow="004"
+        heading="A LOOK INSIDE"
       />
 
       {/* ===== RECENTLY VIEWED ===== */}

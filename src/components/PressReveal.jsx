@@ -28,13 +28,14 @@ export default function PressReveal({
       data-chapter="press"
       style={{ 
         padding: '120px 0', 
-        background: 'var(--bg)',
+        background: 'var(--bg-primary)',
         overflow: 'hidden',
         position: 'relative'
       }}
     >
       {/* Background ambient gradient */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '400px', background: 'radial-gradient(circle at 50% 0%, rgba(201, 151, 74, 0.08) 0%, transparent 60%)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '400px', background: 'radial-gradient(circle at 50% 0%, rgba(201, 151, 74, 0.12) 0%, transparent 70%)' }} />
+
 
       <div className="container">
         <motion.div 
