@@ -23,6 +23,7 @@ export default function BlogPost() {
     description: post?.excerpt,
     image: post?.cover_image,
     type: post ? 'article' : 'website',
+    noindex: true, // hidden/prep: blog posts out of the index until blog launch
   })
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * DragScroller — horizontal strip with click-and-drag scrolling on
+ * DragScroller, horizontal strip with click-and-drag scrolling on
  * desktop, wheel-to-pan, plus an inertial flick. Touch devices use
  * native scrolling.
  *

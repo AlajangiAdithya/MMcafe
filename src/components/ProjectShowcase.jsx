@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { MapPin, ArrowUpRight } from 'lucide-react'
 
 /**
- * ProjectShowcase — three projects, framer-motion choreography.
+ * ProjectShowcase, three projects, framer-motion choreography.
  *
  * - Stagger entrance: each card fades + lifts + un-rotates as the
  *   section enters the viewport.
@@ -35,7 +35,7 @@ function ProjectCard({ project, index, prefersReducedMotion }) {
   })
 
   // Each card pulls its image at a slightly different speed: cards 0 / 1 / 2
-  // get y-ranges of [40,-40], [60,-60], [50,-50] — staggered enough to feel
+  // get y-ranges of [40,-40], [60,-60], [50,-50], staggered enough to feel
   // alive, not chaotic.
   const range = 40 + index * 10
   const imageY = useTransform(

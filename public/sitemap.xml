@@ -1,92 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Beans (/store), Academy (/workshop) and Blog (/blog) are intentionally
+       hidden + noindex for now, so they are excluded from the sitemap until
+       launch. Re-add them (and their product/course/post URLs) when they go
+       live. See seo/IMPLEMENTATION-ROADMAP.md. -->
   <url>
     <loc>https://www.mastermindcafe.in/</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.mastermindcafe.in/store</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindcafe.in/workshop</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.mastermindcafe.in/consultancy</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/about</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindcafe.in/consultancy</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindcafe.in/blog</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/baristas</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/barista-signup</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/contact</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.mastermindcafe.in/login</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindcafe.in/signup</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://www.mastermindcafe.in/privacy-policy</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/terms</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/refund-policy</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.mastermindcafe.in/shipping</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-06-14</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

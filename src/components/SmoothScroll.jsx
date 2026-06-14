@@ -3,7 +3,7 @@ import Lenis from 'lenis'
 import { MOTION } from '../lib/motionConfig'
 
 /**
- * SmoothScroll — Lenis momentum scrolling, mounted once at app shell.
+ * SmoothScroll, Lenis momentum scrolling, mounted once at app shell.
  *
  * - Skipped entirely when prefers-reduced-motion is set.
  * - Skipped when body scroll is locked (modals, drawers) by checking

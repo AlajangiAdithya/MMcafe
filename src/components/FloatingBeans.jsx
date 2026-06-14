@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 
 /**
- * FloatingBeans — decorative slow-drifting coffee-bean dots.
+ * FloatingBeans, decorative slow-drifting coffee-bean dots.
  * Pure CSS animation (keyframes in animation-tokens.css), GPU-only.
  *
  * Props:
- *   count        — number of beans (default 8)
- *   tone         — "gold" (default) | "ink"
- *   seed         — change to re-roll positions (useful per-section)
+ *   count, number of beans (default 8)
+ *   tone, "gold" (default) | "ink"
+ *   seed, change to re-roll positions (useful per-section)
  */
 export default function FloatingBeans({ count = 8, tone = 'gold', seed = 1 }) {
   const beans = useMemo(() => makeBeans(count, seed), [count, seed])

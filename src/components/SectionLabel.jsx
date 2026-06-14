@@ -1,11 +1,11 @@
 /**
- * SectionLabel — editorial label used at the top of every section.
+ * SectionLabel, editorial label used at the top of every section.
  * Format:  001  ──  OUR STORY
  *
  * Props:
- *   number   — string like "001" (zero-padded)
- *   label    — English caption, all-caps
- *   align    — "left" (default) | "center"
+ *   number, string like "001" (zero-padded)
+ *   label, English caption, all-caps
+ *   align, "left" (default) | "center"
  */
 export default function SectionLabel({ number, label, align = 'left' }) {
   return (

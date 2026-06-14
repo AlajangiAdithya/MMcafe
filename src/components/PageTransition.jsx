@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { MOTION } from '../lib/motionConfig'
 
 /**
- * PageTransition — wraps a route's content in a fade + slight blur in/out.
+ * PageTransition, wraps a route's content in a fade + slight blur in/out.
  * Used together with AnimatePresence mode="wait" inside <Routes>.
  *
  * Pure visual layer. Does not affect routing, scroll-restoration, or focus.

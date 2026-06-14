@@ -3,6 +3,8 @@ import { Mail, Phone, MapPin, Clock, Globe } from 'lucide-react'
 import { motion, useInView } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
+import { HeroDockLogo } from '../components/ScrollDockLogo'
+import RotatingWord from '../components/RotatingWord'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -51,14 +53,19 @@ export default function ContactUs() {
             visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
           }}
         >
+          <motion.div variants={fadeUp}><HeroDockLogo /></motion.div>
           <motion.div variants={fadeUp}>
             <AnimatedText
+              as="h1"
               text="Contact Us"
               textClassName="text-foreground"
               underlineClassName="text-primary"
             />
           </motion.div>
-          <motion.p className="policy-updated" variants={fadeUp}>We'd love to hear from you!</motion.p>
+          <motion.p className="policy-updated" variants={fadeUp}>
+            Let&rsquo;s talk coffee, courses or{' '}
+            <RotatingWord words={['orders', 'projects', 'careers', 'collabs']} />.
+          </motion.p>
         </motion.div>
 
         <AnimatedSection>

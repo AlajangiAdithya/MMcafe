@@ -1,5 +1,5 @@
 /* ============================================================
-   ANIMATION TOKENS — global tunables.
+   ANIMATION TOKENS, global tunables.
    Mirror of src/lib/motionConfig.js for non-Motion code paths.
    Edit here OR motionConfig.js to dial the whole site.
    ============================================================ */
@@ -25,7 +25,7 @@
 }
 
 /* ============================================================
-   BUTTON PRESS — subtle scale-down on active.
+   BUTTON PRESS, subtle scale-down on active.
    Applies to all `.btn` site-wide without changing markup.
    ============================================================ */
 .btn {
@@ -52,7 +52,7 @@
 }
 
 /* ============================================================
-   ANIMATED LINK UNDERLINE — left-to-right fill on hover.
+   ANIMATED LINK UNDERLINE, left-to-right fill on hover.
    Targets nav + footer + inline content links.
    ============================================================ */
 .navbar .nav-link {
@@ -78,7 +78,7 @@
 }
 
 /* ============================================================
-   MASK REVEAL — clip-path wipe-from-bottom for images / video.
+   MASK REVEAL, clip-path wipe-from-bottom for images / video.
    Used by <MaskReveal /> component.
    Fills its parent so wrapped <img>/<video> with width/height: 100%
    still size to the original container box.
@@ -119,7 +119,7 @@
 }
 
 /* ============================================================
-   FLOATING BEANS — slow drifting decorative SVG dots.
+   FLOATING BEANS, slow drifting decorative SVG dots.
    Pure CSS, GPU-only.
    ============================================================ */
 .floating-beans {
@@ -158,7 +158,7 @@
 }
 
 /* ============================================================
-   STEAM WISPS — soft white plumes that rise behind hero copy.
+   STEAM WISPS, soft white plumes that rise behind hero copy.
    ============================================================ */
 .steam-layer {
   position: absolute;
@@ -186,12 +186,12 @@
 }
 
 /* ============================================================
-   COUNT-UP — used by <CountUp />. Inherits text styles.
+   COUNT-UP, used by <CountUp />. Inherits text styles.
    ============================================================ */
 .count-up { font-variant-numeric: tabular-nums; }
 
 /* ============================================================
-   SCROLL-LINKED MARQUEE — let Lenis velocity nudge marquee speed.
+   SCROLL-LINKED MARQUEE, let Lenis velocity nudge marquee speed.
    The MarqueeStrip reads --marquee-vel from JS.
    ============================================================ */
 .marquee-strip,
@@ -201,7 +201,7 @@
 }
 
 /* ============================================================
-   SECTION GLOW ON SCROLL — vignette sharpens when section is centered.
+   SECTION GLOW ON SCROLL, vignette sharpens when section is centered.
    Subtle. Driven by an inView class set by IntersectionObserver.
    ============================================================ */
 .section-vignette {
@@ -221,7 +221,7 @@
 .section-vignette.in-view::before { opacity: 1; }
 
 /* ============================================================
-   ENHANCED CARD LIFT — adds a sheen and stronger transform for
+   ENHANCED CARD LIFT, adds a sheen and stronger transform for
    .featured-product, .signoff-card, .value-card on hover.
    ============================================================ */
 .featured-product,
@@ -252,7 +252,7 @@
 }
 
 /* ============================================================
-   GRADIENT SWEEP — subtle moving highlight across kinetic-heading
+   GRADIENT SWEEP, subtle moving highlight across kinetic-heading
    words once revealed. Tasteful, ~3s loop, low opacity.
    ============================================================ */
 .kinetic-heading .kh-word-inner {
@@ -277,7 +277,7 @@
 }
 
 /* ============================================================
-   SCROLL INDICATOR PULSE — gentle attention on hero scroll cue.
+   SCROLL INDICATOR PULSE, gentle attention on hero scroll cue.
    ============================================================ */
 .scroll-indicator .scroll-dot {
   animation: scroll-dot 1.8s var(--ease-out) infinite;
@@ -289,7 +289,7 @@
 }
 
 /* ============================================================
-   PAGE TRANSITION — used by <PageTransition />.
+   PAGE TRANSITION, used by <PageTransition />.
    Backed by AnimatePresence; CSS here is a fallback baseline.
    ============================================================ */
 .page-transition-overlay {
@@ -302,7 +302,7 @@
 }
 
 /* ============================================================
-   ABOUT INTRO IMAGE LIFT — adds a soft Ken Burns on the
+   ABOUT INTRO IMAGE LIFT, adds a soft Ken Burns on the
    parallax intro frames while in view.
    ============================================================ */
 .about-intro-frame {
@@ -318,7 +318,7 @@
 }
 
 /* ============================================================
-   STAT NUMBER POP — number scales gently as it counts up.
+   STAT NUMBER POP, number scales gently as it counts up.
    ============================================================ */
 .stat-pop {
   display: inline-block;
@@ -332,7 +332,7 @@
 }
 
 /* ============================================================
-   REDUCED MOTION — kill anything decorative.
+   REDUCED MOTION, kill anything decorative.
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,

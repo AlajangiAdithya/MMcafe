@@ -1,0 +1,87 @@
+/* ============================================================
+   PREMIUM PAGE HERO, cinematic full-bleed image + scrim, elegant
+   Fraunces serif headline, monospace eyebrow/meta. Used on the
+   Buy Coffee (Store) and Learn Coffee (Academy) pages.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&display=swap');
+
+.pg-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 82vh;
+  margin-top: calc(-1 * var(--nav-height));
+  padding: calc(var(--nav-height) + clamp(36px, 6vw, 72px)) 24px clamp(56px, 8vw, 92px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  overflow: hidden;
+  --pg-cream: #F4E9D8;
+  --pg-accent: #DD9E55;
+  --pg-serif: 'Fraunces', Georgia, serif;
+  --pg-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+.pg-hero-bg {
+  position: absolute; inset: 0; z-index: -2;
+  background-size: cover; background-position: center;
+  transform: scale(1.06);
+}
+.pg-hero-scrim {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(16,11,8,0.6) 0%, rgba(16,11,8,0.46) 45%, rgba(12,9,6,0.84) 100%),
+    radial-gradient(ellipse 70% 60% at 50% 44%, rgba(20,13,9,0.18), rgba(12,9,6,0.6));
+}
+.pg-hero-inner { max-width: 920px; }
+
+.pg-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-family: var(--pg-mono);
+  font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--pg-accent);
+  margin-bottom: clamp(18px, 2.6vw, 30px);
+}
+.pg-eyebrow::before, .pg-eyebrow::after { content: ''; width: 34px; height: 1px; background: rgba(244,233,216,0.4); }
+
+.pg-title {
+  font-family: var(--pg-serif); font-weight: 400;
+  font-size: clamp(2.7rem, 7vw, 5.8rem); line-height: 1; letter-spacing: -0.025em;
+  color: var(--pg-cream) !important; -webkit-text-fill-color: var(--pg-cream) !important;
+  margin: 0;
+}
+.pg-title em { font-style: italic; color: var(--pg-accent) !important; -webkit-text-fill-color: var(--pg-accent) !important; }
+.pg-title .rotating-word,
+.pg-title .rotating-word-inner { color: var(--pg-accent) !important; -webkit-text-fill-color: var(--pg-accent) !important; }
+
+.pg-lede {
+  max-width: 620px; margin: clamp(22px, 3vw, 34px) auto 0;
+  font-size: 1.1rem; line-height: 1.62; color: rgba(244,233,216,0.85);
+}
+.pg-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 30px; margin-top: clamp(26px, 3.5vw, 40px); }
+.pg-meta span { display: inline-flex; align-items: center; gap: 8px; font-family: var(--pg-mono); font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(244,233,216,0.78); }
+.pg-meta em { color: var(--pg-accent); font-style: normal; }
+
+.pg-cta { display: inline-flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: clamp(26px, 3.5vw, 40px); }
+.pg-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--pg-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 14px 24px; border-radius: 999px;
+  transition: background 0.3s cubic-bezier(0.22,1,0.36,1), color 0.3s, border-color 0.3s, transform 0.3s;
+}
+.pg-btn-primary { background: var(--pg-accent); color: #1a1208; }
+.pg-btn-primary:hover { background: var(--pg-cream); transform: translateY(-2px); }
+.pg-btn-ghost { border: 1px solid rgba(244,233,216,0.4); color: var(--pg-cream); }
+.pg-btn-ghost:hover { border-color: var(--pg-accent); color: var(--pg-accent); }
+
+.pg-scrollcue {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-top: clamp(26px, 3.5vw, 40px);
+  font-family: var(--pg-mono); font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(244,233,216,0.7);
+}
+.pg-mouse { width: 20px; height: 32px; border: 1.5px solid rgba(244,233,216,0.5); border-radius: 12px; position: relative; }
+.pg-mouse::before {
+  content: ''; position: absolute; left: 50%; top: 6px; width: 3px; height: 6px;
+  border-radius: 2px; background: var(--pg-accent); transform: translateX(-50%);
+  animation: pg-mousedot 1.6s ease-in-out infinite;
+}
+@keyframes pg-mousedot { 0%{opacity:0;transform:translate(-50%,0)} 30%{opacity:1} 100%{opacity:0;transform:translate(-50%,11px)} }

@@ -11,6 +11,7 @@ import {
 import { openRazorpay } from '../lib/razorpay'
 import { usePageMeta } from '../lib/usePageMeta'
 import { confirmAction } from '../components/ConfirmDialog'
+import { HeroDockLogo } from '../components/ScrollDockLogo'
 import toast from 'react-hot-toast'
 import Loader from '@/components/ui/loader-4'
 
@@ -221,6 +222,7 @@ export default function Baristas() {
             visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
           }}
         >
+          <motion.div variants={fadeUp}><HeroDockLogo /></motion.div>
           <motion.div className="section-label" variants={fadeUp}><Coffee size={14} style={{ display: 'inline', marginRight: 6 }} /> The Barista Directory</motion.div>
           <motion.h1 className="page-title" variants={fadeUp}>Where trained baristas meet hiring cafes.</motion.h1>
           <motion.p className="page-lede" variants={fadeUp}>

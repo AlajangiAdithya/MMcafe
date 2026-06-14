@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Clock, Star, BookOpen, PlayCircle, Video, Info } from 'lucide-react'
+import { Clock, Star, BookOpen, PlayCircle, Video, Info, Award, Wifi } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { getCourses, getEnrollments } from '../lib/database'
 import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../lib/usePageMeta'
 import { CourseGridSkeleton } from '../components/Skeleton'
+import RotatingWord from '../components/RotatingWord'
+import MarqueeStrip from '../components/MarqueeStrip'
+import '../styles/premium-hero.css'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -30,6 +33,7 @@ export default function Academy() {
     title: 'Online Barista Academy · Professional Coffee Courses',
     description: 'HD video courses from certified baristas. Learn espresso, latte art, brewing methods and cafe fundamentals at your pace, anywhere in India.',
     keywords: 'online barista course India, barista training online, espresso course, latte art classes, coffee certification India, learn coffee online',
+    noindex: true, // hidden/prep: keep the academy out of the index until launch
   })
 
   useEffect(() => {
@@ -75,20 +79,68 @@ export default function Academy() {
 
   return (
     <div className="academy-page">
-      <div className="academy-hero">
+      <header className="pg-hero">
+        <div className="pg-hero-bg" aria-hidden="true" style={{ backgroundImage: 'url(/pour-over-coffee.jpg)' }} />
+        <div className="pg-hero-scrim" aria-hidden="true" />
         <motion.div
+          className="pg-hero-inner"
           initial="hidden"
           animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
-          }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.13, delayChildren: 0.1 } } }}
         >
-          <motion.div className="section-label" variants={fadeUp}>Learn from the best</motion.div>
-          <motion.h1 variants={fadeUp}>Barista Academy</motion.h1>
-          <motion.p variants={fadeUp}>Professional video courses to take your coffee skills to the next level</motion.p>
+          <motion.div className="pg-eyebrow" variants={fadeUp}>Learn from the best</motion.div>
+          <motion.h1
+            className="pg-title"
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            Master the art of <em><RotatingWord words={['espresso', 'latte art', 'pour-over', 'cupping', 'milk steaming']} /></em>
+          </motion.h1>
+          <motion.p className="pg-lede" variants={fadeUp}>
+            Professional HD video courses from certified, competition-placed baristas, learn at your own pace, anywhere in India.
+          </motion.p>
+          <motion.div variants={fadeUp}>
+            <span className="pg-scrollcue"><span className="pg-mouse" /> Explore the courses</span>
+          </motion.div>
         </motion.div>
-      </div>
+      </header>
+
+      <MarqueeStrip
+        variant="accent"
+        speed={30}
+        items={['Espresso', 'Latte Art', 'Pour Over', 'Cupping', 'Single Origin', 'Milk Steaming', 'Dialing In', 'Chikmagalur']}
+      />
+
+      <section className="band-dark">
+        <div className="container">
+          <div className="section-header center">
+            <div className="section-label">Why Learn With Us</div>
+            <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Built for real bar skills</h2>
+          </div>
+          <motion.div
+            className="values-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={staggerContainer}
+          >
+            <motion.div className="value-card" variants={fadeUp}>
+              <div className="value-icon"><Video size={22} /></div>
+              <h3>HD Video Lessons</h3>
+              <p>Filmed at the bar, close-up on the technique, rewind any step until it clicks.</p>
+            </motion.div>
+            <motion.div className="value-card" variants={fadeUp}>
+              <div className="value-icon"><Award size={22} /></div>
+              <h3>Taught by Champions</h3>
+              <p>Curriculum built by certified, competition-placed baristas from our Mulund cafe.</p>
+            </motion.div>
+            <motion.div className="value-card" variants={fadeUp}>
+              <div className="value-icon"><Wifi size={22} /></div>
+              <h3>Learn at Your Pace</h3>
+              <p>Lifetime access on any device. Start a free lesson today, no equipment required.</p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
       <div className="academy-container">
         {loading ? (

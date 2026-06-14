@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
-import { ShoppingCart, Filter, Search, Star, Package } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { ShoppingCart, Filter, Search, Star, Package, LayoutGrid, Rows3, ArrowUpRight } from 'lucide-react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getProducts } from '../lib/database'
 import { supabase } from '../lib/supabase'
@@ -8,7 +8,11 @@ import ProductDetailModal from '../components/ProductDetailModal'
 import WishlistButton from '../components/WishlistButton'
 import { ProductGridSkeleton } from '../components/Skeleton'
 import { usePageMeta } from '../lib/usePageMeta'
+import RotatingWord from '../components/RotatingWord'
+import MarqueeStrip from '../components/MarqueeStrip'
 import toast from 'react-hot-toast'
+import '../styles/store-cards.css'
+import '../styles/premium-hero.css'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -29,12 +33,14 @@ export default function Store() {
   const [reviewStats, setReviewStats] = useState({})
   const [selected, setSelected] = useState(null)
   const [reloadKey, setReloadKey] = useState(0)
+  const [view, setView] = useState('card') // 'card' (FCTRY-style panels) | 'grid'
   const { addItem } = useCart()
 
   usePageMeta({
     title: 'Buy Specialty Coffee Beans & Ground Coffee Online',
     description: 'Hand-picked single-origin Karnataka coffee beans and freshly ground powders, roasted in partnership with Bean Rove. Free shipping above ₹999 across India.',
     keywords: 'buy coffee beans online India, single origin coffee, Chikmagalur coffee, ground coffee India, specialty coffee shop, Mastermind Brews store',
+    noindex: true, // hidden/prep: keep the shop out of the index until launch
   })
 
   useEffect(() => {
@@ -105,47 +111,42 @@ export default function Store() {
 
   return (
     <div className="store-page store-page--siatra">
-      <header className="siatra-hero">
-        <div className="siatra-hero-inner">
-          <motion.span
-            className="siatra-hero-eyebrow"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="siatra-hero-eyebrow-line" />
-            Shop · Coffee Collection
-            <span className="siatra-hero-eyebrow-line" />
-          </motion.span>
+      <header className="pg-hero">
+        <div className="pg-hero-bg" aria-hidden="true" style={{ backgroundImage: 'url(/offer-beans.jpg)' }} />
+        <div className="pg-hero-scrim" aria-hidden="true" />
+        <motion.div
+          className="pg-hero-inner"
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.13, delayChildren: 0.1 } } }}
+        >
+          <motion.div className="pg-eyebrow" variants={fadeUp}>Shop · Coffee Collection</motion.div>
           <motion.h1
-            className="siatra-hero-title"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="pg-title"
+            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
           >
-            Beans & powders, <em>roasted into shape.</em>
+            Beans &amp; powders,<br />
+            <span className="siatra-roast-line"><em>roasted into</em>{' '}<RotatingWord words={['shape', 'balance', 'aroma', 'clarity']} /></span>
           </motion.h1>
-          <motion.p
-            className="siatra-hero-lede"
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-          >
-            Hand-picked single-origin from Chikmagalur, roasted with Bean Rove.
-            The same coffee we pour at the bar — sealed fresh, shipped to your door.
+          <motion.p className="pg-lede" variants={fadeUp}>
+            Hand-picked single-origin from Chikmagalur, roasted with Bean Rove, the same coffee we pour at the bar, sealed fresh and shipped to your door.
           </motion.p>
-          <motion.div
-            className="siatra-hero-meta"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span><em>{productCount}</em> {productCount === 1 ? 'product' : 'products'} in store</span>
-            <span><em>Free shipping</em> on orders ₹999+</span>
-            <span><em>Roasted</em> weekly · shipped within 48h</span>
+          <motion.div className="pg-meta" variants={fadeUp}>
+            <span><em>{productCount}</em>&nbsp;{productCount === 1 ? 'product' : 'products'} in store</span>
+            <span><em>Free shipping</em>&nbsp;on ₹999+</span>
+            <span><em>Roasted</em>&nbsp;weekly · shipped in 48h</span>
           </motion.div>
-        </div>
+          <motion.div variants={fadeUp}>
+            <span className="pg-scrollcue"><span className="pg-mouse" /> Browse the collection</span>
+          </motion.div>
+        </motion.div>
       </header>
+
+      <MarqueeStrip
+        variant="accent"
+        speed={34}
+        items={['Single Origin', 'Roasted Weekly', 'Chikmagalur', 'Whole Bean', 'Freshly Ground', 'Free Shipping ₹999+', 'Bean Rove', 'Sealed Fresh']}
+      />
 
       <div className="siatra-shell">
         {loading ? (
@@ -200,8 +201,27 @@ export default function Store() {
                   aria-label="Search products"
                 />
               </label>
+              <div className="fl-toggle" role="group" aria-label="Choose product view">
+                <button
+                  type="button"
+                  className={view === 'card' ? 'is-active' : ''}
+                  onClick={() => setView('card')}
+                  aria-pressed={view === 'card'}
+                >
+                  <Rows3 size={14} aria-hidden="true" /> Cards
+                </button>
+                <button
+                  type="button"
+                  className={view === 'grid' ? 'is-active' : ''}
+                  onClick={() => setView('grid')}
+                  aria-pressed={view === 'grid'}
+                >
+                  <LayoutGrid size={14} aria-hidden="true" /> Grid
+                </button>
+              </div>
             </motion.div>
 
+            {view === 'grid' ? (
             <motion.div
               className="siatra-grid"
               initial="hidden"
@@ -264,6 +284,20 @@ export default function Store() {
                 )
               })}
             </motion.div>
+            ) : (
+              <div className="fl-list">
+                {filtered.map((product, i) => (
+                  <ProductPanel
+                    key={product.id}
+                    product={product}
+                    index={i}
+                    stats={reviewStats[product.id]}
+                    onOpen={() => setSelected(product)}
+                    onAdd={(e) => handleAdd(e, product)}
+                  />
+                ))}
+              </div>
+            )}
 
             {filtered.length === 0 && (
               <div className="siatra-empty">
@@ -293,5 +327,77 @@ export default function Store() {
         />
       )}
     </div>
+  )
+}
+
+/* ------------------------------------------------------------------
+   ProductPanel, full-width editorial "card" (FCTRY-Lab style):
+   a numbered header row over a large media + detail block. The media
+   clip-reveals and parallaxes as the panel scrolls into view. Panels
+   alternate image side via CSS :nth-child for rhythm.
+   ------------------------------------------------------------------ */
+function ProductPanel({ product, index, stats, onOpen, onAdd }) {
+  const ref = useRef(null)
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-7%', '7%'])
+  const num = String(index + 1).padStart(2, '0')
+  const meta = [product.weight, product.category].filter(Boolean).join(' · ')
+
+  return (
+    <article className="fl-panel">
+      <button type="button" className="fl-row" onClick={onOpen} aria-label={`View ${product.name}`}>
+        <span className="fl-idx">{num}.</span>
+        <span className="fl-row-name">{product.name}</span>
+        <span className="fl-row-meta">
+          {meta || 'Coffee'}
+          {stats && stats.count > 0 && <> · {stats.avg.toFixed(1)}★</>}
+        </span>
+      </button>
+
+      <div className="fl-body">
+        <motion.div
+          ref={ref}
+          className="fl-media"
+          onClick={onOpen}
+          initial={reduced ? { opacity: 0 } : { clipPath: 'inset(10% 10% 10% 10% round 16px)', opacity: 0.4 }}
+          whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
+          viewport={{ once: true, margin: '-12%' }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {product.image ? (
+            <motion.img src={product.image} alt={product.name} style={{ y: imgY, scale: 1.1 }} loading="lazy" />
+          ) : (
+            <div className="fl-media-placeholder"><Package size={42} /></div>
+          )}
+          <span className="fl-tag">{product.category}</span>
+          <WishlistButton productId={product.id} className="fl-wish" />
+        </motion.div>
+
+        <div className="fl-detail">
+          <span className="fl-detail-cat">{product.category || 'Specialty Coffee'}</span>
+          <h3 className="fl-detail-name">{product.name}</h3>
+          {product.description && <p className="fl-detail-desc">{product.description}</p>}
+          {stats && stats.count > 0 && (
+            <div className="fl-detail-rating">
+              <Star size={13} fill="currentColor" />
+              <span>{stats.avg.toFixed(1)}</span>
+              <span className="fl-detail-rating-count">({stats.count} {stats.count === 1 ? 'review' : 'reviews'})</span>
+            </div>
+          )}
+          <div className="fl-detail-foot">
+            <span className="fl-detail-price">₹{product.price}</span>
+            <div className="fl-detail-actions">
+              <button className="fl-add" onClick={onAdd} aria-label={`Add ${product.name} to cart`}>
+                <ShoppingCart size={15} /> Add to cart
+              </button>
+              <button className="fl-view" onClick={onOpen} aria-label={`View ${product.name} details`}>
+                Details <ArrowUpRight size={15} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
   )
 }

@@ -103,7 +103,7 @@ export default function PressReveal({
                 maxWidth: '480px'
               }}
             >
-              Asian, European, American, Mediterranean — all under one bicycle-cafe roof. A global culinary revolution curated by our flagship team. Read the broadsheet that tells the whole story.
+              Asian, European, American, Mediterranean, all under one bicycle-cafe roof. A global culinary revolution curated by our flagship team. Read the broadsheet that tells the whole story.
             </motion.p>
             
             <motion.div variants={itemVariants}>

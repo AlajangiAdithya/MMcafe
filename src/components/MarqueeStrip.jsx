@@ -1,17 +1,17 @@
 import { useReducedMotion } from 'framer-motion'
 
 /**
- * MarqueeStrip — infinite horizontal marquee. Used between sections
+ * MarqueeStrip, infinite horizontal marquee. Used between sections
  * to break up the page with a rotating band of coffee terms.
  *
  * The strip auto-scrolls via CSS `animation: marquee-slide`. Two
  * identical tracks side-by-side give a seamless loop.
  *
  * Props:
- *   items    — array of strings or { en } objects
- *   speed    — seconds per loop (default 36s)
- *   variant  — "dark" | "paper" | "accent"
- *   tall     — boolean, increases vertical padding for hero-style strips
+ *   items, array of strings or { en } objects
+ *   speed, seconds per loop (default 36s)
+ *   variant, "dark" | "paper" | "accent"
+ *   tall, boolean, increases vertical padding for hero-style strips
  */
 export default function MarqueeStrip({
   items,

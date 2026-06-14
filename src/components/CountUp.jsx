@@ -3,7 +3,7 @@ import { useInView, useReducedMotion, animate } from 'framer-motion'
 import { MOTION } from '../lib/motionConfig'
 
 /**
- * CountUp — animates from `from` → `to` when the element scrolls into view.
+ * CountUp, animates from `from` → `to` when the element scrolls into view.
  * Preserves any prefix / suffix the parent already shows.
  *
  * Usage:

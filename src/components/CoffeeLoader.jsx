@@ -1,9 +1,9 @@
 /**
- * CoffeeLoader — animated coffee cup with rising steam.
+ * CoffeeLoader, animated coffee cup with rising steam.
  * Used as the global Suspense fallback so every lazy route shows the
  * same on-brand loading state instead of a generic spinner.
  *
- * Pure SVG + CSS — no extra deps, GPU-accelerated, ~1KB.
+ * Pure SVG + CSS, no extra deps, GPU-accelerated, ~1KB.
  */
 export default function CoffeeLoader({ label = 'Brewing…', fullscreen = true }) {
   return (
@@ -28,7 +28,7 @@ export default function CoffeeLoader({ label = 'Brewing…', fullscreen = true }
             strokeWidth="1.5"
           />
 
-          {/* Coffee surface — filling animation via clipPath */}
+          {/* Coffee surface, filling animation via clipPath */}
           <clipPath id="cupClip">
             <path d="M22 62 H98 V102 Q98 120 80 122 H40 Q22 120 22 102 Z" />
           </clipPath>

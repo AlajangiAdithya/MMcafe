@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * MaskReveal — wraps a child element and applies a clip-path wipe
+ * MaskReveal, wraps a child element and applies a clip-path wipe
  * the first time it enters the viewport.
  *
  * Variants:
- *   "up"        — wipe from bottom (default)
- *   "diagonal"  — corner-to-corner sweep
+ *   "up", wipe from bottom (default)
+ *   "diagonal", corner-to-corner sweep
  *
  * Honors prefers-reduced-motion: shows content instantly.
  */

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * Magnetic — wraps any child and pulls it toward the cursor while the
+ * Magnetic, wraps any child and pulls it toward the cursor while the
  * pointer is inside its hitbox. Disabled for touch and reduced-motion.
  *
  * Strength controls the pull (0 = none, 1 = full follow). 0.35 is a

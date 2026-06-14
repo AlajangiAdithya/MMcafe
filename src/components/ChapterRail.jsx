@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 /**
- * ChapterRail — fixed vertical indicator on the right edge that shows
+ * ChapterRail, fixed vertical indicator on the right edge that shows
  * which "chapter" of the page the user is currently scrolled into.
  *
  * Hidden on small screens, and skipped under reduced motion.
  *
  * Props:
- *   chapters — array of { id, num, label } where id matches a section's
+ *   chapters, array of { id, num, label } where id matches a section's
  *              `data-chapter` attribute.
  */
 export default function ChapterRail({ chapters }) {

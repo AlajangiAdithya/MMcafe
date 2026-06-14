@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * Spotlight — attaches a soft, mouse-tracked radial glow inside its
+ * Spotlight, attaches a soft, mouse-tracked radial glow inside its
  * parent. Render *inside* the section you want lit. The parent must
  * be position: relative or absolute.
  *

@@ -43,10 +43,19 @@ function setLink(rel, href, extraAttrs = {}) {
  * @param {string} [opts.canonical]   Absolute URL; defaults to current pathname under SITE_ORIGIN
  * @param {string} [opts.type]        OG type, 'website' (default) or 'article'
  */
-export function usePageMeta({ title, description, image, keywords, canonical, type = 'website' }) {
+export function usePageMeta({ title, description, image, keywords, canonical, type = 'website', noindex = false }) {
   useEffect(() => {
     const fullTitle = title ? `${title} · ${BRAND}` : BRAND
     document.title = fullTitle
+
+    // Robots: set explicitly on every route so SPA navigation between an
+    // indexable page and a noindex page always resets correctly (the static
+    // index.html ships index,follow, which would otherwise "stick").
+    const robots = noindex
+      ? 'noindex, follow'
+      : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+    setMeta('robots', robots)
+    setMeta('googlebot', noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1')
 
     // Canonical: per-route, defaults to current pathname so SPA pages don't all
     // collapse onto the homepage canonical declared in index.html.
@@ -72,5 +81,5 @@ export function usePageMeta({ title, description, image, keywords, canonical, ty
     if (description) setMeta('twitter:description', description)
     if (image) setMeta('twitter:image', image)
     setMeta('twitter:url', url)
-  }, [title, description, image, keywords, canonical, type])
+  }, [title, description, image, keywords, canonical, type, noindex])
 }

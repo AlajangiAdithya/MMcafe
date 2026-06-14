@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * TiltCard — 3D rotation toward the cursor with a moving radial
+ * TiltCard, 3D rotation toward the cursor with a moving radial
  * spotlight. Used to lift the "What We Offer" pillars off the page
  * so they feel like an object, not a card.
  *

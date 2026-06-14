@@ -1,9 +1,9 @@
 /* ============================================================
-   LIGHT THEME + GOLD ACCENT — site-wide token override
+   LIGHT THEME + GOLD ACCENT, site-wide token override
    Loaded after App.css so these :root rules win.
    ============================================================ */
 :root {
-  /* Surfaces — warm ivory / paper tones, the new base */
+  /* Surfaces, warm ivory / paper tones, the new base */
   --bg-primary:   #fbf6ec;   /* cream paper */
   --bg-secondary: #f5ecd9;   /* light latte */
   --bg-tertiary:  #ede0c4;   /* pale gold-cream */
@@ -12,7 +12,7 @@
   --bg-surface:   rgba(255, 252, 245, 0.92);
   --bg-hover:     rgba(245, 236, 217, 0.96);
 
-  /* Coffee semantic palette — keep semantic names, flip lightness */
+  /* Coffee semantic palette, keep semantic names, flip lightness */
   --coffee-espresso: #fbf6ec;
   --coffee-dark:     #f5ecd9;
   --coffee-mocha:    #ede0c4;
@@ -22,7 +22,7 @@
   --coffee-foam:     #efe1cf;
   --coffee-cream:    #f8efe2;
 
-  /* Ink — dark on light, warm */
+  /* Ink, dark on light, warm */
   --ink-100: #1a1208;
   --ink-200: #2a1f12;
   --ink-300: #4a3a26;
@@ -34,12 +34,12 @@
   --text-secondary: #4a3a26;
   --text-muted:     #6e5a3f;
 
-  /* Borders — warm gold-tinted hairlines */
+  /* Borders, warm gold-tinted hairlines */
   --border:        rgba(201, 151, 74, 0.16);
   --border-light:  rgba(201, 151, 74, 0.24);
   --border-strong: rgba(201, 151, 74, 0.42);
 
-  /* GOLD — the only hot color, slightly tuned */
+  /* GOLD, the only hot color, slightly tuned */
   --accent:       #c9974a;
   --accent-soft:  #e8c896;
   --accent-deep:  #8f6a30;
@@ -58,7 +58,7 @@
   --shadow-accent: 0 12px 36px rgba(201, 151, 74, 0.28);
 }
 
-/* Body — swap the dark coffee gradient for warm cream */
+/* Body, swap the dark coffee gradient for warm cream */
 body {
   background:
     radial-gradient(ellipse 70% 50% at 80% -10%, rgba(232, 200, 150, 0.32) 0%, transparent 60%),
@@ -132,7 +132,7 @@ body::before {
   box-shadow: var(--shadow-2);
 }
 
-/* Offer pillar cards — keep their natural styling for images to render */
+/* Offer pillar cards, keep their natural styling for images to render */
 .offer-pillar {
   background: var(--bg-card) !important;
   border: 1px solid var(--border-light) !important;
@@ -178,7 +178,7 @@ p {
   color: var(--ink-300);
 }
 
-/* Hero — cinematic dark overlay, NOT cream */
+/* Hero, cinematic dark overlay, NOT cream */
 .hero {
   background: transparent !important;
 }
@@ -212,7 +212,7 @@ p {
   -webkit-text-fill-color: transparent !important;
 }
 
-/* Navbar — dark espresso theme with cream-toned contrast items */
+/* Navbar, dark espresso theme with cream-toned contrast items */
 .navbar,
 .navbar.scrolled {
   background: linear-gradient(180deg, #14100B 0%, #1C140D 100%) !important;
@@ -246,7 +246,7 @@ p {
   color: #2a1c10 !important;
 }
 
-/* Footer — keep DARK, do NOT make light */
+/* Footer, keep DARK, do NOT make light */
 .footer {
   background: linear-gradient(180deg, transparent 0%, rgba(28, 19, 12, 0.85) 12%, #2a1c10 30%, #160e08 100%) !important;
   color: #fbf5eb !important;
@@ -384,7 +384,7 @@ input:focus, textarea:focus, select:focus {
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-deep); }
 
 /* ============================================================
-   HERO LOGO XL — tagline removed, logo dominates the stage
+   HERO LOGO XL, tagline removed, logo dominates the stage
    ============================================================ */
 .hero-logo-wrap--xl {
   margin: 0 auto;
@@ -410,7 +410,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* ============================================================
-   STACK CARDS — sticky stacking for WHAT WE OFFER
+   STACK CARDS, sticky stacking for WHAT WE OFFER
    ============================================================ */
 .stack-cards {
   position: relative;
@@ -602,7 +602,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* ============================================================
-   ZOOM CTA — Instagram zoom-into-view
+   ZOOM CTA, Instagram zoom-into-view
    ============================================================ */
 .zoom-cta-section {
   position: relative;

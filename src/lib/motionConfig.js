@@ -1,11 +1,11 @@
 /**
- * motionConfig — single source of truth for animation timing across Home + About.
+ * motionConfig, single source of truth for animation timing across Home + About.
  * Dial these to tune the whole site at once. Also exposed as CSS vars
  * in src/styles/animation-tokens.css for non-Motion code paths.
  */
 
 export const MOTION = {
-  // Reveal — fade + translateY on inView
+  // Reveal, fade + translateY on inView
   reveal: {
     distance: 36,        // px translated from below
     distanceStrong: 56,
@@ -57,7 +57,7 @@ export const MOTION = {
     duration: 1.6,
   },
 
-  // Eases — keep these tight. cubic-bezier(0.16, 1, 0.3, 1) is the project default.
+  // Eases, keep these tight. cubic-bezier(0.16, 1, 0.3, 1) is the project default.
   ease: {
     out: [0.16, 1, 0.3, 1],
     standard: [0.25, 0.46, 0.45, 0.94],

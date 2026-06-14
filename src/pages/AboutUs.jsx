@@ -1,14 +1,38 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Coffee, Award, Trophy, MapPin, Clock, ArrowRight, ExternalLink, Sparkles, Heart, Users } from 'lucide-react'
-import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { Coffee, Award, Trophy, MapPin, Clock, ArrowRight, ExternalLink, Heart, Users, Sparkles } from 'lucide-react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
-import { AnimatedText } from '@/components/ui/animated-underline-text-one'
-import { GridBackground } from '@/components/ui/grid-background'
-import MaskReveal from '../components/MaskReveal'
 import CountUp from '../components/CountUp'
+import Magnetic from '../components/Magnetic'
 import FloatingBeans from '../components/FloatingBeans'
 import SteamWisps from '../components/SteamWisps'
+import JsonLd from '../components/JsonLd'
+import '../styles/about-editorial.css'
+
+const ABOUT_ORG_ID = 'https://www.mastermindcafe.in/#organization'
+const ABOUT_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  url: 'https://www.mastermindcafe.in/about',
+  name: 'About Mastermind Brews',
+  about: { '@id': ABOUT_ORG_ID },
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Namrata Thakkar',
+    jobTitle: 'Founder',
+    worksFor: { '@id': ABOUT_ORG_ID },
+    image: 'https://www.mastermindcafe.in/namrata.jpg',
+  },
+}
+const ABOUT_CRUMB = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindcafe.in/' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://www.mastermindcafe.in/about' },
+  ],
+}
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -20,35 +44,119 @@ function InstagramIcon({ size = 16 }) {
   )
 }
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
-}
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-}
-
-function AnimatedSection({ children, className, delay = 0, style }) {
+/* ============================================================
+   StoryPanel, Charmer-style full-bleed media panel with a serif
+   title, monospace caption and a ghost name. The media clip-reveals
+   on entry; the image + ghost word parallax as the panel scrolls.
+   ============================================================ */
+function StoryPanel({ id, tags, year, title, img, alt, tagline, ghost, lede, children }) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-9%', '9%'])
+  const ghostX = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['10%', '-10%'])
+
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      variants={{
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] } },
-      }}
-      className={className}
-      style={style}
-    >
-      {children}
-    </motion.div>
+    <section className="ed-story">
+      <div className="ed-container">
+        <div className="ed-story-head">
+          <span className="ed-story-index">({id})</span>
+          <span className="ed-story-meta">{tags}<br />{year}</span>
+          <h2 className="ed-story-title">{title}</h2>
+        </div>
+
+        <motion.div
+          ref={ref}
+          className="ed-story-media"
+          initial={reduced ? { opacity: 0 } : { clipPath: 'inset(14% 14% 14% 14% round 16px)', opacity: 0.35 }}
+          whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
+          viewport={{ once: true, margin: '-12%' }}
+          transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.img src={img} alt={alt} style={{ y: imgY, scale: 1.14 }} loading="lazy" width="1600" height="900" />
+          <span className="ed-story-tag">{tagline}</span>
+          <motion.span className="ed-story-ghost" style={{ x: ghostX }} aria-hidden="true">{ghost}</motion.span>
+        </motion.div>
+
+        <div className="ed-story-grid">
+          <p className="ed-story-lede">{lede}</p>
+          <div>{children}</div>
+        </div>
+      </div>
+    </section>
   )
 }
+
+/* ============================================================
+   PinLine / PinGhost, sub-pieces of the NRG-style pinned scrolly.
+   Each fades/translates in for its slice of the scroll progress.
+   ============================================================ */
+function PinLine({ progress, index, total, children }) {
+  const seg = 1 / total
+  const s = index * seg
+  const opacity = useTransform(progress, [s, s + 0.06, s + seg - 0.06, s + seg], [0, 1, 1, 0])
+  const y = useTransform(progress, [s, s + 0.06, s + seg - 0.06, s + seg], [60, 0, 0, -60])
+  return <motion.p className="ed-pin-line" style={{ opacity, y }}>{children}</motion.p>
+}
+
+function PinGhost({ progress, index, total, children }) {
+  const seg = 1 / total
+  const s = index * seg
+  const opacity = useTransform(progress, [s, s + 0.08, s + seg - 0.08, s + seg], [0, 1, 1, 0])
+  return <motion.span className="ed-pin-ghost" style={{ opacity }} aria-hidden="true">{children}</motion.span>
+}
+
+const PIN_STEPS = [
+  { ghost: 'ORIGIN', line: <>From a single estate in <em>Chikmagalur</em>,</> },
+  { ghost: 'ROAST', line: <>roasted to exclusive profiles with <em>Bean Rove</em>,</> },
+  { ghost: 'BREW', line: <>dialed in by hand at the <em>bar</em>,</> },
+  { ghost: 'SERVE', line: <>and poured into <em>your</em> cup.</> },
+]
+
+function PinnedStory() {
+  const ref = useRef(null)
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [1.05, 1.18])
+  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['0%', '-6%'])
+
+  return (
+    <section className="ed-pin" ref={ref}>
+      <div className="ed-pin-sticky">
+        <motion.div
+          className="ed-pin-bg"
+          style={{ backgroundImage: 'url(/project-cafe.jpg)', scale: bgScale, y: bgY }}
+        />
+        <div className="ed-pin-scrim" />
+        {PIN_STEPS.map((step, i) => (
+          <PinGhost key={step.ghost} progress={scrollYProgress} index={i} total={PIN_STEPS.length}>
+            {step.ghost}
+          </PinGhost>
+        ))}
+        <div className="ed-pin-inner">
+          <div className="ed-pin-eyebrow">Bean to Cup</div>
+          <div className="ed-pin-stage">
+            {PIN_STEPS.map((step, i) => (
+              <PinLine key={i} progress={scrollYProgress} index={i} total={PIN_STEPS.length}>
+                {step.line}
+              </PinLine>
+            ))}
+          </div>
+        </div>
+        <div className="ed-pin-cue">
+          <span className="ed-scrollcue"><span className="ed-mouse" /> Keep scrolling</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const VALUES = [
+  { icon: Coffee, title: 'Specialty First', body: 'We do not compromise on bean quality, freshness, or the people who pour our cups.' },
+  { icon: Heart, title: 'Welcome All', body: 'Pet friendly, vegan friendly, gluten-free options, hospitality should never be selective.' },
+  { icon: Award, title: 'Train Well', body: 'Great coffee starts with great baristas. We invest in the people who make the craft.' },
+  { icon: Users, title: 'Build Community', body: 'Cafes are third places. We keep ours warm, social, and a little bit unhurried.' },
+]
 
 export default function AboutUs() {
   usePageMeta({
@@ -59,361 +167,189 @@ export default function AboutUs() {
 
   const heroRef = useRef(null)
   const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  })
-
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 80])
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.04])
-
-  // Add `.is-in` to intro frames so the Ken Burns effect (CSS) fires on inView.
-  useEffect(() => {
-    if (reduced) return
-    if (typeof window === 'undefined') return
-    const targets = document.querySelectorAll('.about-intro-frame')
-    if (targets.length === 0) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-in')
-            io.unobserve(e.target)
-          }
-        }
-      },
-      { threshold: 0.2, rootMargin: '0px 0px -6% 0px' },
-    )
-    targets.forEach((t) => io.observe(t))
-    return () => io.disconnect()
-  }, [reduced])
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0])
+  const heroY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 90])
 
   return (
-    <div className="page-shell about-page">
-      {/* ===== PAGE HERO (100K PREMIUM UPGRADE) ===== */}
+    <div className="page-shell about-page about-editorial">
+      <JsonLd id="about-page" data={ABOUT_SCHEMA} />
+      <JsonLd id="about-breadcrumb" data={ABOUT_CRUMB} />
+      {/* ===== HERO ===== */}
       <section className="page-hero about-hero" ref={heroRef}>
         <div className="hero-mesh-overlay" style={{ zIndex: 1 }} />
         <SteamWisps count={4} seed={9} />
         <FloatingBeans count={8} seed={5} />
         <div className="container" style={{ zIndex: 2, position: 'relative' }}>
-          <motion.div style={{ opacity: heroOpacity, y: heroY, scale: heroScale }}>
+          <motion.div style={{ opacity: heroOpacity, y: heroY }}>
             <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
-            }}
-            className="about-hero-content"
-          >
-            <motion.div className="hero-badge" variants={fadeUp} style={{ marginBottom: 32 }}>
-              <span className="dot" />
-              <span className="hero-badge-text">Our Story</span>
-            </motion.div>
-            
-            <motion.h1 className="page-title" variants={fadeUp}>
-              The People, The Place,<br />The <span className="text-accent-glow">Coffee</span>.
-            </motion.h1>
-            
-            <motion.p className="page-lede" variants={fadeUp} style={{ margin: '0 auto' }}>
-              Three stories that make Mastermind Brews: the brand, the brewer, and the cafe where it all began.
-            </motion.p>
+              initial="hidden"
+              animate="visible"
+              variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.14, delayChildren: 0.15 } } }}
+              className="about-hero-content"
+            >
+              <motion.div
+                className="hero-badge"
+                variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                style={{ marginBottom: 32 }}
+              >
+                <span className="dot" />
+                <span className="hero-badge-text">Our Story</span>
+              </motion.div>
+
+              <motion.h1
+                className="page-title"
+                variants={{ hidden: { opacity: 0, y: 36 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+              >
+                The People, The Place,<br />The <span className="text-accent-glow">Coffee</span>.
+              </motion.h1>
+
+              <motion.p
+                className="page-lede"
+                variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}
+                style={{ margin: '0 auto' }}
+              >
+                Three chapters make Mastermind Brews, the brand, the brewer, and the cafe where it all began.
+              </motion.p>
+
+              <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.2 } } }}>
+                <span className="ed-scrollcue"><span className="ed-mouse" /> Scroll to explore</span>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ===== INTRO 1, MASTERMIND BREWS ===== */}
-      <section className="about-intro about-intro-brews about-parallax-section">
-        <div
-          className="about-parallax-bg"
-          aria-hidden="true"
-          style={{ backgroundImage: 'url(/pour-over-coffee.jpg)' }}
-        />
-        <div className="container">
-          <div className="about-intro-grid">
-            <AnimatedSection className="about-intro-media">
-              <div className="about-intro-frame image-portrait">
-                <MaskReveal variant="up">
-                  <img
-                    src="/pour-over-coffee.jpg"
-                    alt="Barista pouring a slow Chemex brew with single-origin Chikmagalur coffee at Mastermind Brews"
-                    loading="lazy"
-                    width="800"
-                    height="1000"
-                  />
-                </MaskReveal>
-                <span className="about-intro-chip"><Sparkles size={12} /> The Brand</span>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection className="about-intro-text" delay={0.15}>
-              <div className="about-intro-label">01 / Mastermind Brews</div>
-              <h2 className="about-intro-title">Specialty coffee, beyond the bar.</h2>
-              <p className="about-intro-lede">
-                Everything we serve at the counter, carried into your kitchen, single-origin beans, the kit to brew them, and the craft behind a properly pulled cup.
-              </p>
-              <p>
-                Our beans travel directly from estates in <strong>Chikmagalur, Karnataka</strong>, roasted to exclusive profiles by Bean Rove. The same coffee that lands in our portafilters, sealed fresh, shipped to your door.
-              </p>
-              <p>
-                Beyond the bag, a barista academy: HD video lessons, hands-on workshops in Mulund, and a consulting arm helping cafes across India build their own coffee programs from the ground up.
-              </p>
-              <div className="about-intro-stats">
-                <div>
-                  <strong><CountUp to={3} /></strong>
-                  <span>Beans · Academy · Projects</span>
-                </div>
-                <div>
-                  <strong>Bean Rove</strong>
-                  <span>Roast Partner</span>
-                </div>
-                <div>
-                  <strong>Chikmagalur</strong>
-                  <span>Single Origin</span>
-                </div>
-              </div>
-              <div className="about-intro-actions">
-                <Link to="/store" className="btn btn-primary">Shop Coffee <ArrowRight size={14} /></Link>
-                <Link to="/workshop" className="btn btn-outline">Learn Coffee</Link>
-              </div>
-            </AnimatedSection>
+      {/* ===== STORY PANELS (Charmer-style) ===== */}
+      <div className="ed-stories">
+        <StoryPanel
+          id="01"
+          tags="ROASTING · ACADEMY · CONSULTING"
+          year="EST. 2023"
+          title={<>Specialty coffee, <em>beyond the bar.</em></>}
+          img="/pour-over-coffee.jpg"
+          alt="Barista pouring a slow Chemex brew with single-origin Chikmagalur coffee at Mastermind Brews"
+          tagline="The Brand"
+          ghost="BREWS"
+          lede="Everything we serve at the counter, carried into your kitchen, single-origin beans, the kit to brew them, and the craft behind a properly pulled cup."
+        >
+          <div className="ed-story-text">
+            <p>Our beans travel directly from estates in <strong>Chikmagalur, Karnataka</strong>, roasted to exclusive profiles by Bean Rove. The same coffee that lands in our portafilters, sealed fresh, shipped to your door.</p>
+            <p>Beyond the bag, a barista academy: HD video lessons, hands-on workshops in Mulund, and a consulting arm helping cafes across India build their coffee programs from the ground up.</p>
           </div>
-        </div>
-      </section>
+          <div className="ed-stats">
+            <div className="ed-stat"><strong><CountUp to={3} /></strong><span>Verticals · Beans, Academy, Projects</span></div>
+            <div className="ed-stat"><strong><CountUp to={100} suffix="%" /></strong><span>Single-Origin Chikmagalur</span></div>
+            <div className="ed-stat"><strong><CountUp to={48} suffix="h" /></strong><span>Roasted & shipped within</span></div>
+          </div>
+          <div className="ed-actions">
+            <Magnetic><Link to="/store" className="ed-btn ed-btn-primary">Shop Coffee <ArrowRight size={14} /></Link></Magnetic>
+            <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn Coffee</Link></Magnetic>
+          </div>
+        </StoryPanel>
 
-      {/* ===== INTRO 2, NAMRATA IS BREWING ===== */}
-      <section className="about-intro about-intro-namrata about-intro-namrata--v2">
-        <div className="about-intro-glow" aria-hidden="true" />
-        <div className="namrata-v2-bg" aria-hidden="true" />
-        <div className="container">
-          <div className="about-intro-grid reverse namrata-v2-grid">
-            <AnimatedSection className="about-intro-media namrata-v2-media">
-              <div className="namrata-v2-photo-stack">
-                <div className="namrata-v2-photo-glow" aria-hidden="true" />
-                <div className="namrata-v2-photo-aura" aria-hidden="true" />
-                <div className="about-intro-frame portrait namrata-v2-frame">
-                  <MaskReveal variant="up">
-                    <img
-                      src="/namrata.jpg"
-                      alt="Namrata Thakkar, founder and head roaster of Mastermind Brews and Mastermind Bicycle Cafe in Mulund, Mumbai"
-                      loading="lazy"
-                      width="800"
-                      height="1000"
-                    />
-                  </MaskReveal>
-                  <span className="namrata-v2-corner namrata-v2-corner--tl" aria-hidden="true" />
-                  <span className="namrata-v2-corner namrata-v2-corner--tr" aria-hidden="true" />
-                  <span className="namrata-v2-corner namrata-v2-corner--bl" aria-hidden="true" />
-                  <span className="namrata-v2-corner namrata-v2-corner--br" aria-hidden="true" />
-                  <span className="about-intro-chip"><Trophy size={12} /> The Brewer</span>
-                </div>
-              </div>
-              <motion.div
-                className="about-namrata-badge namrata-v2-badge"
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 180 }}
-              >
-                <div className="about-namrata-badge-icon"><Award size={18} /></div>
-                <div className="about-namrata-badge-body">
-                  <div className="about-namrata-badge-num">4th Runner-Up</div>
-                  <div className="about-namrata-badge-label">National Barista Championship 2026</div>
-                </div>
-              </motion.div>
-            </AnimatedSection>
-            <AnimatedSection className="about-intro-text" delay={0.15}>
-              <div className="about-intro-label about-intro-label-pink">02 / Namrata Is Brewing</div>
-              <h2 className="about-intro-title">From physiotherapy to championship coffee.</h2>
-              <p className="about-intro-lede">
-                Namrata Thakkar is the founder of Mastermind Bicycle Cafe, and a certified barista who placed <strong>4th Runner-Up at the National Barista Championship 2026</strong> at the India International Coffee Festival.
-              </p>
-              <p>
-                A former physiotherapist, curiosity became learning, learning became obsession, and obsession became craft. She built her coffee from the bar up: extraction, flavour notes, balance, precision, the kind of details that quietly separate a good cup from a great one.
-              </p>
-              <p>
-                On her handle <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer" className="about-inline-link">@namrata_is_brewing</a>, she shares the techniques she teaches her own baristas, from dialing in espresso to pulling a clean pour-over at home.
-              </p>
-              <div className="about-namrata-creds">
-                <div className="about-namrata-cred">
-                  <Trophy size={16} />
-                  <div>
-                    <strong>National Barista Championship 2026</strong>
-                    <span>4th Runner-Up &middot; IICF 2026</span>
-                  </div>
-                </div>
-                <div className="about-namrata-cred">
-                  <Coffee size={16} />
-                  <div>
-                    <strong>Founder, Mastermind Bicycle Cafe</strong>
-                    <span>Specialty Coffee · Mumbai</span>
-                  </div>
-                </div>
-                <div className="about-namrata-cred">
-                  <InstagramIcon size={16} />
-                  <div>
-                    <strong>@namrata_is_brewing</strong>
-                    <span>Coffee education & brewing tips</span>
-                  </div>
-                </div>
-              </div>
-              <div className="about-intro-actions">
-                <a
-                  href="https://www.instagram.com/namrata_is_brewing/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-blue"
-                >
-                  <InstagramIcon size={16} /> Follow @namrata_is_brewing
-                </a>
-              </div>
-            </AnimatedSection>
+        <StoryPanel
+          id="02"
+          tags="FOUNDER · HEAD BARISTA"
+          year="NBC 2026"
+          title={<>From physiotherapy to <em>championship coffee.</em></>}
+          img="/namrata.jpg"
+          alt="Namrata Thakkar, founder and head roaster of Mastermind Brews and Mastermind Bicycle Cafe in Mulund, Mumbai"
+          tagline="The Brewer"
+          ghost="NAMRATA"
+          lede="Namrata Thakkar is the founder of Mastermind Bicycle Cafe, and a certified barista who placed 4th Runner-Up at the National Barista Championship 2026."
+        >
+          <div className="ed-story-text">
+            <p>A former physiotherapist, curiosity became learning, learning became obsession, and obsession became craft. She built her coffee from the bar up, extraction, flavour notes, balance, precision, the details that quietly separate a good cup from a great one.</p>
+            <p>On her handle <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer">@namrata_is_brewing</a>, she shares the techniques she teaches her own baristas, from dialing in espresso to pulling a clean pour-over at home.</p>
           </div>
-        </div>
-      </section>
+          <div className="ed-badge">
+            <span className="ed-badge-icon"><Trophy size={18} /></span>
+            <span>
+              <span className="ed-badge-num">4th Runner-Up</span><br />
+              <span className="ed-badge-label">National Barista Championship 2026 · IICF</span>
+            </span>
+          </div>
+          <div className="ed-actions">
+            <Magnetic>
+              <a href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-primary">
+                <InstagramIcon size={15} /> Follow @namrata_is_brewing
+              </a>
+            </Magnetic>
+          </div>
+        </StoryPanel>
 
-      {/* ===== INTRO 3, MASTERMIND CAFE ===== */}
-      <section className="about-intro about-intro-cafe about-parallax-section">
-        <div
-          className="about-parallax-bg"
-          aria-hidden="true"
-          style={{ backgroundImage: 'url(/project-cafe.jpg)' }}
-        />
-        <div className="container">
-          <div className="about-intro-grid">
-            <AnimatedSection className="about-intro-media">
-              <div className="about-photo-stack">
-                <span className="about-photo-glow" aria-hidden="true" />
-                <span className="about-photo-aura" aria-hidden="true" />
-                <div className="about-intro-frame about-photo-frame image-natural">
-                  <MaskReveal variant="up">
-                    <img
-                      src="/project-cafe.jpg"
-                      alt="Interior view of Mastermind Bicycle Cafe & Bar in Mulund, Mumbai with warm lighting and community seating"
-                      loading="lazy"
-                      width="1200"
-                      height="900"
-                    />
-                  </MaskReveal>
-                  <span className="about-photo-corner about-photo-corner--tl" aria-hidden="true" />
-                  <span className="about-photo-corner about-photo-corner--tr" aria-hidden="true" />
-                  <span className="about-photo-corner about-photo-corner--bl" aria-hidden="true" />
-                  <span className="about-photo-corner about-photo-corner--br" aria-hidden="true" />
-                  <span className="about-intro-chip"><MapPin size={12} /> The Cafe</span>
-                </div>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection className="about-intro-text" delay={0.15}>
-              <div className="about-intro-label about-intro-label-amber">03 / Mastermind Bicycle Cafe</div>
-              <h2 className="about-intro-title">A specialty coffee house. A community space.</h2>
-              <p className="about-intro-lede">
-                In Mulund, the espresso machine and the bike rack share equal billing, a third place open from breakfast through midnight, every day of the week.
-              </p>
-              <p>
-                The kitchen leans South Indian: <strong>Malabar tiffins</strong> at dawn, gelato in the afternoon, matcha cocktails after dark. Pets are welcome, conversations stay slow, and the cycling crew rolls in every weekend.
-              </p>
-              <div className="about-cafe-grid">
-                <div className="about-cafe-card">
-                  <div className="about-cafe-card-icon"><MapPin size={16} /></div>
-                  <div>
-                    <strong>Mulund, Mumbai</strong>
-                    <span>Avior Corporate Park, LBS Marg</span>
-                  </div>
-                </div>
-                <div className="about-cafe-card">
-                  <div className="about-cafe-card-icon"><Clock size={16} /></div>
-                  <div>
-                    <strong>Open All Days</strong>
-                    <span>8:30 AM to 12 Midnight</span>
-                  </div>
-                </div>
-                <div className="about-cafe-card">
-                  <div className="about-cafe-card-icon"><Heart size={16} /></div>
-                  <div>
-                    <strong>Pet Friendly</strong>
-                    <span>Vegan & gluten-free options</span>
-                  </div>
-                </div>
-              </div>
-              <div className="about-intro-actions">
-                <a
-                  href="https://www.mastermindcafe.in/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                >
-                  Visit Cafe Website <ExternalLink size={14} />
-                </a>
-                <a
-                  href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline"
-                >
-                  Get Directions
-                </a>
-              </div>
-            </AnimatedSection>
+        <StoryPanel
+          id="03"
+          tags="HOSPITALITY · KITCHEN · COMMUNITY"
+          year="MULUND, MUMBAI"
+          title={<>A coffee house. <em>A community space.</em></>}
+          img="/project-cafe.jpg"
+          alt="Interior view of Mastermind Bicycle Cafe & Bar in Mulund, Mumbai with warm lighting and community seating"
+          tagline="The Cafe"
+          ghost="CAFE"
+          lede="In Mulund, the espresso machine and the bike rack share equal billing, a third place open from breakfast through midnight, every day of the week."
+        >
+          <div className="ed-story-text">
+            <p>The kitchen leans South Indian: <strong>Malabar tiffins</strong> at dawn, gelato in the afternoon, matcha cocktails after dark. Pets are welcome, conversations stay slow, and the cycling crew rolls in every weekend.</p>
           </div>
-        </div>
-      </section>
+          <div className="ed-stats">
+            <div className="ed-stat"><strong><MapPin size={22} /></strong><span>Avior Corporate Park · LBS Marg</span></div>
+            <div className="ed-stat"><strong><CountUp to={7} /></strong><span>Days open · 8:30 AM–12 AM</span></div>
+            <div className="ed-stat"><strong><Heart size={22} /></strong><span>Pet friendly · Vegan options</span></div>
+          </div>
+          <div className="ed-actions">
+            <Magnetic><a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-primary">Visit Cafe Website <ExternalLink size={14} /></a></Magnetic>
+            <Magnetic><a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-ghost">Get Directions</a></Magnetic>
+          </div>
+        </StoryPanel>
+      </div>
+
+      {/* ===== NRG-STYLE PINNED SCROLLY ===== */}
+      <PinnedStory />
 
       {/* ===== VALUES ===== */}
-      <GridBackground className="min-h-0">
-        <section className="values-section section-vignette" style={{ position: 'relative', zIndex: 1 }}>
-          <FloatingBeans count={6} seed={33} />
-          <div className="container">
-            <AnimatedSection className="section-header center">
-              <div className="section-label">What We Stand For</div>
-              <AnimatedText
-                text="Our Values"
-                textClassName="text-foreground"
-                underlineClassName="text-primary"
-              />
-            </AnimatedSection>
-            <motion.div
-              className="values-grid"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
-              variants={staggerContainer}
-            >
-              <motion.div className="value-card" variants={fadeUp}>
-                <div className="value-icon"><Coffee size={22} /></div>
-                <h3>Specialty First</h3>
-                <p>We do not compromise on bean quality, freshness, or the people who pour our cups.</p>
+      <section className="ed-values">
+        <div className="ed-container">
+          <div className="ed-section-label">What We Stand For</div>
+          <h2 className="ed-section-title">Our Values</h2>
+          <div className="ed-values-grid">
+            {VALUES.map((v, i) => (
+              <motion.div
+                key={v.title}
+                className="ed-value"
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="ed-value-num">0{i + 1}</span>
+                <div className="ed-value-icon"><v.icon size={24} /></div>
+                <h3>{v.title}</h3>
+                <p>{v.body}</p>
               </motion.div>
-              <motion.div className="value-card" variants={fadeUp}>
-                <div className="value-icon"><Heart size={22} /></div>
-                <h3>Welcome All</h3>
-                <p>Pet friendly, vegan friendly, gluten-free options, because hospitality should not be selective.</p>
-              </motion.div>
-              <motion.div className="value-card" variants={fadeUp}>
-                <div className="value-icon"><Award size={22} /></div>
-                <h3>Train Well</h3>
-                <p>Great coffee starts with great baristas. We invest in the people who make the craft.</p>
-              </motion.div>
-              <motion.div className="value-card" variants={fadeUp}>
-                <div className="value-icon"><Users size={22} /></div>
-                <h3>Build Community</h3>
-                <p>Cafes are third places. We keep ours warm, social, and a little bit unhurried.</p>
-              </motion.div>
-            </motion.div>
+            ))}
           </div>
-        </section>
-      </GridBackground>
+        </div>
+      </section>
 
-      <section className="cta-section">
-        <div className="container">
-          <AnimatedSection className="cta-card">
-            <h2>Want to Visit, Learn or Hire?</h2>
+      {/* ===== CLOSING CTA ===== */}
+      <section className="ed-cta">
+        <div className="ed-container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="ed-section-label" style={{ marginBottom: 18 }}><Sparkles size={13} style={{ display: 'inline', marginRight: 6 }} /> Come Say Hi</div>
+            <h2>Want to visit, learn or <em>hire?</em></h2>
             <p>Drop by the cafe, browse the workshop, or get in touch about a project.</p>
-            <div className="hero-btns">
-              <Link to="/workshop" className="btn btn-primary">Browse Workshop <ArrowRight size={14} /></Link>
-              <Link to="/contact" className="btn btn-outline">Contact Us</Link>
+            <div className="ed-actions">
+              <Magnetic><Link to="/workshop" className="ed-btn ed-btn-primary">Browse Workshop <ArrowRight size={14} /></Link></Magnetic>
+              <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Contact Us</Link></Magnetic>
             </div>
-          </AnimatedSection>
+          </motion.div>
         </div>
       </section>
     </div>

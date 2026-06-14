@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 
 // The handle zooms toward the viewer while scattered Instagram photos
-// fade in around it from the corners — feels like the feed lighting up
+// fade in around it from the corners, feels like the feed lighting up
 // before the user clicks through to the real grid.
 export default function ZoomCTA({
   pre = 'Do follow on',

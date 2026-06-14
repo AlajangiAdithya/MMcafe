@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * ScrollProgress — a thin gold bar at the top of the viewport that fills
+ * ScrollProgress, a thin gold bar at the top of the viewport that fills
  * as the page scrolls. Mounted once at app level so it overlays every route.
  * Pure rAF + transform-style width, no library.
  */

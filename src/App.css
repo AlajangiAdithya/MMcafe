@@ -7,7 +7,7 @@
 html { scroll-behavior: smooth; }
 html:focus-within { scroll-behavior: smooth; }
 
-/* Skip link — visible on focus, lets keyboard users bypass the navbar */
+/* Skip link, visible on focus, lets keyboard users bypass the navbar */
 .skip-link {
   position: fixed;
   top: 12px;
@@ -70,7 +70,7 @@ main:focus { outline: none; }
   }
 }
 
-/* Image fallback styling — avoid jarring broken-image icons */
+/* Image fallback styling, avoid jarring broken-image icons */
 img { color: transparent; }
 
 :root {
@@ -80,7 +80,7 @@ img { color: transparent; }
      Legacy aliases preserved so existing classes still work.
      ============================================================ */
 
-  /* Surfaces — porcelain whites & creams. White & gold editorial theme. */
+  /* Surfaces, porcelain whites & creams. White & gold editorial theme. */
   --bg-primary:   #FCFBF7;   /* cleaner Pearl Pearl */
   --bg-secondary: #F8F4EA;   /* softer Parchment */
   --bg-tertiary:  #F1EAD7;   /* warm Linen */
@@ -89,14 +89,14 @@ img { color: transparent; }
   --bg-surface:   #FCFAF5;
   --bg-hover:     #F3EFE0;
 
-  /* Ink — high-contrast black/brown for typography */
+  /* Ink, high-contrast black/brown for typography */
   --ink-100: #000000; /* Absolute Black */
   --ink-200: #111111; /* Near Black */
   --ink-300: #222222; /* Charcoal */
   --ink-400: #444444; /* Dark Grey */
   --ink-500: #666666; /* Meta */
 
-  /* Accents — Sophisticated Metallic Gold */
+  /* Accents, Sophisticated Metallic Gold */
   --accent:       #B88E2F; /* Harvest Gold - more metallic and legible */
   --accent-deep:  #A67C00; /* Deep Gold for active states */
   --accent-soft:  #E8C896; 
@@ -213,7 +213,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Subtle paper-grain overlay on the entire viewport — like the texture
+/* Subtle paper-grain overlay on the entire viewport, like the texture
    of a kraft coffee bag. Pure CSS noise, very low cost. */
 body::before {
   content: '';
@@ -468,7 +468,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   color: var(--ink-100);
 }
 
-/* ===== NAVBAR — Japanese coffee shop, white-on-brown =====
+/* ===== NAVBAR, Japanese coffee shop, white-on-brown =====
    Solid coffee-roast bar at the top of the page. White ivory typography,
    minimal divider rules, no glassmorphism noise. Inspired by
    ueshimacoffeecompany.com and japanesecoffeeco.com. */
@@ -496,7 +496,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   border-bottom: 1px solid rgba(201, 151, 74, 0.22);
 }
 
-/* Thin gold hairline at the bottom of the bar — like the gold leaf on
+/* Thin gold hairline at the bottom of the bar, like the gold leaf on
    a tea-house storefront. */
 .navbar::after {
   content: '';
@@ -615,7 +615,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   position: relative;
   white-space: nowrap;
 }
-/* Underline reveal — thin gold hairline, draws from center on hover. */
+/* Underline reveal, thin gold hairline, draws from center on hover. */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -1829,7 +1829,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   .fs-arrow--next { right: 6px; }
 }
 
-/* ===== Project Slides — opaque scroll-pinned case studies ===== */
+/* ===== Project Slides, opaque scroll-pinned case studies ===== */
 .psl-section {
   position: relative;
   width: 100%;
@@ -2125,7 +2125,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   .psl-slide-metric-label { font-size: 8.5px; }
 }
 
-/* ===== Stack Cards — sticky-stacking reveal ===== */
+/* ===== Stack Cards, sticky-stacking reveal ===== */
 .stack-cards {
   position: relative;
   width: 100%;
@@ -3390,7 +3390,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   border-bottom: 1px solid var(--border);
   position: relative;
   /* overflow: clip lets us hide the corner glow without creating a scroll
-     containing block — which is what kills the sticky ProjectSlides inside. */
+     containing block, which is what kills the sticky ProjectSlides inside. */
   overflow: clip;
 }
 
@@ -6017,7 +6017,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 
 
-/* Gold hairline at the top — mirrors the one under the navbar */
+/* Gold hairline at the top, mirrors the one under the navbar */
 .footer::before {
   content: '';
   position: absolute;
@@ -6132,7 +6132,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 
 
 
-/* Cafe card — white-on-brown, like a printed business card pinned
+/* Cafe card, white-on-brown, like a printed business card pinned
    to the wall of the cafe. */
 .footer-cafe-card {
   position: relative;
@@ -6582,7 +6582,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 }
 
 /* ============================================================
-   POLICY EDITORIAL LAYOUT — inspired by kamalaire.com
+   POLICY EDITORIAL LAYOUT, inspired by kamalaire.com
    Two-column: sticky TOC sidebar (left) + serif-style body (right).
    The page header is a full-bleed brown panel with a thin gold rule.
    ============================================================ */
@@ -6644,7 +6644,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   align-items: start;
 }
 
-/* Sticky table of contents — like a book's index pinned to the margin */
+/* Sticky table of contents, like a book's index pinned to the margin */
 .policy-editorial-toc {
   position: sticky;
   top: calc(var(--nav-height) + 24px);
@@ -6714,7 +6714,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 }
 .policy-editorial-toc li.is-active .toc-num { color: var(--accent); }
 
-/* Reading column — measured line length, generous leading */
+/* Reading column, measured line length, generous leading */
 .policy-editorial-body {
   max-width: 720px;
   font-family: var(--font-sans);
@@ -7883,7 +7883,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   gap: 8px;
   padding: 8px 16px;
   border-radius: var(--radius-pill);
-  background: transparent; /* NO white box — matches navbar */
+  background: transparent; /* NO white box, matches navbar */
   color: rgba(244, 233, 214, 0.90); /* Match nav-link cream color */
   font-family: var(--font-sans);
   font-size: 11px;
@@ -11868,7 +11868,7 @@ textarea:focus-visible {
 }
 
 /* ============================================================
-   COFFEE LOADER — global Suspense fallback
+   COFFEE LOADER, global Suspense fallback
    Steaming cup with brew-filling animation. Replaces the
    generic three-dot spinner so every route change feels on-brand.
    ============================================================ */
@@ -12984,7 +12984,7 @@ textarea:focus-visible {
 }
 
 /* ============================================================
-   INTERACTIVITY LAYER — Kamchukarrr-inspired motion polish
+   INTERACTIVITY LAYER, Kamchukarrr-inspired motion polish
    Soft cursor follower, scroll reveal, magnetic CTA.
    All animations respect prefers-reduced-motion.
    ============================================================ */
@@ -13203,7 +13203,7 @@ html {
 }
 
 /* ============================================================
-   INTERACTIVE LAYER v2 — magnetic, tilt, drag, spotlight
+   INTERACTIVE LAYER v2, magnetic, tilt, drag, spotlight
    Adds the "alive" feel: cursor-following CTAs, 3D tilt on
    the offer pillars, free-scrolling project + IG strips.
    All effects degrade gracefully under reduced motion.
@@ -13642,7 +13642,7 @@ html {
 }
 
 /* ============================================================
-   EDITORIAL LAYER — Japanese minimalist aesthetic
+   EDITORIAL LAYER, Japanese minimalist aesthetic
    Mono labels, kanji decoration, kinetic display headings,
    marquee strips, vertical chapter rail.
    ============================================================ */
@@ -14034,7 +14034,7 @@ html {
 }
 
 /* ============================================================
-   PRESS REVEAL — scroll-pinned headline → clipping
+   PRESS REVEAL, scroll-pinned headline → clipping
    Two-act reveal: title fills the screen first, then fades
    as the menu clipping rises into place. Tall section + sticky inner.
    ============================================================ */
@@ -14213,7 +14213,7 @@ html {
 }
 
 /* ============================================================
-   ZOOM CTA — scattered IG photos drifting in around the handle
+   ZOOM CTA, scattered IG photos drifting in around the handle
    ============================================================ */
 .zoom-cta-scatter {
   position: absolute;
@@ -14251,7 +14251,7 @@ html {
 }
 
 /* ============================================================
-   CAFE BLOCK — full-bleed bg image with cafe info overlay
+   CAFE BLOCK, full-bleed bg image with cafe info overlay
    Replaces the bottom Instagram duplicate.
    ============================================================ */
 .cafe-block-section {
@@ -14399,7 +14399,7 @@ html {
 }
 
 /* ============================================================
-   ACADEMY UPLIFT — lesson preview card + extra polish
+   ACADEMY UPLIFT, lesson preview card + extra polish
    ============================================================ */
 .academy-lesson-card {
   position: absolute;
@@ -14472,7 +14472,7 @@ html {
 }
 
 /* ============================================================
-   SIGN-OFF SECTION — three doors back into the brand
+   SIGN-OFF SECTION, three doors back into the brand
    Sits between newsletter CTA and footer. Cream surface with
    gold accents so it reads continuous with the rest of the page.
 ============================================================ */
@@ -14697,7 +14697,7 @@ html {
 }
 
 /* ============================================================
-   FOOTER — coffee-themed, swap dark slate for espresso/cream
+   FOOTER, coffee-themed, swap dark slate for espresso/cream
 ============================================================ */
 .footer.footer--editorial {
   background:
@@ -14867,7 +14867,7 @@ html {
 }
 
 /* ============================================================
-   HERO V2 — Cinematic editorial refresh
+   HERO V2, Cinematic editorial refresh
    ============================================================ */
 .hero--v2 {
   position: relative;
@@ -15111,7 +15111,7 @@ html {
 .hero--v2 .hero-split-link { height: calc(100% - 30px); }
 
 /* ============================================================
-   NAMRATA SECTION V2 — Fix image visibility + polish
+   NAMRATA SECTION V2, Fix image visibility + polish
    ============================================================ */
 .about-intro-namrata--v2 {
   position: relative;
@@ -15299,12 +15299,12 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: clamp(280px, 42vw, 560px);
-  height: clamp(280px, 42vw, 560px);
+  width: clamp(320px, 47vw, 640px);
+  height: clamp(320px, 47vw, 640px);
   isolation: isolate;
 }
 
-/* Outermost wide aura — gentle gold wash that lifts the whole frame */
+/* Outermost wide aura, gentle gold wash that lifts the whole frame */
 .hero-logo-spotlight-aura {
   position: absolute;
   inset: -32%;
@@ -15325,7 +15325,7 @@ html {
   50% { transform: scale(1.06); opacity: 1; }
 }
 
-/* Inner halo — tighter, brighter, sits just behind the logo */
+/* Inner halo, tighter, brighter, sits just behind the logo */
 .hero-logo-spotlight-halo {
   position: absolute;
   inset: -8%;
@@ -15346,7 +15346,7 @@ html {
   50% { opacity: 1; transform: scale(1.04); }
 }
 
-/* Slow conic shine — a tasteful sweep behind the logo */
+/* Slow conic shine, a tasteful sweep behind the logo */
 .hero-logo-spotlight-shine {
   position: absolute;
   inset: 4%;
@@ -15369,7 +15369,7 @@ html {
   to { transform: rotate(360deg); }
 }
 
-/* Two concentric expanding rings — subtle, low opacity */
+/* Two concentric expanding rings, subtle, low opacity */
 .hero-logo-spotlight-ring {
   position: absolute;
   inset: 0;
@@ -15393,7 +15393,7 @@ html {
   100% { transform: scale(1.55); opacity: 0; border-color: rgba(201, 151, 74, 0.0); }
 }
 
-/* The logo itself — drop shadows give it gold glow lift */
+/* The logo itself, drop shadows give it gold glow lift */
 .hero-logo-spotlight-img {
   position: relative;
   z-index: 3;
@@ -15419,7 +15419,7 @@ html {
 }
 
 /* ============================================================
-   GLASSMORPHISM SYSTEM — site-wide
+   GLASSMORPHISM SYSTEM, site-wide
    Tokens + targeted overrides for surfaces.
    ============================================================ */
 :root {
@@ -15459,7 +15459,7 @@ html {
     inset 0 1px 0 rgba(245, 213, 151, 0.08);
 }
 
-/* A reusable utility — apply `.glass` to any surface */
+/* A reusable utility, apply `.glass` to any surface */
 .glass {
   background: var(--glass-bg-medium);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
@@ -15546,7 +15546,7 @@ html {
   transform: translateY(-4px);
 }
 
-/* Offer pillars — stronger glass since they're hero cards */
+/* Offer pillars, stronger glass since they're hero cards */
 .offer-pillar {
   background: var(--glass-bg-medium) !important;
   -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(var(--glass-saturate));
@@ -15648,9 +15648,9 @@ html {
   border: 1px solid var(--glass-border) !important;
 }
 
-/* ---------- Hero split hint — make it glassy gold ---------- */
+/* ---------- Hero split hint, make it glassy gold ---------- */
 .hero-split-link:hover .hero-split-hint {
-  /* defined elsewhere — append glass pill */
+  /* defined elsewhere, append glass pill */
 }
 
 /* ---------- Footer subtle glass overlay (dark) ---------- */
@@ -15726,7 +15726,7 @@ html {
 }
 
 /* ============================================================
-   HERO TAGLINE PILL — glass, high-contrast text
+   HERO TAGLINE PILL, glass, high-contrast text
    ============================================================ */
 .hero-tagline-pill {
   display: inline-flex;
@@ -15787,7 +15787,7 @@ html {
 }
 
 /* ============================================================
-   ABOUT PHOTO STACK — used by Cafe section, mirrors Namrata
+   ABOUT PHOTO STACK, used by Cafe section, mirrors Namrata
    ============================================================ */
 .about-photo-stack {
   position: relative;
@@ -15887,7 +15887,7 @@ html {
    forms, inputs, selects, badges, marquee, admin, checkout
    ============================================================ */
 
-/* Form controls — light glass on cream pages */
+/* Form controls, light glass on cream pages */
 .form-input,
 .form-textarea,
 .form-select,
@@ -15930,7 +15930,7 @@ select:focus:not([data-no-glass]) {
   outline: none;
 }
 
-/* Section labels — refined glass pill */
+/* Section labels, refined glass pill */
 .section-label,
 .about-intro-label,
 .hero-badge,
@@ -16020,7 +16020,7 @@ select:focus:not([data-no-glass]) {
 }
 
 /* ============================================================
-   AUTH PAGES — "Coffee Ritual" Cinematic Redesign.
+   AUTH PAGES, "Coffee Ritual" Cinematic Redesign.
    Pearl glassmorphism, refined inputs, and sunlit atmosphere.
    ============================================================ */
 .auth-page {

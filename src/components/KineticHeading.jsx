@@ -1,14 +1,14 @@
 import { motion, useReducedMotion } from 'framer-motion'
 
 /**
- * KineticHeading — large display headline that splits text into words
+ * KineticHeading, large display headline that splits text into words
  * and animates each word with a stagger as the heading enters view.
  *
  * Props:
- *   children   — the text
- *   as         — element type (default "h2")
- *   className  — additional class names
- *   delay      — base delay in seconds
+ *   children, the text
+ *   as, element type (default "h2")
+ *   className, additional class names
+ *   delay, base delay in seconds
  */
 const word = {
   hidden: { y: '120%', opacity: 0, rotate: 4 },

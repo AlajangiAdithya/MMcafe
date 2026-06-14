@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * Reveal — wrap any block to have it slide up + fade in on first
+ * Reveal, wrap any block to have it slide up + fade in on first
  * intersection. Kamchukarrr-style scroll choreography without any
  * heavy library dependency.
  *

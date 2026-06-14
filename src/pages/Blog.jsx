@@ -6,6 +6,7 @@ import { getPublishedBlogPosts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import Loader from '@/components/ui/loader-4'
+import { HeroDockLogo } from '../components/ScrollDockLogo'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -27,6 +28,7 @@ export default function Blog() {
     title: 'Coffee Journal · Brewing Guides, Stories & Cafe Notes',
     description: 'Stories, brewing guides, latte-art tutorials and behind-the-scenes notes on coffee from the Mastermind Brews team in Mulund, Mumbai.',
     keywords: 'coffee blog India, brewing guides, latte art tips, specialty coffee stories, Mastermind Brews journal',
+    noindex: true, // hidden/prep: keep the blog out of the index until launch
   })
 
   const [posts, setPosts] = useState([])
@@ -53,9 +55,11 @@ export default function Blog() {
               visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
             }}
           >
-            <motion.div className="section-label" variants={fadeUp}>Blog</motion.div>
+            <motion.div variants={fadeUp}><HeroDockLogo /></motion.div>
+            <motion.div className="section-label" variants={fadeUp}>Journal</motion.div>
             <motion.div variants={fadeUp}>
               <AnimatedText
+                as="h1"
                 text="Notes from the Cafe"
                 textClassName="text-foreground"
                 underlineClassName="text-primary"

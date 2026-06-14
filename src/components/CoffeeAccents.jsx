@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 
 /**
- * CoffeeAccents — decorative SVG coffee elements scattered across a container.
+ * CoffeeAccents, decorative SVG coffee elements scattered across a container.
  * Used both ambiently (site-wide layer) and as a section-level overlay.
  *
  * Props:
- *   variant — "ambient" (full page, scattered) | "section" (corner accents)
- *   density — "light" | "normal" | "dense"
- *   seed    — re-roll positions
+ *   variant, "ambient" (full page, scattered) | "section" (corner accents)
+ *   density, "light" | "normal" | "dense"
+ *   seed, re-roll positions
  */
 export default function CoffeeAccents({ variant = 'section', density = 'normal', seed = 3 }) {
   const counts = {

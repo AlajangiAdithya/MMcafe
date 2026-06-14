@@ -78,7 +78,7 @@ export default function Navbar({ onOpenSearch }) {
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          <img src="/logo.png" alt="Mastermind Brews" />
+          <img src="/logo.png" alt="Mastermind Brews" data-dock-target />
           <div className="nav-logo-text">
             <span className="brand-name">Mastermind Brews</span>
             <span className="brand-sub">

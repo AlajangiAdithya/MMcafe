@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 /**
- * GlobalScrollReveal — automatically tags common content elements with a
+ * GlobalScrollReveal, automatically tags common content elements with a
  * scroll-reveal class and animates them into view via IntersectionObserver.
  *
  * - Runs synchronously via useLayoutEffect so elements are hidden before
@@ -86,7 +86,7 @@ function tagElements(root, io) {
         // Skip anything framer-motion is already animating (it sets inline
         // transform/opacity styles which would fight ours).
         if (el.style && (el.style.opacity !== '' || el.style.transform !== '')) return
-        // Also skip elements whose ancestor is being animated by motion —
+        // Also skip elements whose ancestor is being animated by motion,
         // animating both parent and child causes visual jitter.
         const motionAncestor = el.closest('[style*="opacity"], [style*="transform"]')
         if (motionAncestor && motionAncestor !== el && motionAncestor.contains(el)) return

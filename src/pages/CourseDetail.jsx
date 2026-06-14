@@ -39,6 +39,7 @@ export default function CourseDetail() {
   usePageMeta({
     title: course?.title ? `${course.title} · Mastermind Brews Academy` : 'Course · Mastermind Brews Academy',
     description: course?.description || 'Watch the intro video and explore lessons before enrolling.',
+    noindex: true, // hidden/prep: course pages out of the index until academy launch
   })
 
   useEffect(() => {

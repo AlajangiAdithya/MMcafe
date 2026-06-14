@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 
 /**
- * PolicyLayout — editorial wrapper for legal pages (Privacy, Terms,
+ * PolicyLayout, editorial wrapper for legal pages (Privacy, Terms,
  * Refund, Shipping). Inspired by kamalaire.com: a clean two-column
  * layout with a sticky table-of-contents on the left and serif-like
  * body copy on the right.
  *
  * The TOC auto-builds from the rendered <h2> headings inside the
- * content slot, so the wrapper is drop-in for the existing pages —
+ * content slot, so the wrapper is drop-in for the existing pages,
  * no copy or markup changes required in the legal text itself.
  *
  * On scroll, the currently-visible section is highlighted in the TOC.

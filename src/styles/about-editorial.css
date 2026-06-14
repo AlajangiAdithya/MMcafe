@@ -1,0 +1,502 @@
+/* ============================================================
+   ABOUT · EDITORIAL (Charmer Studio look + NRG scrollytelling)
+   Dark espresso, elegant serif titles, monospace captions,
+   full-bleed media panels with ghost names, and a pinned
+   scroll-through story section. On-brand brown palette.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap');
+
+.about-editorial {
+  --ed-serif: 'Fraunces', 'Noto Serif JP', Georgia, serif;
+  --ed-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --ed-bg: #181009;
+  --ed-bg-2: #211610;
+  --ed-cream: #F4E9D8;
+  --ed-dim: #C7B299;
+  --ed-accent: #DD9E55;
+  --ed-accent-bright: #EFC07E;
+  --ed-line: rgba(244, 233, 216, 0.14);
+  --ed-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  /* !important to beat the App.css "editorial reset" that forces
+     .about-page { background: transparent !important } (same element). */
+  background: var(--ed-bg) !important;
+  color: var(--ed-cream);
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+.ed-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+}
+
+/* ---------- HERO tweaks (serif title to match Charmer) ---------- */
+.about-editorial .about-hero .page-title {
+  font-family: var(--ed-serif);
+  font-weight: 420;
+  letter-spacing: -0.03em;
+}
+.ed-scrollcue {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 34px;
+  font-family: var(--ed-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244, 233, 216, 0.72);
+}
+.ed-mouse {
+  width: 20px; height: 32px;
+  border: 1.5px solid rgba(244, 233, 216, 0.55);
+  border-radius: 12px;
+  position: relative;
+}
+.ed-mouse::before {
+  content: '';
+  position: absolute; left: 50%; top: 6px;
+  width: 3px; height: 6px; border-radius: 2px;
+  background: var(--ed-accent);
+  transform: translateX(-50%);
+  animation: ed-mousedot 1.6s ease-in-out infinite;
+}
+@keyframes ed-mousedot {
+  0% { opacity: 0; transform: translate(-50%, 0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, 11px); }
+}
+
+/* ---------- EDITORIAL HERO (used by Our Projects) ---------- */
+.ed-hero { padding: clamp(70px, 12vw, 150px) 0 clamp(40px, 7vw, 90px); }
+.ed-hero-title { font-size: clamp(2.7rem, 8vw, 6rem) !important; line-height: 0.96; }
+.ed-hero-lede {
+  font-style: normal !important;
+  max-width: 680px;
+  margin: 24px auto 0;
+  text-align: center;
+  color: var(--ed-dim);
+}
+
+/* ---------- CONSULTANCY · PREMIUM CINEMATIC HERO (this page only) ----------
+   A deep, textured dark hero: full-bleed photo under a heavy scrim so it reads
+   as premium and neat (not a flat void). Scoped to .consultancy-page so the
+   shared .pg-hero / About heroes are untouched. */
+.consultancy-page.about-editorial .cons-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 92vh;
+  margin-top: calc(-1 * var(--nav-height));
+  padding: calc(var(--nav-height) + clamp(48px, 8vw, 104px)) 0 clamp(56px, 8vw, 104px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.consultancy-page .cons-hero-bg {
+  position: absolute; inset: 0; z-index: -2;
+  background-size: cover;
+  background-position: center 38%;
+  will-change: transform, opacity;
+  filter: saturate(0.9) contrast(1.02);
+}
+.consultancy-page .cons-hero-scrim {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(18, 12, 8, 0.86) 0%, rgba(18, 12, 8, 0.58) 40%, rgba(14, 9, 6, 0.94) 100%),
+    radial-gradient(ellipse 80% 72% at 50% 46%, rgba(10, 6, 4, 0.3), rgba(10, 6, 4, 0.74) 78%);
+}
+.consultancy-page .cons-hero-inner {
+  position: relative; z-index: 1;
+  text-align: center;
+  max-width: 1040px;
+}
+.consultancy-page .cons-eyebrow {
+  display: inline-flex; align-items: center; gap: 16px;
+  font-family: var(--ed-mono);
+  font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ed-accent);
+  margin-bottom: clamp(22px, 3vw, 34px);
+}
+.consultancy-page .cons-eyebrow::before,
+.consultancy-page .cons-eyebrow::after {
+  content: '';
+  width: clamp(26px, 6vw, 56px); height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244, 233, 216, 0.5));
+}
+.consultancy-page .cons-eyebrow::after {
+  background: linear-gradient(90deg, rgba(244, 233, 216, 0.5), transparent);
+}
+.consultancy-page .cons-hero-title {
+  max-width: 18ch;
+  margin: 0 auto;
+  text-align: center;
+  text-shadow: 0 2px 48px rgba(0, 0, 0, 0.45);
+}
+.consultancy-page .cons-hero-lede {
+  /* clear breathing room below the large serif title (was a cramped 24px) */
+  margin: clamp(26px, 3.6vw, 48px) auto 0;
+  max-width: 640px;
+  text-align: center;
+  line-height: 1.45;
+  color: rgba(244, 233, 216, 0.86);
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.4);
+}
+.consultancy-page .cons-hero-cta { margin-top: clamp(30px, 4vw, 44px); }
+.consultancy-page .cons-hero-cta .ed-btn-primary {
+  padding: 16px 28px;
+  box-shadow: 0 16px 40px -16px rgba(221, 158, 85, 0.6);
+}
+.consultancy-page .cons-hero-cue {
+  margin-top: clamp(34px, 5vw, 52px);
+  display: flex; justify-content: center;
+}
+.consultancy-page .cons-hero-cue .ed-scrollcue { margin-top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .consultancy-page .cons-hero-bg { transform: none !important; }
+}
+
+/* "Who it's for" check list (editorial) */
+.ed-suited-list { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+.ed-suited-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 1.05rem; line-height: 1.5; color: var(--ed-cream);
+  padding-bottom: 14px; border-bottom: 1px solid var(--ed-line);
+}
+.ed-suited-list li svg { color: var(--ed-accent); flex-shrink: 0; margin-top: 4px; }
+
+/* Pinned-process line content (Our Projects) */
+.ed-pin-step-num { display: block; font-family: var(--ed-mono); font-size: 0.78rem; letter-spacing: 0.24em; color: var(--ed-accent); margin-bottom: clamp(14px, 2.4vh, 22px); }
+.ed-pin-step-title {
+  display: block;
+  font-family: var(--ed-serif);
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  line-height: 1.04;
+  max-width: 16ch;
+}
+.ed-pin-step-body {
+  display: block;
+  margin-top: clamp(16px, 2.6vh, 26px);
+  font-family: var(--ed-mono);
+  font-size: clamp(0.8rem, 1.1vw, 0.96rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--ed-dim);
+  max-width: 40ch;
+}
+
+/* ---------- STORY PANELS (Charmer) ---------- */
+.ed-stories { padding: clamp(20px, 4vw, 60px) 0 0; }
+.ed-story {
+  padding: clamp(56px, 9vw, 128px) 0;
+  border-top: 1px solid var(--ed-line);
+}
+.ed-story-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 28px;
+}
+.ed-story-index {
+  font-family: var(--ed-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--ed-accent);
+}
+.ed-story-meta {
+  font-family: var(--ed-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ed-dim);
+  text-align: right;
+}
+.ed-story-title {
+  flex-basis: 100%;
+  font-family: var(--ed-serif);
+  font-weight: 400;
+  font-size: clamp(2.7rem, 8.4vw, 6.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  /* !important + text-fill: a global heading rule in App.css sets
+     color/-webkit-text-fill-color to #1a1208 (dark) and wins otherwise. */
+  color: var(--ed-cream) !important;
+  -webkit-text-fill-color: var(--ed-cream) !important;
+  margin: 10px 0 0;
+}
+.ed-story-title em {
+  font-style: italic;
+  color: var(--ed-accent) !important;
+  -webkit-text-fill-color: var(--ed-accent) !important;
+}
+
+.ed-story-media {
+  position: relative;
+  margin: clamp(26px, 4vw, 54px) 0 clamp(30px, 4vw, 56px);
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 8;
+  background: var(--ed-bg-2);
+  will-change: clip-path;
+}
+.ed-story-media img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  will-change: transform;
+}
+.ed-story-ghost {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  transform: translateX(-50%);
+  font-family: var(--ed-serif);
+  font-weight: 600;
+  font-size: clamp(3.5rem, 17vw, 15rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.14);
+  mix-blend-mode: overlay;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.ed-story-tag {
+  position: absolute; top: 16px; left: 16px;
+  font-family: var(--ed-mono);
+  font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ed-cream);
+  background: rgba(20, 13, 9, 0.5);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  padding: 7px 13px; border-radius: 999px;
+  border: 1px solid rgba(244, 233, 216, 0.2);
+}
+
+.ed-story-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(24px, 5vw, 72px);
+  align-items: start;
+}
+.ed-story-lede {
+  font-family: var(--ed-serif);
+  font-weight: 340;
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.4vw, 2.05rem);
+  line-height: 1.32;
+  color: var(--ed-cream);
+  margin: 0;
+}
+.ed-story-text p {
+  color: var(--ed-dim);
+  font-size: 1rem;
+  line-height: 1.78;
+  margin: 0 0 1rem;
+}
+.ed-story-text p:last-child { margin-bottom: 0; }
+.ed-story-text strong { color: var(--ed-cream); font-weight: 600; }
+.ed-story-text a {
+  color: var(--ed-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.ed-stats {
+  display: flex; flex-wrap: wrap;
+  gap: clamp(22px, 4vw, 54px);
+  margin-top: 30px;
+}
+.ed-stat strong {
+  display: block;
+  font-family: var(--ed-serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  color: var(--ed-accent);
+  line-height: 1;
+}
+.ed-stat span {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--ed-mono);
+  font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ed-dim);
+}
+
+.ed-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+.ed-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ed-mono);
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 14px 22px; border-radius: 999px;
+  transition: background 0.3s var(--ed-ease), color 0.3s var(--ed-ease), border-color 0.3s var(--ed-ease), transform 0.3s var(--ed-ease);
+}
+.ed-btn-primary { background: var(--ed-accent); color: #1a1208; }
+.ed-btn-primary:hover { background: var(--ed-accent-bright); }
+.ed-btn-ghost { border: 1px solid var(--ed-line); color: var(--ed-cream); }
+.ed-btn-ghost:hover { border-color: var(--ed-accent); color: var(--ed-accent); }
+
+.ed-badge {
+  display: inline-flex; align-items: center; gap: 14px;
+  margin-top: 24px; padding: 14px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(221, 158, 85, 0.4);
+  background: rgba(221, 158, 85, 0.1);
+}
+.ed-badge-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: rgba(221, 158, 85, 0.18);
+  color: var(--ed-accent);
+}
+.ed-badge-num { font-family: var(--ed-serif); font-size: 1.05rem; color: var(--ed-cream); font-weight: 600; }
+.ed-badge-label { font-family: var(--ed-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ed-dim); }
+
+/* ---------- NRG-STYLE PINNED SCROLLY ---------- */
+.ed-pin { position: relative; height: 380vh; }
+.ed-pin-sticky {
+  position: sticky; top: 0;
+  height: 100vh; min-height: 600px;
+  overflow: hidden;
+  display: grid; place-items: center;
+}
+.ed-pin-bg {
+  position: absolute; inset: -8% 0;
+  background-size: cover; background-position: center;
+  will-change: transform;
+}
+.ed-pin-scrim {
+  position: absolute; inset: 0;
+  /* Darkest in the CENTER (behind the text), softer toward the edges so the
+     photo still reads. A flat base layer guarantees contrast regardless of
+     the underlying image, kept deliberately heavy because the pour-over photo
+     is bright through the middle. */
+  background:
+    linear-gradient(180deg, rgba(12, 8, 5, 0.64) 0%, rgba(12, 8, 5, 0.5) 42%, rgba(10, 7, 4, 0.82) 100%),
+    radial-gradient(ellipse 72% 66% at 50% 52%, rgba(6, 4, 2, 0.88), rgba(6, 4, 2, 0.12) 80%);
+}
+.ed-pin-ghost {
+  position: absolute; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: var(--ed-serif); font-weight: 600;
+  font-size: clamp(5rem, 23vw, 22rem);
+  line-height: 1; letter-spacing: -0.04em;
+  color: rgba(244, 233, 216, 0.12);
+  pointer-events: none; user-select: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.6s var(--ed-ease);
+}
+.ed-pin-ghost.is-active { opacity: 1; }
+.ed-pin-inner {
+  position: relative; z-index: 2; text-align: center;
+  width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 24px;
+}
+.ed-pin-eyebrow {
+  font-family: var(--ed-mono);
+  font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--ed-accent);
+  margin-bottom: clamp(28px, 5vh, 52px);
+}
+.ed-pin-stage { position: relative; width: 100%; height: clamp(340px, 48vh, 470px); }
+.ed-pin-line {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 24px; text-align: center;
+  font-family: var(--ed-serif); font-weight: 360;
+  color: var(--ed-cream);
+  /* hidden until its scroll band is active; full opacity when shown so the
+     text is always clearly readable (active step toggled from JS) */
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.5s var(--ed-ease), transform 0.6s var(--ed-ease);
+  pointer-events: none;
+}
+.ed-pin-line.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ed-pin-line em { font-style: italic; color: var(--ed-accent); }
+.ed-pin-cue {
+  position: absolute; bottom: 30px; left: 50%;
+  transform: translateX(-50%);
+}
+.ed-pin-dots {
+  display: flex; justify-content: center; gap: 10px;
+  margin-top: clamp(34px, 5vh, 60px);
+}
+.ed-pin-dots span {
+  width: 7px; height: 7px; border-radius: 999px;
+  background: rgba(244, 233, 216, 0.28);
+  transition: background 0.4s var(--ed-ease), transform 0.4s var(--ed-ease);
+}
+.ed-pin-dots span.is-active { background: var(--ed-accent); transform: scale(1.35); }
+
+/* ---------- VALUES (editorial dark) ---------- */
+.ed-values { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
+.ed-section-label {
+  font-family: var(--ed-mono);
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ed-accent);
+}
+.ed-section-title {
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1; letter-spacing: -0.02em;
+  color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important;
+  margin: 12px 0 0;
+}
+.ed-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1px;
+  margin-top: clamp(32px, 5vw, 56px);
+  background: var(--ed-line);
+  border: 1px solid var(--ed-line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.ed-value {
+  background: var(--ed-bg);
+  padding: clamp(26px, 3vw, 40px) clamp(22px, 2.4vw, 32px);
+  transition: background 0.4s var(--ed-ease);
+}
+.ed-value:hover { background: var(--ed-bg-2); }
+.ed-value-icon { color: var(--ed-accent); margin-bottom: 18px; }
+.ed-value h3 { font-family: var(--ed-serif); font-weight: 500; font-size: 1.45rem; color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important; margin: 0 0 10px; }
+.ed-value p { color: var(--ed-dim); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+.ed-value-num { font-family: var(--ed-mono); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ed-dim); display: block; margin-bottom: 16px; }
+
+/* ---------- CLOSING CTA ---------- */
+.ed-cta { padding: clamp(64px, 10vw, 150px) 0; border-top: 1px solid var(--ed-line); text-align: center; }
+.ed-cta h2 {
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1; letter-spacing: -0.02em;
+  color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important;
+  margin: 0 0 20px;
+}
+.ed-cta h2 em { font-style: italic; color: var(--ed-accent) !important; -webkit-text-fill-color: var(--ed-accent) !important; }
+.ed-cta p { color: var(--ed-dim); font-size: 1.1rem; max-width: 620px; margin: 0 auto 36px; line-height: 1.6; }
+.ed-cta .ed-actions { justify-content: center; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .ed-story-grid { grid-template-columns: 1fr; gap: 22px; }
+  .ed-story-meta { text-align: left; }
+  .ed-story-media { aspect-ratio: 16 / 11; }
+}
+
+/* ---------- REDUCED MOTION: unpin, show all lines ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ed-pin { height: auto; }
+  .ed-pin-sticky { position: relative; height: auto; min-height: 0; padding: clamp(60px, 9vw, 110px) 0; }
+  .ed-pin-stage { height: auto; display: flex; flex-direction: column; gap: 22px; }
+  .ed-pin-line { position: relative; inset: auto; opacity: 1 !important; transform: none !important; transition: none; }
+  .ed-pin-ghost { display: none; }
+  .ed-pin-dots { display: none; }
+}

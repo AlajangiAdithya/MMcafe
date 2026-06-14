@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * CursorTrail — a soft steam-puff follower that trails the cursor.
+ * CursorTrail, a soft steam-puff follower that trails the cursor.
  * Adds a "warm, alive" feel without interfering with the custom coffee
  * cursor (the puff sits behind, the bean cursor sits on top via z-index).
  *
@@ -33,7 +33,7 @@ export default function CursorTrail() {
     const onLeave = () => { dot.style.opacity = '0' }
 
     const tick = () => {
-      // Lerp for a soft, lazy follow — about 14% per frame.
+      // Lerp for a soft, lazy follow, about 14% per frame.
       x += (mouseX - x) * 0.14
       y += (mouseY - y) * 0.14
       dot.style.transform = `translate3d(${x}px, ${y}px, 0)`

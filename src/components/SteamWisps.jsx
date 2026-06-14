@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 /**
- * SteamWisps — soft white plumes that drift upward, simulating
+ * SteamWisps, soft white plumes that drift upward, simulating
  * coffee steam behind hero content. Pure CSS keyframes.
  */
 export default function SteamWisps({ count = 4, seed = 7 }) {

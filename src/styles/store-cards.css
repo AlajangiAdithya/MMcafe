@@ -1,0 +1,192 @@
+/* ============================================================
+   STORE · CARD VIEW (FCTRY-Lab-style editorial product panels)
+   + the Cards/Grid view toggle. Light, on-brand brown palette.
+   ============================================================ */
+
+/* ---------- View toggle ---------- */
+.fl-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.fl-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-400);
+  background: transparent;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+.fl-toggle button:hover { color: var(--ink-100); }
+.fl-toggle button.is-active {
+  background: var(--ink-100);
+  color: var(--bg-elevated);
+}
+
+/* ---------- Panel list ---------- */
+.fl-list { display: flex; flex-direction: column; margin-top: 8px; }
+
+.fl-panel {
+  border-top: 1px solid var(--border-strong);
+}
+.fl-panel:last-child { border-bottom: 1px solid var(--border-strong); }
+
+.fl-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: baseline;
+  gap: 18px;
+  width: 100%;
+  padding: 22px 6px;
+  text-align: left;
+  background: transparent;
+  transition: opacity 0.25s var(--ease);
+}
+.fl-row:hover { opacity: 0.72; }
+.fl-idx {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: var(--accent-deep);
+  letter-spacing: 0.04em;
+}
+.fl-row-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink-100);
+}
+.fl-row-meta {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  white-space: nowrap;
+}
+
+/* ---------- Panel body (media + detail) ---------- */
+.fl-body {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  padding: 4px 6px clamp(40px, 6vw, 72px);
+}
+/* Alternate the image side for editorial rhythm */
+.fl-panel:nth-child(even) .fl-media { order: 2; }
+
+.fl-media {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  will-change: clip-path;
+}
+.fl-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.9s var(--ease);
+}
+.fl-media:hover img { transform: scale(1.04) !important; }
+.fl-media-placeholder {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  color: var(--ink-400);
+  background: var(--bg-tertiary);
+}
+.fl-tag {
+  position: absolute; top: 16px; left: 16px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-100);
+  background: rgba(255, 252, 246, 0.78);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.fl-wish {
+  position: absolute !important;
+  top: 12px; right: 12px;
+  z-index: 2;
+}
+
+.fl-detail { max-width: 460px; }
+.fl-detail-cat {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent-deep);
+}
+.fl-detail-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--ink-100);
+  margin: 12px 0 0;
+}
+.fl-detail-desc {
+  color: var(--ink-300);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  margin: 14px 0 0;
+}
+.fl-detail-rating {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 16px;
+  color: var(--accent-deep);
+  font-size: 0.85rem; font-weight: 600;
+}
+.fl-detail-rating-count { color: var(--ink-400); font-weight: 400; }
+
+.fl-detail-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.fl-detail-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: var(--ink-100);
+}
+.fl-detail-actions { display: flex; gap: 10px; }
+.fl-add, .fl-view {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem; font-weight: 600;
+  padding: 12px 18px; border-radius: 999px;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.fl-add { background: var(--ink-100); color: var(--bg-elevated); }
+.fl-add:hover { background: var(--accent-deep); transform: translateY(-2px); }
+.fl-view { border: 1px solid var(--border-strong); color: var(--ink-100); }
+.fl-view:hover { border-color: var(--accent); color: var(--accent-deep); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .fl-body { grid-template-columns: 1fr; gap: 20px; }
+  .fl-panel:nth-child(even) .fl-media { order: 0; }
+  .fl-row { grid-template-columns: 40px 1fr; }
+  .fl-row-meta { grid-column: 2; }
+  .fl-detail { max-width: none; }
+}

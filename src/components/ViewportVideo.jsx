@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from 'react'
 
 /**
- * ViewportVideo — drop-in replacement for <video> that pauses when off-screen
+ * ViewportVideo, drop-in replacement for <video> that pauses when off-screen
  * to save CPU/battery (especially on mobile). Resumes when back in view.
  *
  * All native <video> props pass through. The element is muted by default

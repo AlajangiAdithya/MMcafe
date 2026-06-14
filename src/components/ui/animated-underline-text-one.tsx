@@ -7,16 +7,19 @@ interface AnimatedTextProps extends React.HTMLAttributes<HTMLDivElement> {
   textClassName?: string;
   underlineClassName?: string;
   underlineDuration?: number;
+  /** Heading level to render. Defaults to "h2"; pass "h1" for page titles. */
+  as?: "h1" | "h2" | "h3";
 }
 
 const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
-  ({ text, textClassName, underlineClassName, underlineDuration = 0.8, ...props }, ref) => {
+  ({ text, textClassName, underlineClassName, underlineDuration = 0.8, as = "h2", ...props }, ref) => {
+    const Heading = motion[as];
     return (
       <div
         ref={ref}
         className={cn("flex flex-col items-center gap-0", props.className)}
       >
-        <motion.h2
+        <Heading
           className={cn(
             "text-3xl md:text-4xl font-bold tracking-wide uppercase leading-tight",
             textClassName
@@ -28,13 +31,9 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           {text}
-        </motion.h2>
+        </Heading>
         <motion.div
-          className={cn("mt-3 rounded-full", underlineClassName)}
-          style={{
-            height: '2px',
-            background: 'linear-gradient(90deg, #4A90D9, #D4647A)',
-          }}
+          className={cn("mt-3 rounded-full mm-underline", underlineClassName)}
           initial={{ width: 0, opacity: 0 }}
           whileInView={{ width: 48, opacity: 1 }}
           viewport={{ once: true }}

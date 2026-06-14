@@ -12,7 +12,7 @@ function Word({ children, range, progress, prefersReducedMotion }) {
 }
 
 /**
- * TextReveal — scroll-driven word-by-word reveal. The container becomes
+ * TextReveal, scroll-driven word-by-word reveal. The container becomes
  * tall so the page scroll drives each word in/out of focus.
  */
 export default function TextReveal({ text, className = '' }) {

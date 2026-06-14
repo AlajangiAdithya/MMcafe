@@ -16,10 +16,13 @@ import ScrollProgress from './components/ScrollProgress'
 import GlobalScrollReveal from './components/GlobalScrollReveal'
 import FloatingBeans from './components/FloatingBeans'
 import SmoothScroll from './components/SmoothScroll'
+import TitleFlip from './components/TitleFlip'
+import ScrollDockLogo from './components/ScrollDockLogo'
 import Home from './pages/Home'
 import './App.css'
 import './styles/scroll-effects.css'
 import './styles/animation-tokens.css'
+import './styles/espresso-theme.css'
 
 // Lazy-load every non-critical route. Home stays eager because it's the
 // landing page; everything else is split into its own chunk so the initial
@@ -72,6 +75,7 @@ export default function App() {
 function AppShell() {
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
+  const isHome = location.pathname === '/'
   const [paletteOpen, setPaletteOpen] = useState(false)
 
   // Global ⌘K / Ctrl+K to open the search palette.
@@ -87,13 +91,19 @@ function AppShell() {
   }, [])
 
   return (
-    <div className="app" style={{ position: 'relative' }}>
+    <div
+      className="app"
+      style={{ position: 'relative' }}
+      data-theme={isHome || isAdmin ? undefined : 'espresso'}
+    >
       <a href="#main-content" className="skip-link">Skip to content</a>
-      {/* SmoothScroll removed — using native browser scroll */}
+      {/* SmoothScroll removed, using native browser scroll */}
+      <TitleFlip />
       <ScrollProgress />
       <GlobalScrollReveal />
       <CursorTrail />
       <Navbar onOpenSearch={() => setPaletteOpen(true)} />
+      <ScrollDockLogo />
       <main id="main-content" className="main-content" tabIndex={-1}>
         <ErrorBoundary>
           <Suspense fallback={<RouteFallback />}>

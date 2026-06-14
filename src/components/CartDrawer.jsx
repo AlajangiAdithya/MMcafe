@@ -12,7 +12,7 @@ export default function CartDrawer() {
   const closeBtnRef = useRef(null)
   const previouslyFocusedRef = useRef(null)
 
-  // Lock body scroll, close on Escape, manage focus. Pure UX polish — no
+  // Lock body scroll, close on Escape, manage focus. Pure UX polish, no
   // change to cart state or open/close semantics from the consumer side.
   useEffect(() => {
     if (!isOpen) return
