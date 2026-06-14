@@ -1,6 +1,6 @@
 # SEO Strategy — Mastermind Brews
 
-**Domain:** https://www.mastermindcafe.in
+**Domain:** https://www.mastermindbrews.com
 **Prepared:** 2026-06-14
 **Mode:** Existing live site (optimization, not launch)
 **Stack:** React 19 + Vite 8 SPA (client-side rendered), React Router 7, Supabase, Razorpay

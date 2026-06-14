@@ -10,5 +10,5 @@ Disallow: /order-confirmation
 Disallow: /reset-password
 Disallow: /forgot-password
 
-Sitemap: https://www.mastermindcafe.in/sitemap.xml
-Host: https://www.mastermindcafe.in
+Sitemap: https://www.mastermindbrews.com/sitemap.xml
+Host: https://www.mastermindbrews.com

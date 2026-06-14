@@ -15,7 +15,7 @@ export default function TermsOfService() {
         <section>
           <h2>1. Introduction</h2>
           <p>
-            Welcome to mastermindcafe.in (the "Site"), operated by Mastermind Bicycle Cafe
+            Welcome to mastermindbrews.com (the "Site"), operated by Mastermind Bicycle Cafe
             & Bar, trading as <strong>Mastermind Brews</strong> ("we", "us", "our"). By
             accessing or using our Site, placing an order, enrolling in any course through
             our Barista Academy, submitting a profile to our Barista Directory, or

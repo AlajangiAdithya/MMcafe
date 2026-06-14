@@ -1,6 +1,6 @@
 # Backlink Profile Analysis — Mastermind Brews
 
-**Domain:** https://www.mastermindcafe.in
+**Domain:** https://www.mastermindbrews.com
 **Date:** 2026-06-14
 **Data tier:** 0 — Common Crawl + verification crawler only (no DataForSEO / Moz / Bing keys configured)
 
@@ -66,7 +66,7 @@ Since the profile is greenfield, the job is acquisition. Prioritized for the thr
 | 9 | **YouTube channel** (brewing/latte-art tutorials) → embeds + profile/description links | B | Med | Drives the academy funnel; videos earn embeds (links) |
 | 10 | **Coffee communities** (r/IndiaCoffee, barista forums, Discords) | All | Low | Referral traffic + brand mentions that fuel GEO/AI citations (not just links) |
 
-**Anchor-text guidance from day one** (avoid future over-optimization): keep it natural — mostly **branded** ("Mastermind Brews", "mastermindcafe.in") and **naked URLs**; use exact-match keyword anchors (`buy coffee beans online`) **sparingly (<10%)**.
+**Anchor-text guidance from day one** (avoid future over-optimization): keep it natural — mostly **branded** ("Mastermind Brews", "mastermindbrews.com") and **naked URLs**; use exact-match keyword anchors (`buy coffee beans online`) **sparingly (<10%)**.
 
 ---
 

@@ -17,7 +17,7 @@ export default function RefundPolicy() {
           <p>
             At Mastermind Brews, we take great care in sourcing and packaging our coffee products.
             This policy outlines the terms for returns and refunds for purchases made on
-            mastermindcafe.in. Once an order is placed, it is treated as final and moves into
+            mastermindbrews.com. Once an order is placed, it is treated as final and moves into
             fulfilment immediately.
           </p>
         </section>

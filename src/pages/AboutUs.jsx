@@ -10,11 +10,11 @@ import SteamWisps from '../components/SteamWisps'
 import JsonLd from '../components/JsonLd'
 import '../styles/about-editorial.css'
 
-const ABOUT_ORG_ID = 'https://www.mastermindcafe.in/#organization'
+const ABOUT_ORG_ID = 'https://www.mastermindbrews.com/#organization'
 const ABOUT_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
-  url: 'https://www.mastermindcafe.in/about',
+  url: 'https://www.mastermindbrews.com/about',
   name: 'About Mastermind Brews',
   about: { '@id': ABOUT_ORG_ID },
   mainEntity: {
@@ -22,15 +22,15 @@ const ABOUT_SCHEMA = {
     name: 'Namrata Thakkar',
     jobTitle: 'Founder',
     worksFor: { '@id': ABOUT_ORG_ID },
-    image: 'https://www.mastermindcafe.in/namrata.jpg',
+    image: 'https://www.mastermindbrews.com/namrata.jpg',
   },
 }
 const ABOUT_CRUMB = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindcafe.in/' },
-    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://www.mastermindcafe.in/about' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindbrews.com/' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://www.mastermindbrews.com/about' },
   ],
 }
 
@@ -299,7 +299,7 @@ export default function AboutUs() {
             <div className="ed-stat"><strong><Heart size={22} /></strong><span>Pet friendly · Vegan options</span></div>
           </div>
           <div className="ed-actions">
-            <Magnetic><a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-primary">Visit Cafe Website <ExternalLink size={14} /></a></Magnetic>
+            <Magnetic><a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-primary">Visit Cafe Website <ExternalLink size={14} /></a></Magnetic>
             <Magnetic><a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-ghost">Get Directions</a></Magnetic>
           </div>
         </StoryPanel>

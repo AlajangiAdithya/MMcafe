@@ -7,7 +7,7 @@ import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import '../styles/about-editorial.css'
 
-const ORG_ID = 'https://www.mastermindcafe.in/#organization'
+const ORG_ID = 'https://www.mastermindbrews.com/#organization'
 const CONS_SERVICE = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -15,15 +15,15 @@ const CONS_SERVICE = {
   serviceType: ['Menu & beverage design', 'Cafe operations setup', 'Barista training', 'Cafe audits'],
   provider: { '@id': ORG_ID },
   areaServed: { '@type': 'Country', name: 'India' },
-  url: 'https://www.mastermindcafe.in/consultancy',
+  url: 'https://www.mastermindbrews.com/consultancy',
   description: 'End-to-end cafe consultancy from the team behind Mastermind Brews: menu design, operations, barista training and quality audits for cafes across India.',
 }
 const CONS_CRUMB = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindcafe.in/' },
-    { '@type': 'ListItem', position: 2, name: 'Our Projects', item: 'https://www.mastermindcafe.in/consultancy' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindbrews.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Our Projects', item: 'https://www.mastermindbrews.com/consultancy' },
   ],
 }
 

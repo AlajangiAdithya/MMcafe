@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 const BRAND = 'Mastermind Brews'
-const SITE_ORIGIN = 'https://www.mastermindcafe.in'
+const SITE_ORIGIN = 'https://www.mastermindbrews.com'
 
 function setMeta(name, content, { property = false } = {}) {
   if (!content) return

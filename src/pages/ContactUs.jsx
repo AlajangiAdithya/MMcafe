@@ -142,7 +142,7 @@ export default function ContactUs() {
               <p><strong>Registered Address:</strong> Avior Corporate Park, LBS Marg, Mulund West, Mumbai - 400080, Maharashtra, India</p>
               <p><strong>Email:</strong> <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a></p>
               <p><strong>Phone:</strong> <a href="tel:+918591850161">+91 85918 50161</a></p>
-              <p><strong>Website:</strong> <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer">mastermindcafe.in</a></p>
+              <p><strong>Website:</strong> <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer">mastermindbrews.com</a></p>
             </div>
           </section>
         </AnimatedSection>

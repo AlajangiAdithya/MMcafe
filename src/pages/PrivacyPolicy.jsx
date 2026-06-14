@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
           <h2>1. Introduction</h2>
           <p>
             Mastermind Bicycle Cafe & Bar ("we", "us", "our"), trading as
-            <strong> Mastermind Brews</strong>, operates the website mastermindcafe.in
+            <strong> Mastermind Brews</strong>, operates the website mastermindbrews.com
             (the "Site"). This Privacy Policy explains how we collect, use, disclose,
             and safeguard your information when you visit our Site, place an order,
             enrol in a course, or use our Barista Directory.

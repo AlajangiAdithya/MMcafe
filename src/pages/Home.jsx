@@ -190,7 +190,7 @@ export default function Home() {
     title: 'Specialty Coffee, Barista Academy & Cafe in Mulund, Mumbai',
     description: 'Single-origin Chikmagalur coffee, continental food, baked goods, and an online barista academy. Order beans online or visit Mastermind Bicycle Cafe & Bar in Mulund, Mumbai.',
     keywords: 'specialty coffee Mumbai, single origin coffee India, Chikmagalur coffee beans, cafe in Mulund, Mastermind Bicycle Cafe, online barista academy, buy coffee beans online India, espresso classes Mumbai, pour over coffee India',
-    image: 'https://www.mastermindcafe.in/hero-bg.jpg',
+    image: 'https://www.mastermindbrews.com/hero-bg.jpg',
   })
   const { addItem } = useCart()
   const [featured, setFeatured] = useState([])
@@ -403,7 +403,7 @@ export default function Home() {
               </a>
             </Magnetic>
             <Magnetic>
-              <a href="https://www.mastermindcafe.in/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
+              <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
             </Magnetic>
           </div>
         </AnimatedSection>
