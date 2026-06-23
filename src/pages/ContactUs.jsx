@@ -110,8 +110,8 @@ export default function ContactUs() {
             <motion.div className="contact-card" variants={fadeUp}>
               <Clock size={24} />
               <h3>Cafe Hours</h3>
-              <p>Monday – Sunday</p>
-              <p>11:00 AM – 11:00 PM</p>
+              <p>Open daily</p>
+              <p>8:30 AM – 12 Midnight</p>
             </motion.div>
           </motion.div>
         </section>

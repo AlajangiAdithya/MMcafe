@@ -321,9 +321,6 @@ export default function Home() {
                     className="featured-product has-sheen"
                     variants={fadeUp}
                     onClick={() => setOpenProduct(product)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenProduct(product) } }}
                   >
                     <div className="featured-product-image">
                       {product.image ? (
@@ -344,7 +341,14 @@ export default function Home() {
                     </div>
                     <div className="featured-product-info">
                       <div className="featured-product-category">{product.category}</div>
-                      <div className="featured-product-name">{product.name}</div>
+                      <button
+                        type="button"
+                        className="featured-product-name"
+                        onClick={(e) => { e.stopPropagation(); setOpenProduct(product) }}
+                        style={{ appearance: 'none', background: 'none', border: 0, padding: 0, margin: 0, font: 'inherit', color: 'inherit', textAlign: 'left', cursor: 'pointer', display: 'block', width: '100%' }}
+                      >
+                        {product.name}
+                      </button>
                       {product.weight && <div className="featured-product-weight">{product.weight}</div>}
                       <div className="featured-product-bottom">
                         <span className="featured-product-price">₹{product.price}</span>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Beans (/store), Academy (/workshop) and Blog (/blog) are intentionally
+  <!-- Beans (/store), Academy (/workshop), Blog (/blog), Hire Baristas
+       (/baristas) and Barista signup (/barista-signup) are intentionally
        hidden + noindex for now, so they are excluded from the sitemap until
        launch. Re-add them (and their product/course/post URLs) when they go
        live. See seo/IMPLEMENTATION-ROADMAP.md. -->
@@ -21,18 +22,6 @@
     <lastmod>2026-06-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindbrews.com/baristas</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mastermindbrews.com/barista-signup</loc>
-    <lastmod>2026-06-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.mastermindbrews.com/contact</loc>

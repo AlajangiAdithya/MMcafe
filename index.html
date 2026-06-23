@@ -148,6 +148,46 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- SEO / no-JS fallback. The app is a client-rendered SPA, so crawlers
+         that do not execute JavaScript (some audit tools, AI crawlers such as
+         ChatGPT and Perplexity) would otherwise see an empty shell. This block
+         gives them the core business facts, social links and navigation in the
+         raw HTML. It is hidden from real users (browsers with JS skip it) and
+         ignored by JS-rendering Googlebot. Keep all facts in sync with the
+         JSON-LD above, the Footer and the Contact page. -->
+    <noscript>
+      <h1>Mastermind Brews — Specialty Coffee, Barista Academy &amp; Cafe in Mulund, Mumbai</h1>
+      <p>
+        Mastermind Brews offers single-origin specialty coffee from Chikmagalur,
+        an online barista academy, cafe consultancy, and a hiring directory for
+        trained baristas across India. By the team behind Mastermind Bicycle
+        Cafe &amp; Bar in Mulund West, Mumbai.
+      </p>
+      <h2>Visit the Cafe</h2>
+      <p>
+        <strong>Mastermind Bicycle Cafe &amp; Bar</strong><br />
+        Avior Corporate Park, LBS Marg, Mulund West, Mumbai 400080, Maharashtra, India<br />
+        Open daily, 8:30 AM – 12 Midnight<br />
+        Phone: <a href="tel:+918591850161">+91 85918 50161</a><br />
+        Email: <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>
+      </p>
+      <h2>Explore</h2>
+      <ul>
+        <li><a href="https://www.mastermindbrews.com/about">About Us</a></li>
+        <li><a href="https://www.mastermindbrews.com/store">Buy Coffee</a></li>
+        <li><a href="https://www.mastermindbrews.com/workshop">Learn Coffee</a></li>
+        <li><a href="https://www.mastermindbrews.com/consultancy">Cafe Consultancy</a></li>
+        <li><a href="https://www.mastermindbrews.com/baristas">Hire Baristas</a></li>
+        <li><a href="https://www.mastermindbrews.com/contact">Contact</a></li>
+      </ul>
+      <h2>Follow Us</h2>
+      <ul>
+        <li><a href="https://www.instagram.com/mastermindbicyclecafe/" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.facebook.com/mastermindbicyclecafe/" rel="noopener">Facebook</a></li>
+        <li><a href="https://x.com/cafemastermind" rel="noopener">X (Twitter)</a></li>
+      </ul>
+    </noscript>
     <script>
       // Clear any stale service worker left from a previous deployment.
       // The project has no SW; if one is registered, it must be a leftover

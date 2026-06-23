@@ -52,15 +52,12 @@ export default function Footer() {
           <Link to="/store">Buy Coffee</Link>
           <Link to="/workshop">Learn Coffee</Link>
           <Link to="/consultancy">Our Projects</Link>
-          <Link to="/baristas">Hire Baristas</Link>
         </div>
 
         <div className="footer-col">
           <h4>Company</h4>
           <Link to="/about">About Us</Link>
-          <Link to="/blog">Journal</Link>
           <Link to="/contact">Contact</Link>
-          <Link to="/barista-signup">Join the Network</Link>
         </div>
 
         <div className="footer-col">

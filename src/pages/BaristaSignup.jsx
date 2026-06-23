@@ -58,6 +58,7 @@ export default function BaristaSignup() {
     title: 'Join the Barista Directory · Get Hired by Cafes in India',
     description: 'Are you a barista? Submit your details and get discovered by hiring cafes, hotels and restaurants across India. No fees, no resume needed.',
     keywords: 'barista jobs India, barista signup, cafe jobs Mumbai, barista hiring directory, find barista job',
+    noindex: true, // hidden/prep: keep barista signup out of the index until launch
   })
 
   const [form, setForm] = useState(EMPTY)

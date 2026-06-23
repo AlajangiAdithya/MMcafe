@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, X, BookOpen, Package, Newspaper, Compass, Coffee } from 'lucide-react'
+import { Search, X, BookOpen, Package, Compass } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getProducts, getCourses, getPublishedBlogPosts } from '../lib/database'
+import { getProducts, getCourses } from '../lib/database'
 
 // Static route index so the palette can navigate even when DB is empty.
 const STATIC_ITEMS = [
@@ -10,8 +10,6 @@ const STATIC_ITEMS = [
   { id: 'page-store', kind: 'page', title: 'Store', subtitle: 'Browse coffee', href: '/store', icon: Package },
   { id: 'page-workshop', kind: 'page', title: 'Workshop', subtitle: 'Barista academy', href: '/workshop', icon: BookOpen },
   { id: 'page-consultancy', kind: 'page', title: 'Consultancy', href: '/consultancy', icon: Compass },
-  { id: 'page-blog', kind: 'page', title: 'Blog', href: '/blog', icon: Newspaper },
-  { id: 'page-baristas', kind: 'page', title: 'Hire Baristas', href: '/baristas', icon: Coffee },
   { id: 'page-about', kind: 'page', title: 'About Us', href: '/about', icon: Compass },
   { id: 'page-contact', kind: 'page', title: 'Contact', href: '/contact', icon: Compass },
 ]
@@ -27,9 +25,8 @@ async function loadAll() {
   dataPromise = Promise.all([
     getProducts().catch(() => []),
     getCourses().catch(() => []),
-    getPublishedBlogPosts().catch(() => []),
-  ]).then(([products, courses, posts]) => {
-    dataCache = { products, courses, posts }
+  ]).then(([products, courses]) => {
+    dataCache = { products, courses }
     return dataCache
   })
   return dataPromise
@@ -39,7 +36,7 @@ export default function CommandPalette({ open, onClose }) {
   const navigate = useNavigate()
   const inputRef = useRef(null)
   const [query, setQuery] = useState('')
-  const [data, setData] = useState({ products: [], courses: [], posts: [] })
+  const [data, setData] = useState({ products: [], courses: [] })
   const [active, setActive] = useState(0)
 
   // Load data lazily on first open. Cached for subsequent opens.
@@ -77,16 +74,7 @@ export default function CommandPalette({ open, onClose }) {
       icon: BookOpen,
       hay: `${c.title} ${c.description || ''} ${c.level || ''}`.toLowerCase(),
     }))
-    const posts = data.posts.map((p) => ({
-      id: `post-${p.id}`,
-      kind: 'post',
-      title: p.title,
-      subtitle: p.excerpt || 'Blog post',
-      href: `/blog/${p.slug}`,
-      icon: Newspaper,
-      hay: `${p.title} ${p.excerpt || ''}`.toLowerCase(),
-    }))
-    const all = [...STATIC_ITEMS.map((s) => ({ ...s, hay: s.title.toLowerCase() })), ...products, ...courses, ...posts]
+    const all = [...STATIC_ITEMS.map((s) => ({ ...s, hay: s.title.toLowerCase() })), ...products, ...courses]
     if (!q) return all.slice(0, 12)
     return all.filter((it) => it.hay.includes(q)).slice(0, 12)
   }, [query, data])
@@ -145,7 +133,7 @@ export default function CommandPalette({ open, onClose }) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onKey}
-                placeholder="Search products, courses, posts…"
+                placeholder="Search products, courses…"
                 aria-label="Search"
               />
               <button type="button" className="icon-btn" onClick={onClose} aria-label="Close search">
