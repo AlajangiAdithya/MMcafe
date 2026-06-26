@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Clock, Package, Coffee, GraduationCap, Briefcase } from 'lucide-react'
+import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase } from 'lucide-react'
 import { motion, useInView, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
@@ -398,7 +398,6 @@ export default function Home() {
           <h2>A coffee house. <em>A community space.</em></h2>
           <div className="hr-visit-meta">
             <span><MapPin size={14} /> Avior Corporate Park, Mulund West</span>
-            <span><Clock size={14} /> Open daily · 8:30 AM – 12 AM</span>
           </div>
           <div className="hr-hero-cta">
             <Magnetic>

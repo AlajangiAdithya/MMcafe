@@ -1,28 +1,41 @@
 /* ============================================================
-   ABOUT · EDITORIAL (Charmer Studio look + NRG scrollytelling)
-   Dark espresso, elegant serif titles, monospace captions,
-   full-bleed media panels with ghost names, and a pinned
-   scroll-through story section. On-brand brown palette.
+   ABOUT / CONSULTANCY · EDITORIAL (light brand theme)
+   Porcelain + warm beige surfaces, elegant serif titles,
+   monospace captions, full-bleed media panels with ghost
+   names, and a pinned scroll-through story section.
+   Brand palette: blue + pink accents (no black, no gold).
    ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap');
 
 .about-editorial {
   --ed-serif: 'Fraunces', 'Noto Serif JP', Georgia, serif;
   --ed-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
-  --ed-bg: #181009;
-  --ed-bg-2: #211610;
-  --ed-cream: #F4E9D8;
-  --ed-dim: #C7B299;
-  --ed-accent: #DD9E55;
-  --ed-accent-bright: #EFC07E;
-  --ed-line: rgba(244, 233, 216, 0.14);
+
+  /* Surfaces, light porcelain + warm beige */
+  --ed-bg: #FCFBF7;
+  --ed-bg-2: #F5EEE0;
+
+  /* Ink, warm near-black for type (no pure black) */
+  --ed-ink: #1E1712;
+  --ed-cream: #1E1712;      /* legacy alias -> primary text reads dark on light */
+  --ed-dim: #6E6157;        /* secondary / muted copy */
+
+  /* Brand accents, blue + pink */
+  --ed-blue: #5B9BDB;
+  --ed-blue-ink: #2E6FB0;   /* legible blue for small labels / links */
+  --ed-pink: #D67C8E;
+  --ed-pink-ink: #C0566E;   /* legible pink for small text / emphasis */
+  --ed-accent: #2E6FB0;     /* primary accent alias -> blue */
+  --ed-accent-bright: #5B9BDB;
+
+  --ed-line: rgba(30, 23, 18, 0.12);
   --ed-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   position: relative;
   /* !important to beat the App.css "editorial reset" that forces
      .about-page { background: transparent !important } (same element). */
   background: var(--ed-bg) !important;
-  color: var(--ed-cream);
+  color: var(--ed-ink);
   overflow-x: clip;
   min-height: 100vh;
 }
@@ -33,12 +46,56 @@
   padding: 0 clamp(20px, 5vw, 64px);
 }
 
-/* ---------- HERO tweaks (serif title to match Charmer) ---------- */
+/* ---------- ABOUT HERO (light, serif title, brand glow) ---------- */
+.about-editorial .about-hero { background-color: var(--ed-bg); }
+.about-editorial .about-hero::before {
+  /* keep the photo as a barely-there texture so the hero stays light */
+  filter: saturate(0.9) brightness(1.06);
+  opacity: 0.09;
+}
+.about-editorial .about-hero::after {
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 38%, rgba(91, 155, 219, 0.10), transparent 70%),
+    radial-gradient(ellipse 58% 60% at 82% 84%, rgba(214, 124, 142, 0.10), transparent 70%),
+    linear-gradient(180deg, var(--ed-bg) 0%, rgba(252, 251, 247, 0.5) 45%, var(--ed-bg) 100%);
+}
 .about-editorial .about-hero .page-title {
   font-family: var(--ed-serif);
-  font-weight: 420;
+  font-weight: 440;
   letter-spacing: -0.03em;
+  background: none;
+  -webkit-text-fill-color: var(--ed-ink);
+  color: var(--ed-ink);
+  filter: none;
+  text-shadow: none;
 }
+.about-editorial .about-hero .page-title .text-accent-glow {
+  color: var(--ed-pink-ink);
+  -webkit-text-fill-color: var(--ed-pink-ink);
+  text-shadow: none;
+}
+.about-editorial .about-hero .page-lede {
+  color: var(--ed-dim);
+  text-shadow: none;
+}
+
+/* light brand badge (overrides the dark glass hero badge) */
+.about-editorial .hero-badge {
+  border: 1px solid var(--ed-line);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(46, 111, 176, 0.08);
+}
+.about-editorial .hero-badge-text {
+  background: none;
+  -webkit-text-fill-color: var(--ed-blue-ink);
+  color: var(--ed-blue-ink);
+}
+.about-editorial .hero-badge .dot {
+  background: var(--ed-blue);
+  box-shadow: 0 0 12px rgba(91, 155, 219, 0.5);
+}
+
 .ed-scrollcue {
   display: inline-flex;
   align-items: center;
@@ -48,11 +105,11 @@
   font-size: 0.68rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(244, 233, 216, 0.72);
+  color: var(--ed-dim);
 }
 .ed-mouse {
   width: 20px; height: 32px;
-  border: 1.5px solid rgba(244, 233, 216, 0.55);
+  border: 1.5px solid rgba(30, 23, 18, 0.32);
   border-radius: 12px;
   position: relative;
 }
@@ -60,7 +117,7 @@
   content: '';
   position: absolute; left: 50%; top: 6px;
   width: 3px; height: 6px; border-radius: 2px;
-  background: var(--ed-accent);
+  background: var(--ed-blue);
   transform: translateX(-50%);
   animation: ed-mousedot 1.6s ease-in-out infinite;
 }
@@ -81,10 +138,10 @@
   color: var(--ed-dim);
 }
 
-/* ---------- CONSULTANCY · PREMIUM CINEMATIC HERO (this page only) ----------
-   A deep, textured dark hero: full-bleed photo under a heavy scrim so it reads
-   as premium and neat (not a flat void). Scoped to .consultancy-page so the
-   shared .pg-hero / About heroes are untouched. */
+/* ---------- CONSULTANCY · PREMIUM LIGHT HERO (this page only) ----------
+   A bright, airy hero: full-bleed photo faded behind a cream wash with
+   soft blue/pink glows so it reads premium and on-brand (no black void).
+   Scoped to .consultancy-page so the shared heroes are untouched. */
 .consultancy-page.about-editorial .cons-hero {
   position: relative;
   isolation: isolate;
@@ -100,13 +157,15 @@
   background-size: cover;
   background-position: center 38%;
   will-change: transform, opacity;
-  filter: saturate(0.9) contrast(1.02);
+  filter: saturate(0.92) brightness(1.08);
+  opacity: 0.14;
 }
 .consultancy-page .cons-hero-scrim {
   position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(180deg, rgba(18, 12, 8, 0.86) 0%, rgba(18, 12, 8, 0.58) 40%, rgba(14, 9, 6, 0.94) 100%),
-    radial-gradient(ellipse 80% 72% at 50% 46%, rgba(10, 6, 4, 0.3), rgba(10, 6, 4, 0.74) 78%);
+    radial-gradient(ellipse 80% 72% at 50% 40%, rgba(91, 155, 219, 0.12), transparent 72%),
+    radial-gradient(ellipse 70% 60% at 80% 82%, rgba(214, 124, 142, 0.12), transparent 72%),
+    linear-gradient(180deg, var(--ed-bg) 0%, rgba(252, 251, 247, 0.55) 40%, var(--ed-bg) 100%);
 }
 .consultancy-page .cons-hero-inner {
   position: relative; z-index: 1;
@@ -117,37 +176,40 @@
   display: inline-flex; align-items: center; gap: 16px;
   font-family: var(--ed-mono);
   font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
   margin-bottom: clamp(22px, 3vw, 34px);
 }
 .consultancy-page .cons-eyebrow::before,
 .consultancy-page .cons-eyebrow::after {
   content: '';
   width: clamp(26px, 6vw, 56px); height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(244, 233, 216, 0.5));
+  background: linear-gradient(90deg, transparent, rgba(46, 111, 176, 0.45));
 }
 .consultancy-page .cons-eyebrow::after {
-  background: linear-gradient(90deg, rgba(244, 233, 216, 0.5), transparent);
+  background: linear-gradient(90deg, rgba(46, 111, 176, 0.45), transparent);
 }
 .consultancy-page .cons-hero-title {
   max-width: 18ch;
   margin: 0 auto;
   text-align: center;
-  text-shadow: 0 2px 48px rgba(0, 0, 0, 0.45);
+  text-shadow: none;
+}
+.consultancy-page .cons-hero-title em {
+  color: var(--ed-pink-ink) !important;
+  -webkit-text-fill-color: var(--ed-pink-ink) !important;
 }
 .consultancy-page .cons-hero-lede {
-  /* clear breathing room below the large serif title (was a cramped 24px) */
   margin: clamp(26px, 3.6vw, 48px) auto 0;
   max-width: 640px;
   text-align: center;
   line-height: 1.45;
-  color: rgba(244, 233, 216, 0.86);
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.4);
+  color: var(--ed-dim);
+  text-shadow: none;
 }
 .consultancy-page .cons-hero-cta { margin-top: clamp(30px, 4vw, 44px); }
 .consultancy-page .cons-hero-cta .ed-btn-primary {
   padding: 16px 28px;
-  box-shadow: 0 16px 40px -16px rgba(221, 158, 85, 0.6);
+  box-shadow: 0 16px 40px -16px rgba(91, 155, 219, 0.55);
 }
 .consultancy-page .cons-hero-cue {
   margin-top: clamp(34px, 5vw, 52px);
@@ -163,13 +225,13 @@
 .ed-suited-list { display: flex; flex-direction: column; gap: 14px; margin: 0; }
 .ed-suited-list li {
   display: flex; align-items: flex-start; gap: 12px;
-  font-size: 1.05rem; line-height: 1.5; color: var(--ed-cream);
+  font-size: 1.05rem; line-height: 1.5; color: var(--ed-ink);
   padding-bottom: 14px; border-bottom: 1px solid var(--ed-line);
 }
-.ed-suited-list li svg { color: var(--ed-accent); flex-shrink: 0; margin-top: 4px; }
+.ed-suited-list li svg { color: var(--ed-blue); flex-shrink: 0; margin-top: 4px; }
 
 /* Pinned-process line content (Our Projects) */
-.ed-pin-step-num { display: block; font-family: var(--ed-mono); font-size: 0.78rem; letter-spacing: 0.24em; color: var(--ed-accent); margin-bottom: clamp(14px, 2.4vh, 22px); }
+.ed-pin-step-num { display: block; font-family: var(--ed-mono); font-size: 0.78rem; letter-spacing: 0.24em; color: var(--ed-blue-ink); margin-bottom: clamp(14px, 2.4vh, 22px); }
 .ed-pin-step-title {
   display: block;
   font-family: var(--ed-serif);
@@ -189,7 +251,7 @@
   max-width: 40ch;
 }
 
-/* ---------- STORY PANELS (Charmer) ---------- */
+/* ---------- STORY PANELS (editorial) ---------- */
 .ed-stories { padding: clamp(20px, 4vw, 60px) 0 0; }
 .ed-story {
   padding: clamp(56px, 9vw, 128px) 0;
@@ -206,7 +268,7 @@
   font-family: var(--ed-mono);
   font-size: 0.72rem;
   letter-spacing: 0.22em;
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
 }
 .ed-story-meta {
   font-family: var(--ed-mono);
@@ -223,16 +285,16 @@
   font-size: clamp(2.7rem, 8.4vw, 6.6rem);
   line-height: 0.92;
   letter-spacing: -0.025em;
-  /* !important + text-fill: a global heading rule in App.css sets
-     color/-webkit-text-fill-color to #1a1208 (dark) and wins otherwise. */
-  color: var(--ed-cream) !important;
-  -webkit-text-fill-color: var(--ed-cream) !important;
+  /* !important + text-fill: a global heading rule in App.css sets a dark
+     color via -webkit-text-fill-color and wins otherwise. */
+  color: var(--ed-ink) !important;
+  -webkit-text-fill-color: var(--ed-ink) !important;
   margin: 10px 0 0;
 }
 .ed-story-title em {
   font-style: italic;
-  color: var(--ed-accent) !important;
-  -webkit-text-fill-color: var(--ed-accent) !important;
+  color: var(--ed-pink-ink) !important;
+  -webkit-text-fill-color: var(--ed-pink-ink) !important;
 }
 
 .ed-story-media {
@@ -259,7 +321,7 @@
   font-size: clamp(3.5rem, 17vw, 15rem);
   line-height: 1;
   letter-spacing: -0.04em;
-  color: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.22);
   mix-blend-mode: overlay;
   white-space: nowrap;
   pointer-events: none;
@@ -269,11 +331,11 @@
   position: absolute; top: 16px; left: 16px;
   font-family: var(--ed-mono);
   font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--ed-cream);
-  background: rgba(20, 13, 9, 0.5);
+  color: var(--ed-ink);
+  background: rgba(252, 251, 247, 0.74);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   padding: 7px 13px; border-radius: 999px;
-  border: 1px solid rgba(244, 233, 216, 0.2);
+  border: 1px solid rgba(30, 23, 18, 0.12);
 }
 
 .ed-story-grid {
@@ -284,11 +346,11 @@
 }
 .ed-story-lede {
   font-family: var(--ed-serif);
-  font-weight: 340;
+  font-weight: 360;
   font-style: italic;
   font-size: clamp(1.35rem, 2.4vw, 2.05rem);
   line-height: 1.32;
-  color: var(--ed-cream);
+  color: var(--ed-ink);
   margin: 0;
 }
 .ed-story-text p {
@@ -298,9 +360,9 @@
   margin: 0 0 1rem;
 }
 .ed-story-text p:last-child { margin-bottom: 0; }
-.ed-story-text strong { color: var(--ed-cream); font-weight: 600; }
+.ed-story-text strong { color: var(--ed-ink); font-weight: 600; }
 .ed-story-text a {
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
@@ -316,7 +378,7 @@
   font-family: var(--ed-serif);
   font-weight: 500;
   font-size: clamp(1.9rem, 3vw, 2.7rem);
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
   line-height: 1;
 }
 .ed-stat span {
@@ -333,31 +395,147 @@
   font-family: var(--ed-mono);
   font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
   padding: 14px 22px; border-radius: 999px;
-  transition: background 0.3s var(--ed-ease), color 0.3s var(--ed-ease), border-color 0.3s var(--ed-ease), transform 0.3s var(--ed-ease);
+  transition: background 0.3s var(--ed-ease), color 0.3s var(--ed-ease), border-color 0.3s var(--ed-ease), box-shadow 0.3s var(--ed-ease), filter 0.3s var(--ed-ease), transform 0.3s var(--ed-ease);
 }
-.ed-btn-primary { background: var(--ed-accent); color: #1a1208; }
-.ed-btn-primary:hover { background: var(--ed-accent-bright); }
-.ed-btn-ghost { border: 1px solid var(--ed-line); color: var(--ed-cream); }
-.ed-btn-ghost:hover { border-color: var(--ed-accent); color: var(--ed-accent); }
+.ed-btn-primary { background: linear-gradient(135deg, var(--ed-blue), var(--ed-pink)); color: #ffffff; }
+.ed-btn-primary:hover { filter: brightness(1.06); box-shadow: 0 12px 30px -12px rgba(91, 155, 219, 0.6); }
+.ed-btn-ghost { border: 1px solid var(--ed-line); color: var(--ed-ink); }
+.ed-btn-ghost:hover { border-color: var(--ed-blue); color: var(--ed-blue-ink); }
 
 .ed-badge {
   display: inline-flex; align-items: center; gap: 14px;
   margin-top: 24px; padding: 14px 20px;
   border-radius: 16px;
-  border: 1px solid rgba(221, 158, 85, 0.4);
-  background: rgba(221, 158, 85, 0.1);
+  border: 1px solid rgba(91, 155, 219, 0.35);
+  background: rgba(91, 155, 219, 0.08);
 }
 .ed-badge-icon {
   width: 38px; height: 38px; flex-shrink: 0;
   display: grid; place-items: center;
   border-radius: 10px;
-  background: rgba(221, 158, 85, 0.18);
-  color: var(--ed-accent);
+  background: rgba(214, 124, 142, 0.16);
+  color: var(--ed-pink-ink);
 }
-.ed-badge-num { font-family: var(--ed-serif); font-size: 1.05rem; color: var(--ed-cream); font-weight: 600; }
+.ed-badge-num { font-family: var(--ed-serif); font-size: 1.05rem; color: var(--ed-ink); font-weight: 600; }
 .ed-badge-label { font-family: var(--ed-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ed-dim); }
 
-/* ---------- NRG-STYLE PINNED SCROLLY ---------- */
+/* ---------- INSTAGRAM TABS (About, bottom) ---------- */
+.ed-ig { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
+.ed-ig-grid {
+  margin-top: clamp(32px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.4vw, 28px);
+}
+.ed-ig-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+  padding: clamp(22px, 2.6vw, 34px);
+  border: 1px solid var(--ed-line);
+  border-radius: 20px;
+  background: var(--ed-bg);
+  transition: transform 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease), box-shadow 0.4s var(--ed-ease);
+}
+.ed-ig-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(214, 124, 142, 0.5);
+  box-shadow: 0 18px 42px -22px rgba(46, 111, 176, 0.4);
+}
+.ed-ig-icon {
+  width: 46px; height: 46px; border-radius: 14px;
+  display: grid; place-items: center;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--ed-blue), var(--ed-pink));
+}
+.ed-ig-role {
+  font-family: var(--ed-mono);
+  font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ed-blue-ink);
+}
+.ed-ig-name {
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.1;
+  color: var(--ed-ink); margin: 0;
+}
+.ed-ig-handle {
+  margin-top: auto;
+  font-family: var(--ed-mono); font-size: 0.82rem;
+  color: var(--ed-dim);
+  display: inline-flex; align-items: center; gap: 7px;
+  transition: color 0.3s var(--ed-ease);
+}
+.ed-ig-card:hover .ed-ig-handle { color: var(--ed-pink-ink); }
+@media (max-width: 820px) { .ed-ig-grid { grid-template-columns: 1fr; } }
+
+/* ---------- OUR PROJECTS (Consultancy, cafe grid) ---------- */
+.ed-projects { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
+.ed-projects-lede {
+  font-family: var(--ed-serif); font-style: italic; font-weight: 360;
+  font-size: clamp(1.2rem, 2vw, 1.7rem); line-height: 1.4;
+  color: var(--ed-ink); max-width: 62ch; margin: clamp(18px, 2.4vw, 28px) 0 0;
+}
+.ed-proj-grid {
+  margin-top: clamp(36px, 5vw, 60px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.6vw, 32px);
+}
+.ed-proj-card {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--ed-line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ed-bg);
+  transition: transform 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease), box-shadow 0.4s var(--ed-ease);
+}
+.ed-proj-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(91, 155, 219, 0.4);
+  box-shadow: 0 24px 50px -26px rgba(46, 111, 176, 0.42);
+}
+.ed-proj-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, rgba(91, 155, 219, 0.16), rgba(214, 124, 142, 0.16));
+  overflow: hidden;
+}
+.ed-proj-media::before {
+  content: attr(data-initial);
+  font-family: var(--ed-serif); font-weight: 600;
+  font-size: clamp(4rem, 9vw, 7rem); line-height: 1;
+  color: rgba(46, 111, 176, 0.24);
+}
+.ed-proj-loc {
+  position: absolute; top: 12px; left: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--ed-mono);
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ed-ink);
+  background: rgba(252, 251, 247, 0.8);
+  border: 1px solid rgba(30, 23, 18, 0.1);
+  padding: 5px 10px; border-radius: 999px;
+}
+.ed-proj-ph {
+  position: absolute; bottom: 12px; right: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ed-mono);
+  font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ed-dim);
+}
+.ed-proj-body {
+  padding: clamp(18px, 2vw, 26px);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ed-proj-title {
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.12;
+  color: var(--ed-ink); margin: 0;
+}
+.ed-proj-body p { color: var(--ed-dim); font-size: 0.95rem; line-height: 1.65; margin: 0; }
+@media (max-width: 920px) { .ed-proj-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .ed-proj-grid { grid-template-columns: 1fr; } }
+
+/* ---------- PINNED SCROLLY (Our Projects · How It Works) ---------- */
 .ed-pin { position: relative; height: 380vh; }
 .ed-pin-sticky {
   position: sticky; top: 0;
@@ -372,13 +550,12 @@
 }
 .ed-pin-scrim {
   position: absolute; inset: 0;
-  /* Darkest in the CENTER (behind the text), softer toward the edges so the
-     photo still reads. A flat base layer guarantees contrast regardless of
-     the underlying image, kept deliberately heavy because the pour-over photo
-     is bright through the middle. */
+  /* Bright cream wash over the photo so the section reads light and airy,
+     with faint blue/pink glows for brand depth. Dark ink text sits on top. */
   background:
-    linear-gradient(180deg, rgba(12, 8, 5, 0.64) 0%, rgba(12, 8, 5, 0.5) 42%, rgba(10, 7, 4, 0.82) 100%),
-    radial-gradient(ellipse 72% 66% at 50% 52%, rgba(6, 4, 2, 0.88), rgba(6, 4, 2, 0.12) 80%);
+    linear-gradient(180deg, rgba(252, 251, 247, 0.9) 0%, rgba(252, 251, 247, 0.76) 45%, rgba(252, 251, 247, 0.95) 100%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(91, 155, 219, 0.07), transparent 72%),
+    radial-gradient(ellipse 70% 60% at 72% 82%, rgba(214, 124, 142, 0.07), transparent 72%);
 }
 .ed-pin-ghost {
   position: absolute; left: 0; right: 0; top: 50%;
@@ -387,7 +564,7 @@
   font-family: var(--ed-serif); font-weight: 600;
   font-size: clamp(5rem, 23vw, 22rem);
   line-height: 1; letter-spacing: -0.04em;
-  color: rgba(244, 233, 216, 0.12);
+  color: rgba(46, 111, 176, 0.10);
   pointer-events: none; user-select: none;
   white-space: nowrap;
   opacity: 0;
@@ -401,7 +578,7 @@
 .ed-pin-eyebrow {
   font-family: var(--ed-mono);
   font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase;
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
   margin-bottom: clamp(28px, 5vh, 52px);
 }
 .ed-pin-stage { position: relative; width: 100%; height: clamp(340px, 48vh, 470px); }
@@ -410,7 +587,7 @@
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 0 24px; text-align: center;
   font-family: var(--ed-serif); font-weight: 360;
-  color: var(--ed-cream);
+  color: var(--ed-ink);
   /* hidden until its scroll band is active; full opacity when shown so the
      text is always clearly readable (active step toggled from JS) */
   opacity: 0;
@@ -422,7 +599,7 @@
   opacity: 1;
   transform: translateY(0);
 }
-.ed-pin-line em { font-style: italic; color: var(--ed-accent); }
+.ed-pin-line em { font-style: italic; color: var(--ed-pink-ink); }
 .ed-pin-cue {
   position: absolute; bottom: 30px; left: 50%;
   transform: translateX(-50%);
@@ -433,54 +610,78 @@
 }
 .ed-pin-dots span {
   width: 7px; height: 7px; border-radius: 999px;
-  background: rgba(244, 233, 216, 0.28);
+  background: rgba(30, 23, 18, 0.18);
   transition: background 0.4s var(--ed-ease), transform 0.4s var(--ed-ease);
 }
-.ed-pin-dots span.is-active { background: var(--ed-accent); transform: scale(1.35); }
+.ed-pin-dots span.is-active { background: var(--ed-blue); transform: scale(1.35); }
 
-/* ---------- VALUES (editorial dark) ---------- */
+/* ---------- VALUES (editorial light) ---------- */
 .ed-values { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
 .ed-section-label {
   font-family: var(--ed-mono);
   font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ed-accent);
+  color: var(--ed-blue-ink);
 }
 .ed-section-title {
   font-family: var(--ed-serif); font-weight: 400;
   font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1; letter-spacing: -0.02em;
-  color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important;
+  color: var(--ed-ink) !important; -webkit-text-fill-color: var(--ed-ink) !important;
   margin: 12px 0 0;
 }
+.ed-section-title em { font-style: italic; color: var(--ed-pink-ink) !important; -webkit-text-fill-color: var(--ed-pink-ink) !important; }
+/* Editorial directory: a numbered list of rows, no boxed cards, no icons.
+   Each row = index + serif title on the left, supporting copy on the right,
+   separated by hairline rules. Reads like a magazine contents page. */
 .ed-values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1px;
-  margin-top: clamp(32px, 5vw, 56px);
-  background: var(--ed-line);
-  border: 1px solid var(--ed-line);
-  border-radius: 16px;
-  overflow: hidden;
+  margin-top: clamp(36px, 5vw, 64px);
+  border-top: 1px solid var(--ed-line);
 }
 .ed-value {
-  background: var(--ed-bg);
-  padding: clamp(26px, 3vw, 40px) clamp(22px, 2.4vw, 32px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(16px, 5vw, 80px);
+  align-items: start;
+  padding: clamp(26px, 3.6vw, 46px) clamp(4px, 1vw, 14px);
+  border-bottom: 1px solid var(--ed-line);
   transition: background 0.4s var(--ed-ease);
 }
-.ed-value:hover { background: var(--ed-bg-2); }
-.ed-value-icon { color: var(--ed-accent); margin-bottom: 18px; }
-.ed-value h3 { font-family: var(--ed-serif); font-weight: 500; font-size: 1.45rem; color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important; margin: 0 0 10px; }
-.ed-value p { color: var(--ed-dim); font-size: 0.95rem; line-height: 1.7; margin: 0; }
-.ed-value-num { font-family: var(--ed-mono); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ed-dim); display: block; margin-bottom: 16px; }
+.ed-value:hover { background: rgba(91, 155, 219, 0.04); }
+.ed-value-head {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 1.8vw, 26px);
+}
+.ed-value-num {
+  flex-shrink: 0;
+  font-family: var(--ed-mono);
+  font-size: 0.72rem; letter-spacing: 0.16em;
+  color: var(--ed-blue-ink);
+}
+.ed-value h3 {
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+  line-height: 1.12; letter-spacing: -0.01em;
+  color: var(--ed-ink) !important; -webkit-text-fill-color: var(--ed-ink) !important;
+  margin: 0;
+}
+.ed-value p {
+  color: var(--ed-dim); font-size: 1rem; line-height: 1.75; margin: 0;
+  max-width: 48ch;
+}
+@media (max-width: 760px) {
+  .ed-value { grid-template-columns: 1fr; gap: 12px; }
+  .ed-value p { padding-left: calc(0.72rem * 3.6); }
+}
 
 /* ---------- CLOSING CTA ---------- */
 .ed-cta { padding: clamp(64px, 10vw, 150px) 0; border-top: 1px solid var(--ed-line); text-align: center; }
 .ed-cta h2 {
   font-family: var(--ed-serif); font-weight: 400;
   font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1; letter-spacing: -0.02em;
-  color: var(--ed-cream) !important; -webkit-text-fill-color: var(--ed-cream) !important;
+  color: var(--ed-ink) !important; -webkit-text-fill-color: var(--ed-ink) !important;
   margin: 0 0 20px;
 }
-.ed-cta h2 em { font-style: italic; color: var(--ed-accent) !important; -webkit-text-fill-color: var(--ed-accent) !important; }
+.ed-cta h2 em { font-style: italic; color: var(--ed-pink-ink) !important; -webkit-text-fill-color: var(--ed-pink-ink) !important; }
 .ed-cta p { color: var(--ed-dim); font-size: 1.1rem; max-width: 620px; margin: 0 auto 36px; line-height: 1.6; }
 .ed-cta .ed-actions { justify-content: center; }
 

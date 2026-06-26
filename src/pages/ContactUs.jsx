@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Mail, Phone, MapPin, Clock, Globe } from 'lucide-react'
+import { Mail, Phone, MapPin, Globe } from 'lucide-react'
 import { motion, useInView } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
@@ -39,7 +39,7 @@ function AnimatedSection({ children, className, delay = 0, style }) {
 export default function ContactUs() {
   usePageMeta({
     title: 'Contact Mastermind Brews · Mulund, Mumbai',
-    description: 'Get in touch with Mastermind Brews and Mastermind Bicycle Cafe & Bar in Mulund West, Mumbai. Email, phone, address, opening hours and directions.',
+    description: 'Get in touch with Mastermind Brews and Mastermind Bicycle Cafe & Bar in Mulund West, Mumbai. Email, phone, address and directions.',
     keywords: 'contact Mastermind Brews, Mastermind Bicycle Cafe contact, cafe in Mulund West, coffee shop near me Mumbai',
   })
   return (
@@ -97,21 +97,14 @@ export default function ContactUs() {
               <Phone size={24} />
               <h3>Phone</h3>
               <a href="tel:+918591850161">+91 85918 50161</a>
-              <p>Monday to Saturday, 10 AM – 7 PM IST</p>
+              <p>Call or WhatsApp the team</p>
             </motion.div>
 
             <motion.div className="contact-card" variants={fadeUp}>
               <MapPin size={24} />
               <h3>Visit Us</h3>
               <p>Mastermind Bicycle Cafe & Bar (Mastermind Brews)</p>
-              <p>Avior Corporate Park, LBS Marg,<br />Mulund West, Mumbai - 400080,<br />Maharashtra, India</p>
-            </motion.div>
-
-            <motion.div className="contact-card" variants={fadeUp}>
-              <Clock size={24} />
-              <h3>Cafe Hours</h3>
-              <p>Open daily</p>
-              <p>8:30 AM – 12 Midnight</p>
+              <p>Avior Corporate Park,<br />Mulund West, Mumbai</p>
             </motion.div>
           </motion.div>
         </section>

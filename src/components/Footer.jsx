@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Globe, Mail, Phone, MapPin, Clock, ArrowRight, Send } from 'lucide-react'
+import { Globe, Mail, Phone, MapPin, ArrowRight, Send } from 'lucide-react'
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -74,11 +74,7 @@ export default function Footer() {
           <div className="footer-cafe-meta">
             <div className="footer-cafe-row">
               <MapPin size={14} />
-              <span>Avior Corporate Park, LBS Marg, Mulund West, Mumbai</span>
-            </div>
-            <div className="footer-cafe-row">
-              <Clock size={14} />
-              <span>Open daily &middot; 8:30 AM &ndash; 12 Midnight</span>
+              <span>Avior Corporate Park, Mulund West</span>
             </div>
             <div className="footer-cafe-row">
               <Phone size={14} />

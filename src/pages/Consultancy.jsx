@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Briefcase, Coffee, ClipboardList, BarChart3, Users, ArrowRight, Check } from 'lucide-react'
+import { Briefcase, ArrowRight, Check, MapPin, Image as ImageIcon } from 'lucide-react'
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
@@ -27,11 +27,23 @@ const CONS_CRUMB = {
   ],
 }
 
-const SERVICES = [
-  { icon: Coffee, title: 'Menu & Beverage Design', body: 'Build a coffee program that fits your space, your guests, and your margins.' },
-  { icon: ClipboardList, title: 'Operations Setup', body: 'SOPs, equipment selection, supplier sourcing, and kitchen-bar workflow design.' },
-  { icon: Users, title: 'Staff Training', body: 'Onboard your baristas with hands-on programs run by our team or at our Mulund cafe.' },
-  { icon: BarChart3, title: 'Audits & Health Checks', body: 'Honest, on-the-ground reviews of an existing cafe with a written report and action plan.' },
+const EXPERTISE = [
+  { title: 'Understanding Coffee', body: 'In-depth training on the basics of coffee and the principles of brewing, so your team works from real knowledge.' },
+  { title: 'Procurement', body: 'Sourcing the finest beans and equipment that align with your budget and your goals.' },
+  { title: 'Recipe Formulation & SOP', body: 'Developing signature recipes and Standard Operating Procedures for consistent quality, every single shift.' },
+  { title: 'Cost Analysis', body: 'Tracking ingredient and recipe costs so your pricing decisions balance quality and profitability.' },
+  { title: 'Staff Training', body: 'Hands-on sessions that empower your team to deliver impeccable service to every guest.' },
+]
+
+/* Real consulting projects, the cafes we've built coffee programs with.
+   Photos are placeholders for now (owner is supplying brand imagery). */
+const PROJECTS = [
+  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', body: "One of Virar's first specialty coffee spaces. We built curiosity through a dedicated manual brew bar, from pour-overs to siphon, shaping a coffee culture where it wasn't expected to thrive." },
+  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', body: 'A coffee menu with a voice of its own: classics, healthier choices, indulgent drinks and beverages built to pair with their in-house bakes, as vibrant and varied as Bandstand itself.' },
+  { name: 'Affogato', loc: 'Khar', initial: 'A', body: 'Where a love of coffee met world-class gelato. We shaped a program inspired by Italian cafe culture, because the perfect affogato only happens when great gelato meets equally good espresso.' },
+  { name: "Churn'd", loc: 'Surat', initial: 'C', body: 'Built by a homemaker and her daughters. No gimmicks, just good ingredients and a strong point of view, with drinks like a Mango Sticky Rice Iced Latte and a Thai Boba Tea Soft Serve.' },
+  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', body: "A menu built around indulgence. We developed an espresso- and matcha-led line-up that felt rich and memorable, complementing the brand's dessert-first personality." },
+  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', body: 'Coffee as a daily essential for an international crowd, minutes from the beach, from piña colada cold coffee and kokum cold brew to manual brews and full espresso service.' },
 ]
 
 const PROCESS = [
@@ -171,7 +183,7 @@ export default function Consultancy() {
               className="ed-section-title ed-hero-title cons-hero-title"
               variants={{ hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0, transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] } } }}
             >
-              We help cafes <em>get better.</em>
+              We help cafes <em>brew better.</em>
             </motion.h1>
             <motion.p
               className="ed-story-lede ed-hero-lede cons-hero-lede"
@@ -189,13 +201,13 @@ export default function Consultancy() {
         </div>
       </header>
 
-      {/* ===== SERVICES ===== */}
+      {/* ===== EXPERTISE ===== */}
       <section className="ed-values">
         <div className="ed-container">
-          <div className="ed-section-label">What We Do</div>
-          <h2 className="ed-section-title">Our Services</h2>
+          <div className="ed-section-label">Where We Help</div>
+          <h2 className="ed-section-title">Our Expertise</h2>
           <div className="ed-values-grid">
-            {SERVICES.map((s, i) => (
+            {EXPERTISE.map((s, i) => (
               <motion.div
                 key={s.title}
                 className="ed-value"
@@ -204,9 +216,10 @@ export default function Consultancy() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span className="ed-value-num">0{i + 1}</span>
-                <div className="ed-value-icon"><s.icon size={24} /></div>
-                <h3>{s.title}</h3>
+                <div className="ed-value-head">
+                  <span className="ed-value-num">0{i + 1}</span>
+                  <h3>{s.title}</h3>
+                </div>
                 <p>{s.body}</p>
               </motion.div>
             ))}
@@ -214,7 +227,39 @@ export default function Consultancy() {
         </div>
       </section>
 
-      {/* ===== PROCESS (pinned scrollytelling, like About's Bean-to-Cup) ===== */}
+      {/* ===== OUR PROJECTS (cafes we've worked with) ===== */}
+      <section className="ed-projects">
+        <div className="ed-container">
+          <div className="ed-section-label">Our Projects</div>
+          <h2 className="ed-section-title">Spaces we&rsquo;ve <em>worked with.</em></h2>
+          <p className="ed-projects-lede">
+            Beyond education and brewing, we work with cafes to build stronger coffee programs from the ground up, from menu development and bar setup to workflow, team training, and beverage direction, so every space can serve coffee with more clarity, consistency, and purpose.
+          </p>
+          <div className="ed-proj-grid">
+            {PROJECTS.map((p, i) => (
+              <motion.article
+                key={p.name}
+                className="ed-proj-card"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.55, delay: (i % 3) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="ed-proj-media" data-initial={p.initial}>
+                  <span className="ed-proj-loc"><MapPin size={11} /> {p.loc}</span>
+                  <span className="ed-proj-ph"><ImageIcon size={12} /> Photo soon</span>
+                </div>
+                <div className="ed-proj-body">
+                  <h3 className="ed-proj-title">{p.name}</h3>
+                  <p>{p.body}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PROCESS (pinned scrollytelling) ===== */}
       <PinnedProcess />
 
       {/* ===== WHO IT'S FOR ===== */}

@@ -15299,8 +15299,11 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: clamp(320px, 47vw, 640px);
-  height: clamp(320px, 47vw, 640px);
+  /* Wide lockup logo: size by width and let height follow the artwork so the
+     glow hugs the logo and the whole mark sits dead-centre in the hero. */
+  width: clamp(340px, 58vw, 740px);
+  height: auto;
+  aspect-ratio: 5 / 2;
   isolation: isolate;
 }
 
@@ -15397,7 +15400,7 @@ html {
 .hero-logo-spotlight-img {
   position: relative;
   z-index: 3;
-  width: 88%;
+  width: 100%;
   height: auto;
   filter:
     drop-shadow(0 0 32px rgba(245, 213, 151, 0.85))
@@ -15413,8 +15416,8 @@ html {
 
 @media (max-width: 720px) {
   .hero-logo-spotlight {
-    width: clamp(220px, 70vw, 360px);
-    height: clamp(220px, 70vw, 360px);
+    width: clamp(260px, 86vw, 440px);
+    height: auto;
   }
 }
 
