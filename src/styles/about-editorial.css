@@ -46,55 +46,64 @@
   padding: 0 clamp(20px, 5vw, 64px);
 }
 
-/* ---------- ABOUT HERO (light, serif title, brand glow) ---------- */
-.about-editorial .about-hero { background-color: var(--ed-bg); }
+/* ---------- ABOUT HERO (photo feature band, light text) ----------
+   The team photo stays clearly visible: only gently darkened, with a soft
+   radial behind the centred cream text for legibility, a light overall
+   scrim, and subtle blue/pink glows. !important beats App.css's gold/photo
+   hero rules. Everything below this hero stays light. */
+.about-editorial .about-hero { background-color: #0E0B09 !important; }
 .about-editorial .about-hero::before {
-  /* keep the photo as a barely-there texture so the hero stays light */
-  filter: saturate(0.9) brightness(1.06);
-  opacity: 0.09;
+  /* photo kept visible, only gently darkened so the cream text stays legible */
+  filter: saturate(0.9) brightness(0.62) contrast(1.03) !important;
+  opacity: 0.85 !important;
 }
 .about-editorial .about-hero::after {
   background:
-    radial-gradient(ellipse 75% 65% at 50% 38%, rgba(91, 155, 219, 0.10), transparent 70%),
-    radial-gradient(ellipse 58% 60% at 82% 84%, rgba(214, 124, 142, 0.10), transparent 70%),
-    linear-gradient(180deg, var(--ed-bg) 0%, rgba(252, 251, 247, 0.5) 45%, var(--ed-bg) 100%);
+    radial-gradient(ellipse 78% 66% at 50% 48%, rgba(8, 6, 4, 0.5), transparent 72%),
+    radial-gradient(ellipse 68% 58% at 50% 40%, rgba(91, 155, 219, 0.16), transparent 62%),
+    radial-gradient(ellipse 55% 55% at 80% 86%, rgba(214, 124, 142, 0.14), transparent 66%),
+    linear-gradient(180deg, rgba(8, 6, 4, 0.34) 0%, rgba(8, 6, 4, 0.22) 45%, rgba(6, 4, 3, 0.5) 100%) !important;
 }
 .about-editorial .about-hero .page-title {
   font-family: var(--ed-serif);
   font-weight: 440;
   letter-spacing: -0.03em;
-  background: none;
-  -webkit-text-fill-color: var(--ed-ink);
-  color: var(--ed-ink);
-  filter: none;
-  text-shadow: none;
+  background: none !important;
+  -webkit-text-fill-color: #F6EFE1 !important;
+  color: #F6EFE1 !important;
+  filter: none !important;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
 }
 .about-editorial .about-hero .page-title .text-accent-glow {
-  color: var(--ed-pink-ink);
-  -webkit-text-fill-color: var(--ed-pink-ink);
-  text-shadow: none;
+  color: #ECA9B8 !important;
+  -webkit-text-fill-color: #ECA9B8 !important;
+  text-shadow: 0 0 30px rgba(214, 124, 142, 0.5);
 }
 .about-editorial .about-hero .page-lede {
-  color: var(--ed-dim);
-  text-shadow: none;
+  color: rgba(245, 238, 225, 0.84) !important;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.5);
 }
 
-/* light brand badge (overrides the dark glass hero badge) */
+/* dark-glass brand badge on the dark hero */
 .about-editorial .hero-badge {
-  border: 1px solid var(--ed-line);
-  background: rgba(255, 255, 255, 0.7);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  box-shadow: 0 4px 18px rgba(46, 111, 176, 0.08);
+  border: 1px solid rgba(244, 236, 221, 0.18);
+  background: rgba(255, 255, 255, 0.07);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .about-editorial .hero-badge-text {
   background: none;
-  -webkit-text-fill-color: var(--ed-blue-ink);
-  color: var(--ed-blue-ink);
+  -webkit-text-fill-color: #9FC6EC;
+  color: #9FC6EC;
 }
 .about-editorial .hero-badge .dot {
   background: var(--ed-blue);
-  box-shadow: 0 0 12px rgba(91, 155, 219, 0.5);
+  box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
 }
+/* scrollcue/mouse on the dark hero only (global stays dark for the light
+   Consultancy heroes that reuse .ed-scrollcue) */
+.about-editorial .about-hero .ed-scrollcue { color: rgba(244, 236, 221, 0.72); }
+.about-editorial .about-hero .ed-mouse { border-color: rgba(244, 236, 221, 0.5); }
 
 .ed-scrollcue {
   display: inline-flex;
@@ -466,6 +475,27 @@
 .ed-ig-card:hover .ed-ig-handle { color: var(--ed-pink-ink); }
 @media (max-width: 820px) { .ed-ig-grid { grid-template-columns: 1fr; } }
 
+/* ---------- INSTAGRAM · shadcn Tabs (About, bottom) ---------- */
+.ed-ig .ed-section-label,
+.ed-ig .ed-section-title { text-align: center; }
+.ig-tabs { margin-top: clamp(30px, 4vw, 48px); }
+.ig-tabs [role="tab"] { font-family: var(--ed-mono); cursor: pointer; }
+.ig-tab-blurb {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--ed-dim);
+}
+@keyframes ig-panel-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ig-tab-panel[data-state="active"] { animation: ig-panel-in 0.5s var(--ed-ease) both; }
+@media (prefers-reduced-motion: reduce) {
+  .ig-tab-panel[data-state="active"] { animation: none; }
+}
+
 /* ---------- OUR PROJECTS (Consultancy, cafe grid) ---------- */
 .ed-projects { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
 .ed-projects-lede {
@@ -499,6 +529,13 @@
   background: linear-gradient(135deg, rgba(91, 155, 219, 0.16), rgba(214, 124, 142, 0.16));
   overflow: hidden;
 }
+.ed-proj-media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.55s var(--ed-ease);
+}
+.ed-proj-card:hover .ed-proj-media img { transform: scale(1.05); }
 .ed-proj-media::before {
   content: attr(data-initial);
   font-family: var(--ed-serif); font-weight: 600;

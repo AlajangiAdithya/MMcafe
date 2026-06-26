@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
+import InstagramTabs from '@/components/ui/instagram-tabs'
 import '../styles/about-editorial.css'
 
 const ABOUT_ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -29,16 +30,6 @@ const ABOUT_CRUMB = {
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindbrews.com/' },
     { '@type': 'ListItem', position: 2, name: 'About', item: 'https://www.mastermindbrews.com/about' },
   ],
-}
-
-function InstagramIcon({ size = 16 }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-    </svg>
-  )
 }
 
 /* ============================================================
@@ -83,19 +74,6 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede,
     </section>
   )
 }
-
-const VALUES = [
-  { title: 'Specialty First', body: 'We do not compromise on bean quality, freshness, or the people who pour our cups.' },
-  { title: 'Welcome All', body: 'Pet friendly, vegan friendly, gluten-free options, hospitality should never be selective.' },
-  { title: 'Train Well', body: 'Great coffee starts with great baristas. We invest in the people who make the craft.' },
-  { title: 'Build Community', body: 'Cafes are third places. We keep ours warm, social, and a little bit unhurried.' },
-]
-
-const IG_TABS = [
-  { role: 'The Brand', name: 'Mastermind Brews', handle: '@mastermindbrews', url: 'https://www.instagram.com/mastermindbrews/' },
-  { role: 'The Brewer', name: 'Namrata is Brewing', handle: '@namrata_is_brewing', url: 'https://www.instagram.com/namrata_is_brewing/' },
-  { role: 'The Cafe', name: 'Mastermind Bicycle Cafe', handle: '@mastermindbicyclecafe', url: 'https://www.instagram.com/mastermindbicyclecafe/' },
-]
 
 export default function AboutUs() {
   usePageMeta({
@@ -168,12 +146,12 @@ export default function AboutUs() {
           alt="Namrata Thakkar, founder of Mastermind Brews and certified barista, at the bar in Mulund, Mumbai"
           tagline="The Brewer"
           ghost="NAMRATA"
-          lede="I come from physiotherapy. When my family set out to build a cafe in Mulund, I decided that if we were going to serve coffee, I wanted to truly understand it, as a craft, not just a menu item."
+          lede="I come from a background in physiotherapy. When my family set out to build a cafe in Mulund, Mumbai, alongside the bicycle studio my father had always dreamed of, I decided that if we were going to serve coffee, I wanted to truly understand it, as a craft, not just a menu item."
         >
           <div className="ed-story-text">
-            <p>That took me from <strong>SCA Barista &amp; Brewing</strong> certifications to a <strong>CVA in Thailand</strong> and <strong>Q Processing</strong> at origin in Ethiopia, and onto the competition stage as <strong>4th Runner-Up at the 2026 Indian Barista Championship</strong>. Somewhere along the way, coffee stopped being a drink and became craft, science, sport, and a way of bringing people together.</p>
-            <p>Everything coffee has taught us behind the bar now lives in the academy, from single-origin beans and brewing methods to the craft, technique, and understanding behind every cup.</p>
-            <p>Beyond the beans, our e-books and coffee courses make specialty coffee easier to learn, whether you&rsquo;re an aspiring barista, cafe owner, home brewer, or simply curious. We also host hands-on workshops and barista training at our academy in Mumbai: a space to brew, taste, ask questions, and learn coffee in a way that is visual, approachable, and easy to apply.</p>
+            <p>That took me into professional training, SCA certifications in <strong>Barista Skills &amp; Brewing</strong>, a <strong>CVA in Thailand</strong> to understand sensory evaluation and flavour, and <strong>Q Processing in Ethiopia</strong> to learn how coffee is shaped at origin. Along the way I stepped onto the competition stage, placing as <strong>4th Runner-Up at the 2026 Indian Barista Championship</strong>.</p>
+            <p>Mastermind Brews was born from that journey. Today it is both a platform and a physical academy in Mulund, Mumbai, where I share coffees, brewing knowledge, and hands-on workshops, in the hope of making specialty coffee more approachable and helping others learn faster than I did.</p>
+            <p>For me, coffee is no longer just a drink. It is craft, science, sport, and a way of bringing people together.</p>
           </div>
           <div className="ed-badge">
             <span className="ed-badge-icon"><Trophy size={18} /></span>
@@ -189,49 +167,12 @@ export default function AboutUs() {
         </StoryPanel>
       </div>
 
-      {/* ===== VALUES ===== */}
-      <section className="ed-values">
-        <div className="ed-container">
-          <div className="ed-section-label">What We Stand For</div>
-          <h2 className="ed-section-title">Our Values</h2>
-          <div className="ed-values-grid">
-            {VALUES.map((v, i) => (
-              <motion.div
-                key={v.title}
-                className="ed-value"
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="ed-value-head">
-                  <span className="ed-value-num">0{i + 1}</span>
-                  <h3>{v.title}</h3>
-                </div>
-                <p>{v.body}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ===== INSTAGRAM TABS ===== */}
       <section className="ed-ig">
         <div className="ed-container">
           <div className="ed-section-label">Follow the Journey</div>
           <h2 className="ed-section-title">Three places, <em>one craft.</em></h2>
-          <div className="ed-ig-grid">
-            {IG_TABS.map((t) => (
-              <Magnetic key={t.handle}>
-                <a className="ed-ig-card" href={t.url} target="_blank" rel="noopener noreferrer">
-                  <span className="ed-ig-icon"><InstagramIcon size={20} /></span>
-                  <span className="ed-ig-role">{t.role}</span>
-                  <h3 className="ed-ig-name">{t.name}</h3>
-                  <span className="ed-ig-handle"><InstagramIcon size={13} /> {t.handle}</span>
-                </a>
-              </Magnetic>
-            ))}
-          </div>
+          <InstagramTabs />
         </div>
       </section>
     </div>

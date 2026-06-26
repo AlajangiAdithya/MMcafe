@@ -38,3 +38,35 @@
 
   --radius: 0.625rem;
 }
+
+/*
+ * About / Consultancy editorial pages run a LIGHT shadcn theme so any shadcn
+ * component (Tabs, Button, ...) renders on the porcelain palette with blue/pink
+ * accents — never the global dark surface. Scoped to .about-editorial only.
+ */
+.about-editorial {
+  --tw-background: 40 33% 98%;          /* porcelain #FCFBF7 */
+  --tw-foreground: 25 25% 9%;           /* warm ink #1E1712 */
+
+  --tw-card: 40 40% 97%;                /* soft warm white */
+  --tw-card-foreground: 25 25% 9%;
+
+  --tw-popover: 40 40% 97%;
+  --tw-popover-foreground: 25 25% 9%;
+
+  --tw-primary: 212 61% 52%;            /* legible blue */
+  --tw-primary-foreground: 40 33% 98%;
+
+  --tw-secondary: 348 47% 55%;          /* brand pink */
+  --tw-secondary-foreground: 40 33% 98%;
+
+  --tw-muted: 40 45% 93%;               /* warm beige (tablist track) */
+  --tw-muted-foreground: 26 12% 39%;    /* dim copy #6E6157 */
+
+  --tw-accent: 212 50% 93%;             /* faint blue hover */
+  --tw-accent-foreground: 210 45% 40%;
+
+  --tw-border: 25 25% 11% / 0.12;       /* hairline (matches --ed-line) */
+  --tw-input: 25 25% 11% / 0.16;
+  --tw-ring: 212 61% 52%;
+}

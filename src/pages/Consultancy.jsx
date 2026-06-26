@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Briefcase, ArrowRight, Check, MapPin, Image as ImageIcon } from 'lucide-react'
+import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
@@ -35,15 +35,14 @@ const EXPERTISE = [
   { title: 'Staff Training', body: 'Hands-on sessions that empower your team to deliver impeccable service to every guest.' },
 ]
 
-/* Real consulting projects, the cafes we've built coffee programs with.
-   Photos are placeholders for now (owner is supplying brand imagery). */
+/* Real consulting projects, the cafes we've built coffee programs with. */
 const PROJECTS = [
-  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', body: "One of Virar's first specialty coffee spaces. We built curiosity through a dedicated manual brew bar, from pour-overs to siphon, shaping a coffee culture where it wasn't expected to thrive." },
-  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', body: 'A coffee menu with a voice of its own: classics, healthier choices, indulgent drinks and beverages built to pair with their in-house bakes, as vibrant and varied as Bandstand itself.' },
-  { name: 'Affogato', loc: 'Khar', initial: 'A', body: 'Where a love of coffee met world-class gelato. We shaped a program inspired by Italian cafe culture, because the perfect affogato only happens when great gelato meets equally good espresso.' },
-  { name: "Churn'd", loc: 'Surat', initial: 'C', body: 'Built by a homemaker and her daughters. No gimmicks, just good ingredients and a strong point of view, with drinks like a Mango Sticky Rice Iced Latte and a Thai Boba Tea Soft Serve.' },
-  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', body: "A menu built around indulgence. We developed an espresso- and matcha-led line-up that felt rich and memorable, complementing the brand's dessert-first personality." },
-  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', body: 'Coffee as a daily essential for an international crowd, minutes from the beach, from piña colada cold coffee and kokum cold brew to manual brews and full espresso service.' },
+  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', img: '/projects/cocoa-experience-virar.jpg', body: "One of Virar's first specialty coffee spaces. We built curiosity through a dedicated manual brew bar, from pour-overs to siphon, shaping a coffee culture where it wasn't expected to thrive." },
+  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', img: '/projects/grounded-bandra.jpg', body: 'A coffee menu with a voice of its own: classics, healthier choices, indulgent drinks and beverages built to pair with their in-house bakes, as vibrant and varied as Bandstand itself.' },
+  { name: 'Affogato', loc: 'Khar', initial: 'A', img: '/projects/affogato-khar.jpg', body: 'Where a love of coffee met world-class gelato. We shaped a program inspired by Italian cafe culture, because the perfect affogato only happens when great gelato meets equally good espresso.' },
+  { name: "Churn'd", loc: 'Surat', initial: 'C', img: '/projects/churnd-surat.jpg', body: 'Built by a homemaker and her daughters. No gimmicks, just good ingredients and a strong point of view, with drinks like a Mango Sticky Rice Iced Latte and a Thai Boba Tea Soft Serve.' },
+  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', img: '/projects/indulge-creamery-bandra.jpg', body: "A menu built around indulgence. We developed an espresso- and matcha-led line-up that felt rich and memorable, complementing the brand's dessert-first personality." },
+  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', body: 'Coffee as a daily essential for an international crowd, minutes from the beach, from piña colada cold coffee and kokum cold brew to manual brews and full espresso service.' },
 ]
 
 const PROCESS = [
@@ -81,7 +80,7 @@ function PinnedProcess() {
   return (
     <section className="ed-pin" ref={ref}>
       <div className="ed-pin-sticky">
-        <motion.div className="ed-pin-bg" style={{ backgroundImage: 'url(/pour-over-coffee.jpg)', scale: bgScale }} />
+        <motion.div className="ed-pin-bg" style={{ backgroundImage: 'url(/projects/cocoa-experience-virar.jpg)', scale: bgScale }} />
         <div className="ed-pin-scrim" />
         {PROCESS.map((step, i) => (
           <span key={step.ghost} className={`ed-pin-ghost${i === active ? ' is-active' : ''}`} aria-hidden="true">{step.ghost}</span>
@@ -164,7 +163,7 @@ export default function Consultancy() {
         <motion.div
           className="cons-hero-bg"
           aria-hidden="true"
-          style={{ backgroundImage: 'url(/project-cafe.jpg)' }}
+          style={{ backgroundImage: 'url(/projects/churnd-surat.jpg)' }}
           initial={{ scale: 1.14, opacity: 0 }}
           animate={{ scale: 1.08, opacity: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
@@ -246,8 +245,8 @@ export default function Consultancy() {
                 transition={{ duration: 0.55, delay: (i % 3) * 0.06, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="ed-proj-media" data-initial={p.initial}>
+                  <img src={p.img} alt={`${p.name}, ${p.loc} — a Mastermind Brews cafe project`} loading="lazy" />
                   <span className="ed-proj-loc"><MapPin size={11} /> {p.loc}</span>
-                  <span className="ed-proj-ph"><ImageIcon size={12} /> Photo soon</span>
                 </div>
                 <div className="ed-proj-body">
                   <h3 className="ed-proj-title">{p.name}</h3>
