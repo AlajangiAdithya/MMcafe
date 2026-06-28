@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { payAndVerify, previewCoupon } from '../lib/payments'
-import { sendOrderEmail } from '../lib/email'
+import { sendOrderEmail, sendCafeOrderEmail } from '../lib/email'
 import { getOrdersForUser, getProducts } from '../lib/database'
 import {
   MapPin, Phone, User, Home, Building2, Map, Hash, ShieldCheck,
@@ -241,12 +241,29 @@ export default function Checkout() {
         const orderTotal = result.total || grandTotal
         const orderItemCount = items.length
 
-        // Send confirmation email (non-blocking)
+        const emailOrderId = result.paymentId || result.orderId || '-'
+        const emailItems = items.map(i => ({ name: i.name, qty: i.qty, price: i.price, image: i.image }))
+
+        // Customer receipt (non-blocking)
         sendOrderEmail({
           customerName: address.fullName,
           customerEmail: user.email,
-          orderId: result.paymentId || result.orderId || '-',
-          items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price, image: i.image })),
+          orderId: emailOrderId,
+          items: emailItems,
+          subtotal,
+          shipping,
+          discount,
+          total: orderTotal,
+        })
+
+        // Cafe new-order alert → points staff to the admin panel (non-blocking)
+        sendCafeOrderEmail({
+          orderId: emailOrderId,
+          customerName: address.fullName,
+          customerEmail: user.email,
+          customerPhone: address.phone,
+          shippingAddress: address,
+          items: emailItems,
           subtotal,
           shipping,
           discount,

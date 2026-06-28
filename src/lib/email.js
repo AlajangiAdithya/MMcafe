@@ -30,6 +30,10 @@ const RESET_TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_RESET_TEMPLATE_ID || ''
 const STATUS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_STATUS_TEMPLATE_ID || ''
 const PUBLIC_KEY         = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
 
+// Cafe inbox that receives a "new order placed" alert. When unset, the cafe
+// notification simply no-ops (customer emails are unaffected).
+const CAFE_NOTIFY_EMAIL  = import.meta.env.VITE_CAFE_NOTIFY_EMAIL || ''
+
 // Where the email client should load images from. Never use localhost here —
 // mail clients can't reach a dev machine, which is why logos/items show broken.
 const ASSET_BASE = (import.meta.env.VITE_SITE_URL || 'https://www.mastermindbrews.com').replace(/\/$/, '')
@@ -209,6 +213,110 @@ export async function sendOrderEmail({
   } catch (err) {
     // Never block checkout on email failure
     console.warn('Failed to send confirmation email:', err)
+  }
+}
+
+/** A label/value detail row for the cafe-facing order alert. */
+function detailRow(label, value) {
+  if (value == null || value === '') return ''
+  return `<tr>
+    <td style="padding:5px 12px 5px 0;color:${BRAND.muted};font-size:13px;white-space:nowrap;vertical-align:top;">${esc(label)}</td>
+    <td style="padding:5px 0;color:${BRAND.ink};font-size:13px;font-weight:bold;">${esc(value)}</td>
+  </tr>`
+}
+
+/**
+ * Notify the cafe/admin that a new order was placed.
+ * Internal email, points staff to the admin panel for fulfilment.
+ * No-ops when VITE_CAFE_NOTIFY_EMAIL isn't set. Fails silently so it never
+ * blocks the customer's checkout.
+ *
+ * @param {Object} params
+ * @param {string} params.orderId
+ * @param {string} params.customerName
+ * @param {string} params.customerEmail
+ * @param {string} [params.customerPhone]
+ * @param {Object} [params.shippingAddress]  { addressLine, city, state, pincode }
+ * @param {Array}  params.items              [{ name, qty, price, image? }]
+ * @param {number} [params.subtotal]
+ * @param {number} [params.shipping]
+ * @param {number} [params.discount]
+ * @param {number} params.total
+ */
+export async function sendCafeOrderEmail({
+  orderId,
+  customerName,
+  customerEmail,
+  customerPhone,
+  shippingAddress,
+  items = [],
+  subtotal,
+  shipping = 0,
+  discount = 0,
+  total,
+}) {
+  if (!SERVICE_ID || !PUBLIC_KEY || !TEMPLATE_ID || !CAFE_NOTIFY_EMAIL) {
+    console.info('Cafe notify email skipped (set VITE_CAFE_NOTIFY_EMAIL + EmailJS vars).')
+    return
+  }
+
+  const addr = shippingAddress || {}
+  const addressLine = [
+    addr.line1 || addr.addressLine || addr.address,
+    addr.line2,
+    addr.city,
+    addr.state,
+    addr.pincode,
+  ].filter(Boolean).join(', ')
+
+  const detailsHtml = `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
+      ${detailRow('Customer', customerName)}
+      ${detailRow('Email', customerEmail)}
+      ${detailRow('Phone', customerPhone)}
+      ${detailRow('Ship to', addressLine)}
+    </table>`
+
+  const itemCount = items.reduce((n, i) => n + (Number(i.qty) || 1), 0)
+  const totals = [
+    subtotal != null ? totalRow('Subtotal', inr(subtotal)) : '',
+    totalRow('Shipping', shipping > 0 ? inr(shipping) : 'FREE'),
+    discount > 0 ? totalRow('Discount', '-' + inr(discount)) : '',
+    totalRow('Order Total', inr(total), true),
+  ].join('')
+
+  const bodyHtml = `
+    <div style="font-size:13px;color:${BRAND.muted};text-transform:uppercase;letter-spacing:.08em;">New order</div>
+    <div style="font-size:15px;color:${BRAND.ink};font-weight:bold;padding:2px 0 14px;">#${esc(orderId)} · ${itemCount} item${itemCount === 1 ? '' : 's'}</div>
+    ${detailsHtml}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemRows(items)}</table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">${totals}</table>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px;">
+      <tr><td style="border-radius:8px;background:${BRAND.gold};">
+        <a href="${SITE_URL}/admin" style="display:inline-block;padding:12px 22px;color:#fff;font-size:14px;font-weight:bold;text-decoration:none;">Open the admin panel →</a>
+      </td></tr>
+    </table>
+    <p style="margin:18px 0 0;color:${BRAND.muted};font-size:12px;line-height:1.6;">Manage and fulfil this order from the Orders tab in the admin panel.</p>`
+
+  const content_html = emailShell({
+    heading: `New order placed · #${orderId}`,
+    intro: `${customerName || 'A customer'} just placed an order. Full details are in the admin panel.`,
+    bodyHtml,
+  })
+
+  try {
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      to_email: CAFE_NOTIFY_EMAIL,
+      to_name: 'Mastermind Cafe',
+      subject: `🛎️ New order #${orderId} · ${inr(total)}`,
+      order_id: orderId,
+      content_html,
+      logo_url: LOGO_URL,
+      site_url: SITE_URL,
+    }, PUBLIC_KEY)
+    console.info('Cafe new-order alert sent →', CAFE_NOTIFY_EMAIL)
+  } catch (err) {
+    console.warn('Failed to send cafe order alert:', err)
   }
 }
 

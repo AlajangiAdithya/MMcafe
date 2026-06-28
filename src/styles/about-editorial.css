@@ -554,9 +554,13 @@
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.ig-tab-panel[data-state="active"] { animation: ig-panel-in 0.5s var(--ed-ease) both; }
+/* CSS keyframe only for the reduced-motion / non-pinned fallback.
+   In the pinned scroll version, Framer Motion drives the panel (see .ig-stage). */
+.ig-tabs:not(.ig-scroll) .ig-tab-panel[data-state="active"] {
+  animation: ig-panel-in 0.5s var(--ed-ease) both;
+}
 @media (prefers-reduced-motion: reduce) {
-  .ig-tab-panel[data-state="active"] { animation: none; }
+  .ig-tabs:not(.ig-scroll) .ig-tab-panel[data-state="active"] { animation: none; }
 }
 
 /* ---------- OUR PROJECTS (Consultancy, cafe grid) ---------- */
@@ -1368,4 +1372,53 @@
 @media (max-width: 540px) {
   .ig-tablist { grid-template-columns: 1fr; gap: 5px; }
   .ig-tab { flex-direction: row; justify-content: center; gap: 8px; padding: 11px; }
+}
+
+/* ---- scroll-driven pin: scroll advances through all 3 accounts ---- */
+.ig-scroll {
+  /* tall track gives the pinned panel room to scrub through the 3 tabs */
+  position: relative;
+  height: 300vh;
+  margin-top: clamp(30px, 4vw, 50px);
+}
+.ig-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(18px, 2.4vw, 30px);
+  padding: clamp(56px, 8vh, 96px) 0;
+}
+.ig-stage { position: relative; width: 100%; }
+/* keep height stable while panels swap so the pin doesn't jitter */
+.ig-scroll .ig-tab-panel { margin-top: 0; }
+
+/* progress rail: 3 dots tracking which account the scroll is on */
+.ig-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.ig-progress-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(91, 155, 219, 0.3);
+  transition: background 0.4s var(--ed-ease), transform 0.4s var(--ed-ease),
+    box-shadow 0.4s var(--ed-ease), width 0.4s var(--ed-ease);
+}
+.ig-progress-dot[data-state="done"] { background: var(--bc-pink-ink); }
+.ig-progress-dot[data-state="active"] {
+  width: 30px;
+  background: var(--bc-grad);
+  box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
+}
+
+@media (max-width: 540px) {
+  /* shorter track + auto height so phones aren't stuck scroll-jacking */
+  .ig-scroll { height: 280vh; }
+  .ig-sticky { min-height: 100vh; padding: clamp(40px, 6vh, 72px) 0; }
 }
