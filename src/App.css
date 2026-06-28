@@ -4460,39 +4460,6 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .toggle-auth button:hover { color: var(--accent-deep); }
 
 /* ===== ADMIN PANEL ===== */
-/* Admin is a self-contained DARK dashboard authored against the old dark
-   theme. When the global palette flipped to light, its tokens inverted and
-   text went dark-on-dark (faint labels, invisible input text). Re-scope the
-   dark token set + a base text colour to the admin root so the whole
-   dashboard — including its inline modals — reads correctly again. */
-.admin-page {
-  --bg-primary:   #141414;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary:  #202020;
-  --bg-card:      rgba(255, 255, 255, 0.04);
-  --bg-elevated:  #1c1c1c;
-  --bg-surface:   #181818;
-  --bg-hover:     rgba(255, 255, 255, 0.06);
-  --ink-100: #ffffff;
-  --ink-200: #f0f0f0;
-  --ink-300: #d4d4d4;
-  --ink-400: #a0a0a0;
-  --ink-500: #808080;
-  --text-primary:   #ffffff;
-  --text-secondary: #d4d4d4;
-  --text-muted:     #9a9a9a;
-  --border:        rgba(255, 255, 255, 0.08);
-  --border-light:  rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --white: #ffffff;
-  color: var(--text-primary);
-}
-.admin-form-group input,
-.admin-form-group select,
-.admin-form-group textarea { color: #f0f0f0; }
-.admin-form-group input::placeholder,
-.admin-form-group textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
-
 .admin-page {
   display: grid;
   grid-template-columns: 240px 1fr;
@@ -16497,3 +16464,128 @@ select:focus:not([data-no-glass]) {
   border-color: rgba(201, 151, 74, 0.2);
   transform: translateY(-1px);
 }
+
+/* ============================================================
+   ADMIN — LIGHT THEME OVERRIDE
+   The dashboard was authored against the old dark theme (translucent
+   white panels, dark gradients, white text). The site is now light, so
+   flip every admin surface to a clean white/cream card with dark ink.
+   Loaded last in App.css so it wins the cascade over the dark rules.
+   ============================================================ */
+.admin-page {
+  background:
+    radial-gradient(900px 500px at 0% -10%, rgba(184, 142, 47, 0.06), transparent 60%),
+    var(--bg-secondary) !important;
+  color: var(--ink-200);
+}
+
+/* ----- Sidebar ----- */
+.admin-sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid var(--border) !important;
+  color: var(--ink-200);
+}
+.admin-sidebar-header { color: var(--ink-100) !important; border-bottom: 1px solid var(--border) !important; }
+.admin-sidebar-header svg { color: var(--accent); filter: none !important; }
+.admin-sidebar-footer { border-top: 1px solid var(--border) !important; }
+.admin-nav-item { color: var(--ink-300) !important; }
+.admin-nav-item svg { color: var(--ink-400); }
+.admin-nav-item:hover { background: var(--bg-hover) !important; color: var(--ink-100) !important; }
+.admin-nav-item:hover svg { color: var(--accent); }
+.admin-nav-item.active {
+  background: rgba(184, 142, 47, 0.12) !important;
+  color: var(--accent-deep) !important;
+}
+.admin-nav-item.active svg { color: var(--accent-deep); }
+.admin-nav-item.active::before { background: linear-gradient(180deg, var(--accent), var(--accent-deep)) !important; }
+
+/* ----- Page header ----- */
+.admin-page-header h1 { color: var(--ink-100); }
+.admin-page-header p { color: var(--ink-400); }
+
+/* ----- Stat cards ----- */
+.admin-stat-card,
+.admin-section,
+.admin-chart-wrap,
+.admin-table-wrap,
+.mapping-card,
+.payments-summary-card,
+.admin-empty,
+.admin-info-banner,
+.admin-order-detail-section {
+  background: #ffffff !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 6px 20px rgba(28, 19, 12, 0.06);
+}
+.admin-stat-card::after { display: none !important; }
+.admin-stat-value,
+.payments-summary-card strong {
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  color: var(--ink-100) !important;
+}
+.admin-stat-label { color: var(--ink-400) !important; }
+
+/* ----- Tables ----- */
+.admin-table { color: var(--ink-200); }
+.admin-table th { color: var(--ink-400) !important; border-bottom: 1px solid var(--border) !important; }
+.admin-table td { border-bottom: 1px solid var(--border) !important; }
+.admin-table tr:hover td { background: var(--bg-hover); }
+.admin-table strong { color: var(--ink-100) !important; }
+
+/* ----- Toolbar / search / filters / pager ----- */
+.admin-search,
+.admin-filter-select,
+.admin-pagesize select,
+.admin-filter-chip {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-200) !important;
+}
+.admin-filter-chip:hover { background: var(--bg-hover) !important; color: var(--ink-100) !important; }
+.admin-pager-btn {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-200);
+}
+.admin-pager-btn:hover:not(:disabled) { background: rgba(184, 142, 47, 0.1) !important; border-color: var(--accent) !important; }
+.admin-pager-info { color: var(--ink-400); }
+
+/* ----- Modal ----- */
+.admin-modal-overlay { background: rgba(28, 19, 12, 0.55) !important; }
+.admin-modal {
+  background: #ffffff !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-200);
+  box-shadow: 0 30px 70px rgba(28, 19, 12, 0.28) !important;
+}
+.admin-modal-header { border-bottom: 1px solid var(--border) !important; }
+.admin-modal-header h2 { color: var(--ink-100); }
+.admin-modal-footer { border-top: 1px solid var(--border) !important; background: var(--bg-surface) !important; }
+
+/* ----- Form fields ----- */
+.admin-form-group label { color: var(--ink-400) !important; }
+.admin-form-group input,
+.admin-form-group select,
+.admin-form-group textarea {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-100) !important;
+}
+.admin-form-group input::placeholder,
+.admin-form-group textarea::placeholder { color: var(--ink-400) !important; }
+.admin-form-group input:focus,
+.admin-form-group select:focus,
+.admin-form-group textarea:focus {
+  border-color: var(--accent) !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* ----- Misc ----- */
+.admin-empty svg { opacity: 0.5; color: var(--accent); }
+.admin-code { background: var(--bg-surface) !important; color: var(--ink-200) !important; border: 1px solid var(--border) !important; }
+.admin-chart-axis { color: var(--ink-400) !important; }
+.admin-loading { color: var(--ink-400); }
