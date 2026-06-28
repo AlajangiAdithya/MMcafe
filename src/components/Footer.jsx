@@ -37,9 +37,14 @@ export default function Footer() {
             <img src="/logo.png" alt="Mastermind Brews" />
             <span>Mastermind Brews</span>
           </Link>
-          <p className="footer-brand-blurb">
-            Single-origin specialty coffee from Chikmagalur, roasted in partnership with Bean Rove. By the team behind Mastermind Bicycle Cafe &amp; Bar, Mulund.
-          </p>
+          <div className="footer-brand-bio">
+            <p className="footer-brand-tagline">Building better baristas in India</p>
+            <ul>
+              <li>Barista | Brewing | Sensory Workshops</li>
+              <li>For coffee lovers, home brewers &amp; professionals</li>
+              <li>Mumbai, India</li>
+            </ul>
+          </div>
           <div className="footer-social">
             <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon size={16} /></a>
             <a href="https://www.facebook.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FacebookIcon size={16} /></a>
@@ -69,19 +74,21 @@ export default function Footer() {
         </div>
 
         <aside className="footer-cafe-card">
-          <span className="eyebrow">Visit the Cafe</span>
+          <span className="eyebrow">We Are Located At</span>
           <h4 className="footer-cafe-title">Mastermind<br/>Bicycle Cafe &amp; Bar</h4>
           <div className="footer-cafe-meta">
             <div className="footer-cafe-row">
-              <MapPin size={14} />
-              <span>Avior Corporate Park, Mulund West</span>
+              <MapPin size={15} />
+              <span>
+                Cafe, LG 38 &amp; 39 &middot; Mastermind Brews, LG 06
+              </span>
             </div>
             <div className="footer-cafe-row">
-              <Phone size={14} />
+              <Phone size={15} />
               <a href="tel:+918591850161">+91 85918 50161</a>
             </div>
             <div className="footer-cafe-row">
-              <Mail size={14} />
+              <Mail size={15} />
               <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>
             </div>
           </div>

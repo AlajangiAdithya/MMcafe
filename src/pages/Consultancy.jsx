@@ -37,12 +37,12 @@ const EXPERTISE = [
 
 /* Real consulting projects, the cafes we've built coffee programs with. */
 const PROJECTS = [
-  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', img: '/projects/cocoa-experience-virar.jpg', body: "One of Virar's first specialty coffee spaces. We built curiosity through a dedicated manual brew bar, from pour-overs to siphon, shaping a coffee culture where it wasn't expected to thrive." },
-  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', img: '/projects/grounded-bandra.jpg', body: 'A coffee menu with a voice of its own: classics, healthier choices, indulgent drinks and beverages built to pair with their in-house bakes, as vibrant and varied as Bandstand itself.' },
-  { name: 'Affogato', loc: 'Khar', initial: 'A', img: '/projects/affogato-khar.jpg', body: 'Where a love of coffee met world-class gelato. We shaped a program inspired by Italian cafe culture, because the perfect affogato only happens when great gelato meets equally good espresso.' },
-  { name: "Churn'd", loc: 'Surat', initial: 'C', img: '/projects/churnd-surat.jpg', body: 'Built by a homemaker and her daughters. No gimmicks, just good ingredients and a strong point of view, with drinks like a Mango Sticky Rice Iced Latte and a Thai Boba Tea Soft Serve.' },
-  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', img: '/projects/indulge-creamery-bandra.jpg', body: "A menu built around indulgence. We developed an espresso- and matcha-led line-up that felt rich and memorable, complementing the brand's dessert-first personality." },
-  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', body: 'Coffee as a daily essential for an international crowd, minutes from the beach, from piña colada cold coffee and kokum cold brew to manual brews and full espresso service.' },
+  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', img: '/hero-bg.jpg', tag: 'Manual Brew Bar', body: `Specialty coffee where no one expected it — a brew bar that turned curious locals into regulars.` },
+  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', img: '/projects/grounded-bandra.jpg', tag: 'Menu Design', body: `A menu with a voice of its own — classics, healthier pours, and indulgent drinks built around the bakes.` },
+  { name: 'Affogato', loc: 'Khar', initial: 'A', img: '/projects/affogato-khar.jpg', tag: 'Coffee × Gelato', body: `Italian café culture, done right — espresso worthy of world-class gelato.` },
+  { name: "Churn'd", loc: 'Surat', initial: 'C', img: '/projects/churnd-surat.jpg', tag: 'Beverage Innovation', body: `No gimmicks, big ideas — like a Mango Sticky Rice Iced Latte and a Thai Boba soft serve.` },
+  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', img: '/projects/indulge-creamery-bandra.jpg', tag: 'Espresso & Matcha', body: `Indulgence by design — an espresso- and matcha-led menu for a sweet-toothed crowd.` },
+  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', tag: 'Coffee Program', body: `Beachside coffee with intent — from piña colada cold coffee to proper espresso service.` },
 ]
 
 const PROCESS = [
@@ -80,7 +80,7 @@ function PinnedProcess() {
   return (
     <section className="ed-pin" ref={ref}>
       <div className="ed-pin-sticky">
-        <motion.div className="ed-pin-bg" style={{ backgroundImage: 'url(/projects/cocoa-experience-virar.jpg)', scale: bgScale }} />
+        <motion.div className="ed-pin-bg" style={{ backgroundImage: 'url(/about-team.jpg)', scale: bgScale }} />
         <div className="ed-pin-scrim" />
         {PROCESS.map((step, i) => (
           <span key={step.ghost} className={`ed-pin-ghost${i === active ? ' is-active' : ''}`} aria-hidden="true">{step.ghost}</span>
@@ -111,30 +111,12 @@ function PinnedProcess() {
 }
 
 function SuitedPanel() {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-8%', '8%'])
   return (
-    <section className="ed-story">
+    <section className="ed-story cons-suited">
       <div className="ed-container">
-        <div className="ed-story-head">
-          <span className="ed-story-index">(04)</span>
-          <span className="ed-story-meta">WHO IT&rsquo;S FOR</span>
-          <h2 className="ed-story-title">Cafes at <em>every stage.</em></h2>
-        </div>
-        <motion.div
-          ref={ref}
-          className="ed-story-media"
-          initial={reduced ? { opacity: 0 } : { clipPath: 'inset(14% 14% 14% 14% round 16px)', opacity: 0.35 }}
-          whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
-          viewport={{ once: true, margin: '-12%' }}
-          transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.img src="/project-cafe.jpg" alt="A cafe consulting project by Mastermind Brews" style={{ y: imgY, scale: 1.14 }} loading="lazy" />
-          <span className="ed-story-tag">In the Field</span>
-        </motion.div>
-        <div className="ed-story-grid">
+        <div className="ed-section-label">Who It&rsquo;s For</div>
+        <h2 className="ed-section-title">Cafes at <em>every stage.</em></h2>
+        <div className="ed-story-grid cons-suited-grid">
           <p className="ed-story-lede">From first-time owners to established cafes hitting a plateau, if coffee is on your menu, we can help.</p>
           <ul className="ed-suited-list">
             {SUITED.map((item) => (
@@ -163,7 +145,7 @@ export default function Consultancy() {
         <motion.div
           className="cons-hero-bg"
           aria-hidden="true"
-          style={{ backgroundImage: 'url(/projects/churnd-surat.jpg)' }}
+          style={{ backgroundImage: 'url(/hero-bg.jpg)' }}
           initial={{ scale: 1.14, opacity: 0 }}
           animate={{ scale: 1.08, opacity: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
@@ -200,6 +182,21 @@ export default function Consultancy() {
         </div>
       </header>
 
+      {/* ===== FOUNDER INTRO ===== */}
+      <section className="cons-intro">
+        <div className="ed-container">
+          <div className="ed-section-label">A Note from the Founder</div>
+          <div className="cons-intro-body">
+            <p>
+              Having personally experienced the balance between passion and profession, I understand the significance of designing a cafe that resonates and speaks your vision and values. My journey as the Founder of Mastermind Bicycle Cafe, along with my certifications as an SCA Barista and Brewer, Bartender, and Gelatiere, has equipped me with a holistic skill to guide you through this endeavor.
+            </p>
+            <p>
+              While opening a cafe can seem really simple, it&rsquo;s the meticulous attention to detail that defines us from the rest and helps succeed. Drawing from my experience in running Mastermind Bicycle Cafe, I bring a hands-on approach to every aspect of Cafe Management.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ===== EXPERTISE ===== */}
       <section className="ed-values">
         <div className="ed-container">
@@ -231,9 +228,6 @@ export default function Consultancy() {
         <div className="ed-container">
           <div className="ed-section-label">Our Projects</div>
           <h2 className="ed-section-title">Spaces we&rsquo;ve <em>worked with.</em></h2>
-          <p className="ed-projects-lede">
-            Beyond education and brewing, we work with cafes to build stronger coffee programs from the ground up, from menu development and bar setup to workflow, team training, and beverage direction, so every space can serve coffee with more clarity, consistency, and purpose.
-          </p>
           <div className="ed-proj-grid">
             {PROJECTS.map((p, i) => (
               <motion.article
@@ -245,10 +239,11 @@ export default function Consultancy() {
                 transition={{ duration: 0.55, delay: (i % 3) * 0.06, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="ed-proj-media" data-initial={p.initial}>
-                  <img src={p.img} alt={`${p.name}, ${p.loc} — a Mastermind Brews cafe project`} loading="lazy" />
+                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" />
                   <span className="ed-proj-loc"><MapPin size={11} /> {p.loc}</span>
                 </div>
                 <div className="ed-proj-body">
+                  <span className="ed-proj-tag">{p.tag}</span>
                   <h3 className="ed-proj-title">{p.name}</h3>
                   <p>{p.body}</p>
                 </div>
@@ -277,7 +272,6 @@ export default function Consultancy() {
               <Briefcase size={13} style={{ display: 'inline', marginRight: 6 }} /> Let&rsquo;s Build
             </div>
             <h2>Tell us what you&rsquo;re <em>building.</em></h2>
-            <p>We&rsquo;ll reply within two working days with a fit assessment and clear next steps.</p>
             <div className="ed-actions">
               <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link></Magnetic>
             </div>

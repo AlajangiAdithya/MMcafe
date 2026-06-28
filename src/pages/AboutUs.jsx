@@ -20,7 +20,7 @@ const ABOUT_SCHEMA = {
     name: 'Namrata Thakkar',
     jobTitle: 'Founder',
     worksFor: { '@id': ABOUT_ORG_ID },
-    image: 'https://www.mastermindbrews.com/namrata.jpg',
+    image: 'https://www.mastermindbrews.com/namrata-thakkar.jpg',
   },
 }
 const ABOUT_CRUMB = {
@@ -41,8 +41,8 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede,
   const ref = useRef(null)
   const reduced = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-9%', '9%'])
-  const ghostX = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['10%', '-10%'])
+  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-6%', '6%'])
+  const ghostX = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['30%', '-30%'])
 
   return (
     <section className="ed-story">
@@ -53,23 +53,23 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede,
           <h2 className="ed-story-title">{title}</h2>
         </div>
 
-        <motion.div
-          ref={ref}
-          className="ed-story-media"
-          initial={reduced ? { opacity: 0 } : { clipPath: 'inset(14% 14% 14% 14% round 16px)', opacity: 0.35 }}
-          whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
-          viewport={{ once: true, margin: '-12%' }}
-          transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.img src={img} alt={alt} style={{ y: imgY, scale: 1.14 }} loading="lazy" width="1600" height="900" />
-          <span className="ed-story-tag">{tagline}</span>
-          <motion.span className="ed-story-ghost" style={{ x: ghostX }} aria-hidden="true">{ghost}</motion.span>
-        </motion.div>
-
-        <div className="ed-story-grid">
+        <div className="ed-story-intro">
+          <motion.div
+            ref={ref}
+            className="ed-story-media"
+            initial={reduced ? { opacity: 0 } : { clipPath: 'inset(14% 14% 14% 14% round 16px)', opacity: 0.35 }}
+            whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.img src={img} alt={alt} style={{ y: imgY, scale: 1.12 }} loading="lazy" width="877" height="775" />
+            <span className="ed-story-tag">{tagline}</span>
+            <motion.span className="ed-story-ghost" style={{ x: ghostX }} aria-hidden="true">{ghost}</motion.span>
+          </motion.div>
           <p className="ed-story-lede">{lede}</p>
-          <div>{children}</div>
         </div>
+
+        <div className="ed-story-body">{children}</div>
       </div>
     </section>
   )
@@ -142,7 +142,7 @@ export default function AboutUs() {
           tags="FOUNDER · ACADEMY"
           year="MULUND, MUMBAI"
           title={<>Coffee was never <em>the plan.</em></>}
-          img="/namrata.jpg"
+          img="/namrata-thakkar.jpg"
           alt="Namrata Thakkar, founder of Mastermind Brews and certified barista, at the bar in Mulund, Mumbai"
           tagline="The Brewer"
           ghost="NAMRATA"

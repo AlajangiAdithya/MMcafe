@@ -1,10 +1,39 @@
 import { useRef } from 'react'
-import { Mail, Phone, MapPin, Globe } from 'lucide-react'
+import { Mail, Phone, MapPin } from 'lucide-react'
+
+function InstagramIcon({ size = 24 }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
 import { motion, useInView } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
+import JsonLd from '../components/JsonLd'
 import { AnimatedText } from '@/components/ui/animated-underline-text-one'
 import { HeroDockLogo } from '../components/ScrollDockLogo'
 import RotatingWord from '../components/RotatingWord'
+
+const CONTACT_PAGE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  url: 'https://www.mastermindbrews.com/contact',
+  name: 'Contact Mastermind Brews',
+  description: 'Contact Mastermind Brews and Mastermind Bicycle Cafe & Bar in Mulund West, Mumbai.',
+  about: { '@id': 'https://www.mastermindbrews.com/#cafe' },
+  mainEntity: { '@id': 'https://www.mastermindbrews.com/#cafe' },
+}
+const CONTACT_CRUMB = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.mastermindbrews.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://www.mastermindbrews.com/contact' },
+  ],
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -44,6 +73,8 @@ export default function ContactUs() {
   })
   return (
     <div className="policy-page">
+      <JsonLd id="contact-page" data={CONTACT_PAGE_SCHEMA} />
+      <JsonLd id="contact-breadcrumb" data={CONTACT_CRUMB} />
       <div className="policy-container">
         <motion.div
           initial="hidden"
@@ -103,7 +134,8 @@ export default function ContactUs() {
             <motion.div className="contact-card" variants={fadeUp}>
               <MapPin size={24} />
               <h3>Visit Us</h3>
-              <p>Mastermind Bicycle Cafe & Bar (Mastermind Brews)</p>
+              <p>Mastermind Bicycle Cafe &amp; Bar, LG 38, 39</p>
+              <p>Mastermind Brews, LG 06</p>
               <p>Avior Corporate Park,<br />Mulund West, Mumbai</p>
             </motion.div>
           </motion.div>
@@ -112,15 +144,21 @@ export default function ContactUs() {
         <AnimatedSection>
           <section>
             <h2>Follow Us</h2>
-            <div className="contact-socials">
-              <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer">
-                <Globe size={16} /> Instagram
+            <div className="contact-ig-grid">
+              <a className="contact-card contact-ig-card" href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon size={24} />
+                <h3>Mastermind Bicycle Cafe</h3>
+                <span>@mastermindbicyclecafe</span>
               </a>
-              <a href="https://www.facebook.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer">
-                <Globe size={16} /> Facebook
+              <a className="contact-card contact-ig-card" href="https://www.instagram.com/namrata_is_brewing/" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon size={24} />
+                <h3>Namrata is Brewing</h3>
+                <span>@namrata_is_brewing</span>
               </a>
-              <a href="https://x.com/cafemastermind" target="_blank" rel="noopener noreferrer">
-                <Globe size={16} /> X (Twitter)
+              <a className="contact-card contact-ig-card" href="https://www.instagram.com/mastermindbrews/" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon size={24} />
+                <h3>Mastermind Brews</h3>
+                <span>@mastermindbrews</span>
               </a>
             </div>
           </section>

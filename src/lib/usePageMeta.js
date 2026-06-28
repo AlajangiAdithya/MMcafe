@@ -1,7 +1,15 @@
 import { useEffect } from 'react'
 
 const BRAND = 'Mastermind Brews'
-const SITE_ORIGIN = 'https://www.mastermindbrews.com'
+export const SITE_ORIGIN = 'https://www.mastermindbrews.com'
+// Default social-share image. 1024x682 (~1.5:1) renders cleanly on every
+// platform; declaring the real dimensions lets the first scrape render the
+// large card without a re-fetch. (The logo is 789x364 and was wrongly declared
+// 1200x630, which broke card rendering.)
+const DEFAULT_IMAGE = `${SITE_ORIGIN}/hero-bg.jpg`
+const DEFAULT_IMAGE_W = 1024
+const DEFAULT_IMAGE_H = 682
+const DEFAULT_IMAGE_ALT = 'Inside Mastermind Bicycle Cafe & Bar, Mulund, Mumbai'
 
 function setMeta(name, content, { property = false } = {}) {
   if (!content) return
@@ -68,18 +76,32 @@ export function usePageMeta({ title, description, image, keywords, canonical, ty
     if (description) setMeta('description', description)
     if (keywords) setMeta('keywords', keywords)
 
+    // Social image: fall back to a known-good default so every route shares a
+    // proper card. Only declare width/height/type for the default (whose exact
+    // dimensions we know); a custom per-page image declares alt only.
+    const ogImage = image || DEFAULT_IMAGE
+    const isDefaultImage = !image
+
     setMeta('og:site_name', BRAND, { property: true })
     setMeta('og:type', type, { property: true })
     setMeta('og:title', fullTitle, { property: true })
     if (description) setMeta('og:description', description, { property: true })
-    if (image) setMeta('og:image', image, { property: true })
+    setMeta('og:image', ogImage, { property: true })
+    setMeta('og:image:alt', isDefaultImage ? DEFAULT_IMAGE_ALT : fullTitle, { property: true })
+    if (isDefaultImage) {
+      setMeta('og:image:secure_url', ogImage, { property: true })
+      setMeta('og:image:type', 'image/jpeg', { property: true })
+      setMeta('og:image:width', String(DEFAULT_IMAGE_W), { property: true })
+      setMeta('og:image:height', String(DEFAULT_IMAGE_H), { property: true })
+    }
     setMeta('og:url', url, { property: true })
     setMeta('og:locale', 'en_IN', { property: true })
 
     setMeta('twitter:card', 'summary_large_image')
     setMeta('twitter:title', fullTitle)
     if (description) setMeta('twitter:description', description)
-    if (image) setMeta('twitter:image', image)
+    setMeta('twitter:image', ogImage)
+    setMeta('twitter:image:alt', isDefaultImage ? DEFAULT_IMAGE_ALT : fullTitle)
     setMeta('twitter:url', url)
   }, [title, description, image, keywords, canonical, type, noindex])
 }

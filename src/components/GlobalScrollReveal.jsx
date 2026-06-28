@@ -35,6 +35,8 @@ const SELECTORS = [
   '.about-namrata-cred', '.feature-card',
   // Other prominent blocks
   '.section-header', '.section-label', '.section-desc', '.section-title',
+  // Editorial sections (About / Consultancy): eyebrow labels + checklist
+  '.ed-section-label', '.ed-suited-list > *', '.ed-projects-lede', '.ed-badge',
   '.about-intro-grid', '.about-intro-media', '.about-intro-text',
   '.visit-card', '.visit-info', '.press-row', '.press-copy',
   '.press-clipping-wrap', '.newsletter-content', '.hero-btns',

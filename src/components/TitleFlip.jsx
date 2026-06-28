@@ -14,7 +14,7 @@ import { useEffect } from 'react'
  * deliberately do NOT listen to window blur/focus: headless SEO/social
  * crawlers load pages without window focus, so a blur-driven flip would
  * overwrite every page's <title> with "☕ Brewing…" in the snapshot the
- * crawler captures — making every URL look like a duplicate title to Google
+ * crawler captures - making every URL look like a duplicate title to Google
  * (and to audit tools). visibilitychange stays 'visible' for those crawlers,
  * so the real per-route title is what gets indexed. It also avoids false
  * flips when focus moves into an embedded iframe (e.g. Razorpay checkout).

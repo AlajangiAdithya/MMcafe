@@ -19,6 +19,7 @@ import SmoothScroll from './components/SmoothScroll'
 import TitleFlip from './components/TitleFlip'
 import ScrollDockLogo from './components/ScrollDockLogo'
 import Home from './pages/Home'
+import NotFound from './pages/NotFound'
 import './App.css'
 import './styles/scroll-effects.css'
 import './styles/animation-tokens.css'
@@ -137,6 +138,7 @@ function AppShell() {
               <Route path="/refund-policy" element={<RefundPolicy />} />
               <Route path="/shipping" element={<ShippingPolicy />} />
               <Route path="/contact" element={<ContactUs />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

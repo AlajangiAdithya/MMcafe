@@ -475,6 +475,69 @@
 .ed-ig-card:hover .ed-ig-handle { color: var(--ed-pink-ink); }
 @media (max-width: 820px) { .ed-ig-grid { grid-template-columns: 1fr; } }
 
+/* ---------- FOLLOW THE JOURNEY · image cards (About, bottom) ---------- */
+.ig-journey-grid {
+  margin-top: clamp(32px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px, 2.6vw, 30px);
+}
+.ig-journey-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ed-line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ed-bg);
+  transition: transform 0.45s var(--ed-ease), border-color 0.45s var(--ed-ease), box-shadow 0.45s var(--ed-ease);
+}
+.ig-journey-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(214, 124, 142, 0.5);
+  box-shadow: 0 26px 54px -28px rgba(46, 111, 176, 0.42);
+}
+.ig-journey-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.ig-journey-media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.6s var(--ed-ease);
+}
+.ig-journey-card:hover .ig-journey-media img { transform: scale(1.06); }
+.ig-journey-media::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(10, 8, 6, 0.5) 100%);
+}
+.ig-journey-role {
+  position: absolute; left: 14px; bottom: 12px; z-index: 1;
+  font-family: var(--ed-mono);
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--ed-blue), var(--ed-pink));
+  padding: 6px 12px; border-radius: 999px;
+}
+.ig-journey-body {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: clamp(20px, 2.2vw, 28px);
+}
+.ig-journey-body .ed-ig-name { margin: 0; }
+.ig-journey-handle {
+  margin-top: 6px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ed-mono); font-size: 0.84rem;
+  color: var(--ed-blue-ink);
+  transition: color 0.3s var(--ed-ease);
+}
+.ig-journey-card:hover .ig-journey-handle { color: var(--ed-pink-ink); }
+@media (max-width: 820px) {
+  .ig-journey-grid { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; }
+}
+
 /* ---------- INSTAGRAM · shadcn Tabs (About, bottom) ---------- */
 .ed-ig .ed-section-label,
 .ed-ig .ed-section-title { text-align: center; }
@@ -568,7 +631,28 @@
   font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.12;
   color: var(--ed-ink); margin: 0;
 }
-.ed-proj-body p { color: var(--ed-dim); font-size: 0.95rem; line-height: 1.65; margin: 0; }
+.ed-proj-body p { color: var(--ed-dim); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+/* small focus-area chip above the title */
+.ed-proj-tag {
+  align-self: flex-start;
+  font-family: var(--ed-mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ed-blue-ink);
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(91, 155, 219, 0.10);
+  border: 1px solid rgba(91, 155, 219, 0.28);
+  transition: background 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease), color 0.4s var(--ed-ease);
+}
+.ed-proj-card:hover .ed-proj-tag {
+  background: var(--ed-blue); border-color: var(--ed-blue); color: #fff;
+}
+/* accent sweep along the top edge of the card on hover */
+.ed-proj-card { position: relative; }
+.ed-proj-card::after {
+  content: ''; position: absolute; left: 0; top: 0; height: 3px; width: 0; z-index: 3;
+  background: linear-gradient(90deg, var(--ed-blue), var(--ed-pink));
+  transition: width 0.5s var(--ed-ease);
+}
+.ed-proj-card:hover::after { width: 100%; }
 @media (max-width: 920px) { .ed-proj-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .ed-proj-grid { grid-template-columns: 1fr; } }
 
@@ -729,6 +813,139 @@
   .ed-story-media { aspect-ratio: 16 / 11; }
 }
 
+/* ============================================================
+   CONSULTANCY · founder intro + typography emphasis (this page only)
+   Bigger, more prominent section eyebrows + titles so they aren't
+   "ignored in the corner"; quieter supporting copy underneath.
+   ============================================================ */
+.consultancy-page .cons-intro {
+  padding: clamp(48px, 8vw, 100px) 0;
+  border-top: 1px solid var(--ed-line);
+}
+.consultancy-page .cons-intro-body {
+  margin-top: clamp(20px, 3vw, 34px);
+  max-width: 72ch;
+}
+.consultancy-page .cons-intro-body p {
+  font-family: var(--ed-serif);
+  font-weight: 360;
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--ed-ink);
+  margin: 0 0 1.1rem;
+}
+.consultancy-page .cons-intro-body p:last-child { margin-bottom: 0; }
+
+/* Prominent eyebrows/labels across the page */
+.consultancy-page .ed-section-label {
+  font-size: 0.86rem;
+  letter-spacing: 0.2em;
+  color: var(--ed-pink-ink);
+}
+.consultancy-page .cons-eyebrow { font-size: 0.9rem; }
+
+/* Larger section titles */
+.consultancy-page .ed-section-title {
+  font-size: clamp(2.4rem, 5.8vw, 4.4rem);
+  margin-top: 16px;
+}
+
+/* Quieter supporting copy */
+.consultancy-page .ed-value p,
+.consultancy-page .ed-suited-list li { font-size: 0.95rem; }
+.consultancy-page .ed-story-lede { font-size: clamp(1.2rem, 1.9vw, 1.6rem); }
+
+/* "Our Expertise" — centered heading */
+.consultancy-page .ed-values .ed-section-label,
+.consultancy-page .ed-values .ed-section-title { text-align: center; }
+
+/* "Who It's For" — text-only panel (pizza image removed) */
+.consultancy-page .cons-suited-grid { margin-top: clamp(28px, 4vw, 52px); }
+
+/* ============================================================
+   ABOUT · founder portrait framing + legible ghost name
+   The photo is near-square, so a wide 2:1 band cropped it to a strip.
+   Present it as a contained centered portrait and make the ghost word
+   read clearly on the dark image (no mix-blend wash-out).
+   ============================================================ */
+/* Founder intro: portrait + first paragraph side by side, rest below */
+.about-page .ed-story-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  margin: clamp(30px, 4vw, 58px) 0 clamp(34px, 4.5vw, 64px);
+}
+.about-page .ed-story-media {
+  aspect-ratio: 4 / 5;
+  max-width: 460px;
+  margin: 0;
+}
+.about-page .ed-story-media img {
+  object-position: 50% 22%;
+}
+.about-page .ed-story-intro .ed-story-lede { margin: 0; }
+.about-page .ed-story-body { max-width: 760px; }
+.about-page .ed-story-ghost {
+  font-size: clamp(2.2rem, 8vw, 4.2rem);
+  bottom: 5%;
+  color: rgba(246, 239, 225, 0.4);
+  mix-blend-mode: normal;
+  text-shadow: 0 2px 26px rgba(0, 0, 0, 0.55);
+  letter-spacing: 0.01em;
+}
+@media (max-width: 820px) {
+  .about-page .ed-story-intro { grid-template-columns: 1fr; gap: 26px; }
+  .about-page .ed-story-media { max-width: 420px; }
+}
+
+/* ============================================================
+   CONSULTANCY · dark scrims (hero + How It Works)
+   Swap the bright cream washes for a black translucent layer so the
+   cafe photo reads through a dark overlay instead of a white one.
+   ============================================================ */
+.consultancy-page .cons-hero-bg {
+  filter: saturate(1) brightness(0.92);
+  opacity: 0.9;
+}
+.consultancy-page .cons-hero-scrim {
+  background:
+    radial-gradient(ellipse 80% 72% at 50% 40%, rgba(91, 155, 219, 0.14), transparent 72%),
+    radial-gradient(ellipse 70% 60% at 80% 82%, rgba(214, 124, 142, 0.14), transparent 72%),
+    linear-gradient(180deg, rgba(10, 8, 6, 0.58) 0%, rgba(10, 8, 6, 0.46) 45%, rgba(10, 8, 6, 0.72) 100%);
+}
+/* Light-up the hero type now that it sits on a dark layer */
+.consultancy-page .cons-hero-title {
+  color: #F6EFE1 !important;
+  -webkit-text-fill-color: #F6EFE1 !important;
+}
+.consultancy-page .cons-hero-title em {
+  color: #ECA9B8 !important;
+  -webkit-text-fill-color: #ECA9B8 !important;
+}
+.consultancy-page .cons-hero-lede { color: rgba(245, 238, 225, 0.86); }
+.consultancy-page .cons-hero .cons-eyebrow { color: #9FC6EC; }
+.consultancy-page .cons-hero .ed-scrollcue { color: rgba(245, 238, 225, 0.72); }
+.consultancy-page .cons-hero .ed-mouse { border-color: rgba(245, 238, 225, 0.5); }
+
+.consultancy-page .ed-pin-scrim {
+  background:
+    linear-gradient(180deg, rgba(10, 8, 6, 0.72) 0%, rgba(10, 8, 6, 0.58) 45%, rgba(10, 8, 6, 0.82) 100%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(91, 155, 219, 0.1), transparent 72%),
+    radial-gradient(ellipse 70% 60% at 72% 82%, rgba(214, 124, 142, 0.1), transparent 72%);
+}
+/* Light-up the How It Works content on the dark layer */
+.consultancy-page .ed-pin-eyebrow { color: #9FC6EC; }
+.consultancy-page .ed-pin-line { color: #F6EFE1; }
+.consultancy-page .ed-pin-line em { color: #ECA9B8; }
+.consultancy-page .ed-pin-step-num { color: #9FC6EC; }
+.consultancy-page .ed-pin-step-body { color: rgba(245, 238, 225, 0.78); }
+.consultancy-page .ed-pin-ghost { color: rgba(246, 239, 225, 0.1); }
+.consultancy-page .ed-pin-dots span { background: rgba(245, 238, 225, 0.3); }
+.consultancy-page .ed-pin-dots span.is-active { background: var(--ed-blue); }
+.consultancy-page .ed-pin-cue .ed-scrollcue { color: rgba(245, 238, 225, 0.7); }
+.consultancy-page .ed-pin-cue .ed-mouse { border-color: rgba(245, 238, 225, 0.5); }
+
 /* ---------- REDUCED MOTION: unpin, show all lines ---------- */
 @media (prefers-reduced-motion: reduce) {
   .ed-pin { height: auto; }
@@ -737,4 +954,418 @@
   .ed-pin-line { position: relative; inset: auto; opacity: 1 !important; transform: none !important; transition: none; }
   .ed-pin-ghost { display: none; }
   .ed-pin-dots { display: none; }
+}
+
+/* ============================================================
+   ABOUT · INDULGENT TREATMENT (brand blue + pink, highlighted)
+   A rich, layered overlay scoped ONLY to the founder story panel
+   and the "Follow the Journey" Instagram tabs. Same depth as before,
+   but recolored to the logo's blue + pink and pushed harder so the
+   accents really pop. The rest of About / Consultancy is untouched.
+   ============================================================ */
+.about-editorial {
+  --bc-ink: #1E1712;                  /* primary dark text */
+  --bc-mocha: #4A4039;                /* secondary copy */
+  --bc-dark: #0E0B09;                 /* dark backing behind photos */
+  --bc-blue: #5B9BDB;
+  --bc-blue-ink: #2E6FB0;             /* legible blue on cream */
+  --bc-pink: #D67C8E;
+  --bc-pink-ink: #C0566E;             /* legible pink on cream */
+  --bc-cream: #F6EFE1;
+  /* vivid blue → pink (the brand gradient, saturated for highlight) */
+  --bc-grad: linear-gradient(120deg, #2E6FB0 0%, #5B9BDB 42%, #D67C8E 100%);
+  --bc-grad-soft: linear-gradient(135deg, rgba(91, 155, 219, 0.22), rgba(214, 124, 142, 0.2));
+}
+
+/* ---- shared blue→pink gradient-text helper (story + IG titles) ---- */
+.about-page .ed-stories .ed-story-title em,
+.about-page .ed-ig .ed-section-title em {
+  font-style: italic;
+  background: var(--bc-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-shadow: none;
+}
+
+/* ============================================================
+   1 · FOUNDER STORY PANEL  ("Coffee was never the plan.")
+   ============================================================ */
+.about-page .ed-stories .ed-story {
+  position: relative;
+  /* blue/pink hairline + a soft brand glow rising from the section top */
+  border-top: 1px solid rgba(46, 111, 176, 0.28);
+  background:
+    radial-gradient(120% 70% at 50% -8%, rgba(91, 155, 219, 0.12), transparent 60%);
+}
+
+/* eyebrow "ABOUT" → blue pill with a lit blue→pink dot */
+.about-page .ed-stories .ed-story-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(91, 155, 219, 0.55);
+  background: var(--bc-grad-soft);
+  color: var(--bc-blue-ink);
+  letter-spacing: 0.26em;
+  font-size: 0.62rem;
+}
+.about-page .ed-stories .ed-story-index::before {
+  content: "";
+  width: 7px; height: 7px; border-radius: 999px;
+  background: linear-gradient(135deg, #5B9BDB, #D67C8E);
+  box-shadow: 0 0 12px rgba(91, 155, 219, 0.9);
+}
+
+/* meta block → muted ink */
+.about-page .ed-stories .ed-story-meta { color: var(--bc-mocha); }
+
+/* portrait frame: blue/pink gradient ring + glow + soft vignette */
+.about-page .ed-stories .ed-story-media {
+  border: 1.5px solid rgba(91, 155, 219, 0.55);
+  box-shadow:
+    0 30px 70px -34px rgba(46, 111, 176, 0.55),
+    0 0 0 1px rgba(214, 124, 142, 0.25),
+    inset 0 0 0 6px rgba(246, 239, 225, 0.5);
+  background: var(--bc-dark);
+}
+.about-page .ed-stories .ed-story-media::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(75% 55% at 50% 0%, rgba(91, 155, 219, 0.18), transparent 55%),
+    radial-gradient(60% 50% at 90% 100%, rgba(214, 124, 142, 0.2), transparent 60%),
+    linear-gradient(180deg, transparent 42%, rgba(14, 11, 9, 0.5) 100%);
+}
+/* "The Brewer" tag pill → blue→pink gradient */
+.about-page .ed-stories .ed-story-tag {
+  color: #fff;
+  background: var(--bc-grad);
+  border: 1px solid rgba(246, 239, 225, 0.35);
+  box-shadow: 0 8px 22px -10px rgba(46, 111, 176, 0.8);
+}
+/* ghost name reads as cream */
+.about-page .ed-stories .ed-story-ghost {
+  color: rgba(246, 239, 225, 0.52);
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* lede: italic serif with a blue→pink accent bar */
+.about-page .ed-stories .ed-story-intro .ed-story-lede {
+  position: relative;
+  padding-left: clamp(18px, 2vw, 28px);
+}
+.about-page .ed-stories .ed-story-intro .ed-story-lede::before {
+  content: "";
+  position: absolute; left: 0; top: 6px; bottom: 6px;
+  width: 3px; border-radius: 3px;
+  background: var(--bc-grad);
+}
+
+/* body emphasis + links in brand tones */
+.about-page .ed-stories .ed-story-text strong {
+  color: var(--bc-blue-ink);
+  font-weight: 600;
+  background: linear-gradient(transparent 78%, rgba(91, 155, 219, 0.16) 0);
+}
+.about-page .ed-stories .ed-story-text a {
+  color: var(--bc-blue-ink);
+  text-decoration-color: rgba(46, 111, 176, 0.6);
+}
+
+/* ---- layout: body text on the left, award + CTAs as a right rail ---- */
+.about-page .ed-stories .ed-story-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(232px, 27%, 312px);
+  column-gap: clamp(30px, 4.5vw, 64px);
+  align-items: start;
+  max-width: none;
+}
+.about-page .ed-stories .ed-story-text {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.about-page .ed-stories .ed-badge {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  margin-top: 6px;
+}
+.about-page .ed-stories .ed-actions {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: clamp(16px, 2vw, 22px);
+  flex-direction: column;
+  align-items: stretch;
+}
+.about-page .ed-stories .ed-actions .ed-btn { justify-content: center; }
+@media (max-width: 820px) {
+  .about-page .ed-stories .ed-story-body { grid-template-columns: 1fr; }
+  .about-page .ed-stories .ed-story-text { grid-row: auto; }
+  .about-page .ed-stories .ed-badge,
+  .about-page .ed-stories .ed-actions { grid-column: 1; }
+  .about-page .ed-stories .ed-badge { width: auto; }
+  .about-page .ed-stories .ed-actions { flex-direction: row; align-items: center; }
+}
+
+/* ---- editorial body typography (lead drop-cap + closing pull line) ---- */
+.about-page .ed-stories .ed-story-text p { font-size: 1.04rem; }
+
+/* lead paragraph: richer ink + a blue→pink gradient drop cap */
+.about-page .ed-stories .ed-story-text p:first-child {
+  color: var(--bc-ink);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+.about-page .ed-stories .ed-story-text p:first-child::first-letter {
+  float: left;
+  margin: 6px 14px 0 0;
+  font-family: var(--ed-serif);
+  font-weight: 500;
+  font-size: 3.6em;
+  line-height: 0.78;
+  background: var(--bc-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* closing line: serif-italic pull statement, set off by a brand divider */
+.about-page .ed-stories .ed-story-text p:last-child {
+  margin-top: clamp(24px, 3.4vw, 36px);
+  padding-top: clamp(22px, 3vw, 30px);
+  border-top: 1px solid rgba(91, 155, 219, 0.28);
+  font-family: var(--ed-serif);
+  font-style: italic;
+  font-weight: 360;
+  font-size: clamp(1.32rem, 2.3vw, 1.8rem);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--bc-ink);
+}
+
+/* championship badge → blue/pink chip */
+.about-page .ed-stories .ed-badge {
+  border: 1px solid rgba(91, 155, 219, 0.5);
+  background: var(--bc-grad-soft);
+  box-shadow: 0 16px 40px -26px rgba(46, 111, 176, 0.65);
+}
+.about-page .ed-stories .ed-badge-icon {
+  background: var(--bc-grad);
+  color: #fff;
+  box-shadow: 0 8px 18px -8px rgba(192, 86, 110, 0.85);
+}
+.about-page .ed-stories .ed-badge-num { color: var(--bc-ink); }
+
+/* primary CTA → blue→pink gradient with colored glow */
+.about-page .ed-stories .ed-btn-primary {
+  background: var(--bc-grad);
+  box-shadow: 0 16px 38px -16px rgba(46, 111, 176, 0.7);
+}
+.about-page .ed-stories .ed-btn-primary:hover {
+  box-shadow: 0 20px 48px -16px rgba(192, 86, 110, 0.78);
+}
+.about-page .ed-stories .ed-btn-ghost:hover {
+  border-color: var(--bc-blue);
+  color: var(--bc-blue-ink);
+}
+
+/* ============================================================
+   2 · "FOLLOW THE JOURNEY"  ·  premium Instagram tabs
+   ============================================================ */
+.about-page .ed-ig {
+  position: relative;
+  border-top: 1px solid rgba(46, 111, 176, 0.28);
+  background:
+    radial-gradient(110% 80% at 50% 0%, rgba(91, 155, 219, 0.1), transparent 58%);
+}
+
+.ig-tabs { margin-top: clamp(30px, 4vw, 50px); }
+
+/* ---- segmented tab list ---- */
+.ig-tablist {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 6px;
+  border-radius: 18px;
+  border: 1px solid rgba(91, 155, 219, 0.35);
+  background:
+    linear-gradient(180deg, rgba(246, 239, 225, 0.7), rgba(245, 238, 224, 0.4));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.ig-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 13px 10px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  transition: background 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease),
+    box-shadow 0.4s var(--ed-ease), transform 0.2s var(--ed-ease);
+}
+.ig-tab:hover { background: rgba(91, 155, 219, 0.08); }
+.ig-tab:active { transform: scale(0.985); }
+.ig-tab:focus-visible {
+  outline: 2px solid var(--bc-blue);
+  outline-offset: 2px;
+}
+.ig-tab-role {
+  font-family: var(--ed-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bc-blue-ink);
+}
+.ig-tab-name {
+  font-family: var(--ed-serif);
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  line-height: 1.1;
+  color: var(--bc-mocha);
+}
+.ig-tab[data-state="active"] {
+  background: linear-gradient(180deg, #ffffff, #f4f8fd);
+  border-color: rgba(91, 155, 219, 0.55);
+  box-shadow:
+    0 12px 26px -14px rgba(46, 111, 176, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+/* lit blue→pink indicator bar under the active tab */
+.ig-tab[data-state="active"]::after {
+  content: "";
+  position: absolute; left: 22%; right: 22%; bottom: 6px; height: 3px;
+  border-radius: 3px;
+  background: var(--bc-grad);
+  box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
+}
+.about-page .ig-tab[data-state="active"] .ig-tab-name { color: var(--bc-ink); }
+.about-page .ig-tab[data-state="active"] .ig-tab-role { color: var(--bc-pink-ink); }
+
+/* ---- active panel: editorial split (image + content) ---- */
+.ig-tab-panel {
+  margin-top: clamp(22px, 3vw, 36px);
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(20px, 3vw, 44px);
+  align-items: stretch;
+  padding: clamp(14px, 1.6vw, 18px);
+  border-radius: 26px;
+  border: 1px solid rgba(91, 155, 219, 0.32);
+  background:
+    linear-gradient(135deg, rgba(91, 155, 219, 0.08), rgba(252, 251, 247, 0.94) 45%, rgba(214, 124, 142, 0.08));
+  box-shadow: 0 34px 80px -44px rgba(46, 111, 176, 0.6);
+}
+.ig-tab-panel[hidden] { display: none; }
+
+.ig-panel-media {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+  background: var(--bc-dark);
+}
+.ig-panel-media img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transform: scale(1.02);
+  transition: transform 0.8s var(--ed-ease);
+}
+.ig-tab-panel[data-state="active"] .ig-panel-media img { transform: scale(1); }
+.ig-panel-media::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(65% 45% at 50% 0%, rgba(91, 155, 219, 0.2), transparent 55%),
+    radial-gradient(55% 45% at 95% 100%, rgba(214, 124, 142, 0.22), transparent 60%),
+    linear-gradient(180deg, transparent 42%, rgba(14, 11, 9, 0.6) 100%);
+}
+.ig-panel-tag {
+  position: absolute; left: 16px; bottom: 16px; z-index: 1;
+  font-family: var(--ed-mono);
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #fff;
+  background: var(--bc-grad);
+  border: 1px solid rgba(246, 239, 225, 0.35);
+  box-shadow: 0 8px 22px -10px rgba(46, 111, 176, 0.85);
+  padding: 7px 14px; border-radius: 999px;
+}
+
+.ig-panel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(10px, 2vw, 26px) clamp(8px, 1.6vw, 20px);
+}
+.ig-panel-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--ed-mono);
+  font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--bc-blue-ink);
+}
+.about-page .ig-panel-name {
+  font-family: var(--ed-serif);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--bc-ink) !important;
+  -webkit-text-fill-color: var(--bc-ink) !important;
+  margin: 0;
+}
+.ig-panel-blurb {
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--bc-mocha);
+  max-width: 44ch;
+  margin: 0;
+}
+.ig-panel-note {
+  font-family: var(--ed-mono);
+  font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--bc-pink-ink);
+  padding-top: 4px;
+  border-top: 1px solid rgba(91, 155, 219, 0.3);
+}
+.ig-panel-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-top: 6px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-family: var(--ed-mono);
+  font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #fff;
+  background: var(--bc-grad);
+  box-shadow: 0 16px 38px -16px rgba(46, 111, 176, 0.7);
+  transition: filter 0.3s var(--ed-ease), box-shadow 0.3s var(--ed-ease), transform 0.3s var(--ed-ease);
+}
+.ig-panel-btn svg { transition: transform 0.3s var(--ed-ease); }
+.ig-panel-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 22px 48px -16px rgba(192, 86, 110, 0.8);
+}
+.ig-panel-btn:hover svg { transform: translateX(4px); }
+
+/* responsive: stack tabs + panel */
+@media (max-width: 820px) {
+  .ig-tab-panel { grid-template-columns: 1fr; }
+  .ig-tab-name { font-size: 0.92rem; }
+}
+@media (max-width: 540px) {
+  .ig-tablist { grid-template-columns: 1fr; gap: 5px; }
+  .ig-tab { flex-direction: row; justify-content: center; gap: 8px; padding: 11px; }
 }

@@ -144,7 +144,9 @@
 .hr-hero-cuewrap { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); }
 
 /* ---------- THREE VERTICALS (editorial rows) ---------- */
-.hr-verticals { padding: clamp(72px, 11vw, 150px) 0; }
+.hr-verticals { position: relative; overflow: hidden; padding: clamp(72px, 11vw, 150px) 0; }
+.hr-verticals .hr-vert-head, .hr-verticals .hr-vert { position: relative; z-index: 1; }
+.hr-vert-lines { z-index: 0; }
 .hr-vert-head { max-width: 1280px; margin: 0 auto clamp(36px, 5vw, 64px); padding: 0 clamp(20px, 5vw, 64px); }
 .hr-label { font-family: var(--hr-mono); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--hr-accent); }
 .hr-section-title {
@@ -164,6 +166,8 @@
 }
 .hr-vert:nth-child(even) .hr-vert-media { order: 2; }
 .hr-vert-media { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: var(--bg-tertiary, #efe3d2); }
+/* over-tall inner wrapper gives the scroll parallax vertical room without gaps */
+.hr-vert-media-inner { position: absolute; inset: -12% 0; will-change: transform; }
 .hr-vert-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.9s var(--hr-ease); }
 .hr-vert:hover .hr-vert-media img { transform: scale(1.05); }
 .hr-vert-num { position: absolute; top: 16px; left: 18px; font-family: var(--hr-mono); font-size: 0.72rem; letter-spacing: 0.12em; color: var(--hr-cream); text-shadow: 0 1px 8px rgba(0,0,0,.5); }
@@ -189,7 +193,7 @@
   padding: clamp(90px, 14vw, 200px) 24px;
   text-align: center; overflow: hidden;
 }
-.hr-visit-bg { position: absolute; inset: -6% 0; z-index: -2; background: url('/project-cafe.jpg') center/cover no-repeat; filter: brightness(0.42) saturate(0.9); transform: scale(1.05); }
+.hr-visit-bg { position: absolute; inset: -14% 0; z-index: -2; background: url('/hero-bg.jpg') center/cover no-repeat; filter: brightness(0.42) saturate(0.9); transform: scale(1.05); will-change: transform; }
 .hr-visit-scrim { position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(18,12,8,0.45), rgba(14,9,6,0.82)); }
 .hr-visit-inner { max-width: 820px; margin: 0 auto; }
 .hr-visit h2 {
@@ -235,6 +239,17 @@
   margin: 14px 0 0; max-width: 14ch;
 }
 .cap-ritual-head em { font-style: italic; color: var(--hr-accent-bright) !important; -webkit-text-fill-color: var(--hr-accent-bright) !important; }
+.cap-ritual-kicker {
+  font-family: var(--hr-mono); font-size: 0.82rem; letter-spacing: 0.04em;
+  color: rgba(244, 233, 216, 0.62); margin: 16px 0 0; max-width: 42ch;
+}
+
+/* scroll-drawn flowing lines, layered behind the ritual content */
+.cap-ritual .cap-wrap { position: relative; z-index: 1; }
+.flow-lines {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
 .cap-ritual-grid {
   display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(30px, 6vw, 90px);
   align-items: center; margin-top: clamp(40px, 6vw, 80px);
@@ -272,9 +287,10 @@
 .cap-mark-track span { padding-right: 0.35em; }
 @keyframes cap-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .cap-mark-pill {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  position: absolute; inset: 0; margin: auto;
   width: clamp(280px, 42vw, 640px); aspect-ratio: 16 / 9;
   border-radius: 999px; overflow: hidden; z-index: 2;
+  will-change: transform;
   border: 1px solid rgba(40, 22, 8, 0.14);
   box-shadow: 0 34px 90px rgba(40, 22, 8, 0.28);
   background-size: cover;
@@ -288,6 +304,47 @@
   color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,0.6);
 }
 
+/* ---------- COFFEE DESIGN ELEMENTS (beans + steam) ---------- */
+/* Scattered bean clusters used as quiet section decoration. */
+.coffee-beans { position: absolute; pointer-events: none; z-index: 0; }
+.coffee-bean { position: absolute; color: rgba(176, 116, 51, 0.16); --bean-crease: rgba(244, 233, 216, 0.9); }
+.coffee-bean--1 { top: 0; left: 0; }
+.coffee-bean--2 { top: 30px; left: 34px; }
+.coffee-bean--3 { top: -14px; left: 56px; }
+.coffee-bean--4 { top: 26px; left: 78px; }
+
+/* verticals header, beans drift to the top-right of the section title */
+.hr-vert-head { position: relative; }
+.hr-vert-beans { top: -18px; right: clamp(20px, 5vw, 64px); width: 110px; height: 70px; }
+@media (max-width: 700px) { .hr-vert-beans { opacity: 0.7; right: 12px; transform: scale(0.8); } }
+
+/* closing CTA, beans in a corner + steam rising over the "cup" headline */
+.hr-cta { position: relative; overflow: hidden; }
+.hr-cta > div { position: relative; z-index: 2; }
+.hr-cta-beans { bottom: clamp(20px, 4vw, 48px); left: clamp(20px, 5vw, 70px); width: 120px; height: 70px; }
+.hr-cta-beans .coffee-bean { color: rgba(40, 22, 8, 0.10); --bean-crease: rgba(248, 244, 234, 0.95); }
+@media (max-width: 700px) { .hr-cta-beans { display: none; } }
+
+.hr-steam {
+  position: absolute; top: clamp(30px, 7vw, 78px); left: 50%; transform: translateX(-50%);
+  width: 60px; height: 96px; pointer-events: none; z-index: 1;
+}
+.hr-steam-wisp {
+  position: absolute; bottom: 0; width: 7px; height: 62px; border-radius: 8px;
+  background: linear-gradient(to top, rgba(176,116,51,0), rgba(176,116,51,0.32) 45%, rgba(176,116,51,0));
+  filter: blur(3px); opacity: 0;
+  animation: hr-steam-rise 3.8s ease-in-out infinite;
+}
+.hr-steam-wisp:nth-child(1) { left: 12px; animation-delay: 0s; }
+.hr-steam-wisp:nth-child(2) { left: 27px; height: 78px; animation-delay: 1s; }
+.hr-steam-wisp:nth-child(3) { left: 42px; animation-delay: 2.1s; }
+@keyframes hr-steam-rise {
+  0%   { opacity: 0; transform: translate(0, 12px) scaleY(0.7); }
+  22%  { opacity: 0.85; }
+  60%  { opacity: 0.5; transform: translate(-7px, -28px) scaleY(1); }
+  100% { opacity: 0; transform: translate(5px, -62px) scaleY(1.12); }
+}
+
 @media (max-width: 860px) {
   .hr-vert { grid-template-columns: 1fr; gap: 22px; }
   .hr-vert:nth-child(even) .hr-vert-media { order: 0; }
@@ -295,4 +352,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .cap-mark-track { animation: none; }
+  .hr-steam-wisp { animation: none; opacity: 0.4; }
 }

@@ -20,6 +20,12 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
 }
 
+const WHY = [
+  { n: '01', Icon: Video, title: 'HD Video Lessons', body: 'Filmed at the bar, close-up on the technique, rewind any step until it clicks.' },
+  { n: '02', Icon: Award, title: 'Taught by Champions', body: 'Curriculum built by certified, competition-placed baristas from our Mulund cafe.' },
+  { n: '03', Icon: Wifi, title: 'Learn at Your Pace', body: 'Lifetime access on any device. Start a free lesson today, no equipment required.' },
+]
+
 export default function Academy() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -117,27 +123,22 @@ export default function Academy() {
             <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Built for real bar skills</h2>
           </div>
           <motion.div
-            className="values-grid"
+            className="acad-why"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
             variants={staggerContainer}
           >
-            <motion.div className="value-card" variants={fadeUp}>
-              <div className="value-icon"><Video size={22} /></div>
-              <h3>HD Video Lessons</h3>
-              <p>Filmed at the bar, close-up on the technique, rewind any step until it clicks.</p>
-            </motion.div>
-            <motion.div className="value-card" variants={fadeUp}>
-              <div className="value-icon"><Award size={22} /></div>
-              <h3>Taught by Champions</h3>
-              <p>Curriculum built by certified, competition-placed baristas from our Mulund cafe.</p>
-            </motion.div>
-            <motion.div className="value-card" variants={fadeUp}>
-              <div className="value-icon"><Wifi size={22} /></div>
-              <h3>Learn at Your Pace</h3>
-              <p>Lifetime access on any device. Start a free lesson today, no equipment required.</p>
-            </motion.div>
+            {WHY.map(({ n, Icon, title, body }) => (
+              <motion.div className="acad-why-row" variants={fadeUp} key={n}>
+                <span className="acad-why-num" aria-hidden="true">{n}</span>
+                <span className="acad-why-icon" aria-hidden="true"><Icon size={22} /></span>
+                <div className="acad-why-text">
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { useId, useRef, useState, type KeyboardEvent } from "react"
 
 function InstagramIcon({ size = 20 }: { size?: number }) {
   return (
@@ -21,14 +21,48 @@ function InstagramIcon({ size = 20 }: { size?: number }) {
   )
 }
 
-const IG_TABS = [
+function ArrowIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  )
+}
+
+type IgTab = {
+  value: string
+  role: string
+  name: string
+  handle: string
+  url: string
+  blurb: string
+  img: string
+  note: string
+}
+
+const IG_TABS: IgTab[] = [
   {
     value: "brand",
     role: "The Brand",
     name: "Mastermind Brews",
     handle: "@mastermindbrews",
     url: "https://www.instagram.com/mastermindbrews/",
-    blurb: "Single-origin beans, brew guides, and the craft behind every cup.",
+    blurb:
+      "Single-origin beans, brew guides, and the craft behind every cup, the stories that go from farm to your first pour.",
+    img: "/pour-over-coffee.jpg",
+    note: "Beans · Brew guides · Craft",
   },
   {
     value: "brewer",
@@ -36,7 +70,10 @@ const IG_TABS = [
     name: "Namrata is Brewing",
     handle: "@namrata_is_brewing",
     url: "https://www.instagram.com/namrata_is_brewing/",
-    blurb: "Behind the bar with our founder — training, competitions, and everyday brews.",
+    blurb:
+      "Behind the bar with our founder: training, competitions, and the everyday brews that sharpen the craft.",
+    img: "/namrata-thakkar.jpg",
+    note: "Founder · Training · Competitions",
   },
   {
     value: "cafe",
@@ -44,51 +81,112 @@ const IG_TABS = [
     name: "Mastermind Bicycle Cafe",
     handle: "@mastermindbicyclecafe",
     url: "https://www.instagram.com/mastermindbicyclecafe/",
-    blurb: "Our home in Mulund — coffee, community, and bicycles under one roof.",
+    blurb:
+      "Our home in Mulund: coffee, community, and bicycles under one roof, where every regular becomes a familiar face.",
+    img: "/hero-bg.jpg",
+    note: "Mulund · Community · Bicycles",
   },
 ]
 
 export default function InstagramTabs() {
-  return (
-    <Tabs defaultValue="brand" className="ig-tabs flex w-full flex-col items-center">
-      <TabsList className="h-auto flex-wrap justify-center gap-1.5 rounded-full p-1.5">
-        {IG_TABS.map((t) => (
-          <TabsTrigger
-            key={t.value}
-            value={t.value}
-            className="rounded-full px-5 py-2.5 text-[0.68rem] font-medium uppercase tracking-[0.18em] transition-all data-[state=active]:shadow-sm"
-          >
-            {t.role}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+  const [active, setActive] = useState(0)
+  const baseId = useId()
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
-      {IG_TABS.map((t) => (
-        <TabsContent
-          key={t.value}
-          value={t.value}
-          className="ig-tab-panel mt-8 w-full max-w-md focus-visible:ring-0"
-        >
-          <div className="flex min-h-[300px] flex-col items-center gap-5 rounded-3xl border border-border bg-card px-8 py-10 text-center">
-            <span className="ed-ig-icon">
-              <InstagramIcon size={22} />
-            </span>
-            <span className="ed-ig-role">{t.role}</span>
-            <h3 className="ed-ig-name" style={{ margin: 0 }}>
-              {t.name}
-            </h3>
-            <p className="ig-tab-blurb">{t.blurb}</p>
-            <a
-              href={t.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ed-btn ed-btn-primary mt-1"
+  const focusTab = (index: number) => {
+    const next = (index + IG_TABS.length) % IG_TABS.length
+    setActive(next)
+    tabRefs.current[next]?.focus()
+  }
+
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault()
+        focusTab(index + 1)
+        break
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault()
+        focusTab(index - 1)
+        break
+      case "Home":
+        e.preventDefault()
+        focusTab(0)
+        break
+      case "End":
+        e.preventDefault()
+        focusTab(IG_TABS.length - 1)
+        break
+    }
+  }
+
+  return (
+    <div className="ig-tabs">
+      <div className="ig-tablist" role="tablist" aria-label="Follow the journey on Instagram">
+        {IG_TABS.map((t, i) => {
+          const selected = i === active
+          return (
+            <button
+              key={t.value}
+              ref={(el) => {
+                tabRefs.current[i] = el
+              }}
+              role="tab"
+              id={`${baseId}-tab-${t.value}`}
+              aria-selected={selected}
+              aria-controls={`${baseId}-panel-${t.value}`}
+              tabIndex={selected ? 0 : -1}
+              data-state={selected ? "active" : "inactive"}
+              className="ig-tab"
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => onKeyDown(e, i)}
             >
-              <InstagramIcon size={15} /> Follow {t.handle}
-            </a>
+              <span className="ig-tab-role">{t.role}</span>
+              <span className="ig-tab-name">{t.name}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {IG_TABS.map((t, i) => {
+        const selected = i === active
+        return (
+          <div
+            key={t.value}
+            role="tabpanel"
+            id={`${baseId}-panel-${t.value}`}
+            aria-labelledby={`${baseId}-tab-${t.value}`}
+            hidden={!selected}
+            data-state={selected ? "active" : "inactive"}
+            className="ig-tab-panel"
+          >
+            <div className="ig-panel-media">
+              <img src={t.img} alt={`${t.name} on Instagram`} loading="lazy" />
+              <span className="ig-panel-tag">{t.role}</span>
+            </div>
+
+            <div className="ig-panel-content">
+              <span className="ig-panel-kicker">
+                <InstagramIcon size={14} /> On Instagram
+              </span>
+              <h3 className="ig-panel-name">{t.name}</h3>
+              <p className="ig-panel-blurb">{t.blurb}</p>
+              <span className="ig-panel-note">{t.note}</span>
+              <a
+                href={t.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ig-panel-btn"
+              >
+                Follow {t.handle}
+                <ArrowIcon size={15} />
+              </a>
+            </div>
           </div>
-        </TabsContent>
-      ))}
-    </Tabs>
+        )
+      })}
+    </div>
   )
 }
