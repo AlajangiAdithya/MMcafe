@@ -130,6 +130,7 @@ export default function CourseCheckout() {
             orderId: `FREE-${course.id}`,
             courseTitle: course.title,
             total: 0,
+            courseImage: course.image || course.thumbnail,
           })
           navigate('/my-courses')
         })
@@ -159,6 +160,7 @@ export default function CourseCheckout() {
           orderId: `COURSE-${course.id}`,
           courseTitle: course.title,
           total: grandTotal,
+          courseImage: course.image || course.thumbnail,
         })
         navigate('/my-courses')
       },

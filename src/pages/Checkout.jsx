@@ -246,8 +246,10 @@ export default function Checkout() {
           customerName: address.fullName,
           customerEmail: user.email,
           orderId: result.paymentId || result.orderId || '-',
-          items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+          items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price, image: i.image })),
+          subtotal,
           shipping,
+          discount,
           total: orderTotal,
         })
 
