@@ -27,7 +27,10 @@ export default function Checkout() {
     pincode: '',
   })
   const [errors, setErrors] = useState({})
-  const [loading, setLoading] = useState(false)
+  // 'idle' | 'loading' | 'error' | 'success' — drives the SlideButton state so
+  // a failed validation/payment shows an error and resets instead of hanging.
+  const [payStatus, setPayStatus] = useState('idle')
+  const loading = payStatus === 'loading'
 
   // Coupon
   const [couponInput, setCouponInput] = useState('')
@@ -198,16 +201,28 @@ export default function Checkout() {
     setCouponInput('')
   }
 
+  // Flash an error on the slide button, surface a toast, then reset to idle so
+  // the slider snaps back and the customer can fix things and retry.
+  const failOrder = (msg) => {
+    setPayStatus('error')
+    toast.error(msg)
+    setTimeout(() => setPayStatus('idle'), 1500)
+  }
+
   const handlePlaceOrder = () => {
+    if (loading) return
     if (stockIssues.length > 0) {
-      toast.error('Please update your cart before placing the order')
+      failOrder('Please update your cart before placing the order')
       return
     }
     if (!validate()) {
-      toast.error('Please fill in all required fields')
+      // validate() also populates `errors`, so each bad field shows its message.
+      const firstError = document.querySelector('.input-group.input-error input')
+      firstError?.focus()
+      failOrder('Please correct the highlighted fields before paying')
       return
     }
-    setLoading(true)
+    setPayStatus('loading')
 
     payAndVerify({
       kind: 'cart',
@@ -221,7 +236,7 @@ export default function Checkout() {
       },
       brandName: 'Mastermind Brews',
       onSuccess: (result) => {
-        setLoading(false)
+        setPayStatus('success')
         toast.success('Order placed successfully!')
         const orderTotal = result.total || grandTotal
         const orderItemCount = items.length
@@ -247,8 +262,7 @@ export default function Checkout() {
         })
       },
       onFailure: (msg) => {
-        setLoading(false)
-        toast.error(msg || 'Payment failed')
+        failOrder(msg || 'Payment failed')
       },
     })
   }
@@ -514,7 +528,7 @@ export default function Checkout() {
                 : `Slide to Pay ₹${grandTotal.toLocaleString()}`}
               onConfirm={handlePlaceOrder}
               loading={loading}
-              status={loading ? 'loading' : 'idle'}
+              status={payStatus}
               disabled={loading || stockIssues.length > 0}
               className="checkout-pay-btn"
             />

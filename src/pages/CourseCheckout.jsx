@@ -18,7 +18,10 @@ export default function CourseCheckout() {
 
   const [course, setCourse] = useState(null)
   const [pageLoading, setPageLoading] = useState(true)
-  const [loading, setLoading] = useState(false)
+  // 'idle' | 'loading' | 'error' | 'success' — drives the SlideButton so a
+  // failed validation/payment resets the slider instead of hanging on "Processing…".
+  const [payStatus, setPayStatus] = useState('idle')
+  const loading = payStatus === 'loading'
 
   const [details, setDetails] = useState({
     fullName: '',
@@ -99,17 +102,27 @@ export default function CourseCheckout() {
     return Object.keys(e).length === 0
   }
 
+  const failPay = (msg) => {
+    setPayStatus('error')
+    toast.error(msg)
+    setTimeout(() => setPayStatus('idle'), 1500)
+  }
+
   const handlePay = () => {
     if (!course) return
+    if (loading) return
     if (!validate()) {
-      toast.error('Please fill in all required fields')
+      const firstError = document.querySelector('.input-group.input-error input')
+      firstError?.focus()
+      failPay('Please correct the highlighted fields before paying')
       return
     }
-    setLoading(true)
+    setPayStatus('loading')
 
     if (course.free) {
       addEnrollment({ userId: user.id, courseId: course.id })
         .then(() => {
+          setPayStatus('success')
           toast.success(`Enrolled in ${course.title}`)
           sendCourseEmail({
             customerName: details.fullName,
@@ -120,8 +133,7 @@ export default function CourseCheckout() {
           })
           navigate('/my-courses')
         })
-        .catch((err) => toast.error(err?.message || 'Could not enroll'))
-        .finally(() => setLoading(false))
+        .catch((err) => failPay(err?.message || 'Could not enroll'))
       return
     }
 
@@ -139,7 +151,7 @@ export default function CourseCheckout() {
       },
       brandName: course.title,
       onSuccess: () => {
-        setLoading(false)
+        setPayStatus('success')
         toast.success(`Enrolled in ${course.title}`)
         sendCourseEmail({
           customerName: details.fullName,
@@ -151,8 +163,7 @@ export default function CourseCheckout() {
         navigate('/my-courses')
       },
       onFailure: (msg) => {
-        setLoading(false)
-        toast.error(msg || 'Payment failed')
+        failPay(msg || 'Payment failed')
       },
     })
   }
@@ -310,7 +321,7 @@ export default function CourseCheckout() {
               label={course.free ? 'Slide to Enroll' : `Slide to Pay ₹${grandTotal.toLocaleString()}`}
               onConfirm={handlePay}
               loading={loading}
-              status={loading ? 'loading' : 'idle'}
+              status={payStatus}
               disabled={loading}
               className="checkout-pay-btn"
             />

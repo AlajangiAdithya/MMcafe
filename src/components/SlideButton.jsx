@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
   motion,
@@ -27,6 +27,18 @@ export default function SlideButton({
   const dragX = useMotionValue(0)
   const springX = useSpring(dragX, SPRING)
   const fillWidth = useTransform(springX, x => x + 56)
+
+  // When the parent reports a failure, briefly show "Failed" then snap the
+  // handle back to the start so the user can correct their input and retry.
+  // Without this the slider stays stuck showing "Processing…" forever.
+  useEffect(() => {
+    if (status !== 'error') return
+    const t = setTimeout(() => {
+      setCompleted(false)
+      dragX.set(0)
+    }, 1300)
+    return () => clearTimeout(t)
+  }, [status, dragX])
 
   const getMaxX = () => {
     const w = trackRef.current?.offsetWidth ?? 280

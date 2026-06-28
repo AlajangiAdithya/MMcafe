@@ -3297,7 +3297,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
               border-color var(--dur-fast) var(--ease);
 }
 .academy-chip:hover {
-  color: var(--accent-soft);
+  color: var(--accent-deep);
   border-color: var(--accent);
 }
 
@@ -4457,7 +4457,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   position: relative;
 }
 .toggle-auth a:hover,
-.toggle-auth button:hover { color: var(--accent-soft); }
+.toggle-auth button:hover { color: var(--accent-deep); }
 
 /* ===== ADMIN PANEL ===== */
 .admin-page {
@@ -8133,7 +8133,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   text-transform: uppercase;
   color: var(--accent);
 }
-.auth-forgot-link:hover { color: var(--accent-soft); text-decoration: underline; text-underline-offset: 3px; }
+.auth-forgot-link:hover { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 3px; }
 .auth-success-state {
   display: flex;
   flex-direction: column;
@@ -10662,7 +10662,7 @@ textarea:focus-visible {
   letter-spacing: var(--ls-wide);
   padding: 5px 12px;
   background: rgba(201, 151, 74, 0.10);
-  color: var(--accent-soft);
+  color: var(--accent-deep);
   border: 1px solid rgba(201, 151, 74, 0.25);
   border-radius: var(--radius-pill);
 }
@@ -10867,7 +10867,7 @@ textarea:focus-visible {
   border-color: rgba(201, 151, 74, 0.30);
 }
 .dual-tag-cafes {
-  color: var(--accent-soft);
+  color: var(--accent-deep);
   background: rgba(232, 200, 150, 0.10);
   border-color: rgba(232, 200, 150, 0.30);
 }
@@ -11077,7 +11077,7 @@ textarea:focus-visible {
   text-transform: uppercase;
   border-radius: var(--radius-pill);
   background: rgba(201, 151, 74, 0.10);
-  color: var(--accent-soft);
+  color: var(--accent-deep);
   border: 1px solid rgba(201, 151, 74, 0.28);
 }
 
@@ -11227,7 +11227,7 @@ textarea:focus-visible {
 .access-banner-info {
   background: rgba(201, 151, 74, 0.08);
   border: 1px solid rgba(201, 151, 74, 0.28);
-  color: var(--accent-soft);
+  color: var(--accent-deep);
 }
 
 /* ===== Hire flow stepper ===== */
