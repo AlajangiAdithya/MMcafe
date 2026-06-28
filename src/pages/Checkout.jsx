@@ -235,7 +235,7 @@ export default function Checkout() {
         phone: address.phone,
       },
       brandName: 'Mastermind Brews',
-      onSuccess: (result) => {
+      onSuccess: async (result) => {
         setPayStatus('success')
         toast.success('Order placed successfully!')
         const orderTotal = result.total || grandTotal
@@ -244,31 +244,35 @@ export default function Checkout() {
         const emailOrderId = result.paymentId || result.orderId || '-'
         const emailItems = items.map(i => ({ name: i.name, qty: i.qty, price: i.price, image: i.image }))
 
-        // Customer receipt (non-blocking)
-        sendOrderEmail({
-          customerName: address.fullName,
-          customerEmail: user.email,
-          orderId: emailOrderId,
-          items: emailItems,
-          subtotal,
-          shipping,
-          discount,
-          total: orderTotal,
-        })
-
-        // Cafe new-order alert → points staff to the admin panel (non-blocking)
-        sendCafeOrderEmail({
-          orderId: emailOrderId,
-          customerName: address.fullName,
-          customerEmail: user.email,
-          customerPhone: address.phone,
-          shippingAddress: address,
-          items: emailItems,
-          subtotal,
-          shipping,
-          discount,
-          total: orderTotal,
-        })
+        // Send both emails and WAIT for them before navigating, so leaving the
+        // page can't cut off the second request. allSettled = one failing never
+        // blocks the other (both are also internally fail-silent).
+        await Promise.allSettled([
+          // Customer receipt
+          sendOrderEmail({
+            customerName: address.fullName,
+            customerEmail: user.email,
+            orderId: emailOrderId,
+            items: emailItems,
+            subtotal,
+            shipping,
+            discount,
+            total: orderTotal,
+          }),
+          // Cafe new-order alert → points staff to the admin panel
+          sendCafeOrderEmail({
+            orderId: emailOrderId,
+            customerName: address.fullName,
+            customerEmail: user.email,
+            customerPhone: address.phone,
+            shippingAddress: address,
+            items: emailItems,
+            subtotal,
+            shipping,
+            discount,
+            total: orderTotal,
+          }),
+        ])
 
         clearCart()
         navigate('/order-confirmation', {

@@ -64,7 +64,18 @@ async function callFn(name, payload) {
     body: payload,
     headers: { Authorization: `Bearer ${session.access_token}` },
   })
-  if (error) throw new Error(error.message || 'Edge function failed')
+  if (error) {
+    // supabase-js gives a generic "non-2xx" message; the *real* reason is in
+    // the function's JSON body on error.context (a Response). Read it so the
+    // user/console sees "Insufficient stock", "Invalid coupon", etc.
+    let msg = error.message || 'Edge function failed'
+    try {
+      const body = await error.context?.json?.()
+      if (body?.error) msg = body.error
+    } catch { /* body not JSON — keep generic message */ }
+    console.warn(`[${name}] failed:`, msg)
+    throw new Error(msg)
+  }
   if (data?.error) throw new Error(data.error)
   return data
 }

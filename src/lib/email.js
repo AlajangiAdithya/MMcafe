@@ -24,11 +24,13 @@
 
 import emailjs from '@emailjs/browser'
 
-const SERVICE_ID         = import.meta.env.VITE_EMAILJS_SERVICE_ID || ''
-const TEMPLATE_ID        = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || ''
-const RESET_TEMPLATE_ID  = import.meta.env.VITE_EMAILJS_RESET_TEMPLATE_ID || ''
-const STATUS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_STATUS_TEMPLATE_ID || ''
-const PUBLIC_KEY         = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
+const SERVICE_ID            = import.meta.env.VITE_EMAILJS_SERVICE_ID || ''
+const TEMPLATE_ID           = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || ''
+const RESET_TEMPLATE_ID     = import.meta.env.VITE_EMAILJS_RESET_TEMPLATE_ID || ''
+const STATUS_TEMPLATE_ID    = import.meta.env.VITE_EMAILJS_STATUS_TEMPLATE_ID || ''
+const CAFE_TEMPLATE_ID      = import.meta.env.VITE_EMAILJS_CAFE_TEMPLATE_ID || ''
+const DELIVERED_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_DELIVERED_TEMPLATE_ID || ''
+const PUBLIC_KEY            = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
 
 // Cafe inbox that receives a "new order placed" alert. When unset, the cafe
 // notification simply no-ops (customer emails are unaffected).
@@ -255,7 +257,8 @@ export async function sendCafeOrderEmail({
   discount = 0,
   total,
 }) {
-  if (!SERVICE_ID || !PUBLIC_KEY || !TEMPLATE_ID || !CAFE_NOTIFY_EMAIL) {
+  const cafeTemplate = CAFE_TEMPLATE_ID || TEMPLATE_ID
+  if (!SERVICE_ID || !PUBLIC_KEY || !cafeTemplate || !CAFE_NOTIFY_EMAIL) {
     console.info('Cafe notify email skipped (set VITE_CAFE_NOTIFY_EMAIL + EmailJS vars).')
     return
   }
@@ -305,7 +308,7 @@ export async function sendCafeOrderEmail({
   })
 
   try {
-    await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    await emailjs.send(SERVICE_ID, cafeTemplate, {
       to_email: CAFE_NOTIFY_EMAIL,
       to_name: 'Mastermind Cafe',
       subject: `🛎️ New order #${orderId} · ${inr(total)}`,
@@ -378,14 +381,17 @@ export async function sendCourseEmail({
 }
 
 /**
- * Notify a customer that their order's status changed (e.g. shipped).
- * Falls back to the standard order template when the dedicated status
- * template is not configured. Fails silently, status updates must not
- * block the admin UI.
+ * Notify a customer that their order's status changed (e.g. shipped, delivered).
+ * "delivered" uses its own dedicated template when configured; other statuses
+ * use the generic status template. Both fall back to the standard order
+ * template. Fails silently, status updates must not block the admin UI.
  */
 export async function sendOrderStatusEmail({ order, status, customerEmail, customerName }) {
   if (!SERVICE_ID || !PUBLIC_KEY) return
-  const templateId = STATUS_TEMPLATE_ID || TEMPLATE_ID
+  // Delivered gets its own template; everything else uses the status template.
+  const templateId = status === 'delivered'
+    ? (DELIVERED_TEMPLATE_ID || STATUS_TEMPLATE_ID || TEMPLATE_ID)
+    : (STATUS_TEMPLATE_ID || TEMPLATE_ID)
   if (!templateId) return
   const headline = STATUS_HEADLINES[status] || `Your order status is now ${status}`
   const items = Array.isArray(order?.items) ? order.items : []
