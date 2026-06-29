@@ -136,10 +136,11 @@ export default function Academy() {
             Master the art of <em><RotatingWord words={['espresso', 'latte art', 'pour-over', 'cupping', 'milk steaming']} /></em>
           </motion.h1>
           <motion.p className="pg-lede" variants={fadeUp}>
-            Professional HD video courses from certified, competition-placed baristas, learn at your own pace, anywhere in India.
+            Professional HD video courses <em>and</em> downloadable PDF guides from certified,
+            competition-placed baristas — learn at your own pace, anywhere in India.
           </motion.p>
           <motion.div variants={fadeUp}>
-            <span className="pg-scrollcue"><span className="pg-mouse" /> Explore the courses</span>
+            <span className="pg-scrollcue"><span className="pg-mouse" /> Explore courses &amp; books</span>
           </motion.div>
         </motion.div>
       </header>
@@ -147,7 +148,7 @@ export default function Academy() {
       <MarqueeStrip
         variant="accent"
         speed={30}
-        items={['Espresso', 'Latte Art', 'Pour Over', 'Cupping', 'Single Origin', 'Milk Steaming', 'Dialing In', 'Chikmagalur']}
+        items={['Espresso', 'Latte Art', 'Pour Over', 'Video Courses', 'Cupping', 'eBooks & Guides', 'Single Origin', 'Milk Steaming', 'PDF Downloads', 'Dialing In', 'Chikmagalur']}
       />
 
       <section className="band-dark">
@@ -268,6 +269,10 @@ export default function Academy() {
           <div className="section-header center books-head">
             <div className="section-label">Read &amp; Brew</div>
             <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Coffee books &amp; guides</h2>
+            <p className="books-sub">
+              Downloadable PDF eBooks &amp; guides — buy once and they&rsquo;re yours to keep,
+              re-download any time from your library.
+            </p>
           </div>
           <motion.div
             className="courses-grid"

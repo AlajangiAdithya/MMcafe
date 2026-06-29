@@ -602,6 +602,7 @@ export default function Admin() {
               <DashboardTab
                 products={products}
                 courses={courses}
+                books={books}
                 users={users}
                 orders={orders}
                 reviews={reviews}
@@ -867,7 +868,7 @@ function Pager({ page, setPage, totalPages, total }) {
 
 // ===== DASHBOARD TAB =====
 function DashboardTab({
-  products, courses, users, orders, reviews, enrollments,
+  products, courses, books = [], users, orders, reviews, enrollments,
   productRevenue, courseRevenue, totalRevenue,
 }) {
   const paidEnrollments = enrollments.filter(e => !!e.payment_id)
@@ -875,6 +876,7 @@ function DashboardTab({
     { label: 'Total Users', value: users.length, icon: UserCheck, color: '#4A90D9' },
     { label: 'Products', value: products.length, icon: Package, color: '#3AAA3A' },
     { label: 'Courses', value: courses.length, icon: Video, color: '#D4647A' },
+    { label: 'Books', value: books.length, icon: Library, color: '#B88E2F' },
     { label: 'Orders', value: orders.length, icon: ShoppingBag, color: '#F2A73B' },
   ]
 
@@ -1617,12 +1619,16 @@ function BookForm({ data, mode, onSave, onClose }) {
   }
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} className="book-form">
       <div className="admin-modal-header">
-        <h2>{mode === 'edit' ? 'Edit Book' : 'Add Book'}</h2>
+        <h2 className="book-form-heading"><Library size={18} /> {mode === 'edit' ? 'Edit Book' : 'Add a Book'}</h2>
         <button type="button" onClick={onClose} className="icon-btn"><X size={20} /></button>
       </div>
       <div className="admin-modal-body">
+        <p className="book-form-intro">
+          Sell a downloadable PDF in <strong>Learn Coffee</strong>, right alongside your video courses.
+        </p>
+
         <div className="admin-form-group">
           <label>Title *</label>
           <input
@@ -1631,6 +1637,7 @@ function BookForm({ data, mode, onSave, onClose }) {
             placeholder="The Home Barista Handbook" required
           />
         </div>
+
         <div className="admin-form-group">
           <label>Description</label>
           <textarea
@@ -1639,13 +1646,14 @@ function BookForm({ data, mode, onSave, onClose }) {
             placeholder="What this book covers…" rows={3}
           />
         </div>
-        <div className="admin-form-row">
+
+        <div className="book-form-fields">
           <div className="admin-form-group">
             <label>Author</label>
             <input
               type="text" value={form.author || ''}
               onChange={(e) => update('author', e.target.value)}
-              placeholder="e.g. Mastermind Brews"
+              placeholder="Mastermind Brews"
             />
           </div>
           <div className="admin-form-group">
@@ -1656,8 +1664,6 @@ function BookForm({ data, mode, onSave, onClose }) {
               placeholder="120"
             />
           </div>
-        </div>
-        <div className="admin-form-row">
           <div className="admin-form-group">
             <label>Price (₹)</label>
             <input
@@ -1666,48 +1672,55 @@ function BookForm({ data, mode, onSave, onClose }) {
               placeholder="499" disabled={form.free}
             />
           </div>
-          <div className="admin-form-group" style={{ justifyContent: 'flex-end' }}>
-            <label className="admin-checkbox">
-              <input
-                type="checkbox" checked={!!form.free}
-                onChange={(e) => update('free', e.target.checked)}
-              />
-              Free book
-            </label>
+        </div>
+
+        <label className="book-free-toggle">
+          <input
+            type="checkbox" checked={!!form.free}
+            onChange={(e) => update('free', e.target.checked)}
+          />
+          <span>Offer this book for free (no payment required)</span>
+        </label>
+
+        <div className="book-form-uploads">
+          <div className="book-upload-card">
+            <div className="book-upload-head">
+              <ImageIcon size={15} /> Cover image
+              <span className="book-upload-tag">Public</span>
+            </div>
+            <FileUploader
+              bucket="book-covers"
+              accept="image/*"
+              kind="image"
+              value={form.cover_image}
+              onChange={(url) => update('cover_image', url)}
+              maxSizeMB={5}
+            />
+            <small>Shown on the storefront card. Optional, but a cover sells better.</small>
           </div>
-        </div>
-        <div className="admin-form-group">
-          <label>Cover Image</label>
-          <FileUploader
-            bucket="book-covers"
-            accept="image/*"
-            kind="image"
-            value={form.cover_image}
-            onChange={(url) => update('cover_image', url)}
-            maxSizeMB={5}
-          />
-          <small className="text-muted">Shown on the storefront card. Public.</small>
-        </div>
-        <div className="admin-form-group">
-          <label>Book PDF *</label>
-          <FileUploader
-            bucket="course-books"
-            accept="application/pdf"
-            kind="file"
-            isPrivate
-            value={form.pdf_path}
-            onChange={(path) => update('pdf_path', path)}
-            maxSizeMB={50}
-          />
-          <small className="text-muted">
-            Stored in a private bucket. Buyers receive a secure, expiring download link — the file is never publicly accessible.
-          </small>
+
+          <div className="book-upload-card">
+            <div className="book-upload-head">
+              <FileText size={15} /> Book PDF
+              <span className="book-upload-tag private">Private</span>
+            </div>
+            <FileUploader
+              bucket="course-books"
+              accept="application/pdf"
+              kind="file"
+              isPrivate
+              value={form.pdf_path}
+              onChange={(path) => update('pdf_path', path)}
+              maxSizeMB={50}
+            />
+            <small>Required. Stored privately — buyers only ever get a short-lived signed link, never a public URL.</small>
+          </div>
         </div>
       </div>
       <div className="admin-modal-footer">
         <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
         <button type="submit" className="btn btn-blue" disabled={saving}>
-          {saving ? <><span className="spinner" /> Saving…</> : <><Save size={16} /> Save</>}
+          {saving ? <><span className="spinner" /> Saving…</> : <><Save size={16} /> Save book</>}
         </button>
       </div>
     </form>

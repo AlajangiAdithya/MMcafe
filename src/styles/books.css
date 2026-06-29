@@ -21,6 +21,16 @@
   gap: 4px;
 }
 
+/* Subtitle under the "Coffee books & guides" heading */
+.books-sub {
+  max-width: 46ch;
+  margin: 10px auto 0;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.72;
+}
+
 /* ---- Quick-view dialog (shadcn Dialog content) ---- */
 .book-qv-content {
   max-width: 36rem;
@@ -121,6 +131,88 @@
 .mylibrary-download {
   width: 100%;
   margin-top: auto;
+}
+
+/* ---- Admin: Book form (cleaner, card-based layout) ---- */
+.book-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.book-form-intro {
+  margin: 0 0 18px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+.book-form-intro strong { color: rgba(255, 255, 255, 0.8); }
+
+/* Author / Pages / Price on one tidy row */
+.book-form-fields {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 0.8fr;
+  gap: 14px;
+}
+
+.book-free-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 14px 0 18px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+  user-select: none;
+}
+.book-free-toggle input { width: 16px; height: 16px; accent-color: #4A90D9; cursor: pointer; }
+
+/* Two upload zones side by side, each in its own labelled card */
+.book-form-uploads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.book-upload-card {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.025);
+}
+.book-upload-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+.book-upload-tag {
+  margin-left: auto;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(58, 170, 58, 0.16);
+  color: #5fce5f;
+}
+.book-upload-tag.private {
+  background: rgba(212, 142, 55, 0.18);
+  color: #e0b066;
+}
+.book-upload-card small {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+@media (max-width: 560px) {
+  .book-form-fields,
+  .book-form-uploads { grid-template-columns: 1fr; }
 }
 
 /* ---- Admin: private PDF file chip in FileUploader ---- */
