@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../lib/usePageMeta'
 import { CourseGridSkeleton } from '../components/Skeleton'
 import RotatingWord from '../components/RotatingWord'
-import MarqueeStrip from '../components/MarqueeStrip'
 import BookQuickView from '../components/BookQuickView'
 import '../styles/premium-hero.css'
 
@@ -139,19 +138,10 @@ export default function Academy() {
             Professional HD video courses <em>and</em> downloadable PDF guides from certified,
             competition-placed baristas — learn at your own pace, anywhere in India.
           </motion.p>
-          <motion.div variants={fadeUp}>
-            <span className="pg-scrollcue"><span className="pg-mouse" /> Explore courses &amp; books</span>
-          </motion.div>
         </motion.div>
       </header>
 
-      <MarqueeStrip
-        variant="accent"
-        speed={30}
-        items={['Espresso', 'Latte Art', 'Pour Over', 'Video Courses', 'Cupping', 'eBooks & Guides', 'Single Origin', 'Milk Steaming', 'PDF Downloads', 'Dialing In', 'Chikmagalur']}
-      />
-
-      <section className="band-dark">
+      <section className="band-dark acad-why-band">
         <div className="container">
           <div className="section-header center">
             <div className="section-label">Why Learn With Us</div>

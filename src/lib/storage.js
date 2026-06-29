@@ -93,15 +93,66 @@ export async function uploadFilePrivate(bucket, file, { userId = 'anon', onProgr
 }
 
 /**
+ * Resolve a stored value into the object path *inside `bucket`*, or null when
+ * the value isn't a deletable object in that bucket. Handles every shape a
+ * file field can hold:
+ *   - a public URL for this bucket  → the object path after the bucket marker
+ *   - any other absolute URL        → null (external video host, signed URL,
+ *                                      a different bucket — not ours to delete)
+ *   - a bare token with no slash     → null (e.g. a Bunny video ID, not a path)
+ *   - a bare storage path (priv.)    → used as-is (e.g. "userId/123-file.pdf")
+ */
+function storagePathFor(bucket, value) {
+  if (!value || typeof value !== 'string') return null
+  const v = value.trim()
+  if (!v) return null
+  const marker = `/storage/v1/object/public/${bucket}/`
+  const idx = v.indexOf(marker)
+  if (idx !== -1) return decodeURIComponent(v.substring(idx + marker.length))
+  if (/^https?:\/\//i.test(v)) return null
+  if (!v.includes('/')) return null
+  return v
+}
+
+/**
  * Delete a file from a bucket. Pass either the storage path or a public URL.
+ * No-ops when the value isn't an object in this bucket (external URL, etc.).
  */
 export async function deleteFile(bucket, pathOrUrl) {
-  if (!pathOrUrl) return
-  let path = pathOrUrl
-  // Extract path from public URL if needed
-  const marker = `/storage/v1/object/public/${bucket}/`
-  const idx = pathOrUrl.indexOf(marker)
-  if (idx !== -1) path = pathOrUrl.substring(idx + marker.length)
+  const path = storagePathFor(bucket, pathOrUrl)
+  if (!path) return
   const { error } = await supabase.storage.from(bucket).remove([path])
   if (error) throw error
+}
+
+/**
+ * Best-effort removal of many storage objects at once, used when a catalog row
+ * (product / course / book / lesson) is deleted so its images, videos and PDFs
+ * don't linger in storage and waste space.
+ *
+ * Pass a list of { bucket, value } pairs; empties, external URLs and bare IDs
+ * are skipped automatically. This NEVER throws — orphaned-file cleanup must not
+ * undo or block the DB delete that triggered it, so failures are logged only.
+ *
+ * @param {Array<{bucket: string, value: string}>} items
+ */
+export async function deleteStorageFiles(items = []) {
+  // Group paths per bucket so each bucket needs only one remove() round-trip.
+  const byBucket = new Map()
+  for (const { bucket, value } of items) {
+    const path = storagePathFor(bucket, value)
+    if (!path) continue
+    if (!byBucket.has(bucket)) byBucket.set(bucket, [])
+    byBucket.get(bucket).push(path)
+  }
+  await Promise.all(
+    [...byBucket.entries()].map(async ([bucket, paths]) => {
+      try {
+        const { error } = await supabase.storage.from(bucket).remove(paths)
+        if (error) console.warn(`[storage] could not remove from ${bucket}:`, error.message)
+      } catch (e) {
+        console.warn(`[storage] remove threw for ${bucket}:`, e?.message || e)
+      }
+    }),
+  )
 }

@@ -87,67 +87,78 @@
 @keyframes pg-mousedot { 0%{opacity:0;transform:translate(-50%,0)} 30%{opacity:1} 100%{opacity:0;transform:translate(-50%,11px)} }
 
 /* ============================================================
-   "WHY LEARN WITH US", editorial numbered ledger (replaces the
-   generic icon cards). Big serif index numbers, hairline rules,
-   and a caramel sweep on hover. Lives on the dark espresso band.
+   ACADEMY (Learn Coffee) — compact, formal variant. The shared
+   .pg-hero is cinematic/full-height on the Store; the learning
+   page wants far less scrolling, so we tighten the hero and turn
+   the old numbered ledger into a compact 3-up feature row. All
+   overrides are scoped to .academy-page so the Store is untouched.
    ============================================================ */
-.acad-why { max-width: 960px; margin: clamp(40px, 5vw, 64px) auto 0; }
-.acad-why-row {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  align-items: center;
-  gap: clamp(20px, 4vw, 52px);
-  padding: clamp(26px, 4vw, 42px) clamp(4px, 1vw, 14px);
-  border-top: 1px solid rgba(247, 237, 222, 0.14);
+.academy-page .pg-hero {
+  min-height: 0;
+  padding-top: calc(var(--nav-height) + clamp(44px, 6vw, 76px));
+  padding-bottom: clamp(40px, 6vw, 68px);
 }
-.acad-why-row:last-child { border-bottom: 1px solid rgba(247, 237, 222, 0.14); }
-/* caramel sweep along the top hairline on hover */
-.acad-why-row::before {
-  content: ''; position: absolute; left: 0; top: -1px; height: 1px; width: 0;
-  background: linear-gradient(90deg, var(--accent, #D89A52), transparent);
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.acad-why-row:hover::before { width: 100%; }
+.academy-page .pg-title { font-size: clamp(2.3rem, 5.2vw, 4.3rem); }
+.academy-page .pg-lede { font-size: 1.04rem; }
 
-.acad-why-num {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500; font-size: clamp(2.6rem, 5.2vw, 4.4rem); line-height: 0.9;
-  letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
-  color: var(--accent, #D89A52);
-  -webkit-text-fill-color: var(--accent, #D89A52);
-  opacity: 0.92;
-  transition: opacity 0.4s ease;
+/* Pull the dark "why" band in tight against the hero and shrink its
+   own breathing room — it's a supporting strip, not a feature section. */
+.acad-why-band {
+  padding-top: clamp(44px, 5vw, 72px) !important;
+  padding-bottom: clamp(44px, 5vw, 72px) !important;
+  margin-top: 0 !important;
+  margin-bottom: clamp(28px, 4vw, 56px) !important;
 }
-.acad-why-row:hover .acad-why-num { opacity: 1; }
+.acad-why-band .section-header { margin-bottom: clamp(8px, 2vw, 20px); }
+
+/* "WHY LEARN WITH US" — compact 3-up feature row: icon chip, serif
+   title, one tight line of copy. Clean and formal, minimal scroll. */
+.acad-why {
+  max-width: 1080px;
+  margin: clamp(26px, 3.5vw, 40px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3.5vw, 48px);
+}
+.acad-why-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.acad-why-num { display: none; }
 
 .acad-why-icon {
-  width: 56px; height: 56px; flex-shrink: 0;
+  width: 50px; height: 50px; flex-shrink: 0;
   display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 50%;
+  border-radius: 14px;
   background: rgba(216, 154, 82, 0.14);
   border: 1px solid rgba(216, 154, 82, 0.34);
   color: var(--accent, #D89A52);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
 }
-.acad-why-row:hover .acad-why-icon { transform: translateY(-4px) rotate(-6deg); background: rgba(216, 154, 82, 0.24); }
+.acad-why-row:hover .acad-why-icon { transform: translateY(-3px); background: rgba(216, 154, 82, 0.24); }
 
 .acad-why-text h3 {
   font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.1;
-  letter-spacing: -0.01em; margin: 0 0 8px;
+  font-weight: 500; font-size: clamp(1.2rem, 1.9vw, 1.5rem); line-height: 1.15;
+  letter-spacing: -0.01em; margin: 0 0 6px;
   color: var(--ink-100, #F4E9D8);
 }
 .acad-why-text p {
-  margin: 0; line-height: 1.65; font-size: 1rem; max-width: 54ch;
+  margin: 0; line-height: 1.6; font-size: 0.95rem; max-width: 38ch;
   color: var(--ink-300, rgba(244, 233, 216, 0.78));
 }
 
-@media (max-width: 640px) {
-  .acad-why-row { grid-template-columns: auto 1fr; gap: 16px 22px; align-items: start; }
-  .acad-why-icon { display: none; }
-  .acad-why-num { font-size: clamp(2.2rem, 12vw, 3rem); }
+@media (max-width: 760px) {
+  .acad-why { grid-template-columns: 1fr; gap: 22px; }
+  .acad-why-row {
+    flex-direction: row; align-items: flex-start; gap: 18px;
+    padding-bottom: 22px; border-bottom: 1px solid rgba(247, 237, 222, 0.14);
+  }
+  .acad-why-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .acad-why-icon { width: 44px; height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .acad-why-row::before, .acad-why-icon, .acad-why-num { transition: none; }
+  .acad-why-icon { transition: none; }
 }

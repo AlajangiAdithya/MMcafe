@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { deleteStorageFiles } from './storage'
 
 // ===== PROFILES =====
 export async function upsertProfile({ id, email, firstName, lastName }) {
@@ -73,8 +74,11 @@ export async function updateProduct(id, updates) {
 }
 
 export async function deleteProduct(id) {
+  // Grab the image URL before the row is gone so we can free its storage too.
+  const { data: row } = await supabase.from('products').select('image').eq('id', id).single()
   const { error } = await supabase.from('products').delete().eq('id', id)
   if (error) throw error
+  await deleteStorageFiles([{ bucket: 'product-images', value: row?.image }])
 }
 
 // ===== COURSES =====
@@ -113,8 +117,21 @@ export async function updateCourse(id, updates) {
 }
 
 export async function deleteCourse(id) {
+  // Collect the course thumbnail + every lesson's video & thumbnail first; the
+  // lesson rows themselves cascade-delete with the course, but their storage
+  // objects don't, so we sweep them up afterwards.
+  const [{ data: course }, { data: lessons }] = await Promise.all([
+    supabase.from('courses').select('image').eq('id', id).single(),
+    supabase.from('lessons').select('video_url, thumbnail').eq('course_id', id),
+  ])
   const { error } = await supabase.from('courses').delete().eq('id', id)
   if (error) throw error
+  const files = [{ bucket: 'course-thumbnails', value: course?.image }]
+  for (const l of lessons || []) {
+    files.push({ bucket: 'course-videos', value: l.video_url })
+    files.push({ bucket: 'course-thumbnails', value: l.thumbnail })
+  }
+  await deleteStorageFiles(files)
 }
 
 export async function getCourseById(id) {
@@ -177,8 +194,18 @@ export async function updateBook(id, updates) {
 }
 
 export async function deleteBook(id) {
+  // Free both the public cover and the private PDF once the row is removed.
+  const { data: book } = await supabase
+    .from('books')
+    .select('cover_image, pdf_path')
+    .eq('id', id)
+    .single()
   const { error } = await supabase.from('books').delete().eq('id', id)
   if (error) throw error
+  await deleteStorageFiles([
+    { bucket: 'book-covers', value: book?.cover_image },
+    { bucket: 'course-books', value: book?.pdf_path },
+  ])
 }
 
 // ===== BOOK PURCHASES (permanent entitlement) =====
@@ -544,8 +571,18 @@ export async function updateLesson(id, updates) {
 }
 
 export async function deleteLesson(id) {
+  // Pull the video + thumbnail refs before delete so storage gets freed too.
+  const { data: lesson } = await supabase
+    .from('lessons')
+    .select('video_url, thumbnail')
+    .eq('id', id)
+    .single()
   const { error } = await supabase.from('lessons').delete().eq('id', id)
   if (error) throw error
+  await deleteStorageFiles([
+    { bucket: 'course-videos', value: lesson?.video_url },
+    { bucket: 'course-thumbnails', value: lesson?.thumbnail },
+  ])
 }
 
 export async function reorderLessons(idsInOrder) {
