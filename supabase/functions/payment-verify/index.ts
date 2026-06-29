@@ -64,6 +64,7 @@ serve(async (req) => {
       kind,
       items,
       courseId,
+      bookId,
       shippingAddress,
       couponCode,
     } = body as any
@@ -145,6 +146,18 @@ serve(async (req) => {
       )
       if (enrErr) return json({ error: enrErr.message }, 500)
       return json({ ok: true, courseId })
+    }
+
+    if (kind === 'book') {
+      if (!bookId) return json({ error: 'Missing bookId' }, 400)
+      // Permanent entitlement. Idempotent on (user_id, book_id) so a webhook
+      // retry or double-submit can't create duplicate purchases.
+      const { error: bpErr } = await admin.from('book_purchases').upsert(
+        { user_id: user.id, book_id: bookId, payment_id: razorpay_payment_id },
+        { onConflict: 'user_id,book_id', ignoreDuplicates: true },
+      )
+      if (bpErr) return json({ error: bpErr.message }, 500)
+      return json({ ok: true, bookId })
     }
 
     return json({ error: 'Invalid kind' }, 400)

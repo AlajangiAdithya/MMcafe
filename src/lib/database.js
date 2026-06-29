@@ -127,6 +127,144 @@ export async function getCourseById(id) {
   return data
 }
 
+// ===== BOOKS (standalone PDF products sold in the Academy) =====
+// Catalog rows are public (RLS: anyone can SELECT). The actual PDF lives in a
+// PRIVATE bucket and is referenced by `pdf_path` only — never a public URL.
+export async function getBooks() {
+  const { data, error } = await supabase
+    .from('books')
+    .select('id, title, description, price, free, cover_image, author, pages, created_at')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+// Admin needs pdf_path too (to confirm a file is attached).
+export async function getBooksAdmin() {
+  const { data, error } = await supabase
+    .from('books')
+    .select('*')
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+export async function getBookById(id) {
+  const { data, error } = await supabase
+    .from('books')
+    .select('id, title, description, price, free, cover_image, author, pages, created_at')
+    .eq('id', id)
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function addBook(book) {
+  const { data, error } = await supabase.from('books').insert(book).select().single()
+  if (error) throw error
+  return data
+}
+
+export async function updateBook(id, updates) {
+  const { data, error } = await supabase
+    .from('books')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deleteBook(id) {
+  const { error } = await supabase.from('books').delete().eq('id', id)
+  if (error) throw error
+}
+
+// ===== BOOK PURCHASES (permanent entitlement) =====
+export async function getMyBooks(userId) {
+  if (!userId) return []
+  const { data, error } = await supabase
+    .from('book_purchases')
+    .select('*, books(id, title, cover_image, author, pages)')
+    .eq('user_id', userId)
+    .order('purchased_at', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+export async function hasPurchasedBook(userId, bookId) {
+  if (!userId || !bookId) return false
+  const { data, error } = await supabase
+    .from('book_purchases')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('book_id', bookId)
+    .maybeSingle()
+  if (error) return false
+  return !!data
+}
+
+// Free books only — the buyer inserts their own entitlement row (RLS allows
+// user_id = auth.uid()). Paid purchases are written server-side by the
+// payment-verify edge function using the service role.
+export async function addBookPurchase({ userId, bookId, paymentId = null }) {
+  const { data, error } = await supabase
+    .from('book_purchases')
+    .upsert(
+      { user_id: userId, book_id: bookId, payment_id: paymentId },
+      { onConflict: 'user_id,book_id', ignoreDuplicates: true },
+    )
+    .select()
+  if (error) throw error
+  return data
+}
+
+// Admin: every purchase, with the buyer profile merged manually (book_purchases
+// .user_id references auth.users, so PostgREST can't embed profiles directly).
+export async function getAllBookPurchases() {
+  const { data: rows, error } = await supabase
+    .from('book_purchases')
+    .select('*, books(title, price, free, cover_image)')
+    .order('purchased_at', { ascending: false })
+  if (error) throw error
+  if (!rows || rows.length === 0) return []
+
+  const userIds = [...new Set(rows.map(r => r.user_id).filter(Boolean))]
+  let profileMap = new Map()
+  if (userIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, first_name, last_name, email')
+      .in('id', userIds)
+    profileMap = new Map((profiles || []).map(p => [p.id, p]))
+  }
+  return rows.map(r => ({ ...r, profiles: profileMap.get(r.user_id) || null }))
+}
+
+// Request a short-lived signed download URL for a purchased book. The
+// book-download edge function verifies the purchase server-side before signing,
+// so this fails (throws) for anyone who hasn't bought the book.
+export async function getBookDownloadUrl(bookId) {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) throw new Error('Please sign in to download your book')
+  const { data, error } = await supabase.functions.invoke('book-download', {
+    body: { bookId },
+    headers: { Authorization: `Bearer ${session.access_token}` },
+  })
+  if (error) {
+    let msg = error.message || 'Could not prepare your download'
+    try {
+      const body = await error.context?.json?.()
+      if (body?.error) msg = body.error
+    } catch { /* keep generic */ }
+    throw new Error(msg)
+  }
+  if (data?.error) throw new Error(data.error)
+  if (!data?.url) throw new Error('Download link unavailable')
+  return data.url
+}
+
 // ===== ORDERS =====
 // Manually merge profile info because there's no direct FK from
 // orders.user_id to profiles.id (both reference auth.users), so PostgREST

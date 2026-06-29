@@ -381,6 +381,74 @@ export async function sendCourseEmail({
 }
 
 /**
+ * Send a book purchase confirmation email with a secure download CTA.
+ * The email never carries the PDF itself — it links to My Library, where a
+ * verified, short-lived signed URL is generated on demand. Fails silently so
+ * it never blocks the purchase flow.
+ *
+ * @param {Object} params
+ * @param {string} params.customerName
+ * @param {string} params.customerEmail
+ * @param {string} params.orderId
+ * @param {string} params.bookTitle
+ * @param {number} params.total
+ * @param {string} [params.bookCover]
+ */
+export async function sendBookEmail({
+  customerName,
+  customerEmail,
+  orderId,
+  bookTitle,
+  total,
+  bookCover,
+}) {
+  if (!isEmailConfigured()) {
+    console.info('EmailJS not configured. Skipping email. Set VITE_EMAILJS_* in .env.')
+    return
+  }
+
+  const isFree = !(Number(total) > 0)
+  const libraryUrl = `${SITE_URL}/my-library`
+  const bodyHtml = `
+    <div style="font-size:13px;color:${BRAND.muted};text-transform:uppercase;letter-spacing:.08em;">Purchase</div>
+    <div style="font-size:15px;color:${BRAND.ink};font-weight:bold;padding:2px 0 14px;">#${esc(orderId)}</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemRows([{ name: bookTitle, qty: 1, price: Number(total) || 0, image: bookCover }])}</table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+      ${totalRow('Amount paid', isFree ? 'FREE' : inr(total), true)}
+    </table>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px;">
+      <tr><td style="border-radius:8px;background:${BRAND.gold};">
+        <a href="${libraryUrl}" style="display:inline-block;padding:12px 24px;color:#fff;font-size:14px;font-weight:bold;text-decoration:none;">📖 Download your book →</a>
+      </td></tr>
+    </table>
+    <p style="margin:18px 0 0;color:${BRAND.muted};font-size:13px;line-height:1.6;">
+      Your book is saved permanently to <a href="${libraryUrl}" style="color:${BRAND.gold};text-decoration:none;">My Library</a>.
+      Sign in any time to download it again — the link above is always there.
+    </p>`
+
+  const content_html = emailShell({
+    heading: 'Your book is ready 📖',
+    intro: `Hi ${customerName || 'there'}, thanks for your purchase of ${bookTitle}.`,
+    bodyHtml,
+  })
+
+  try {
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      to_email: customerEmail,
+      to_name: customerName,
+      subject: `Your book is ready · ${bookTitle}`,
+      order_id: orderId,
+      content_html,
+      logo_url: LOGO_URL,
+      site_url: SITE_URL,
+    }, PUBLIC_KEY)
+    console.info('Book confirmation email sent to', customerEmail)
+  } catch (err) {
+    console.warn('Failed to send book confirmation email:', err)
+  }
+}
+
+/**
  * Notify a customer that their order's status changed (e.g. shipped, delivered).
  * "delivered" uses its own dedicated template when configured; other statuses
  * use the generic status template. Both fall back to the standard order

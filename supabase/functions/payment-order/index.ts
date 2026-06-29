@@ -66,10 +66,11 @@ serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}))
-    const { kind, items, courseId, couponCode } = body as {
-      kind: 'cart' | 'course'
+    const { kind, items, courseId, bookId, couponCode } = body as {
+      kind: 'cart' | 'course' | 'book'
       items?: Array<{ id: number; qty: number }>
       courseId?: number
+      bookId?: number
       couponCode?: string
     }
 
@@ -133,6 +134,19 @@ serve(async (req) => {
       description = course.title
       notes.kind = 'course'
       notes.course_id = String(course.id)
+    } else if (kind === 'book') {
+      if (!bookId) return json({ error: 'Missing bookId' }, 400)
+      const { data: book, error } = await admin
+        .from('books')
+        .select('id, title, price, free')
+        .eq('id', bookId)
+        .single()
+      if (error || !book) return json({ error: 'Book not found' }, 404)
+      if (book.free) return json({ error: 'Book is free' }, 400)
+      amount = Number(book.price)
+      description = book.title
+      notes.kind = 'book'
+      notes.book_id = String(book.id)
     } else {
       return json({ error: 'Invalid kind' }, 400)
     }

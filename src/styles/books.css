@@ -1,0 +1,154 @@
+/* ============================================================
+   Books (Learn Coffee) — storefront quick-view, library, and the
+   admin PDF file chip. Book CARDS reuse the existing .course-* classes
+   so they sit seamlessly beside courses on the espresso palette.
+   The quick-view Dialog renders in a portal (outside [data-theme]),
+   so it is themed via the global --tw-* tokens, never espresso-scoped vars.
+   ============================================================ */
+
+/* ---- Academy "Books & Guides" section ---- */
+.academy-books {
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.academy-books .books-head {
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* A small "eBook · PDF" pill reusing the course-level look, but distinct corner */
+.book-format-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---- Quick-view dialog (shadcn Dialog content) ---- */
+.book-qv-content {
+  max-width: 36rem;
+  animation: book-qv-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes book-qv-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.book-qv-title {
+  font-family: "Yanone Kaffeesatz", "Montserrat", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+.book-qv-sub { margin-top: 2px; }
+
+.book-qv-body {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 480px) {
+  .book-qv-body { grid-template-columns: 96px 1fr; gap: 14px; }
+}
+
+.book-qv-cover {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: hsl(var(--tw-muted));
+  border: 1px solid hsl(var(--tw-border));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+.book-qv-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.book-qv-cover-empty {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: hsl(var(--tw-muted-foreground));
+}
+.book-qv-price-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.book-qv-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.book-qv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.82rem;
+  color: hsl(var(--tw-muted-foreground));
+}
+.book-qv-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.book-qv-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: hsl(var(--tw-foreground) / 0.85);
+  margin: 0;
+  max-height: 9.5rem;
+  overflow-y: auto;
+}
+.book-qv-owned {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.book-qv-owned-badge { align-self: flex-start; }
+.book-qv-cta { width: 100%; }
+.book-qv-secure {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: hsl(var(--tw-muted-foreground));
+  margin: 2px 0 0;
+}
+
+/* ---- My Library download action (reuses .mycourse-* grid) ---- */
+.mylibrary-download {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ---- Admin: private PDF file chip in FileUploader ---- */
+.file-uploader-filechip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+}
+.file-uploader-filename {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+.file-uploader-fileok {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #3aaa3a;
+  white-space: nowrap;
+}

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import { Upload, X, Image as ImageIcon, Film, Loader2, Link as LinkIcon, Check } from 'lucide-react'
-import { uploadFile } from '../lib/storage'
+import { Upload, X, Image as ImageIcon, Film, FileText, Loader2, Link as LinkIcon, Check } from 'lucide-react'
+import { uploadFile, uploadFilePrivate } from '../lib/storage'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
@@ -9,13 +9,15 @@ import toast from 'react-hot-toast'
  * for admins who already have a hosted asset.
  *
  * Props:
- *  - bucket    : 'product-images' | 'course-videos' | 'course-thumbnails'
- *  - accept    : file input accept string (e.g. 'image/*' or 'video/*')
- *  - kind      : 'image' | 'video'  (controls preview type)
- *  - value     : current public URL (or '')
- *  - onChange  : (url: string) => void
+ *  - bucket    : 'product-images' | 'course-videos' | 'course-thumbnails' | 'book-covers' | 'course-books'
+ *  - accept    : file input accept string (e.g. 'image/*', 'video/*', 'application/pdf')
+ *  - kind      : 'image' | 'video' | 'file'  (controls preview type)
+ *  - value     : current public URL — or, when isPrivate, the storage path (or '')
+ *  - onChange  : (urlOrPath: string) => void
  *  - maxSizeMB : optional client-side size guard
  *  - label     : optional label override
+ *  - isPrivate : when true, uploads to a private bucket and stores the path
+ *                (no public URL, no "paste URL" fallback)
  */
 export default function FileUploader({
   bucket,
@@ -25,6 +27,7 @@ export default function FileUploader({
   onChange,
   maxSizeMB,
   label,
+  isPrivate = false,
 }) {
   const inputRef = useRef(null)
   const { user } = useAuth()
@@ -43,11 +46,19 @@ export default function FileUploader({
     setUploading(true)
     setProgress(0)
     try {
-      const { url } = await uploadFile(bucket, file, {
-        userId: user?.id || 'anon',
-        onProgress: setProgress,
-      })
-      onChange(url)
+      if (isPrivate) {
+        const { path } = await uploadFilePrivate(bucket, file, {
+          userId: user?.id || 'anon',
+          onProgress: setProgress,
+        })
+        onChange(path)
+      } else {
+        const { url } = await uploadFile(bucket, file, {
+          userId: user?.id || 'anon',
+          onProgress: setProgress,
+        })
+        onChange(url)
+      }
       toast.success('Uploaded')
     } catch (err) {
       toast.error(err.message || 'Upload failed')
@@ -80,7 +91,8 @@ export default function FileUploader({
     toast.success('URL set')
   }
 
-  const Icon = kind === 'video' ? Film : ImageIcon
+  const Icon = kind === 'video' ? Film : kind === 'file' ? FileText : ImageIcon
+  const fileName = value ? value.split('/').pop() : ''
 
   return (
     <div className="file-uploader">
@@ -88,7 +100,13 @@ export default function FileUploader({
 
       {value && !uploading ? (
         <div className="file-uploader-preview">
-          {kind === 'video' ? (
+          {isPrivate || kind === 'file' ? (
+            <div className="file-uploader-filechip">
+              <FileText size={18} />
+              <span className="file-uploader-filename" title={fileName}>{fileName}</span>
+              <span className="file-uploader-fileok"><Check size={13} /> attached</span>
+            </div>
+          ) : kind === 'video' ? (
             <video src={value} controls className="file-uploader-media" />
           ) : (
             <img src={value} alt="Preview" className="file-uploader-media" />
@@ -102,14 +120,16 @@ export default function FileUploader({
             >
               <Upload size={14} /> Replace
             </button>
-            <button
-              type="button"
-              className="btn-ghost-small"
-              onClick={() => { setShowUrl(s => !s); setUrlDraft(value) }}
-              disabled={uploading}
-            >
-              <LinkIcon size={14} /> Use URL
-            </button>
+            {!isPrivate && (
+              <button
+                type="button"
+                className="btn-ghost-small"
+                onClick={() => { setShowUrl(s => !s); setUrlDraft(value) }}
+                disabled={uploading}
+              >
+                <LinkIcon size={14} /> Use URL
+              </button>
+            )}
             <button
               type="button"
               className="btn-ghost-small danger"
@@ -150,20 +170,22 @@ export default function FileUploader({
                 <strong>Click</strong> or drag a {kind} here
               </span>
               {maxSizeMB && <small>Max {maxSizeMB}MB</small>}
-              <button
-                type="button"
-                className="btn-ghost-small"
-                onClick={(e) => { e.stopPropagation(); setShowUrl(s => !s) }}
-                style={{ marginTop: 8 }}
-              >
-                <LinkIcon size={14} /> Or paste a URL
-              </button>
+              {!isPrivate && (
+                <button
+                  type="button"
+                  className="btn-ghost-small"
+                  onClick={(e) => { e.stopPropagation(); setShowUrl(s => !s) }}
+                  style={{ marginTop: 8 }}
+                >
+                  <LinkIcon size={14} /> Or paste a URL
+                </button>
+              )}
             </>
           )}
         </div>
       )}
 
-      {showUrl && (
+      {showUrl && !isPrivate && (
         <div className="file-uploader-url-row" style={{ display: 'flex', gap: 6, marginTop: 8 }}>
           <input
             type="url"

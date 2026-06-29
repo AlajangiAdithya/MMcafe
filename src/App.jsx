@@ -24,6 +24,7 @@ import './App.css'
 import './styles/scroll-effects.css'
 import './styles/animation-tokens.css'
 import './styles/espresso-theme.css'
+import './styles/books.css'
 
 // Lazy-load every non-critical route. Home stays eager because it's the
 // landing page; everything else is split into its own chunk so the initial
@@ -39,6 +40,7 @@ const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'))
 const Admin = lazy(() => import('./pages/Admin'))
 const MyOrders = lazy(() => import('./pages/MyOrders'))
 const MyCourses = lazy(() => import('./pages/MyCourses'))
+const MyLibrary = lazy(() => import('./pages/MyLibrary'))
 const MyProfile = lazy(() => import('./pages/MyProfile'))
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'))
 const CourseDetail = lazy(() => import('./pages/CourseDetail'))
@@ -127,6 +129,7 @@ function AppShell() {
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/my-orders" element={<MyOrders />} />
               <Route path="/my-courses" element={<MyCourses />} />
+              <Route path="/my-library" element={<MyLibrary />} />
               <Route path="/my-profile" element={<MyProfile />} />
               <Route path="/course/:courseId" element={<CourseDetail />} />
               <Route path="/course/:courseId/checkout" element={<CourseCheckout />} />

@@ -84,9 +84,10 @@ async function callFn(name, payload) {
  * Run the entire pay -> verify -> persist flow.
  *
  * @param {object} opts
- * @param {'cart'|'course'} opts.kind
+ * @param {'cart'|'course'|'book'} opts.kind
  * @param {Array<{id:number, qty:number}>} [opts.items]
  * @param {number} [opts.courseId]
+ * @param {number} [opts.bookId]
  * @param {string} [opts.couponCode]
  * @param {object} [opts.shippingAddress]
  * @param {{name?:string, email?:string, phone?:string}} [opts.customer]
@@ -96,14 +97,14 @@ async function callFn(name, payload) {
  */
 export async function payAndVerify(opts) {
   const {
-    kind, items, courseId, couponCode, shippingAddress,
+    kind, items, courseId, bookId, couponCode, shippingAddress,
     customer = {}, brandName = 'Mastermind Brews',
     onSuccess, onFailure,
   } = opts
 
   try {
     // 1) Server creates the Razorpay order with a verified amount
-    const order = await callFn('payment-order', { kind, items, courseId, couponCode })
+    const order = await callFn('payment-order', { kind, items, courseId, bookId, couponCode })
 
     await loadRazorpay()
 
@@ -129,7 +130,7 @@ export async function payAndVerify(opts) {
             razorpay_order_id: resp.razorpay_order_id,
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
-            kind, items, courseId, couponCode, shippingAddress,
+            kind, items, courseId, bookId, couponCode, shippingAddress,
           })
           onSuccess?.({ ...result, paymentId: resp.razorpay_payment_id, total: order.amount })
         } catch (e) {

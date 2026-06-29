@@ -8,11 +8,12 @@ import {
   Check, XCircle, Tag, Download, TrendingUp, Home, LogOut, RefreshCw,
   GraduationCap, ChevronDown, ChevronUp, BookOpen, Image as ImageIcon,
   Newspaper, Building2, Link2, MapPin, Phone, Mail, AlertCircle, Briefcase,
-  ClipboardList, Clock, Wallet,
+  ClipboardList, Clock, Wallet, Library, FileText,
 } from 'lucide-react'
 import {
   getProducts, addProduct, updateProduct, deleteProduct,
   getCourses, addCourse, updateCourse, deleteCourse,
+  getBooksAdmin, addBook, updateBook, deleteBook,
   getProfiles, getOrders, updateOrderStatus,
   getAllReviews, setReviewApproval, deleteReview,
   getCoupons, addCoupon, updateCoupon, deleteCoupon,
@@ -33,6 +34,7 @@ const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'products', label: 'Products', icon: Package },
   { id: 'courses', label: 'Courses', icon: Video },
+  { id: 'books', label: 'Books', icon: Library },
   { id: 'orders', label: 'Orders', icon: ShoppingBag },
   { id: 'enrollments', label: 'Enrollments', icon: GraduationCap },
   { id: 'payments', label: 'Payments', icon: DollarSign },
@@ -54,6 +56,7 @@ const fullName = (p, fallback = '-') => {
 
 const EMPTY_PRODUCT = { name: '', price: '', category: 'beans', weight: '', image: '', description: '', in_stock: true, stock_quantity: '', is_featured: false }
 const EMPTY_COURSE = { title: '', description: '', price: '', duration: '', rating: '4.5', level: 'Beginner', image: '', video_url: '', free: false }
+const EMPTY_BOOK = { title: '', description: '', price: '', author: '', pages: '', cover_image: '', pdf_path: '', free: false }
 const EMPTY_COUPON = { code: '', description: '', discount_type: 'percent', discount_value: '', min_order_total: '', max_uses: '', active: true, expires_at: '' }
 const EMPTY_BLOG = { slug: '', title: '', excerpt: '', cover_image: '', content: '', author_name: '', published: false }
 
@@ -73,6 +76,7 @@ export default function Admin() {
   const [tab, setTab] = useState('dashboard')
   const [products, setProducts] = useState([])
   const [courses, setCourses] = useState([])
+  const [books, setBooks] = useState([])
   const [users, setUsers] = useState([])
   const [orders, setOrders] = useState([])
   const [reviews, setReviews] = useState([])
@@ -111,9 +115,10 @@ export default function Admin() {
         toast.error(`Could not load ${label}: ${err?.message || 'unknown error'}`)
         return []
       }
-      const [p, c, u, o, r, cp, en, bp, bs, pc] = await Promise.all([
+      const [p, c, bk, u, o, r, cp, en, bp, bs, pc] = await Promise.all([
         getProducts().catch(reportFail('products')),
         getCourses().catch(reportFail('courses')),
+        getBooksAdmin().catch(reportFail('books')),
         getProfiles().catch(reportFail('users')),
         getOrders().catch(reportFail('orders')),
         getAllReviews().catch(reportFail('reviews')),
@@ -125,6 +130,7 @@ export default function Admin() {
       ])
       setProducts(p)
       setCourses(c)
+      setBooks(bk)
       setUsers(u)
       setOrders(o)
       setReviews(r)
@@ -244,6 +250,53 @@ export default function Admin() {
     try {
       await deleteCourse(id)
       toast.success('Course deleted')
+      loadData()
+    } catch (err) {
+      toast.error(err.message)
+    }
+  }
+
+  const handleSaveBook = async (formData) => {
+    if (!formData.pdf_path) {
+      toast.error('Upload the book PDF before saving')
+      return
+    }
+    const payload = {
+      title: formData.title,
+      description: formData.description,
+      price: formData.free ? 0 : (parseInt(formData.price) || 0),
+      author: formData.author?.trim() || null,
+      pages: parseInt(formData.pages) || null,
+      cover_image: formData.cover_image || null,
+      pdf_path: formData.pdf_path,
+      free: !!formData.free,
+    }
+    try {
+      if (modal.mode === 'edit') {
+        await updateBook(modal.data.id, payload)
+        toast.success('Book updated')
+      } else {
+        await addBook(payload)
+        toast.success('Book added')
+      }
+      setModal(null)
+      loadData()
+    } catch (err) {
+      toast.error(err.message)
+    }
+  }
+
+  const handleDeleteBook = async (id) => {
+    const ok = await confirmAction({
+      title: 'Delete book?',
+      message: 'This removes the book from the Academy. Buyers will lose access to the download.',
+      confirmLabel: 'Delete',
+      danger: true,
+    })
+    if (!ok) return
+    try {
+      await deleteBook(id)
+      toast.success('Book deleted')
       loadData()
     } catch (err) {
       toast.error(err.message)
@@ -576,6 +629,14 @@ export default function Admin() {
                 onDelete={handleDeleteCourse}
               />
             )}
+            {tab === 'books' && (
+              <BooksTab
+                books={books}
+                onAdd={() => setModal({ type: 'book', mode: 'add', data: { ...EMPTY_BOOK } })}
+                onEdit={(b) => setModal({ type: 'book', mode: 'edit', data: { ...b } })}
+                onDelete={handleDeleteBook}
+              />
+            )}
             {tab === 'orders' && (
               <OrdersTab orders={orders} onStatusChange={handleOrderStatusChange} />
             )}
@@ -654,6 +715,14 @@ export default function Admin() {
                 data={modal.data}
                 mode={modal.mode}
                 onSave={handleSaveCourse}
+                onClose={() => setModal(null)}
+              />
+            )}
+            {modal.type === 'book' && (
+              <BookForm
+                data={modal.data}
+                mode={modal.mode}
+                onSave={handleSaveBook}
                 onClose={() => setModal(null)}
               />
             )}
@@ -1443,6 +1512,205 @@ function CoursesTab({ courses, onAdd, onEdit, onManageLessons, onDelete }) {
         </>
       )}
     </div>
+  )
+}
+
+// ===== BOOKS TAB =====
+function BooksTab({ books, onAdd, onEdit, onDelete }) {
+  const ctrl = useTableControls(books, ['title', 'author', 'description'])
+
+  return (
+    <div>
+      <div className="admin-page-header">
+        <div>
+          <h1>Books</h1>
+          <p>{books.length} digital book{books.length === 1 ? '' : 's'} in the Academy</p>
+        </div>
+        <button className="btn btn-blue" onClick={onAdd}>
+          <Plus size={16} /> Add Book
+        </button>
+      </div>
+
+      {books.length === 0 ? (
+        <div className="admin-empty">
+          <Library size={48} />
+          <h3>No books yet</h3>
+          <p>Add your first PDF book to sell it in Learn Coffee.</p>
+          <button className="btn btn-blue" onClick={onAdd}><Plus size={16} /> Add Book</button>
+        </div>
+      ) : (
+        <>
+          <TableToolbar
+            search={ctrl.search} setSearch={ctrl.setSearch}
+            pageSize={ctrl.pageSize} setPageSize={ctrl.setPageSize}
+            placeholder="Search books..."
+          />
+
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Cover</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Price</th>
+                  <th>Pages</th>
+                  <th>PDF</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ctrl.slice.map(b => (
+                  <tr key={b.id}>
+                    <td>
+                      {b.cover_image ? (
+                        <img src={b.cover_image} alt={b.title} className="admin-thumb" />
+                      ) : (
+                        <div className="admin-thumb-placeholder"><Library size={16} /></div>
+                      )}
+                    </td>
+                    <td><strong>{b.title}</strong></td>
+                    <td>{b.author || '-'}</td>
+                    <td>{b.free ? <span className="status-badge status-confirmed">FREE</span> : `₹${b.price}`}</td>
+                    <td>{b.pages || '-'}</td>
+                    <td>
+                      {b.pdf_path ? (
+                        <span className="admin-video-link"><FileText size={14} /> Attached</span>
+                      ) : (
+                        <span className="text-muted">Missing</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="admin-actions">
+                        <button className="admin-action-btn edit" onClick={() => onEdit(b)} title="Edit">
+                          <Pencil size={14} />
+                        </button>
+                        <button className="admin-action-btn delete" onClick={() => onDelete(b.id)} title="Delete">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pager {...ctrl} />
+        </>
+      )}
+    </div>
+  )
+}
+
+function BookForm({ data, mode, onSave, onClose }) {
+  const [form, setForm] = useState(data)
+  const [saving, setSaving] = useState(false)
+  const update = (k, v) => setForm((p) => ({ ...p, [k]: v }))
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!form.title.trim()) return toast.error('Title is required')
+    if (!form.pdf_path) return toast.error('Upload the book PDF before saving')
+    setSaving(true)
+    await onSave(form)
+    setSaving(false)
+  }
+
+  return (
+    <form onSubmit={submit}>
+      <div className="admin-modal-header">
+        <h2>{mode === 'edit' ? 'Edit Book' : 'Add Book'}</h2>
+        <button type="button" onClick={onClose} className="icon-btn"><X size={20} /></button>
+      </div>
+      <div className="admin-modal-body">
+        <div className="admin-form-group">
+          <label>Title *</label>
+          <input
+            type="text" value={form.title}
+            onChange={(e) => update('title', e.target.value)}
+            placeholder="The Home Barista Handbook" required
+          />
+        </div>
+        <div className="admin-form-group">
+          <label>Description</label>
+          <textarea
+            value={form.description || ''}
+            onChange={(e) => update('description', e.target.value)}
+            placeholder="What this book covers…" rows={3}
+          />
+        </div>
+        <div className="admin-form-row">
+          <div className="admin-form-group">
+            <label>Author</label>
+            <input
+              type="text" value={form.author || ''}
+              onChange={(e) => update('author', e.target.value)}
+              placeholder="e.g. Mastermind Brews"
+            />
+          </div>
+          <div className="admin-form-group">
+            <label>Pages</label>
+            <input
+              type="number" min={0} value={form.pages ?? ''}
+              onChange={(e) => update('pages', e.target.value)}
+              placeholder="120"
+            />
+          </div>
+        </div>
+        <div className="admin-form-row">
+          <div className="admin-form-group">
+            <label>Price (₹)</label>
+            <input
+              type="number" min={0} value={form.free ? '' : (form.price ?? '')}
+              onChange={(e) => update('price', e.target.value)}
+              placeholder="499" disabled={form.free}
+            />
+          </div>
+          <div className="admin-form-group" style={{ justifyContent: 'flex-end' }}>
+            <label className="admin-checkbox">
+              <input
+                type="checkbox" checked={!!form.free}
+                onChange={(e) => update('free', e.target.checked)}
+              />
+              Free book
+            </label>
+          </div>
+        </div>
+        <div className="admin-form-group">
+          <label>Cover Image</label>
+          <FileUploader
+            bucket="book-covers"
+            accept="image/*"
+            kind="image"
+            value={form.cover_image}
+            onChange={(url) => update('cover_image', url)}
+            maxSizeMB={5}
+          />
+          <small className="text-muted">Shown on the storefront card. Public.</small>
+        </div>
+        <div className="admin-form-group">
+          <label>Book PDF *</label>
+          <FileUploader
+            bucket="course-books"
+            accept="application/pdf"
+            kind="file"
+            isPrivate
+            value={form.pdf_path}
+            onChange={(path) => update('pdf_path', path)}
+            maxSizeMB={50}
+          />
+          <small className="text-muted">
+            Stored in a private bucket. Buyers receive a secure, expiring download link — the file is never publicly accessible.
+          </small>
+        </div>
+      </div>
+      <div className="admin-modal-footer">
+        <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+        <button type="submit" className="btn btn-blue" disabled={saving}>
+          {saving ? <><span className="spinner" /> Saving…</> : <><Save size={16} /> Save</>}
+        </button>
+      </div>
+    </form>
   )
 }
 

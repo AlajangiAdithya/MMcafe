@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Clock, Star, BookOpen, PlayCircle, Video, Info, Award, Wifi } from 'lucide-react'
+import {
+  Clock, Star, BookOpen, PlayCircle, Video, Info, Award, Wifi,
+  FileText, Download, User as UserIcon,
+} from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
-import { getCourses, getEnrollments } from '../lib/database'
+import { getCourses, getEnrollments, getBooks, getMyBooks } from '../lib/database'
 import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../lib/usePageMeta'
 import { CourseGridSkeleton } from '../components/Skeleton'
 import RotatingWord from '../components/RotatingWord'
 import MarqueeStrip from '../components/MarqueeStrip'
+import BookQuickView from '../components/BookQuickView'
 import '../styles/premium-hero.css'
 
 const fadeUp = {
@@ -34,6 +38,10 @@ export default function Academy() {
   const [error, setError] = useState(null)
   const [purchased, setPurchased] = useState(new Set())
   const [reloadKey, setReloadKey] = useState(0)
+  const [books, setBooks] = useState([])
+  const [purchasedBooks, setPurchasedBooks] = useState(new Set())
+  const [activeBook, setActiveBook] = useState(null)
+  const [qvOpen, setQvOpen] = useState(false)
 
   usePageMeta({
     title: 'Online Barista Academy · Professional Coffee Courses',
@@ -78,9 +86,35 @@ export default function Academy() {
     return () => { cancelled = true }
   }, [user])
 
+  // Books load independently of courses so a course error never hides the shelf.
+  useEffect(() => {
+    let cancelled = false
+    getBooks()
+      .then(data => { if (!cancelled) setBooks(data) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [reloadKey])
+
+  useEffect(() => {
+    let cancelled = false
+    if (!user) {
+      Promise.resolve().then(() => { if (!cancelled) setPurchasedBooks(new Set()) })
+      return () => { cancelled = true }
+    }
+    getMyBooks(user.id)
+      .then(rows => { if (!cancelled) setPurchasedBooks(new Set(rows.map(r => r.book_id))) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [user])
+
   const goToCourse = (course) => {
     if (purchased.has(course.id)) navigate('/my-courses')
     else navigate(`/course/${course.id}`)
+  }
+
+  const openBook = (book) => { setActiveBook(book); setQvOpen(true) }
+  const handleBookPurchased = (bookId) => {
+    setPurchasedBooks(prev => new Set(prev).add(bookId))
   }
 
   return (
@@ -228,6 +262,83 @@ export default function Academy() {
           </motion.div>
         )}
       </div>
+
+      {books.length > 0 && (
+        <div className="academy-container academy-books">
+          <div className="section-header center books-head">
+            <div className="section-label">Read &amp; Brew</div>
+            <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Coffee books &amp; guides</h2>
+          </div>
+          <motion.div
+            className="courses-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={staggerContainer}
+          >
+            {books.map(book => {
+              const owned = purchasedBooks.has(book.id)
+              return (
+                <motion.div
+                  key={book.id}
+                  className="course-card clickable"
+                  onClick={() => openBook(book)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      openBook(book)
+                    }
+                  }}
+                  variants={fadeUp}
+                >
+                  <div className="course-image">
+                    {book.cover_image && <img src={book.cover_image} alt={book.title} loading="lazy" />}
+                    <span className={`course-badge ${book.free ? 'free' : ''}`}>
+                      {book.free ? 'FREE' : `₹${(book.price || 0).toLocaleString()}`}
+                    </span>
+                    <span className="course-level book-format-tag"><FileText size={12} /> eBook · PDF</span>
+                  </div>
+                  <div className="course-info">
+                    <h3>{book.title}</h3>
+                    <p>{book.description}</p>
+                    <div className="course-meta">
+                      {book.author && <span><UserIcon size={13} /> {book.author}</span>}
+                      {book.pages ? <span><BookOpen size={13} /> {book.pages} pages</span> : null}
+                    </div>
+                    {owned ? (
+                      <button
+                        type="button"
+                        className="btn btn-success full-width"
+                        onClick={(e) => { e.stopPropagation(); navigate('/my-library') }}
+                      >
+                        <Download size={16} /> In your library
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary full-width"
+                        onClick={(e) => { e.stopPropagation(); openBook(book) }}
+                      >
+                        <Info size={16} /> View book
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        </div>
+      )}
+
+      <BookQuickView
+        book={activeBook}
+        open={qvOpen}
+        onOpenChange={setQvOpen}
+        purchased={activeBook ? purchasedBooks.has(activeBook.id) : false}
+        onPurchased={handleBookPurchased}
+      />
     </div>
   )
 }

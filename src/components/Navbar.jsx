@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { ShoppingCart, User, LogOut, Menu, X, Shield, Package, BookOpen, ChevronDown, Heart, UserCircle, Search } from 'lucide-react'
+import { ShoppingCart, User, LogOut, Menu, X, Shield, Package, BookOpen, ChevronDown, Heart, UserCircle, Search, Library } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import { useState, useEffect, useRef } from 'react'
@@ -167,6 +167,9 @@ export default function Navbar({ onOpenSearch }) {
                     <Link to="/my-courses" className="user-dropdown-item">
                       <BookOpen size={14} /> My Courses
                     </Link>
+                    <Link to="/my-library" className="user-dropdown-item">
+                      <Library size={14} /> My Library
+                    </Link>
                     <Link to="/my-profile" className="user-dropdown-item">
                       <UserCircle size={14} /> My Profile
                     </Link>
@@ -243,6 +246,9 @@ export default function Navbar({ onOpenSearch }) {
                   </Link>
                   <Link to="/my-courses" className="user-dropdown-item">
                     <BookOpen size={14} /> My Courses
+                  </Link>
+                  <Link to="/my-library" className="user-dropdown-item">
+                    <Library size={14} /> My Library
                   </Link>
                   <Link to="/my-profile" className="user-dropdown-item">
                     <UserCircle size={14} /> My Profile

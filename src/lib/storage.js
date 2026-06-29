@@ -46,6 +46,53 @@ export async function uploadFile(bucket, file, { userId = 'anon', onProgress } =
 }
 
 /**
+ * Upload a File to a PRIVATE Supabase Storage bucket and return only its
+ * storage path (never a public URL — the bucket isn't public).
+ *
+ * Used for paid digital goods (e.g. book PDFs) that must never be reachable
+ * by a guessable public link. The stored path is later turned into a
+ * short-lived signed URL by the `book-download` edge function, but only after
+ * a purchase is verified server-side.
+ *
+ * @param {string} bucket  private bucket id (e.g. 'course-books')
+ * @param {File}   file    browser File object
+ * @param {object} [opts]
+ * @param {string} [opts.userId]    used for the folder prefix
+ * @param {(pct:number)=>void} [opts.onProgress]  optional progress callback (0-100)
+ * @returns {Promise<{ path: string }>}
+ */
+export async function uploadFilePrivate(bucket, file, { userId = 'anon', onProgress } = {}) {
+  if (!file) throw new Error('No file provided')
+
+  const path = `${userId}/${Date.now()}-${slug(file.name)}`
+
+  let progressTimer
+  if (onProgress) {
+    let pct = 5
+    onProgress(pct)
+    progressTimer = setInterval(() => {
+      pct = Math.min(pct + 7, 90)
+      onProgress(pct)
+    }, 400)
+  }
+
+  const { error } = await supabase.storage.from(bucket).upload(path, file, {
+    cacheControl: '3600',
+    upsert: false,
+    contentType: file.type || undefined,
+  })
+
+  if (progressTimer) clearInterval(progressTimer)
+  if (onProgress) onProgress(100)
+
+  if (error) throw error
+
+  // Deliberately NO getPublicUrl: the bucket is private, so we persist the
+  // path and sign it on demand for verified buyers only.
+  return { path }
+}
+
+/**
  * Delete a file from a bucket. Pass either the storage path or a public URL.
  */
 export async function deleteFile(bucket, pathOrUrl) {
