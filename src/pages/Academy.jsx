@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
-  Clock, Star, BookOpen, PlayCircle, Video, Info, Award, Wifi,
-  FileText, Download, User as UserIcon,
+  Clock, Star, BookOpen, PlayCircle, Video, Info,
+  FileText, Download, GraduationCap, Library, User as UserIcon,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -9,7 +9,6 @@ import { getCourses, getEnrollments, getBooks, getMyBooks } from '../lib/databas
 import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../lib/usePageMeta'
 import { CourseGridSkeleton } from '../components/Skeleton'
-import RotatingWord from '../components/RotatingWord'
 import BookQuickView from '../components/BookQuickView'
 import '../styles/premium-hero.css'
 
@@ -20,14 +19,8 @@ const fadeUp = {
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
 }
-
-const WHY = [
-  { n: '01', Icon: Video, title: 'HD Video Lessons', body: 'Filmed at the bar, close-up on the technique, rewind any step until it clicks.' },
-  { n: '02', Icon: Award, title: 'Taught by Champions', body: 'Curriculum built by certified, competition-placed baristas from our Mulund cafe.' },
-  { n: '03', Icon: Wifi, title: 'Learn at Your Pace', body: 'Lifetime access on any device. Start a free lesson today, no equipment required.' },
-]
 
 export default function Academy() {
   const { user } = useAuth()
@@ -117,58 +110,39 @@ export default function Academy() {
   }
 
   return (
-    <div className="academy-page">
-      <header className="pg-hero">
-        <div className="pg-hero-bg" aria-hidden="true" style={{ backgroundImage: 'url(/pour-over-coffee.jpg)' }} />
-        <div className="pg-hero-scrim" aria-hidden="true" />
-        <motion.div
-          className="pg-hero-inner"
-          initial="hidden"
-          animate="visible"
-          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.13, delayChildren: 0.1 } } }}
-        >
-          <motion.div className="pg-eyebrow" variants={fadeUp}>Learn from the best</motion.div>
-          <motion.h1
-            className="pg-title"
-            variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            Master the art of <em><RotatingWord words={['espresso', 'latte art', 'pour-over', 'cupping', 'milk steaming']} /></em>
-          </motion.h1>
-          <motion.p className="pg-lede" variants={fadeUp}>
-            Professional HD video courses <em>and</em> downloadable PDF guides from certified,
-            competition-placed baristas — learn at your own pace, anywhere in India.
-          </motion.p>
+    <div className="academy-page acad-catalog">
+      <motion.header
+        className="acad-head"
+        initial="hidden"
+        animate="visible"
+        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}
+      >
+        <motion.span className="acad-head-eyebrow" variants={fadeUp}>
+          Mastermind Brews · Academy
+        </motion.span>
+        <motion.h1 className="acad-head-title" variants={fadeUp}>
+          Learn coffee, <em>properly.</em>
+        </motion.h1>
+        <motion.p className="acad-head-lede" variants={fadeUp}>
+          Professional HD video courses and downloadable PDF guides from certified,
+          competition-placed baristas — study at your own pace, anywhere in India.
+        </motion.p>
+        <motion.div className="acad-head-meta" variants={fadeUp}>
+          <span><GraduationCap size={14} /> <strong>{courses.length}</strong> {courses.length === 1 ? 'course' : 'courses'}</span>
+          <span className="acad-meta-dot" aria-hidden="true" />
+          <span><Library size={14} /> <strong>{books.length}</strong> {books.length === 1 ? 'guide' : 'guides'}</span>
+          <span className="acad-meta-dot" aria-hidden="true" />
+          <span>Lifetime access</span>
         </motion.div>
-      </header>
+      </motion.header>
 
-      <section className="band-dark acad-why-band">
-        <div className="container">
-          <div className="section-header center">
-            <div className="section-label">Why Learn With Us</div>
-            <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Built for real bar skills</h2>
-          </div>
-          <motion.div
-            className="acad-why"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            variants={staggerContainer}
-          >
-            {WHY.map(({ n, Icon, title, body }) => (
-              <motion.div className="acad-why-row" variants={fadeUp} key={n}>
-                <span className="acad-why-num" aria-hidden="true">{n}</span>
-                <span className="acad-why-icon" aria-hidden="true"><Icon size={22} /></span>
-                <div className="acad-why-text">
-                  <h3>{title}</h3>
-                  <p>{body}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+      <section className="academy-container acad-section" aria-labelledby="acad-courses-head">
+        <div className="acad-section-head">
+          <h2 id="acad-courses-head">Courses</h2>
+          {!loading && !error && courses.length > 0 && (
+            <span className="acad-section-count">{courses.length} {courses.length === 1 ? 'course' : 'courses'}</span>
+          )}
         </div>
-      </section>
-
-      <div className="academy-container">
         {loading ? (
           <CourseGridSkeleton count={6} />
         ) : error ? (
@@ -252,17 +226,18 @@ export default function Academy() {
             ))}
           </motion.div>
         )}
-      </div>
+      </section>
 
       {books.length > 0 && (
-        <div className="academy-container academy-books">
-          <div className="section-header center books-head">
-            <div className="section-label">Read &amp; Brew</div>
-            <h2 className="about-intro-title" style={{ textAlign: 'center' }}>Coffee books &amp; guides</h2>
-            <p className="books-sub">
-              Downloadable PDF eBooks &amp; guides — buy once and they&rsquo;re yours to keep,
-              re-download any time from your library.
-            </p>
+        <section className="academy-container acad-section academy-books" aria-labelledby="acad-books-head">
+          <div className="acad-section-head">
+            <div className="acad-section-headings">
+              <h2 id="acad-books-head">Books &amp; guides</h2>
+              <p className="acad-section-sub">
+                Downloadable PDF eBooks — buy once, yours to keep and re-download from your library any time.
+              </p>
+            </div>
+            <span className="acad-section-count">{books.length} {books.length === 1 ? 'title' : 'titles'}</span>
           </div>
           <motion.div
             className="courses-grid"
@@ -324,7 +299,7 @@ export default function Academy() {
               )
             })}
           </motion.div>
-        </div>
+        </section>
       )}
 
       <BookQuickView

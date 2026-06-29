@@ -4460,10 +4460,46 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .toggle-auth button:hover { color: var(--accent-deep); }
 
 /* ===== ADMIN PANEL ===== */
+/* ============================================================
+   ADMIN DASHBOARD — dark espresso surface (the admin's native
+   design). Every admin card, input, hover state and most of its
+   text was authored for a DARK theme (cream text on translucent-
+   white surfaces). The site's light base left all of that white-
+   on-light = invisible. Re-declaring the dark token set here —
+   .admin-page also wraps the admin modal — repaints every token-
+   driven surface and the hardcoded-white text back to correct
+   contrast in one place, instead of converting hundreds of values.
+   ============================================================ */
 .admin-page {
   display: grid;
   grid-template-columns: 240px 1fr;
   min-height: calc(100vh - var(--nav-height));
+
+  /* Surfaces */
+  --bg-primary:   #1C1310;
+  --bg-secondary: #20140F;
+  --bg-tertiary:  #281A13;
+  --bg-card:      #241712;
+  --bg-elevated:  #2A1B12;
+  --bg-surface:   #181009;
+  --bg-hover:     rgba(255, 244, 230, 0.06);
+
+  /* Ink → cream on dark */
+  --ink-100: #F7EDDE;
+  --ink-200: #EFE2D0;
+  --ink-300: #D8C5AE;
+  --ink-400: #B69E83;
+  --ink-500: #94785C;
+  --text-primary:   #F7EDDE;
+  --text-secondary: #D8C5AE;
+  --text-muted:     #B69E83;
+
+  /* Hairlines */
+  --border:        rgba(247, 237, 222, 0.12);
+  --border-light:  rgba(247, 237, 222, 0.20);
+  --border-strong: rgba(247, 237, 222, 0.30);
+
+  background: var(--bg-primary);
 }
 
 .admin-loading {
@@ -4611,12 +4647,12 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   font-size: 1.6rem;
   font-weight: 800;
   line-height: 1.2;
-  color: #000000 !important; /* Force black for absolute visibility */
+  color: var(--text-primary);
 }
 
 .admin-stat-label {
   font-size: 0.75rem;
-  color: var(--ink-300); /* Darker brown for legibility on cream bg */
+  color: var(--ink-300);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -4662,7 +4698,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 .admin-table td {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
-  color: #000000 !important; /* Force black for table data */
+  color: var(--text-secondary);
   vertical-align: middle;
 }
 
@@ -4671,7 +4707,7 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
 }
 
 .admin-table strong {
-  color: #000000 !important;
+  color: var(--text-primary);
 }
 
 .admin-table a {
@@ -11522,7 +11558,7 @@ textarea:focus-visible {
 }
 .payments-summary-card strong {
   font-size: 1.4rem;
-  color: #000000 !important;
+  color: var(--text-primary);
 }
 .payments-summary-card small {
   font-size: 0.78rem;

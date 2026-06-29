@@ -87,78 +87,79 @@
 @keyframes pg-mousedot { 0%{opacity:0;transform:translate(-50%,0)} 30%{opacity:1} 100%{opacity:0;transform:translate(-50%,11px)} }
 
 /* ============================================================
-   ACADEMY (Learn Coffee) — compact, formal variant. The shared
-   .pg-hero is cinematic/full-height on the Store; the learning
-   page wants far less scrolling, so we tighten the hero and turn
-   the old numbered ledger into a compact 3-up feature row. All
-   overrides are scoped to .academy-page so the Store is untouched.
+   ACADEMY (Learn Coffee) — refined course catalog. No cinematic
+   hero, no marquee, no dark band: a compact warm masthead, then
+   the courses grid, then the books grid. Reads like a formal
+   learning catalog. Academy sits on the light espresso surface,
+   so the design tokens below resolve to dark ink on cream.
    ============================================================ */
-.academy-page .pg-hero {
-  min-height: 0;
-  padding-top: calc(var(--nav-height) + clamp(44px, 6vw, 76px));
-  padding-bottom: clamp(40px, 6vw, 68px);
-}
-.academy-page .pg-title { font-size: clamp(2.3rem, 5.2vw, 4.3rem); }
-.academy-page .pg-lede { font-size: 1.04rem; }
+.acad-catalog { padding-bottom: clamp(56px, 8vw, 112px); }
 
-/* Pull the dark "why" band in tight against the hero and shrink its
-   own breathing room — it's a supporting strip, not a feature section. */
-.acad-why-band {
-  padding-top: clamp(44px, 5vw, 72px) !important;
-  padding-bottom: clamp(44px, 5vw, 72px) !important;
-  margin-top: 0 !important;
-  margin-bottom: clamp(28px, 4vw, 56px) !important;
+/* — Masthead — */
+.acad-head {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 92px) 32px clamp(6px, 2vw, 18px);
 }
-.acad-why-band .section-header { margin-bottom: clamp(8px, 2vw, 20px); }
+.acad-head-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 18px;
+}
+.acad-head-eyebrow::before {
+  content: ''; width: 26px; height: 1px;
+  background: var(--accent); opacity: 0.55;
+}
+.acad-head-title {
+  font-family: 'Fraunces', Georgia, serif; font-weight: 400;
+  font-size: clamp(2.4rem, 5.4vw, 4.4rem); line-height: 1.02; letter-spacing: -0.025em;
+  color: var(--text-primary); margin: 0;
+}
+.acad-head-title em { font-style: italic; color: var(--accent); }
+.acad-head-lede {
+  max-width: 60ch; margin: 20px 0 0;
+  font-size: 1.06rem; line-height: 1.65; color: var(--text-secondary);
+}
+.acad-head-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px;
+  margin-top: 26px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.acad-head-meta span { display: inline-flex; align-items: center; gap: 8px; }
+.acad-head-meta svg { color: var(--accent); }
+.acad-head-meta strong { color: var(--accent-deep); font-weight: 600; font-variant-numeric: tabular-nums; }
+.acad-meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.45; }
 
-/* "WHY LEARN WITH US" — compact 3-up feature row: icon chip, serif
-   title, one tight line of copy. Clean and formal, minimal scroll. */
-.acad-why {
-  max-width: 1080px;
-  margin: clamp(26px, 3.5vw, 40px) auto 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(24px, 3.5vw, 48px);
-}
-.acad-why-row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-}
-.acad-why-num { display: none; }
+/* — Catalog section heading (Courses / Books & guides) — */
+.acad-catalog .acad-section { padding-top: clamp(38px, 5.5vw, 68px); }
+.acad-catalog .academy-books { margin-top: 0; }   /* spacing handled by .acad-section */
 
-.acad-why-icon {
-  width: 50px; height: 50px; flex-shrink: 0;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 14px;
-  background: rgba(216, 154, 82, 0.14);
-  border: 1px solid rgba(216, 154, 82, 0.34);
-  color: var(--accent, #D89A52);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
+.acad-section-head {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 14px 24px;
+  padding-bottom: 16px; margin-bottom: clamp(22px, 3vw, 34px);
+  border-bottom: 1px solid var(--border);
 }
-.acad-why-row:hover .acad-why-icon { transform: translateY(-3px); background: rgba(216, 154, 82, 0.24); }
-
-.acad-why-text h3 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 500; font-size: clamp(1.2rem, 1.9vw, 1.5rem); line-height: 1.15;
-  letter-spacing: -0.01em; margin: 0 0 6px;
-  color: var(--ink-100, #F4E9D8);
+.acad-section-headings { min-width: 0; }
+.acad-section-head h2 {
+  font-family: 'Fraunces', Georgia, serif; font-weight: 500;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem); line-height: 1.05; letter-spacing: -0.015em;
+  color: var(--text-primary); margin: 0;
 }
-.acad-why-text p {
-  margin: 0; line-height: 1.6; font-size: 0.95rem; max-width: 38ch;
-  color: var(--ink-300, rgba(244, 233, 216, 0.78));
+.acad-section-sub {
+  margin: 8px 0 0; max-width: 56ch;
+  font-size: 0.94rem; line-height: 1.55; color: var(--text-muted);
+}
+.acad-section-count {
+  flex-shrink: 0; padding-bottom: 3px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); white-space: nowrap;
 }
 
-@media (max-width: 760px) {
-  .acad-why { grid-template-columns: 1fr; gap: 22px; }
-  .acad-why-row {
-    flex-direction: row; align-items: flex-start; gap: 18px;
-    padding-bottom: 22px; border-bottom: 1px solid rgba(247, 237, 222, 0.14);
-  }
-  .acad-why-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .acad-why-icon { width: 44px; height: 44px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .acad-why-icon { transition: none; }
+@media (max-width: 560px) {
+  .acad-section-head { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
