@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
-import CountUp from '../components/CountUp'
+import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
+import TiltCard from '../components/TiltCard'
 import '../styles/about-editorial.css'
 
 const ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -47,13 +48,6 @@ const PROJECTS = [
   { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', tag: 'Coffee Program', body: `Beachside coffee with intent — from piña colada cold coffee to proper espresso service.`, details: `Designed custom bar layout for beachside humidity, and established an end-to-end green bean procurement system.` },
 ]
 
-/* Animated impact counters for the consultancy work. */
-const CONS_STATS = [
-  { to: 6, label: 'Cafe programs built', sub: 'Across India' },
-  { to: 5, label: 'Cities served', sub: 'Mumbai · Surat · Goa & more' },
-  { to: 5, label: 'Areas of expertise', sub: 'Beans to SOPs' },
-  { to: 100, suffix: '%', label: 'Hands-on delivery', sub: 'On-site & remote' },
-]
 
 /* Editorial photo grid — 6 shots from the cafes we've built programs with. */
 const CONS_GRID = [
@@ -85,69 +79,6 @@ const SUITED = [
    exactly one step is on screen at FULL opacity (always readable), and it only
    changes once its scroll band is actually reached, no early/partial fades and
    no out-of-[0,1] WAAPI offset risk. The crossfade itself is plain CSS. */
-/* Accordion project listing — hupr.ca Spheres d'innovation pattern.
-   Each row shows project name + tag + location; click to expand
-   an image + description panel. One row open at a time. */
-function ProjectAccordion({ projects }) {
-  const [open, setOpen] = useState(null)
-  return (
-    <div className="cons-accordion">
-      {projects.map((p, i) => {
-        const isOpen = open === i
-        return (
-          <div key={p.name} className={`cons-acc-item${isOpen ? ' is-open' : ''}`}>
-            <button
-              className="cons-acc-trigger"
-              onClick={() => setOpen(isOpen ? null : i)}
-              aria-expanded={isOpen}
-            >
-              <span className="cons-acc-num">0{i + 1}</span>
-              <div className="cons-acc-meta">
-                <span className="cons-acc-tag">{p.tag}</span>
-                <h3 className="cons-acc-name">{p.name}</h3>
-              </div>
-              <span className="cons-acc-loc"><MapPin size={11} /> {p.loc}</span>
-              <motion.span
-                className="cons-acc-arrow"
-                animate={{ rotate: isOpen ? 45 : 0 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <ArrowRight size={16} />
-              </motion.span>
-            </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div
-                  key="panel"
-                  className="cons-acc-panel"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ overflow: 'hidden' }}
-                >
-                  <div className="cons-acc-inner">
-                    <div className="cons-acc-img-wrap">
-                      <img src={p.img} alt={`${p.name}, ${p.loc}`} loading="lazy" />
-                    </div>
-                    <div>
-                      <p className="cons-acc-desc">{p.body}</p>
-                      <div className="cons-acc-scope">
-                        <span className="cons-acc-scope-label">Scope of Delivery</span>
-                        <p className="cons-acc-scope-body">{p.details}</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
 function PinnedProcess() {
   const ref = useRef(null)
   const reduced = useReducedMotion()
@@ -306,36 +237,34 @@ export default function Consultancy() {
         </div>
       </section>
 
-      {/* ===== OUR PROJECTS (accordion, hupr.ca Spheres style) ===== */}
+      {/* ===== OUR PROJECTS (draggable tilt showcase) ===== */}
       <section className="ed-projects cons-projects">
         <div className="ed-container">
           <div className="ed-section-label">Our Projects</div>
           <KineticHeading as="h2" className="ed-section-title">Spaces we&rsquo;ve shaped.</KineticHeading>
-          <p className="ed-journey-kicker">Six cafes, six coffee programs built from the ground up. Click any row to open the full story.</p>
+          <p className="ed-journey-kicker">Drag through the cafes we&rsquo;ve built coffee programs with&mdash;each card carries its own scope of delivery.</p>
         </div>
-        <ProjectAccordion projects={PROJECTS} />
-      </section>
-
-      {/* ===== IMPACT (animated counters) ===== */}
-      <section className="ed-stats cons-stats">
-        <div className="ed-container">
-          <div className="ed-section-label">The Work, in Numbers</div>
-          <div className="ed-stats-grid">
-            {CONS_STATS.map((s, i) => (
-              <motion.div
-                key={s.label}
-                className="ed-stat"
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <span className="ed-stat-num"><CountUp to={s.to} suffix={s.suffix || ''} separator={s.separator ?? ','} /></span>
-                <span className="ed-stat-label">{s.label}</span>
-                {s.sub && <span className="ed-stat-sub">{s.sub}</span>}
-              </motion.div>
+        <div data-cursor="drag">
+          <DragScroller className="cons-show-track" autoDrift={0.2}>
+            {PROJECTS.map((p, i) => (
+              <TiltCard key={p.name} className="cons-show-card" max={6} scale={1.02} glare={false}>
+                <div className="cons-show-media">
+                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" draggable="false" />
+                  <span className="cons-show-index">0{i + 1}</span>
+                  <span className="cons-show-loc"><MapPin size={11} /> {p.loc}</span>
+                </div>
+                <div className="cons-show-body">
+                  <span className="cons-show-tag">{p.tag}</span>
+                  <h3 className="cons-show-title">{p.name}</h3>
+                  <p className="cons-show-desc">{p.body}</p>
+                  <div className="cons-show-scope">
+                    <span className="cons-show-scope-label">Scope of Delivery</span>
+                    <p>{p.details}</p>
+                  </div>
+                </div>
+              </TiltCard>
             ))}
-          </div>
+          </DragScroller>
         </div>
       </section>
 

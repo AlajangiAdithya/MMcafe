@@ -6,18 +6,10 @@ import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
-import CountUp from '../components/CountUp'
 import KineticHeading from '../components/KineticHeading'
 import InstagramTabs from '@/components/ui/instagram-tabs'
 import '../styles/about-editorial.css'
 
-/* Animated stat counters, the craft measured in certifications + milestones. */
-const ABOUT_STATS = [
-  { to: 4, label: 'SCA & specialty certifications', sub: 'Barista · Brewing · CVA · Q Processing' },
-  { to: 3, label: 'Countries trained at origin', sub: 'India · Thailand · Ethiopia' },
-  { to: 4, suffix: 'th', label: 'Indian Barista Championship', sub: 'Runner-Up, 2026' },
-  { to: 2026, separator: '', label: 'The academy, founded', sub: 'Mulund, Mumbai' },
-]
 
 /* Draggable journey timeline, physiotherapy → competition stage → the academy. */
 const ABOUT_JOURNEY = [
@@ -230,31 +222,6 @@ export default function AboutUs() {
           </div>
         </StoryPanel>
       </div>
-
-      {/* ===== BY THE NUMBERS (animated counters) ===== */}
-      <section className="ed-stats">
-        <div className="ed-container">
-          <div className="ed-section-label">The Craft, Measured</div>
-          <div className="ed-stats-grid">
-            {ABOUT_STATS.map((s, i) => (
-              <motion.div
-                key={s.label}
-                className="ed-stat"
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <span className="ed-stat-num">
-                  <CountUp to={s.to} suffix={s.suffix || ''} separator={s.separator ?? ','} />
-                </span>
-                <span className="ed-stat-label">{s.label}</span>
-                {s.sub && <span className="ed-stat-sub">{s.sub}</span>}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ===== THREE PRINCIPLES (paradisoinstitute.org-style pillars) ===== */}
       <section className="ed-pillars">
