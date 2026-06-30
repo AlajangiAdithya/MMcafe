@@ -1154,15 +1154,15 @@ function SalesChart({ series }) {
       <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="admin-chart">
         <defs>
           <linearGradient id="rev" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#4A90D9" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#4A90D9" stopOpacity="0" />
+            <stop offset="0%" stopColor="#D89A52" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#D89A52" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={area} fill="url(#rev)" />
-        <path d={path} fill="none" stroke="#4A90D9" strokeWidth="2" />
+        <path d={path} fill="none" stroke="#D89A52" strokeWidth="2" />
         {series.map((s, i) => (
           <g key={i}>
-            <circle cx={PAD + i * xStep} cy={yFor(s.total)} r="3" fill="#4A90D9" />
+            <circle cx={PAD + i * xStep} cy={yFor(s.total)} r="3" fill="#ECBC7C" />
           </g>
         ))}
       </svg>

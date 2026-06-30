@@ -153,7 +153,7 @@ function AppShell() {
       <Toaster
         position="bottom-right"
         toastOptions={{
-          style: { background: '#1a1a2e', color: '#fff', border: '1px solid #2a2a4a' },
+          style: { background: '#241712', color: '#F7EDDE', border: '1px solid rgba(216, 154, 82, 0.30)' },
           duration: 3500,
         }}
         containerClassName="mm-toaster"
