@@ -873,11 +873,11 @@ function DashboardTab({
 }) {
   const paidEnrollments = enrollments.filter(e => !!e.payment_id)
   const stats = [
-    { label: 'Total Users', value: users.length, icon: UserCheck, color: '#4A90D9' },
-    { label: 'Products', value: products.length, icon: Package, color: '#3AAA3A' },
-    { label: 'Courses', value: courses.length, icon: Video, color: '#D4647A' },
-    { label: 'Books', value: books.length, icon: Library, color: '#B88E2F' },
-    { label: 'Orders', value: orders.length, icon: ShoppingBag, color: '#F2A73B' },
+    { label: 'Total Users', value: users.length, icon: UserCheck, color: '#1A1A1A' },
+    { label: 'Products', value: products.length, icon: Package, color: '#1A1A1A' },
+    { label: 'Courses', value: courses.length, icon: Video, color: '#1A1A1A' },
+    { label: 'Books', value: books.length, icon: Library, color: '#1A1A1A' },
+    { label: 'Orders', value: orders.length, icon: ShoppingBag, color: '#1A1A1A' },
   ]
 
   // Build last-14-days revenue series with separate product / course bands.
@@ -935,7 +935,7 @@ function DashboardTab({
 
       <div className="admin-stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
         <div className="admin-stat-card">
-          <div className="admin-stat-icon" style={{ background: '#3AAA3A15', color: '#3AAA3A' }}>
+          <div className="admin-stat-icon" style={{ background: '#1A1A1A12', color: '#1A1A1A' }}>
             <DollarSign size={22} />
           </div>
           <div className="admin-stat-info">
@@ -944,7 +944,7 @@ function DashboardTab({
           </div>
         </div>
         <div className="admin-stat-card">
-          <div className="admin-stat-icon" style={{ background: '#4A90D915', color: '#4A90D9' }}>
+          <div className="admin-stat-icon" style={{ background: '#1A1A1A12', color: '#1A1A1A' }}>
             <Package size={22} />
           </div>
           <div className="admin-stat-info">
@@ -953,7 +953,7 @@ function DashboardTab({
           </div>
         </div>
         <div className="admin-stat-card">
-          <div className="admin-stat-icon" style={{ background: '#D4647A15', color: '#D4647A' }}>
+          <div className="admin-stat-icon" style={{ background: '#1A1A1A12', color: '#1A1A1A' }}>
             <GraduationCap size={22} />
           </div>
           <div className="admin-stat-info">
@@ -962,7 +962,7 @@ function DashboardTab({
           </div>
         </div>
         <div className="admin-stat-card">
-          <div className="admin-stat-icon" style={{ background: '#F2A73B15', color: '#F2A73B' }}>
+          <div className="admin-stat-icon" style={{ background: '#1A1A1A12', color: '#1A1A1A' }}>
             <Star size={22} />
           </div>
           <div className="admin-stat-info">
@@ -1154,15 +1154,15 @@ function SalesChart({ series }) {
       <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="admin-chart">
         <defs>
           <linearGradient id="rev" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#D89A52" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#D89A52" stopOpacity="0" />
+            <stop offset="0%" stopColor="#1A1A1A" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#1A1A1A" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={area} fill="url(#rev)" />
-        <path d={path} fill="none" stroke="#D89A52" strokeWidth="2" />
+        <path d={path} fill="none" stroke="#1A1A1A" strokeWidth="2" />
         {series.map((s, i) => (
           <g key={i}>
-            <circle cx={PAD + i * xStep} cy={yFor(s.total)} r="3" fill="#ECBC7C" />
+            <circle cx={PAD + i * xStep} cy={yFor(s.total)} r="3" fill="#1A1A1A" />
           </g>
         ))}
       </svg>
@@ -2766,7 +2766,7 @@ function BaristasTab({ baristas, onApprove, onDelete, onView }) {
                     <td>{new Date(b.created_at).toLocaleDateString()}</td>
                     <td>
                       {b.hired_at
-                        ? <span className="status-badge status-confirmed" title={`Hired on ${new Date(b.hired_at).toLocaleDateString()}`} style={{ background: 'rgba(34,197,94,0.15)', color: '#4ade80' }}>Hired ✓</span>
+                        ? <span className="status-badge status-confirmed" title={`Hired on ${new Date(b.hired_at).toLocaleDateString()}`} style={{ background: '#111111', color: '#FFFFFF' }}>Hired ✓</span>
                         : b.approved
                           ? <button onClick={() => onApprove(b, false)} className="status-badge status-confirmed" title="Click to hide" style={{ cursor: 'pointer', border: 'none' }}>Approved</button>
                           : <button onClick={() => onApprove(b, true)} className="status-badge status-cancelled" title="Click to approve" style={{ cursor: 'pointer', border: 'none' }}>Pending</button>}
@@ -2836,7 +2836,7 @@ function MappingsTab({ paidCafes, baristas, onManage, onRevoke }) {
           <h1>Cafe Mappings</h1>
           <p>
             {visible.length} cafe{visible.length === 1 ? '' : 's'} shown • {filledSlots} of {totalSlots} slots filled
-            {cafesWaiting > 0 && <> • <strong style={{ color: '#f59e0b' }}>{cafesWaiting} waiting for assignments</strong></>}
+            {cafesWaiting > 0 && <> • <strong style={{ color: '#111111' }}>{cafesWaiting} waiting for assignments</strong></>}
           </p>
         </div>
       </div>
@@ -2903,7 +2903,7 @@ function MappingsTab({ paidCafes, baristas, onManage, onRevoke }) {
                     </div>
                   )}
                   {cafe.revoked_at && (
-                    <div style={{ color: '#f87171' }}>
+                    <div style={{ color: '#555555' }}>
                       Revoked {new Date(cafe.revoked_at).toLocaleDateString()}
                       {cafe.revoked_reason ? `: ${cafe.revoked_reason}` : ''}
                     </div>

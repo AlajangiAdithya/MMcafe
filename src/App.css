@@ -4475,42 +4475,49 @@ h4, h5, h6 { font-weight: 600; letter-spacing: -0.01em; }
   grid-template-columns: 240px 1fr;
   min-height: calc(100vh - var(--nav-height));
 
-  /* Surfaces */
-  --bg-primary:   #1C1310;
-  --bg-secondary: #20140F;
-  --bg-tertiary:  #281A13;
-  --bg-card:      #241712;
-  --bg-elevated:  #2A1B12;
-  --bg-surface:   #181009;
-  --bg-hover:     rgba(255, 244, 230, 0.06);
+  /* ===== BLACK & WHITE ADMIN =====
+     Every admin token below is re-declared as a neutral grayscale value,
+     scoped to .admin-page only (the rest of the site keeps its :root
+     palette). This single block flips all token-driven admin surfaces,
+     text, borders and accents to a clean light monochrome. */
 
-  /* Ink → cream on dark */
-  --ink-100: #F7EDDE;
-  --ink-200: #EFE2D0;
-  --ink-300: #D8C5AE;
-  --ink-400: #B69E83;
-  --ink-500: #94785C;
-  --text-primary:   #F7EDDE;
-  --text-secondary: #D8C5AE;
-  --text-muted:     #B69E83;
+  /* Surfaces → white / light gray */
+  --bg-primary:   #F4F4F5;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary:  #ECECEE;
+  --bg-card:      #FFFFFF;
+  --bg-elevated:  #FFFFFF;
+  --bg-surface:   #FFFFFF;
+  --bg-hover:     rgba(0, 0, 0, 0.04);
 
-  /* Hairlines */
-  --border:        rgba(247, 237, 222, 0.12);
-  --border-light:  rgba(247, 237, 222, 0.20);
-  --border-strong: rgba(247, 237, 222, 0.30);
+  /* Ink → near-black on light */
+  --ink-100: #141414;
+  --ink-200: #1F1F1F;
+  --ink-300: #3D3D3D;
+  --ink-400: #6B6B6B;
+  --ink-500: #8A8A8A;
+  --text-primary:   #141414;
+  --text-secondary: #3D3D3D;
+  --text-muted:     #6B6B6B;
 
-  /* Accent → bright caramel-gold tuned for the dark espresso surface.
-     The :root gold (#B88E2F) is calibrated for light backgrounds and
-     reads muddy here, so brighten it locally. */
-  --accent:       #D89A52;
-  --accent-deep:  #ECBC7C;
-  --accent-soft:  #ECBC7C; /* light gold so button/ghost hovers lighten, not darken */
-  --accent-glow:  rgba(216, 154, 82, 0.28);
-  --gold-accent:  #D89A52;
-  /* Pull the stray brand blues onto the warm axis so nothing renders
-     cold-blue against the espresso panels. */
-  --mm-blue:       #D89A52;
-  --mm-blue-light: #ECBC7C;
+  /* Hairlines → black at low alpha (higher alpha = more visible) */
+  --border:        rgba(0, 0, 0, 0.10);
+  --border-light:  rgba(0, 0, 0, 0.16);
+  --border-strong: rgba(0, 0, 0, 0.26);
+
+  /* Accent → black. Everything that used gold (borders, focus rings,
+     active states, button fills) now reads as neutral black/gray. */
+  --accent:       #1A1A1A;
+  --accent-deep:  #000000;
+  --accent-soft:  #333333;
+  --accent-glow:  rgba(0, 0, 0, 0.14);
+  --gold-accent:  #1A1A1A;
+  --shadow-accent: 0 8px 22px rgba(0, 0, 0, 0.14);
+  /* Neutralize the stray brand blue/pink so nothing renders in colour. */
+  --mm-blue:       #1A1A1A;
+  --mm-blue-light: #333333;
+  --mm-pink:       #1A1A1A;
+  --mm-pink-light: #333333;
 
   background: var(--bg-primary);
 }
@@ -16522,48 +16529,54 @@ select:focus:not([data-no-glass]) {
 }
 
 /* ============================================================
-   ADMIN — DARK ESPRESSO COHESION (final pass, wins the cascade)
-   An earlier experiment forced white panels here while the admin's
-   ink tokens stayed cream — that rendered cream-on-white text
-   (invisible). This restores ONE consistent dark-espresso surface
-   set: warm panels, cream ink, gold accents. Loaded last so it is
-   the single source of truth for admin colour.
+   ADMIN — BLACK & WHITE (final pass, wins the cascade)
+   The admin was a dark espresso + gold theme. This strips every
+   hue: white / light-gray surfaces, near-black ink, gray hairlines,
+   black accents. Loaded last with !important so it is the single
+   source of truth for admin colour, and it also neutralizes the
+   leftover gold gradients/glows from the earlier polish layer.
+   Scoped entirely to .admin-page, so the rest of the site is
+   untouched.
    ============================================================ */
 .admin-page {
-  background:
-    radial-gradient(900px 520px at 0% -10%, rgba(216, 154, 82, 0.10), transparent 60%),
-    radial-gradient(720px 420px at 100% 0%, rgba(122, 74, 36, 0.16), transparent 55%),
-    var(--bg-primary) !important;
+  background: var(--bg-primary) !important;
   color: var(--ink-200);
 }
 
 /* ----- Sidebar ----- */
 .admin-sidebar {
-  background: linear-gradient(180deg, #251710, #18100A) !important;
+  background: #FFFFFF !important;
   border-right: 1px solid var(--border) !important;
   color: var(--ink-200);
 }
 .admin-sidebar-header { color: var(--ink-100) !important; border-bottom: 1px solid var(--border) !important; }
-.admin-sidebar-header svg { color: var(--accent); }
+.admin-sidebar-header svg { color: var(--ink-100) !important; filter: none !important; }
 .admin-sidebar-footer { border-top: 1px solid var(--border) !important; }
 .admin-nav-item { color: var(--ink-300) !important; }
-.admin-nav-item svg { color: var(--ink-400); }
-.admin-nav-item:hover { background: rgba(247, 237, 222, 0.05) !important; color: var(--ink-100) !important; }
-.admin-nav-item:hover svg { color: var(--accent); }
+.admin-nav-item svg { color: var(--ink-400) !important; }
+.admin-nav-item:hover { background: rgba(0, 0, 0, 0.05) !important; color: var(--ink-100) !important; transform: none !important; }
+.admin-nav-item:hover svg { color: var(--ink-100) !important; }
 .admin-nav-item.active {
-  background: linear-gradient(90deg, rgba(216, 154, 82, 0.20), rgba(216, 154, 82, 0.04)) !important;
-  color: #FBF3E6 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #111111 !important;
+  box-shadow: none !important;
 }
-.admin-nav-item.active svg { color: var(--accent-deep); }
+.admin-nav-item.active svg { color: #111111 !important; }
+.admin-nav-item.active::before { background: #111111 !important; box-shadow: none !important; }
 
 /* ----- Page header ----- */
+.admin-page-header { border-bottom: 1px solid var(--border) !important; }
+.admin-page-header::after { background: rgba(0, 0, 0, 0.22) !important; }
 .admin-page-header h1 {
-  background: linear-gradient(180deg, #FBF3E6, #D2BC9C);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: none !important;
+  -webkit-text-fill-color: #111111 !important;
+  color: #111111 !important;
 }
-.admin-page-header p { color: var(--ink-300); }
+.admin-page-header p { color: var(--ink-300) !important; }
+
+/* ----- Section heading accent bar ----- */
+.admin-section h2 { color: var(--ink-100) !important; }
+.admin-section h2::before { background: #111111 !important; }
 
 /* ----- Panels (cards, tables, modal surfaces) ----- */
 .admin-stat-card,
@@ -16573,58 +16586,98 @@ select:focus:not([data-no-glass]) {
 .payments-summary-card,
 .admin-empty,
 .admin-order-detail-section {
-  background: linear-gradient(155deg, rgba(247, 237, 222, 0.055), rgba(247, 237, 222, 0.018)) !important;
-  border: 1px solid var(--border-light) !important;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.30);
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
 }
+.admin-stat-card::before { display: none !important; }
+.admin-stat-card:hover { border-color: var(--border-strong) !important; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10) !important; }
 .admin-stat-label { color: var(--ink-300) !important; }
+.admin-stat-value {
+  background: none !important;
+  -webkit-text-fill-color: #111111 !important;
+  color: #111111 !important;
+}
 
 /* ----- Tables ----- */
 .admin-table { color: var(--ink-200); }
-.admin-table th { color: var(--ink-300) !important; border-bottom: 1px solid var(--border) !important; }
+.admin-table th { background: #F4F4F5 !important; color: var(--ink-300) !important; border-bottom: 1px solid var(--border) !important; }
 .admin-table td { border-bottom: 1px solid var(--border) !important; color: var(--ink-200); }
-.admin-table tr:hover td { background: rgba(216, 154, 82, 0.07); }
+.admin-table tr:hover td,
+.admin-table tbody tr:hover td { background: rgba(0, 0, 0, 0.04) !important; }
 .admin-table strong { color: var(--ink-100) !important; }
+.admin-thumb-placeholder { background: #F0F0F1 !important; border: 1px solid var(--border) !important; color: var(--ink-400) !important; }
+
+/* ----- Action buttons ----- */
+.admin-action-btn {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-300) !important;
+}
+.admin-action-btn:hover { background: rgba(0, 0, 0, 0.05) !important; color: var(--ink-100) !important; }
+.admin-action-btn.edit:hover {
+  background: #111111 !important;
+  border-color: #111111 !important;
+  color: #FFFFFF !important;
+}
+.admin-action-btn.delete:hover {
+  background: #FFFFFF !important;
+  border-color: #111111 !important;
+  color: #111111 !important;
+}
 
 /* ----- Toolbar / search / filters / pager ----- */
 .admin-search,
 .admin-filter-select,
 .admin-pagesize select,
 .admin-filter-chip {
-  background: rgba(247, 237, 222, 0.04) !important;
+  background: #FFFFFF !important;
   border: 1px solid var(--border) !important;
   color: var(--ink-200) !important;
 }
 .admin-search input { color: var(--ink-100); }
 .admin-search input::placeholder { color: var(--ink-400); }
-.admin-filter-chip:hover { background: rgba(247, 237, 222, 0.08) !important; color: var(--ink-100) !important; }
+.admin-search:focus-within {
+  border-color: #111111 !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.10) !important;
+}
+.admin-filter-select:hover,
+.admin-pagesize select:hover { border-color: var(--border-strong) !important; }
+.admin-filter-chip:hover { background: rgba(0, 0, 0, 0.05) !important; color: var(--ink-100) !important; }
+.admin-filter-chip.active {
+  background: #111111 !important;
+  border-color: #111111 !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
 .admin-pager-btn {
-  background: rgba(247, 237, 222, 0.04) !important;
+  background: #FFFFFF !important;
   border: 1px solid var(--border) !important;
   color: var(--ink-200);
 }
-.admin-pager-btn:hover:not(:disabled) { background: rgba(216, 154, 82, 0.12) !important; border-color: var(--accent) !important; }
+.admin-pager-btn:hover:not(:disabled) { background: rgba(0, 0, 0, 0.06) !important; border-color: #111111 !important; }
 .admin-pager-info { color: var(--ink-400); }
 
 /* ----- Modal ----- */
-.admin-modal-overlay { background: rgba(14, 9, 5, 0.72) !important; }
+.admin-modal-overlay { background: rgba(0, 0, 0, 0.55) !important; }
 .admin-modal {
-  background: linear-gradient(180deg, #241712, #18100A) !important;
-  border: 1px solid var(--border-light) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
   color: var(--ink-200);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.30) !important;
 }
 .admin-modal-header { border-bottom: 1px solid var(--border) !important; }
 .admin-modal-header h2 { color: var(--ink-100); }
-.admin-modal-footer { border-top: 1px solid var(--border) !important; background: rgba(247, 237, 222, 0.02) !important; }
+.admin-modal-footer { border-top: 1px solid var(--border) !important; background: #FAFAFA !important; }
 
 /* ----- Form fields ----- */
 .admin-form-group label { color: var(--ink-300) !important; }
 .admin-form-group input,
 .admin-form-group select,
 .admin-form-group textarea {
-  background: rgba(247, 237, 222, 0.04) !important;
-  border: 1px solid var(--border-light) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border) !important;
   color: var(--ink-100) !important;
 }
 .admin-form-group input::placeholder,
@@ -16632,13 +16685,105 @@ select:focus:not([data-no-glass]) {
 .admin-form-group input:focus,
 .admin-form-group select:focus,
 .admin-form-group textarea:focus {
-  border-color: var(--accent) !important;
-  background: rgba(216, 154, 82, 0.06) !important;
-  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+  border-color: #111111 !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.10) !important;
 }
 
+/* ----- Payments summary value (gradient text → solid black) ----- */
+.payments-summary-card strong {
+  background: none !important;
+  -webkit-text-fill-color: #111111 !important;
+  color: #111111 !important;
+}
+
+/* ----- Buttons (admin-scoped: black fill, white text) ----- */
+.admin-page .btn-blue,
+.admin-page .btn-gold,
+.admin-page .btn-pink,
+.admin-page .btn-primary {
+  background: #111111 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16) !important;
+}
+.admin-page .btn-blue:hover,
+.admin-page .btn-gold:hover,
+.admin-page .btn-pink:hover,
+.admin-page .btn-primary:hover {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}
+.admin-page .btn-ghost { color: var(--ink-300) !important; }
+.admin-page .btn-ghost:hover { color: #111111 !important; }
+.admin-page .btn-success { background: #2F2F2F !important; color: #FFFFFF !important; }
+
+/* ----- Feature / filter toggles ----- */
+.admin-feature-toggle.on { background: #111111 !important; color: #FFFFFF !important; border-color: #111111 !important; }
+.admin-filter-toggle.active { background: rgba(0, 0, 0, 0.06) !important; border-color: #111111 !important; color: #111111 !important; }
+.admin-feature-check input[type="checkbox"] { accent-color: #111111 !important; }
+
+/* ----- Status badges (admin only — kept distinguishable in grayscale) ----- */
+.admin-page .status-badge { border: 1px solid transparent; }
+.admin-page .status-confirmed,
+.admin-page .status-delivered { background: #111111 !important; color: #FFFFFF !important; }
+.admin-page .status-pending,
+.admin-page .status-processing,
+.admin-page .status-shipped { background: #E4E4E6 !important; color: #1F1F1F !important; }
+.admin-page .status-cancelled { background: #FFFFFF !important; color: #555555 !important; border-color: rgba(0, 0, 0, 0.28) !important; }
+.admin-page .admin-status-select.status-confirmed,
+.admin-page .admin-status-select.status-processing,
+.admin-page .admin-status-select.status-shipped,
+.admin-page .admin-status-select.status-delivered,
+.admin-page .admin-status-select.status-cancelled { color: var(--ink-100) !important; }
+
+/* ----- Info banner ----- */
+.admin-info-banner { background: #F4F4F5 !important; border: 1px solid var(--border) !important; color: var(--ink-200) !important; }
+.admin-info-banner svg { color: #111111 !important; }
+
 /* ----- Misc ----- */
-.admin-empty svg { opacity: 0.5; color: var(--accent); }
-.admin-code { background: rgba(247, 237, 222, 0.05) !important; color: var(--ink-200) !important; border: 1px solid var(--border) !important; }
+.admin-empty svg { opacity: 0.45; color: var(--ink-400) !important; }
+.admin-code { background: #F4F4F5 !important; color: var(--ink-200) !important; border: 1px solid var(--border) !important; }
 .admin-chart-axis { color: var(--ink-400) !important; }
 .admin-loading { color: var(--ink-400); }
+
+/* ----- Admin status pills (grayscale, kept distinguishable) ----- */
+.admin-page .mapping-pill { background: #EFEFF0 !important; color: #1F1F1F !important; }
+.admin-page .mapping-pill.pill-ok,
+.admin-page .mapping-pill.pill-active,
+.admin-page .pill-active { background: #111111 !important; color: #FFFFFF !important; }
+.admin-page .mapping-pill.pill-mid,
+.admin-page .mapping-pill.pill-warn,
+.admin-page .mapping-pill.pill-expiring,
+.admin-page .pill-expiring,
+.admin-page .pill-type-order,
+.admin-page .pill-type-course { background: #E4E4E6 !important; color: #1F1F1F !important; }
+.admin-page .mapping-pill.pill-expired,
+.admin-page .mapping-pill.pill-revoked,
+.admin-page .pill-expired,
+.admin-page .pill-revoked { background: #FFFFFF !important; color: #555555 !important; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22) !important; }
+
+/* ----- Admin banners / suggestions / briefs (grayscale) ----- */
+.admin-page .field-suggestion { background: #F4F4F5 !important; border-color: rgba(0, 0, 0, 0.16) !important; color: var(--ink-200) !important; }
+.admin-page .field-suggestion:hover { background: #ECECEE !important; }
+.admin-page .access-banner-warn,
+.admin-page .access-banner-info { background: #F4F4F5 !important; border-color: rgba(0, 0, 0, 0.16) !important; color: var(--ink-200) !important; }
+.admin-page .access-banner-warn span { color: var(--ink-300) !important; }
+.admin-page .mapping-brief { background: #F4F4F5 !important; border-color: rgba(0, 0, 0, 0.12) !important; }
+.admin-page .mapping-brief-empty { background: #F4F4F5 !important; border-color: rgba(0, 0, 0, 0.16) !important; color: var(--ink-300) !important; }
+
+/* ----- Admin file uploader (was blue) ----- */
+.admin-page .file-uploader-drop:hover,
+.admin-page .file-uploader-drop.drag-over,
+.admin-page .file-uploader-drop.uploading { background: rgba(0, 0, 0, 0.04) !important; border-color: #111111 !important; color: #111111 !important; }
+
+/* ----- Admin danger buttons / confirm (only when inside admin) ----- */
+.admin-page .btn-danger { background: #111111 !important; color: #FFFFFF !important; border-color: #111111 !important; }
+.admin-page .btn-danger:hover { background: #000000 !important; }
+
+/* ----- Admin scrollbars (dark thumb on light surface) ----- */
+.admin-sidebar::-webkit-scrollbar-thumb,
+.admin-main::-webkit-scrollbar-thumb,
+.admin-modal::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.18) !important; }
+.admin-sidebar::-webkit-scrollbar-thumb:hover,
+.admin-main::-webkit-scrollbar-thumb:hover,
+.admin-modal::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.30) !important; }
