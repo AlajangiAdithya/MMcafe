@@ -8,6 +8,7 @@ import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
 import TiltCard from '../components/TiltCard'
+import MarqueeStrip from '../components/MarqueeStrip'
 import '../styles/about-editorial.css'
 
 const ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -29,6 +30,15 @@ const CONS_CRUMB = {
     { '@type': 'ListItem', position: 2, name: 'Our Projects', item: 'https://www.mastermindbrews.com/consultancy' },
   ],
 }
+
+const CAFE_MARQUEE = [
+  { en: 'COCOA EXPERIENCE CAFE · VIRAR' },
+  { en: 'GROUNDED · BANDRA' },
+  { en: 'AFFOGATO · KHAR' },
+  { en: "CHURN'D · SURAT" },
+  { en: 'INDULGE CREAMERY · BANDRA' },
+  { en: 'GERANIUM HAVEN · GOA' },
+]
 
 const EXPERTISE = [
   { title: 'Understanding Coffee', body: 'In-depth training on the basics of coffee and the principles of brewing, so your team works from real knowledge.' },
@@ -196,6 +206,9 @@ export default function Consultancy() {
         </div>
       </header>
 
+      {/* ===== CAFE NAME MARQUEE ===== */}
+      <MarqueeStrip items={CAFE_MARQUEE} variant="dark" speed={28} />
+
       {/* ===== FOUNDER INTRO ===== */}
       <section className="cons-intro">
         <div className="ed-container">
@@ -212,20 +225,22 @@ export default function Consultancy() {
       </section>
 
       {/* ===== EXPERTISE ===== */}
-      <section className="ed-values">
+      <section className="ed-values cons-expertise">
         <div className="ed-container">
           <div className="ed-section-label">Where We Help</div>
           <KineticHeading as="h2" className="ed-section-title">Our Expertise</KineticHeading>
-          <div className="ed-values-grid">
+          <div className="ed-values-grid cons-expertise-grid">
             {EXPERTISE.map((s, i) => (
               <motion.div
                 key={s.title}
-                className="ed-value"
+                className="ed-value cons-expertise-card"
                 initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -4 }}
               >
+                <span className="cons-expertise-ghost">0{i + 1}</span>
                 <div className="ed-value-head">
                   <span className="ed-value-num">0{i + 1}</span>
                   <h3>{s.title}</h3>

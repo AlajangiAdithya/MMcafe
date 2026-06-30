@@ -1769,3 +1769,33 @@
   .cons-acc-loc { display: none; }
   .cons-acc-trigger { gap: 12px; padding: 16px 20px; }
 }
+
+/* ---------- EXPERTISE CARDS — visual overhaul ---------- */
+.cons-expertise-grid.ed-values-grid { border-top: none; }
+.cons-expertise-card.ed-value {
+  position: relative; overflow: hidden;
+  padding: clamp(24px, 3.5vw, 40px) clamp(20px, 3vw, 36px);
+  border: 1px solid var(--ed-line);
+  border-radius: 12px;
+  background: var(--ed-bg);
+  transition: border-color 0.35s var(--ed-ease), box-shadow 0.35s var(--ed-ease), transform 0.35s var(--ed-ease);
+  margin-bottom: 0;
+}
+.cons-expertise-card.ed-value:hover {
+  border-color: var(--ed-blue);
+  box-shadow: 0 18px 48px -20px rgba(46, 111, 176, 0.18);
+  transform: translateY(-4px) !important;
+}
+.cons-expertise-ghost {
+  position: absolute; bottom: -0.1em; right: 0.1em;
+  font-family: var(--ed-serif); font-weight: 700;
+  font-size: clamp(5rem, 9vw, 9rem); line-height: 1;
+  color: rgba(40, 22, 8, 0.04); pointer-events: none; user-select: none;
+  transition: color 0.4s var(--ed-ease);
+}
+.cons-expertise-card:hover .cons-expertise-ghost { color: rgba(46, 111, 176, 0.07); }
+.cons-expertise-grid.ed-values-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: clamp(12px, 2vw, 18px);
+  margin-top: clamp(32px, 5vw, 56px);
+}

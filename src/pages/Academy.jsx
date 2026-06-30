@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   Clock, Star, BookOpen, PlayCircle, Video, Info,
   FileText, Download, GraduationCap, Library, User as UserIcon,
+  ChevronDown, Award, Repeat, MonitorPlay,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -20,6 +21,70 @@ const fadeUp = {
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
+}
+
+const WHY_ITEMS = [
+  { Icon: MonitorPlay, label: 'HD Video Lessons', sub: 'Professional quality, every module' },
+  { Icon: Award, label: 'Expert Instructors', sub: 'Competition-placed baristas' },
+  { Icon: Repeat, label: 'Lifetime Access', sub: 'Watch anytime, as many times' },
+  { Icon: GraduationCap, label: 'Career-Ready', sub: 'Built for real coffee careers' },
+]
+
+function AcademyHero({ courseCount, bookCount }) {
+  return (
+    <header className="acad-cinema-hero">
+      <div className="acad-cinema-bg" />
+      <div className="acad-cinema-scrim" />
+      <motion.div
+        className="acad-cinema-inner"
+        initial="hidden"
+        animate="visible"
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.13, delayChildren: 0.15 } } }}
+      >
+        <motion.div className="acad-cinema-eyebrow" variants={fadeUp}>
+          Mastermind Brews · Academy
+        </motion.div>
+        <motion.h1 className="acad-cinema-title" variants={fadeUp}>
+          Learn the craft. <em>Master the cup.</em>
+        </motion.h1>
+        <motion.p className="acad-cinema-lede" variants={fadeUp}>
+          Professional HD video courses and downloadable guides from certified,
+          competition-placed baristas — study at your own pace, anywhere in India.
+        </motion.p>
+        <motion.div className="acad-cinema-stats" variants={fadeUp}>
+          <span><strong>{courseCount || '—'}</strong> Courses</span>
+          <span className="acad-cinema-dot" aria-hidden="true" />
+          <span><strong>{bookCount || '—'}</strong> Guides</span>
+          <span className="acad-cinema-dot" aria-hidden="true" />
+          <span>Lifetime Access</span>
+        </motion.div>
+        <motion.a href="#acad-courses" className="acad-cinema-cta" variants={fadeUp}>
+          Browse Courses <ChevronDown size={16} />
+        </motion.a>
+      </motion.div>
+    </header>
+  )
+}
+
+function WhyStrip() {
+  return (
+    <div className="acad-why-strip">
+      {WHY_ITEMS.map((item, i) => (
+        <motion.div
+          key={i}
+          className="acad-why-item"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-30px' }}
+          transition={{ duration: 0.5, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <item.Icon size={22} className="acad-why-icon" aria-hidden="true" />
+          <span className="acad-why-label">{item.label}</span>
+          <span className="acad-why-sub">{item.sub}</span>
+        </motion.div>
+      ))}
+    </div>
+  )
 }
 
 export default function Academy() {
@@ -111,32 +176,10 @@ export default function Academy() {
 
   return (
     <div className="academy-page acad-catalog">
-      <motion.header
-        className="acad-head"
-        initial="hidden"
-        animate="visible"
-        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}
-      >
-        <motion.span className="acad-head-eyebrow" variants={fadeUp}>
-          Mastermind Brews · Academy
-        </motion.span>
-        <motion.h1 className="acad-head-title" variants={fadeUp}>
-          Learn coffee, <em>properly.</em>
-        </motion.h1>
-        <motion.p className="acad-head-lede" variants={fadeUp}>
-          Professional HD video courses and downloadable PDF guides from certified,
-          competition-placed baristas — study at your own pace, anywhere in India.
-        </motion.p>
-        <motion.div className="acad-head-meta" variants={fadeUp}>
-          <span><GraduationCap size={14} /> <strong>{courses.length}</strong> {courses.length === 1 ? 'course' : 'courses'}</span>
-          <span className="acad-meta-dot" aria-hidden="true" />
-          <span><Library size={14} /> <strong>{books.length}</strong> {books.length === 1 ? 'guide' : 'guides'}</span>
-          <span className="acad-meta-dot" aria-hidden="true" />
-          <span>Lifetime access</span>
-        </motion.div>
-      </motion.header>
+      <AcademyHero courseCount={courses.length} bookCount={books.length} />
+      <WhyStrip />
 
-      <section className="academy-container acad-section" aria-labelledby="acad-courses-head">
+      <section id="acad-courses" className="academy-container acad-section" aria-labelledby="acad-courses-head">
         <div className="acad-section-head">
           <h2 id="acad-courses-head">Courses</h2>
           {!loading && !error && courses.length > 0 && (

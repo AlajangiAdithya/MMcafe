@@ -163,3 +163,111 @@
 @media (max-width: 560px) {
   .acad-section-head { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
+
+/* ============================================================
+   ACADEMY — cinematic dark hero
+   ============================================================ */
+.acad-cinema-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 88vh;
+  margin-top: calc(-1 * var(--nav-height, 68px));
+  display: flex;
+  align-items: flex-end;
+  padding: calc(var(--nav-height, 68px) + clamp(40px, 7vw, 80px)) clamp(24px, 5vw, 80px) clamp(56px, 8vw, 96px);
+  overflow: hidden;
+}
+.acad-cinema-bg {
+  position: absolute; inset: 0; z-index: -2;
+  background: url('/offer-academy.png') center / cover no-repeat;
+  transform: scale(1.06);
+  filter: brightness(0.28) saturate(0.6);
+  transition: transform 8s ease;
+}
+.acad-cinema-hero:hover .acad-cinema-bg { transform: scale(1.0); }
+.acad-cinema-scrim {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(to top, rgba(9,8,7,0.92) 0%, rgba(9,8,7,0.5) 55%, rgba(9,8,7,0.2) 100%),
+    radial-gradient(ellipse 70% 55% at 20% 60%, rgba(176,116,51,0.14), transparent 65%);
+}
+.acad-cinema-inner { max-width: 860px; }
+.acad-cinema-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(221, 158, 85, 0.9);
+  margin-bottom: clamp(16px, 2.5vw, 26px);
+}
+.acad-cinema-eyebrow::before {
+  content: ''; width: 36px; height: 1px; background: rgba(221, 158, 85, 0.5);
+}
+.acad-cinema-title {
+  font-family: 'Fraunces', Georgia, serif; font-weight: 400;
+  font-size: clamp(2.8rem, 7vw, 6rem); line-height: 1; letter-spacing: -0.03em;
+  color: #F4E9D8; margin: 0;
+}
+.acad-cinema-title em {
+  font-style: italic; color: #DD9E55;
+}
+.acad-cinema-lede {
+  max-width: 58ch; margin: clamp(20px, 2.5vw, 30px) 0 0;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem); line-height: 1.65;
+  color: rgba(244, 233, 216, 0.75);
+}
+.acad-cinema-stats {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+  margin-top: clamp(22px, 3vw, 34px);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(244, 233, 216, 0.65);
+}
+.acad-cinema-stats strong { color: #DD9E55; font-variant-numeric: tabular-nums; }
+.acad-cinema-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(221,158,85,0.5); }
+.acad-cinema-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: clamp(28px, 4vw, 44px);
+  padding: 14px 28px; border-radius: 999px;
+  background: rgba(176, 116, 51, 0.9);
+  color: #1a1208;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase;
+  transition: background 0.3s, transform 0.3s;
+}
+.acad-cinema-cta:hover { background: #DD9E55; transform: translateY(-2px); }
+.acad-cinema-cta svg { animation: acad-bounce 1.6s ease-in-out infinite; }
+@keyframes acad-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+
+/* ============================================================
+   ACADEMY — "Why learn with us" feature strip
+   ============================================================ */
+.acad-why-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bg-primary, #faf7f2);
+  border-bottom: 1px solid var(--border, rgba(40,22,8,0.1));
+}
+.acad-why-item {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 5px;
+  padding: clamp(18px, 2.5vw, 28px) clamp(14px, 2.5vw, 28px);
+  border-right: 1px solid var(--border, rgba(40,22,8,0.1));
+  transition: background 0.25s;
+}
+.acad-why-item:last-child { border-right: none; }
+.acad-why-item:hover { background: var(--bg-secondary, #f5ede0); }
+.acad-why-icon { color: var(--accent, #b07433); margin-bottom: 4px; }
+.acad-why-label {
+  font-weight: 600; font-size: 0.9rem;
+  color: var(--text-primary, #1a1208); line-height: 1.2;
+}
+.acad-why-sub {
+  font-size: 0.76rem; line-height: 1.45;
+  color: var(--text-muted, #7a6248);
+}
+@media (max-width: 640px) {
+  .acad-why-strip { grid-template-columns: 1fr 1fr; }
+  .acad-why-item:nth-child(2) { border-right: none; }
+  .acad-why-item:nth-child(3) { border-right: 1px solid var(--border, rgba(40,22,8,0.1)); border-top: 1px solid var(--border, rgba(40,22,8,0.1)); }
+  .acad-why-item:nth-child(4) { border-top: 1px solid var(--border, rgba(40,22,8,0.1)); }
+  .acad-cinema-title { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+}

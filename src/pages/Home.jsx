@@ -427,7 +427,6 @@ const FLOAT_IMAGES = [
   { src: '/pour-over-coffee.jpg',   x: '24%', y: '22%', rotate:  5, w: 225 },
   { src: '/namrata-thakkar.jpg',    x: '49%', y: '4%',  rotate: -3, w: 185 },
   { src: '/about-team.jpg',         x: '70%', y: '16%', rotate:  9, w: 210 },
-  { src: '/cafe-food.png',          x: '84%', y: '36%', rotate: -6, w: 170 },
 ]
 
 function FloatingImages() {
@@ -458,6 +457,101 @@ function FloatingImages() {
   )
 }
 
+/* ===== OUR STANDARDS — bento craft grid ===== */
+const CRAFT_ITEMS = [
+  {
+    num: '01',
+    title: 'Single-Origin,\nAlways.',
+    body: 'Every bag traces to a named Chikmagalur estate — no blends, no filler. One farmer, one terroir, one honest cup.',
+    color: '#b07433',
+    img: '/offer-beans.jpg',
+  },
+  {
+    num: '02',
+    title: 'Roasted\nto Profile.',
+    body: 'We partner with Bean Rove to develop exclusive roast curves for each lot — consistent down to the gram, every batch.',
+    color: '#c27840',
+    img: '/hero-bg.jpg',
+  },
+  {
+    num: '03',
+    title: 'Taught by\nChampions.',
+    body: 'Our academy is built by competition-placed baristas. Practical, technical, and career-ready — not just hobbyist content.',
+    color: '#9a6b2a',
+    img: '/offer-academy.png',
+  },
+  {
+    num: '04',
+    title: 'Bar-Quality\nat Home.',
+    body: "What ships to your door is what we pour at Mulund. If it doesn't pass our bar, it never leaves our roastery.",
+    color: '#d4894e',
+    img: '/project-cafe.jpg',
+  },
+]
+
+function CraftCard({ item, index }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-10%' })
+  const [hovered, setHovered] = useState(false)
+  const reduced = useReducedMotion()
+  return (
+    <motion.div
+      ref={ref}
+      className="craft-card"
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="craft-card-bg" style={{ backgroundImage: `url(${item.img})` }} />
+      <motion.div
+        className="craft-card-glow"
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.55 }}
+        style={{ background: `radial-gradient(ellipse at 30% 90%, ${item.color}30, transparent 62%)` }}
+      />
+      <div className="craft-card-content">
+        <span className="craft-card-num">{item.num}</span>
+        <motion.h3
+          className="craft-card-title"
+          animate={reduced ? undefined : { y: hovered ? -6 : 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          {item.title.split('\n').map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+          ))}
+        </motion.h3>
+        <p className="craft-card-body">{item.body}</p>
+        <motion.div
+          className="craft-card-rule"
+          animate={{ scaleX: hovered ? 1 : 0 }}
+          style={{ originX: 0, backgroundColor: item.color }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </div>
+    </motion.div>
+  )
+}
+
+function CraftSection() {
+  return (
+    <section className="craft-section">
+      <div className="craft-intro">
+        <AnimatedSection><div className="hr-label">Our Standards</div></AnimatedSection>
+        <WordReveal
+          className="craft-heading"
+          text={[{ t: 'Coffee done ' }, { t: 'the right way.', em: true }]}
+        />
+      </div>
+      <div className="craft-grid">
+        {CRAFT_ITEMS.map((item, i) => (
+          <CraftCard key={item.num} item={item} index={i} />
+        ))}
+      </div>
+    </section>
+  )
+}
 
 export default function Home() {
   usePageMeta({
@@ -662,13 +756,11 @@ export default function Home() {
         <ScrollPill />
       </section>
 
-      {/* ===== FLOATING IMAGES (draggable, above Visit section) ===== */}
-      <FloatingImages />
-
-      {/* ===== VISIT THE CAFE (cinematic band) ===== */}
+      {/* ===== VISIT THE CAFE (cinematic band) with floating images ===== */}
       <section className="hr-visit">
         <ParallaxBand />
         <div className="hr-visit-scrim" aria-hidden="true" />
+        <FloatingImages />
         <motion.div
           className="hr-visit-inner"
           initial="hidden"
@@ -709,44 +801,8 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== CLOSING CTA ===== */}
-      <section className="hr-cta">
-        <span className="hr-steam" aria-hidden="true">
-          <span className="hr-steam-wisp" />
-          <span className="hr-steam-wisp" />
-          <span className="hr-steam-wisp" />
-        </span>
-        <CoffeeBeans className="hr-cta-beans" aria-hidden="true" />
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-12%' }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } }
-          }}
-        >
-          <motion.div
-            className="hr-label"
-            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
-          >
-            Start Here
-          </motion.div>
-          <WordReveal as="h2" text={[{ t: 'Your next great ' }, { t: 'cup', em: true }, { t: ' awaits.' }]} />
-          <motion.p
-            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-          >
-            Order single-origin beans, book a workshop, or drop by the bar&mdash;wherever you are on the coffee journey, we&rsquo;ll meet you there.
-          </motion.p>
-          <motion.div
-            className="hr-hero-cta"
-            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-          >
-            <Magnetic><Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Explore the store</Link></Magnetic>
-            <Magnetic><Link to="/about" className="hr-btn hr-btn-ghost">Our Story</Link></Magnetic>
-          </motion.div>
-        </motion.div>
-      </section>
+      {/* ===== OUR STANDARDS (bento craft grid) ===== */}
+      <CraftSection />
 
       {openProduct && (
         <ProductDetailModal
