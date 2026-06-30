@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
