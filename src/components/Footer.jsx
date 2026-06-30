@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Globe, Mail, Phone, MapPin, ArrowRight, Send } from 'lucide-react'
 
 function InstagramIcon({ size = 16 }) {
   return (
@@ -29,88 +28,63 @@ function XIcon({ size = 16 }) {
 
 export default function Footer() {
   return (
-    <footer className="footer footer--editorial">
-      <div className="footer-main">
-
-        <div className="footer-brand">
-          <Link to="/" className="footer-brand-logo">
-            <img src="/logo.png" alt="Mastermind Brews" />
-            <span>Mastermind Brews</span>
-          </Link>
-          <div className="footer-brand-bio">
-            <p className="footer-brand-tagline">Building better baristas in India</p>
-            <ul>
-              <li>Barista | Brewing | Sensory Workshops</li>
-              <li>For coffee lovers, home brewers &amp; professionals</li>
-              <li>Mumbai, India</li>
-            </ul>
-          </div>
-          <div className="footer-social">
-            <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon size={16} /></a>
-            <a href="https://www.facebook.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FacebookIcon size={16} /></a>
-            <a href="https://x.com/cafemastermind" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><XIcon size={14} /></a>
-          </div>
-        </div>
-
-        <div className="footer-col">
-          <h4>Shop</h4>
-          <Link to="/store">Buy Coffee</Link>
-          <Link to="/workshop">Learn Coffee</Link>
-          <Link to="/consultancy">Our Projects</Link>
-        </div>
-
-        <div className="footer-col">
-          <h4>Company</h4>
-          <Link to="/about">About Us</Link>
-          <Link to="/contact">Contact</Link>
-        </div>
-
-        <div className="footer-col">
-          <h4>Account</h4>
-          <Link to="/login">Sign In</Link>
-          <Link to="/signup">Create Account</Link>
-          <Link to="/my-orders">My Orders</Link>
-          <Link to="/wishlist">Wishlist</Link>
-        </div>
-
-        <aside className="footer-cafe-card">
-          <span className="eyebrow">We Are Located At</span>
-          <h4 className="footer-cafe-title">Mastermind<br/>Bicycle Cafe &amp; Bar</h4>
-          <div className="footer-cafe-meta">
-            <div className="footer-cafe-row">
-              <MapPin size={15} />
-              <span>
-                Cafe, LG 38 &amp; 39 &middot; Mastermind Brews, LG 06
-              </span>
-            </div>
-            <div className="footer-cafe-row">
-              <Phone size={15} />
-              <a href="tel:+918591850161">+91 85918 50161</a>
-            </div>
-            <div className="footer-cafe-row">
-              <Mail size={15} />
-              <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>
-            </div>
-          </div>
-          <a
-            href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-cafe-map"
-          >
-            Open in Maps <ArrowRight size={12} />
+    <footer className="footer footer--editorial footer--v2">
+      {/* Large email CTA */}
+      <div className="ftr2-cta">
+        <div className="ftr2-inner">
+          <span className="ftr2-cta-label">Start a conversation</span>
+          <a href="mailto:hello@mastermindcafe.in" className="ftr2-email">
+            hello@mastermindcafe.in
           </a>
-        </aside>
+        </div>
       </div>
 
-      <div className="footer-bottom">
-        <p>&copy; 2026 Mastermind Bicycle Cafe &amp; Bar. Crafted in Mulund, Mumbai.</p>
-        <div className="footer-bottom-links">
-          <Link to="/privacy-policy">Privacy</Link>
-          <Link to="/terms">Terms</Link>
-          <Link to="/refund-policy">Refunds</Link>
-          <Link to="/shipping">Shipping</Link>
-          <Link to="/contact">Contact</Link>
+      {/* Three-col info grid */}
+      <div className="ftr2-body">
+        <div className="ftr2-inner">
+          <div className="ftr2-brand">
+            <Link to="/" className="ftr2-logo">
+              <img src="/logo.png" alt="Mastermind Brews" />
+              <span>Mastermind Brews</span>
+            </Link>
+            <p className="ftr2-tagline">Specialty coffee · Barista academy · Cafe consultancy · Mumbai, India</p>
+            <div className="ftr2-social">
+              <a href="https://www.instagram.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon size={16} /></a>
+              <a href="https://www.facebook.com/mastermindbicyclecafe/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FacebookIcon size={16} /></a>
+              <a href="https://x.com/cafemastermind" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><XIcon size={14} /></a>
+            </div>
+          </div>
+
+          <nav className="ftr2-nav">
+            <h4 className="ftr2-col-title">Navigate</h4>
+            <Link to="/">Home</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/store">Buy Coffee</Link>
+            <Link to="/workshop">Learn Coffee</Link>
+            <Link to="/consultancy">Our Projects</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
+
+          <div className="ftr2-contact">
+            <h4 className="ftr2-col-title">Find Us</h4>
+            <p>Mastermind Bicycle Cafe &amp; Bar</p>
+            <p>Avior Corporate Park<br />Mulund West, Mumbai</p>
+            <a href="tel:+918591850161">+91 85918 50161</a>
+            <a href="mailto:hello@mastermindcafe.in">hello@mastermindcafe.in</a>
+          </div>
+        </div>
+      </div>
+
+      {/* Legal bar */}
+      <div className="ftr2-legal">
+        <div className="ftr2-inner ftr2-legal-inner">
+          <p>&copy; 2026 Mastermind Brews &middot; Mulund, Mumbai</p>
+          <div className="ftr2-legal-links">
+            <Link to="/privacy-policy">Privacy</Link>
+            <Link to="/terms">Terms</Link>
+            <Link to="/refund-policy">Refunds</Link>
+            <Link to="/shipping">Shipping</Link>
+          </div>
         </div>
       </div>
     </footer>

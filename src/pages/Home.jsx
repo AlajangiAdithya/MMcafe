@@ -402,13 +402,7 @@ function ScrollHero() {
           {/* Block B, headline that takes the logo's place on scroll */}
           <motion.div className="hr-hero2-block hr-hero2-text" style={{ opacity: textOpacity, y: textY }}>
             <div className="hr-eyebrow">Mastermind Brews · Mumbai, India</div>
-            <h1 className="hr-hero-head">The art of <em>great coffee.</em></h1>
-            <div className="hr-definitions-line" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.85rem', fontFamily: 'var(--hr-mono)', color: 'var(--hr-accent-bright)', marginTop: '-8px', marginBottom: '22px' }}>
-              <span className="hr-phonetic" style={{ color: 'var(--hr-cream)', fontWeight: 500 }}>/ˈkɒfi/</span>
-              <span className="hr-pos" style={{ fontStyle: 'italic', color: 'rgba(244, 233, 216, 0.5)' }}>(noun)</span>
-              <span className="hr-def-separator" style={{ color: 'rgba(176, 116, 51, 0.4)' }}>•</span>
-              <span className="hr-def-short" style={{ color: 'rgba(244, 233, 216, 0.7)' }}>A legendary, golden elixir that connects generations. Feel the soul of craft, in every single pour.</span>
-            </div>
+            <h1 className="hr-hero-head">A portfolio built for <em>every cup.</em></h1>
             <p className="hr-hero-sub">
               Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
             </p>
@@ -427,69 +421,39 @@ function ScrollHero() {
   )
 }
 
-/* PORTFOLIO COLUMNS, wolverineworldwide.com-style "A portfolio built for every
-   cup." Four columns of photos scroll vertically (alternating up/down, varied
-   speeds) beside a headline + CTA. Pure-CSS marquee so it stays alive even when
-   the page isn't scrolling; the loop is seamless because each column renders its
-   images twice and translates exactly one copy's height. Decorative → aria-hidden. */
-const PORTFOLIO_COLUMNS = [
-  ['/hero-bg.jpg', '/project-cafe.jpg', '/pour-over-coffee.jpg', '/projects/affogato-khar.jpg'],
-  ['/offer-beans.jpg', '/cafe-food.png', '/projects/grounded-bandra.jpg', '/academy-feature.jpg'],
-  ['/project-beans.jpg', '/projects/churnd-surat.jpg', '/offer-academy.png', '/projects/geranium-haven-goa.jpg'],
-  ['/about-team.jpg', '/projects/cocoa-experience-virar.jpg', '/projects/indulge-creamery-bandra.jpg', '/cafe-press-bg.jpg'],
+/* FLOATING IMAGES — scattered draggable photo cluster above the "Visit Us" section */
+const FLOAT_IMAGES = [
+  { src: '/hero-bg.jpg',            x: '3%',  y: '8%',  rotate: -8, w: 195 },
+  { src: '/pour-over-coffee.jpg',   x: '24%', y: '22%', rotate:  5, w: 225 },
+  { src: '/namrata-thakkar.jpg',    x: '49%', y: '4%',  rotate: -3, w: 185 },
+  { src: '/about-team.jpg',         x: '70%', y: '16%', rotate:  9, w: 210 },
+  { src: '/cafe-food.png',          x: '84%', y: '36%', rotate: -6, w: 170 },
 ]
 
-function PortfolioColumns() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-15%' })
+function FloatingImages() {
   return (
-    <section className="hr-portfolio" ref={ref}>
-      <div className="hr-portfolio-inner">
-        <motion.div
-          className="hr-portfolio-copy"
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } } }}
-        >
+    <section className="hr-float-section" aria-hidden="true">
+      <div className="hr-float-zone">
+        {FLOAT_IMAGES.map((img, i) => (
           <motion.div
-            className="hr-label"
-            style={{ color: 'var(--hr-accent-bright)' }}
-            variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+            key={i}
+            className="hr-float-card"
+            style={{ left: img.x, top: img.y, width: img.w }}
+            drag
+            dragConstraints={{ left: -90, right: 90, top: -90, bottom: 90 }}
+            dragElastic={0.14}
+            whileDrag={{ scale: 1.07, zIndex: 20 }}
+            whileHover={{ scale: 1.04 }}
+            initial={{ opacity: 0, scale: 0.82, rotate: img.rotate * 1.6 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: img.rotate }}
+            viewport={{ once: true, margin: '-12%' }}
+            transition={{ duration: 0.85, delay: i * 0.11, ease: [0.16, 1, 0.3, 1] }}
           >
-            Our Work
+            <img src={img.src} alt="" loading="lazy" draggable="false" />
           </motion.div>
-          <motion.h2
-            className="hr-portfolio-head"
-            variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
-          >
-            A portfolio built for <em>every cup.</em>
-          </motion.h2>
-          <motion.p
-            className="hr-portfolio-sub"
-            variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-          >
-            Single-origin roasting, an online barista academy, and full cafe builds&mdash;every part of Mastermind Brews, in one place.
-          </motion.p>
-          <motion.div
-            className="hr-portfolio-cta"
-            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-          >
-            <Magnetic>
-              <Link to="/consultancy" className="hr-btn hr-btn-primary">Explore our work <ArrowUpRight size={15} /></Link>
-            </Magnetic>
-          </motion.div>
-        </motion.div>
-
-        <div className="hr-portfolio-cols" aria-hidden="true">
-          {PORTFOLIO_COLUMNS.map((imgs, ci) => (
-            <div key={ci} className={`hr-pf-col${ci % 2 === 1 ? ' hr-pf-col--down' : ''}`}>
-              {[...imgs, ...imgs].map((src, ii) => (
-                <img key={ii} className="hr-pf-img" src={src} alt="" loading="lazy" draggable="false" />
-              ))}
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
+      <p className="hr-float-hint">grab &amp; move</p>
     </section>
   )
 }
@@ -559,9 +523,6 @@ export default function Home() {
 
       {/* ===== HERO, video bg; logo→headline scroll crossfade ===== */}
       <ScrollHero />
-
-      {/* ===== PORTFOLIO (scrolling photo columns + CTA) ===== */}
-      <PortfolioColumns />
 
       <MarqueeStrip items={MARQUEE_TERMS} variant="paper" tall />
 
@@ -700,6 +661,9 @@ export default function Home() {
         </div>
         <ScrollPill />
       </section>
+
+      {/* ===== FLOATING IMAGES (draggable, above Visit section) ===== */}
+      <FloatingImages />
 
       {/* ===== VISIT THE CAFE (cinematic band) ===== */}
       <section className="hr-visit">

@@ -107,7 +107,10 @@ export default function Navbar({ onOpenSearch }) {
               to={l.to}
               className={`nav-link ${location.pathname === l.to ? 'active' : ''}`}
             >
-              {l.label}
+              <span className="nl-wrap">
+                <span className="nl-text">{l.label}</span>
+                <span className="nl-text nl-text--b" aria-hidden="true">{l.label}</span>
+              </span>
             </Link>
           ))}
         </div>

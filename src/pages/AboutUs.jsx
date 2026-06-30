@@ -6,7 +6,6 @@ import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
-import ScrollingColumns from '../components/ScrollingColumns'
 import CountUp from '../components/CountUp'
 import KineticHeading from '../components/KineticHeading'
 import InstagramTabs from '@/components/ui/instagram-tabs'
@@ -31,12 +30,33 @@ const ABOUT_JOURNEY = [
   { year: 'TODAY', title: 'Mastermind Brews', body: 'A platform and a physical academy in Mulund, sharing coffees, knowledge, and hands-on workshops.' },
 ]
 
-/* Photo wall, four columns of moments from the cafe + academy + projects. */
-const ABOUT_GALLERY = [
-  ['/namrata-thakkar.jpg', '/pour-over-coffee.jpg', '/offer-beans.jpg', '/projects/affogato-khar.jpg'],
-  ['/about-team.jpg', '/academy-feature.jpg', '/cafe-food.png', '/projects/grounded-bandra.jpg'],
-  ['/project-cafe.jpg', '/project-beans.jpg', '/offer-academy.png', '/projects/geranium-haven-goa.jpg'],
-  ['/hero-bg.jpg', '/cafe-press-bg.jpg', '/projects/churnd-surat.jpg', '/projects/indulge-creamery-bandra.jpg'],
+/* Editorial photo grid — 6 moments from the cafe, academy & journey. */
+const ABOUT_GRID = [
+  { src: '/namrata-thakkar.jpg',         alt: 'Namrata Thakkar, founder of Mastermind Brews' },
+  { src: '/pour-over-coffee.jpg',        alt: 'Pour-over brewing at Mastermind Brews' },
+  { src: '/about-team.jpg',              alt: 'The Mastermind Brews team' },
+  { src: '/academy-feature.jpg',         alt: 'Barista academy session' },
+  { src: '/project-cafe.jpg',            alt: 'Mastermind Bicycle Cafe & Bar, Mulund' },
+  { src: '/cafe-food.png',               alt: 'Food at Mastermind Bicycle Cafe' },
+]
+
+/* Three founding principles, paradisoinstitute.org-style pillar structure. */
+const ABOUT_PILLARS = [
+  {
+    num: '01',
+    title: 'Source with Intention',
+    body: 'Every bean traces back to its origin. Chikmagalur highlands, Ethiopian processing stations, Thailand—because where coffee begins determines what ends up in your cup.',
+  },
+  {
+    num: '02',
+    title: 'Brew with Precision',
+    body: 'SCA certifications, a competition stage, and years of calibration. The science of extraction is not separate from the art of hospitality—they are the same discipline.',
+  },
+  {
+    num: '03',
+    title: 'Share with Purpose',
+    body: 'Mastermind Brews exists so others can learn faster than we did. The academy, the workshops, the consultancy—all of it is about carrying the craft further than we can alone.',
+  },
 ]
 
 const ABOUT_ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -236,6 +256,32 @@ export default function AboutUs() {
         </div>
       </section>
 
+      {/* ===== THREE PRINCIPLES (paradisoinstitute.org-style pillars) ===== */}
+      <section className="ed-pillars">
+        <div className="ed-container">
+          <div className="ed-section-label">What Drives the Craft</div>
+          <KineticHeading as="h2" className="ed-section-title">Three principles, <em>one cup.</em></KineticHeading>
+          <div className="ed-pillars-list">
+            {ABOUT_PILLARS.map((p, i) => (
+              <motion.div
+                key={p.num}
+                className="ed-pillar"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="ed-pillar-num">{p.num}</span>
+                <div>
+                  <h3 className="ed-pillar-title">{p.title}</h3>
+                  <p className="ed-pillar-body">{p.body}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===== THE JOURNEY (draggable timeline) ===== */}
       <section className="ed-journey">
         <div className="ed-container">
@@ -257,7 +303,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ===== MOMENTS (scrolling photo wall) ===== */}
+      {/* ===== IN FRAME (editorial photo grid) ===== */}
       <section className="ed-gallery">
         <div className="ed-container ed-gallery-head">
           <div>
@@ -266,8 +312,19 @@ export default function AboutUs() {
           </div>
           <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn with us <ArrowRight size={14} /></Link></Magnetic>
         </div>
-        <div className="ed-gallery-cols">
-          <ScrollingColumns columns={ABOUT_GALLERY} />
+        <div className="ed-photo-grid">
+          {ABOUT_GRID.map((p, i) => (
+            <motion.div
+              key={i}
+              className="ed-photo-grid-item"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <img src={p.src} alt={p.alt} loading="lazy" />
+            </motion.div>
+          ))}
         </div>
       </section>
 

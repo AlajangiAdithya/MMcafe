@@ -16860,3 +16860,128 @@ select:focus:not([data-no-glass]) {
 .admin-sidebar::-webkit-scrollbar-thumb:hover,
 .admin-main::-webkit-scrollbar-thumb:hover,
 .admin-modal::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.30) !important; }
+
+/* ============================================================
+   NAV LINK — rolling text hover (wildbran.pt style)
+   .nl-wrap clips to 1em height and holds two stacked copies.
+   On hover both roll up: primary exits top, secondary (gold)
+   enters from below. Only applies to the desktop centre nav.
+   ============================================================ */
+.nl-wrap {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  height: 1em;
+  line-height: 1;
+}
+.nl-text {
+  display: block; white-space: nowrap;
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+  line-height: 1;
+}
+.nl-text--b {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  color: var(--accent, #c9974a);
+  text-align: center;
+  line-height: 1;
+}
+.nav-center .nav-link:hover .nl-text { transform: translateY(-100%); }
+.nav-center .nav-link.active .nl-text { color: #FFF7E6; }
+
+/* ============================================================
+   PAGE TRANSITION — smooth fade + subtle Y shift
+   ============================================================ */
+.page-transition-root {
+  position: relative;
+  min-height: 100%;
+}
+
+/* ============================================================
+   FOOTER V2 — large editorial email + three-col grid
+   Inspired by wildbran.pt minimal agency footer.
+   ============================================================ */
+.footer.footer--v2 {
+  background: #0E0B09;
+  color: rgba(244, 233, 216, 0.78);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ftr2-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 5vw, 64px);
+}
+/* CTA block: large email */
+.ftr2-cta {
+  padding: clamp(60px, 10vw, 120px) 0 clamp(40px, 7vw, 80px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.ftr2-cta-label {
+  display: block;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent, #c9974a); margin-bottom: 18px;
+}
+.ftr2-email {
+  display: block;
+  font-family: var(--font-serif, 'Yanone Kaffeesatz', sans-serif);
+  font-size: clamp(2rem, 5.5vw, 5.2rem);
+  font-weight: 300; line-height: 1.0; letter-spacing: -0.02em;
+  color: rgba(244, 233, 216, 0.88); text-decoration: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.ftr2-email:hover { color: #fff; opacity: 0.95; }
+/* Body grid */
+.ftr2-body { padding: clamp(48px, 7vw, 80px) 0; }
+.ftr2-body .ftr2-inner {
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+  gap: clamp(32px, 5vw, 72px); align-items: start;
+}
+.ftr2-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; margin-bottom: 16px;
+  color: rgba(244, 233, 216, 0.88);
+}
+.ftr2-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.ftr2-logo span { font-weight: 600; font-size: 0.95rem; }
+.ftr2-tagline {
+  font-size: 0.85rem; line-height: 1.55;
+  color: rgba(244, 233, 216, 0.38); margin: 0 0 24px; max-width: 30ch;
+}
+.ftr2-social { display: flex; gap: 14px; }
+.ftr2-social a { color: rgba(244, 233, 216, 0.42); transition: color 0.22s; }
+.ftr2-social a:hover { color: rgba(244, 233, 216, 0.9); }
+.ftr2-col-title {
+  font-family: var(--font-mono, monospace); font-size: 0.6rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(244, 233, 216, 0.3); margin: 0 0 18px; font-weight: 400;
+}
+.ftr2-nav, .ftr2-contact { display: flex; flex-direction: column; gap: 11px; }
+.ftr2-nav a, .ftr2-contact a, .ftr2-contact p {
+  font-size: 0.9rem; color: rgba(244, 233, 216, 0.6);
+  text-decoration: none; transition: color 0.22s; line-height: 1.4; margin: 0;
+}
+.ftr2-nav a:hover, .ftr2-contact a:hover { color: rgba(244, 233, 216, 0.95); }
+/* Legal bar */
+.ftr2-legal {
+  border-top: 1px solid rgba(255, 255, 255, 0.07); padding: 20px 0;
+}
+.ftr2-legal-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.ftr2-legal p { font-size: 0.76rem; color: rgba(244, 233, 216, 0.28); margin: 0; }
+.ftr2-legal-links { display: flex; gap: 20px; }
+.ftr2-legal-links a {
+  font-size: 0.76rem; color: rgba(244, 233, 216, 0.28); text-decoration: none;
+  transition: color 0.2s;
+}
+.ftr2-legal-links a:hover { color: rgba(244, 233, 216, 0.65); }
+@media (max-width: 768px) {
+  .ftr2-body .ftr2-inner { grid-template-columns: 1fr 1fr; }
+  .ftr2-brand { grid-column: 1 / -1; }
+  .ftr2-email { font-size: clamp(1.6rem, 7vw, 3rem); }
+}
+@media (max-width: 480px) {
+  .ftr2-body .ftr2-inner { grid-template-columns: 1fr; }
+}

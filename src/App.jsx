@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
@@ -111,6 +112,15 @@ function AppShell() {
       <ScrollDockLogo />
       <main id="main-content" className="main-content" tabIndex={-1}>
         <ErrorBoundary>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              className="page-transition-root"
+              initial={{ opacity: 0, y: 7 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -146,6 +156,8 @@ function AppShell() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+            </motion.div>
+          </AnimatePresence>
         </ErrorBoundary>
       </main>
       {!isAdmin && <Footer />}

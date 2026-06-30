@@ -1,15 +1,12 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
-import DragScroller from '../components/DragScroller'
-import ScrollingColumns from '../components/ScrollingColumns'
 import CountUp from '../components/CountUp'
 import KineticHeading from '../components/KineticHeading'
-import TiltCard from '../components/TiltCard'
 import '../styles/about-editorial.css'
 
 const ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -58,12 +55,14 @@ const CONS_STATS = [
   { to: 100, suffix: '%', label: 'Hands-on delivery', sub: 'On-site & remote' },
 ]
 
-/* Photo wall, four columns of the cafes + programs we've shaped. */
-const CONS_GALLERY = [
-  ['/hero-bg.jpg', '/projects/grounded-bandra.jpg', '/pour-over-coffee.jpg', '/projects/churnd-surat.jpg'],
-  ['/projects/affogato-khar.jpg', '/project-cafe.jpg', '/projects/indulge-creamery-bandra.jpg', '/offer-beans.jpg'],
-  ['/projects/geranium-haven-goa.jpg', '/cafe-food.png', '/projects/cocoa-experience-virar.jpg', '/academy-feature.jpg'],
-  ['/project-beans.jpg', '/about-team.jpg', '/cafe-press-bg.jpg', '/offer-academy.png'],
+/* Editorial photo grid — 6 shots from the cafes we've built programs with. */
+const CONS_GRID = [
+  { src: '/projects/grounded-bandra.jpg',        alt: 'Grounded Cafe, Bandra' },
+  { src: '/projects/affogato-khar.jpg',           alt: 'Affogato Cafe, Khar' },
+  { src: '/projects/churnd-surat.jpg',            alt: "Churn'd, Surat" },
+  { src: '/pour-over-coffee.jpg',                 alt: 'Pour-over coffee service' },
+  { src: '/hero-bg.jpg',                          alt: 'Mastermind specialty coffee' },
+  { src: '/projects/geranium-haven-goa.jpg',      alt: 'Geranium Haven, Arambol, Goa' },
 ]
 
 const PROCESS = [
@@ -86,6 +85,69 @@ const SUITED = [
    exactly one step is on screen at FULL opacity (always readable), and it only
    changes once its scroll band is actually reached, no early/partial fades and
    no out-of-[0,1] WAAPI offset risk. The crossfade itself is plain CSS. */
+/* Accordion project listing — hupr.ca Spheres d'innovation pattern.
+   Each row shows project name + tag + location; click to expand
+   an image + description panel. One row open at a time. */
+function ProjectAccordion({ projects }) {
+  const [open, setOpen] = useState(null)
+  return (
+    <div className="cons-accordion">
+      {projects.map((p, i) => {
+        const isOpen = open === i
+        return (
+          <div key={p.name} className={`cons-acc-item${isOpen ? ' is-open' : ''}`}>
+            <button
+              className="cons-acc-trigger"
+              onClick={() => setOpen(isOpen ? null : i)}
+              aria-expanded={isOpen}
+            >
+              <span className="cons-acc-num">0{i + 1}</span>
+              <div className="cons-acc-meta">
+                <span className="cons-acc-tag">{p.tag}</span>
+                <h3 className="cons-acc-name">{p.name}</h3>
+              </div>
+              <span className="cons-acc-loc"><MapPin size={11} /> {p.loc}</span>
+              <motion.span
+                className="cons-acc-arrow"
+                animate={{ rotate: isOpen ? 45 : 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ArrowRight size={16} />
+              </motion.span>
+            </button>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key="panel"
+                  className="cons-acc-panel"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <div className="cons-acc-inner">
+                    <div className="cons-acc-img-wrap">
+                      <img src={p.img} alt={`${p.name}, ${p.loc}`} loading="lazy" />
+                    </div>
+                    <div>
+                      <p className="cons-acc-desc">{p.body}</p>
+                      <div className="cons-acc-scope">
+                        <span className="cons-acc-scope-label">Scope of Delivery</span>
+                        <p className="cons-acc-scope-body">{p.details}</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function PinnedProcess() {
   const ref = useRef(null)
   const reduced = useReducedMotion()
@@ -244,35 +306,14 @@ export default function Consultancy() {
         </div>
       </section>
 
-      {/* ===== OUR PROJECTS (draggable tilt showcase) ===== */}
+      {/* ===== OUR PROJECTS (accordion, hupr.ca Spheres style) ===== */}
       <section className="ed-projects cons-projects">
         <div className="ed-container">
           <div className="ed-section-label">Our Projects</div>
           <KineticHeading as="h2" className="ed-section-title">Spaces we&rsquo;ve shaped.</KineticHeading>
-          <p className="ed-journey-kicker">Drag through the cafes we&rsquo;ve built coffee programs with&mdash;each card carries its own scope of delivery.</p>
+          <p className="ed-journey-kicker">Six cafes, six coffee programs built from the ground up. Click any row to open the full story.</p>
         </div>
-        <div data-cursor="drag">
-          <DragScroller className="cons-show-track" autoDrift={0.2}>
-            {PROJECTS.map((p, i) => (
-              <TiltCard key={p.name} className="cons-show-card" max={6} scale={1.02} glare={false}>
-                <div className="cons-show-media">
-                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" draggable="false" />
-                  <span className="cons-show-index">0{i + 1}</span>
-                  <span className="cons-show-loc"><MapPin size={11} /> {p.loc}</span>
-                </div>
-                <div className="cons-show-body">
-                  <span className="cons-show-tag">{p.tag}</span>
-                  <h3 className="cons-show-title">{p.name}</h3>
-                  <p className="cons-show-desc">{p.body}</p>
-                  <div className="cons-show-scope">
-                    <span className="cons-show-scope-label">Scope of Delivery</span>
-                    <p>{p.details}</p>
-                  </div>
-                </div>
-              </TiltCard>
-            ))}
-          </DragScroller>
-        </div>
+        <ProjectAccordion projects={PROJECTS} />
       </section>
 
       {/* ===== IMPACT (animated counters) ===== */}
@@ -301,7 +342,7 @@ export default function Consultancy() {
       {/* ===== PROCESS (pinned scrollytelling) ===== */}
       <PinnedProcess />
 
-      {/* ===== IN THEIR SPACES (scrolling photo wall) ===== */}
+      {/* ===== IN THEIR SPACES (editorial photo grid) ===== */}
       <section className="ed-gallery cons-gallery">
         <div className="ed-container ed-gallery-head">
           <div>
@@ -310,8 +351,19 @@ export default function Consultancy() {
           </div>
           <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link></Magnetic>
         </div>
-        <div className="ed-gallery-cols">
-          <ScrollingColumns columns={CONS_GALLERY} />
+        <div className="ed-photo-grid">
+          {CONS_GRID.map((p, i) => (
+            <motion.div
+              key={i}
+              className="ed-photo-grid-item"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <img src={p.src} alt={p.alt} loading="lazy" />
+            </motion.div>
+          ))}
         </div>
       </section>
 

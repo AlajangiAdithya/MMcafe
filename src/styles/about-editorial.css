@@ -1564,12 +1564,12 @@
 /* light-theme drag hint colour */
 .about-editorial .drag-scroller-hint { color: var(--ed-dim); }
 
-/* ---------- MOMENTS (scrolling photo wall) ---------- */
+/* ---------- MOMENTS / GALLERY ---------- */
 .ed-gallery {
   padding: clamp(56px, 9vw, 120px) 0;
   background: var(--ed-bg-2);
   border-top: 1px solid var(--ed-line);
-  overflow: hidden;
+  overflow: visible; /* grid items scale on hover — don't clip */
 }
 .ed-gallery-head {
   display: flex; align-items: flex-end; justify-content: space-between;
@@ -1622,3 +1622,150 @@
   color: var(--ed-blue-ink);
 }
 .cons-show-scope p { font-size: 0.85rem; line-height: 1.5; color: var(--ed-ink); margin: 0; }
+
+/* ============================================================
+   EDITORIAL PHOTO GRID — replaces scrolling photo walls
+   6-item mosaic: items 1 & 3 are tall (span 2 rows), item 5
+   is wide (span 2 cols). Inspired by editorial print layouts.
+   ============================================================ */
+.ed-photo-grid {
+  padding: 0 clamp(20px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr 1fr;
+  gap: clamp(10px, 1.2vw, 14px);
+}
+.ed-photo-grid-item {
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--ed-line);
+  display: block;
+}
+.ed-photo-grid-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.65s var(--ed-ease);
+}
+.ed-photo-grid-item:hover img { transform: scale(1.05); }
+.ed-photo-grid-item:nth-child(1) { grid-column: 1; grid-row: 1 / 3; min-height: 480px; }
+.ed-photo-grid-item:nth-child(2) { grid-column: 2; grid-row: 1; aspect-ratio: 4/3; }
+.ed-photo-grid-item:nth-child(3) { grid-column: 3; grid-row: 1 / 3; min-height: 480px; }
+.ed-photo-grid-item:nth-child(4) { grid-column: 2; grid-row: 2; aspect-ratio: 4/3; }
+.ed-photo-grid-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3; aspect-ratio: 16/7; }
+.ed-photo-grid-item:nth-child(6) { grid-column: 3; grid-row: 3; aspect-ratio: 4/3; }
+
+@media (max-width: 768px) {
+  .ed-photo-grid { grid-template-columns: 1fr 1fr; }
+  .ed-photo-grid-item {
+    grid-column: auto !important; grid-row: auto !important;
+    min-height: 0 !important; aspect-ratio: 4/3;
+  }
+  .ed-photo-grid-item:nth-child(1),
+  .ed-photo-grid-item:nth-child(3) { aspect-ratio: 3/4; }
+  .ed-photo-grid-item:nth-child(5) { grid-column: span 2 !important; aspect-ratio: 16/9; }
+}
+@media (max-width: 480px) {
+  .ed-photo-grid { grid-template-columns: 1fr; }
+  .ed-photo-grid-item { aspect-ratio: 4/3 !important; }
+  .ed-photo-grid-item:nth-child(5) { grid-column: auto !important; }
+}
+
+/* ============================================================
+   PILLARS — numbered editorial values, paradisoinstitute.org style
+   ============================================================ */
+.ed-pillars {
+  padding: clamp(56px, 9vw, 120px) 0;
+  border-top: 1px solid var(--ed-line);
+}
+.ed-pillars-list { margin-top: clamp(32px, 5vw, 56px); }
+.ed-pillar {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 clamp(20px, 3vw, 48px);
+  padding: clamp(28px, 4vw, 44px) 0;
+  border-bottom: 1px solid var(--ed-line);
+  align-items: start;
+}
+.ed-pillar:first-child { border-top: 1px solid var(--ed-line); }
+.ed-pillar-num {
+  font-family: var(--ed-serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300; font-style: italic;
+  color: var(--ed-blue);
+  line-height: 1; padding-top: 2px;
+}
+.ed-pillar-title {
+  font-family: var(--ed-serif);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--ed-ink); margin: 0 0 12px;
+}
+.ed-pillar-body {
+  font-size: 0.98rem; line-height: 1.68;
+  color: var(--ed-dim); margin: 0; max-width: 64ch;
+}
+@media (max-width: 540px) {
+  .ed-pillar { grid-template-columns: 48px 1fr; gap: 0 14px; }
+  .ed-pillar-num { font-size: 1.8rem; }
+}
+
+/* ============================================================
+   PROJECTS ACCORDION — hupr.ca Spheres d'innovation style
+   Vertical list of projects, each row expands on click to
+   reveal an image + description panel.
+   ============================================================ */
+.cons-accordion { border-top: 1px solid var(--ed-line); margin-top: clamp(28px, 4vw, 48px); }
+.cons-acc-item { border-bottom: 1px solid var(--ed-line); }
+.cons-acc-trigger {
+  width: 100%; display: flex; align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  padding: clamp(18px, 2.5vw, 28px) clamp(20px, 5vw, 64px);
+  background: none; border: none; cursor: pointer; text-align: left;
+  transition: background 0.22s ease;
+}
+.cons-acc-trigger:hover,
+.cons-acc-item.is-open .cons-acc-trigger { background: rgba(91, 155, 219, 0.04); }
+.cons-acc-num {
+  font-family: var(--ed-mono); font-size: 0.72rem;
+  letter-spacing: 0.1em; color: var(--ed-dim); flex-shrink: 0; width: 24px;
+}
+.cons-acc-meta { flex: 1; min-width: 0; }
+.cons-acc-tag {
+  display: block; font-family: var(--ed-mono); font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ed-blue-ink); margin-bottom: 3px;
+}
+.cons-acc-name {
+  font-family: var(--ed-serif);
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
+  font-weight: 400; line-height: 1.1; color: var(--ed-ink); margin: 0;
+}
+.cons-acc-loc {
+  font-family: var(--ed-mono); font-size: 0.76rem; color: var(--ed-dim);
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.cons-acc-arrow {
+  flex-shrink: 0; color: var(--ed-blue-ink);
+  display: flex; align-items: center; line-height: 1;
+}
+.cons-acc-panel { overflow: hidden; }
+.cons-acc-inner {
+  display: grid; grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(20px, 3.5vw, 52px);
+  padding: 4px clamp(20px, 5vw, 64px) clamp(28px, 4vw, 40px);
+  align-items: start;
+}
+.cons-acc-img-wrap { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+.cons-acc-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cons-acc-desc { font-size: 1rem; line-height: 1.65; color: var(--ed-ink); margin: 0 0 20px; }
+.cons-acc-scope { padding-top: 16px; border-top: 1px dashed var(--ed-line); }
+.cons-acc-scope-label {
+  display: block; font-family: var(--ed-mono); font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--ed-dim); margin-bottom: 8px;
+}
+.cons-acc-scope-body { font-size: 0.88rem; line-height: 1.6; color: var(--ed-dim); margin: 0; }
+
+@media (max-width: 640px) {
+  .cons-acc-inner { grid-template-columns: 1fr; }
+  .cons-acc-loc { display: none; }
+  .cons-acc-trigger { gap: 12px; padding: 16px 20px; }
+}

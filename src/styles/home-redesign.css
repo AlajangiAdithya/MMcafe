@@ -458,3 +458,44 @@
   .hr-pf-col { animation: none; }
   .hr-portfolio-cols:hover .hr-pf-img { filter: none; }
 }
+
+/* ============================================================
+   FLOATING IMAGES — draggable scattered photo cluster
+   Appears above the "Visit Us" section on the home page.
+   Each image is absolutely positioned & fully draggable.
+   ============================================================ */
+.hr-float-section {
+  position: relative;
+  background: #0E0B09;
+  padding: clamp(48px, 8vw, 100px) 0 clamp(24px, 4vw, 52px);
+  overflow: hidden;
+}
+.hr-float-zone {
+  position: relative;
+  height: clamp(300px, 42vh, 500px);
+  user-select: none;
+}
+.hr-float-card {
+  position: absolute;
+  cursor: grab;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 22px 64px rgba(0, 0, 0, 0.55), 0 4px 14px rgba(0, 0, 0, 0.38);
+}
+.hr-float-card:active { cursor: grabbing; }
+.hr-float-card img {
+  display: block; width: 100%;
+  aspect-ratio: 3/4; object-fit: cover;
+  pointer-events: none; border-radius: 12px;
+}
+.hr-float-hint {
+  text-align: center;
+  padding: clamp(12px, 1.8vw, 22px) 0 0;
+  font-family: var(--hr-mono, 'JetBrains Mono', monospace);
+  font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(244, 233, 216, 0.22);
+}
+@media (max-width: 640px) {
+  .hr-float-zone { height: 260px; }
+  .hr-float-card:nth-child(n+4) { display: none; }
+}
