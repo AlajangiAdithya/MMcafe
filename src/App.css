@@ -210,7 +210,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
+}
+
+/* ===== MOBILE HARDENING =====
+   background-attachment:fixed is janky/broken on mobile browsers (iOS Safari
+   especially) — pin the body bg to scroll on touch/small screens, and tighten
+   the container gutter so content isn't squeezed on narrow phones. */
+@media (max-width: 1024px), (pointer: coarse) {
+  body { background-attachment: scroll; }
+}
+@media (max-width: 600px) {
+  .container { padding: 0 20px; }
 }
 
 /* Subtle paper-grain overlay on the entire viewport, like the texture

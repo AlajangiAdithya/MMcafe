@@ -15,6 +15,11 @@ export default function SmoothScroll() {
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    // Native momentum scroll on touch devices. Lenis' syncTouch hijacks the
+    // browser's native touch scrolling and makes phones/tablets feel laggy and
+    // floaty — the #1 "mobile feels bad" culprit. Only run smooth scroll where
+    // there's a real pointer (mouse/trackpad). ScrollToTop falls back to native.
+    if (window.matchMedia('(pointer: coarse)').matches) return
 
     const lenis = new Lenis({
       lerp: MOTION.smoothScroll.lerp,

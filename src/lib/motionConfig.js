@@ -37,7 +37,7 @@ export const MOTION = {
     lerp: 0.12,         // 0.08–0.14 sweet spot: smooth yet responsive
     wheelMultiplier: 1,  // native scroll distance
     touchMultiplier: 1.6,
-    syncTouch: true,
+    syncTouch: false,    // never hijack native touch scroll (mobile feel)
   },
 
   // Page transitions Home ↔ About

@@ -143,9 +143,9 @@
   margin: 0 0 18px;
   font-size: 0.85rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
+  color: #3D3D3D;
 }
-.book-form-intro strong { color: rgba(255, 255, 255, 0.8); }
+.book-form-intro strong { color: #141414; }
 
 /* Author / Pages / Price on one tidy row */
 .book-form-fields {
@@ -160,11 +160,11 @@
   gap: 9px;
   margin: 14px 0 18px;
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.82);
+  color: #1F1F1F;
   cursor: pointer;
   user-select: none;
 }
-.book-free-toggle input { width: 16px; height: 16px; accent-color: #4A90D9; cursor: pointer; }
+.book-free-toggle input { width: 16px; height: 16px; accent-color: #111111; cursor: pointer; }
 
 /* Two upload zones side by side, each in its own labelled card */
 .book-form-uploads {
@@ -178,8 +178,8 @@
   gap: 9px;
   padding: 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #FAFAFA;
 }
 .book-upload-head {
   display: flex;
@@ -187,7 +187,7 @@
   gap: 7px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #141414;
 }
 .book-upload-tag {
   margin-left: auto;
@@ -197,17 +197,17 @@
   text-transform: uppercase;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(58, 170, 58, 0.16);
-  color: #5fce5f;
+  background: #111111;
+  color: #FFFFFF;
 }
 .book-upload-tag.private {
-  background: rgba(212, 142, 55, 0.18);
-  color: #e0b066;
+  background: #E4E4E6;
+  color: #1F1F1F;
 }
 .book-upload-card small {
   font-size: 0.72rem;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.48);
+  color: #6B6B6B;
 }
 
 @media (max-width: 560px) {
@@ -223,8 +223,8 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #FAFAFA;
   color: inherit;
 }
 .file-uploader-filename {
@@ -241,6 +241,6 @@
   gap: 4px;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #3aaa3a;
+  color: #111111;
   white-space: nowrap;
 }

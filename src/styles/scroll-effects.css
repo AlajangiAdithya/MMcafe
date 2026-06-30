@@ -729,6 +729,10 @@ input:focus, textarea:focus, select:focus {
   filter: saturate(1.04);
   pointer-events: none;
 }
+/* fixed-attachment parallax is janky on phones — pin to scroll on touch */
+@media (max-width: 1024px), (pointer: coarse) {
+  .about-parallax-bg { background-attachment: scroll; }
+}
 .about-parallax-section::after {
   content: '';
   position: absolute;
