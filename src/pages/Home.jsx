@@ -426,119 +426,6 @@ function ScrollHero() {
     </section>
   )
 }
-function CoffeeAnatomy() {
-  const [active, setActive] = useState(0)
-
-  const layers = [
-    {
-      name: 'Textured Microfoam Veil',
-      phonetic: '/ˈmaɪkrəʊfəʊm/',
-      desc: 'Silky micro-bubbles formed by precision air injection, creating a velvety mouthfeel and sealing in underlying coffee aromas.',
-      science: 'Steamed exactly between 60°C and 65°C to preserve natural lactose sweetness.',
-      pct: '20%',
-      color: 'rgba(239, 225, 207, 0.9)',
-      dotColor: '#efe1cf'
-    },
-    {
-      name: 'Espresso Crema Shield',
-      phonetic: '/ˈkremə/',
-      desc: 'The golden-brown emulsified carbon dioxide bubbles and soluble coffee oils that sit atop a freshly pulled shot.',
-      science: 'Formed at 9-bar pressure, sealing volatile aromatic compounds in the cup.',
-      pct: '12%',
-      color: 'rgba(201, 151, 74, 0.85)',
-      dotColor: '#c9974a'
-    },
-    {
-      name: 'The Espresso Heart',
-      phonetic: '/eˈspresəʊ/',
-      desc: 'The concentrated core liquid carrying dark chocolate notes, caramels, and balanced organic acids.',
-      science: '36g extracted from 18g of double-washed Chikmagalur beans in 28 seconds.',
-      pct: '28%',
-      color: 'rgba(74, 58, 38, 0.95)',
-      dotColor: '#4a3a26'
-    },
-    {
-      name: 'Filtered Water Base',
-      phonetic: '/ˈwɔːtə/',
-      desc: 'Balanced hot water that dilutes and opens the concentrated coffee solids for a lighter drinking body.',
-      science: 'TDS-balanced water (135ppm) at 93°C to unlock the origin notes.',
-      pct: '40%',
-      color: 'rgba(232, 224, 200, 0.35)',
-      dotColor: '#ede0c4'
-    }
-  ]
-
-  const activeLayer = layers[active]
-
-  return (
-    <div className="coffee-anatomy">
-      <div className="anatomy-header">
-        <span className="anatomy-badge">Interactive Anatomy</span>
-        <h3>The Anatomy of a Cup</h3>
-        <p className="anatomy-tagline">Hover or tap on the cup layers or labels to inspect the extraction science</p>
-      </div>
-
-      <div className="anatomy-grid">
-        <div className="anatomy-details">
-          <div className="anatomy-panel">
-            <div className="anatomy-meta">
-              <span className="anatomy-pct">{activeLayer.pct} Vol</span>
-              <span className="anatomy-layer-phonetic">{activeLayer.phonetic}</span>
-            </div>
-            <h4 className="anatomy-layer-name">{activeLayer.name}</h4>
-            <p className="anatomy-layer-desc">{activeLayer.desc}</p>
-            
-            <div className="anatomy-science-box">
-              <span className="science-label">Extraction Science</span>
-              <p className="science-text">{activeLayer.science}</p>
-            </div>
-          </div>
-
-          <div className="anatomy-selector-list">
-            {layers.map((l, idx) => (
-              <button
-                key={l.name}
-                type="button"
-                className={`anatomy-selector-item ${idx === active ? 'active' : ''}`}
-                onMouseEnter={() => setActive(idx)}
-                onClick={() => setActive(idx)}
-              >
-                <span className="selector-dot" style={{ background: l.dotColor }} />
-                <span className="selector-title">{l.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="anatomy-visual">
-          <div className="cup-container">
-            <div className="glass-cup">
-              <div className="cup-handle" />
-              <div className="cup-contents">
-                {layers.map((l, idx) => {
-                  const isWordActive = idx === active
-                  return (
-                    <div
-                      key={l.name}
-                      className={`cup-layer cup-layer--${idx} ${isWordActive ? 'active' : ''}`}
-                      style={{
-                        backgroundColor: l.color,
-                        height: l.pct,
-                        boxShadow: isWordActive ? `inset 0 0 16px rgba(255,255,255,0.2), 0 0 12px ${l.dotColor}` : 'none'
-                      }}
-                      onMouseEnter={() => setActive(idx)}
-                      onClick={() => setActive(idx)}
-                    />
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 /* PORTFOLIO COLUMNS, wolverineworldwide.com-style "A portfolio built for every
    cup." Four columns of photos scroll vertically (alternating up/down, varied
@@ -707,9 +594,6 @@ export default function Home() {
               <Link to="/store" className="cap-ritual-link">Discover the coffee <ArrowRight size={14} /></Link>
             </AnimatedSection>
           </div>
-
-          <CoffeeAnatomy />
-
         </div>
       </section>
 
