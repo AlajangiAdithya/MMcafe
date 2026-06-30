@@ -5,8 +5,39 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
+import DragScroller from '../components/DragScroller'
+import ScrollingColumns from '../components/ScrollingColumns'
+import CountUp from '../components/CountUp'
+import KineticHeading from '../components/KineticHeading'
 import InstagramTabs from '@/components/ui/instagram-tabs'
 import '../styles/about-editorial.css'
+
+/* Animated stat counters, the craft measured in certifications + milestones. */
+const ABOUT_STATS = [
+  { to: 4, label: 'SCA & specialty certifications', sub: 'Barista · Brewing · CVA · Q Processing' },
+  { to: 3, label: 'Countries trained at origin', sub: 'India · Thailand · Ethiopia' },
+  { to: 4, suffix: 'th', label: 'Indian Barista Championship', sub: 'Runner-Up, 2026' },
+  { to: 2026, separator: '', label: 'The academy, founded', sub: 'Mulund, Mumbai' },
+]
+
+/* Draggable journey timeline, physiotherapy → competition stage → the academy. */
+const ABOUT_JOURNEY = [
+  { year: 'BEFORE', title: 'Physiotherapy', body: 'A background in healing bodies, an eye for precision, patience, and care that would carry straight into the craft.' },
+  { year: 'THE START', title: 'The Family Cafe', body: 'A cafe in Mulund beside my father’s bicycle studio. If we were going to serve coffee, I wanted to truly understand it.' },
+  { year: 'SCA', title: 'Barista & Brewing', body: 'Professional SCA certifications in barista skills and brewing, learning the craft from the ground up.' },
+  { year: 'THAILAND', title: 'CVA Sensory', body: 'A Coffee Value Assessment to read flavour, structure, and sensory evaluation properly.' },
+  { year: 'ETHIOPIA', title: 'Q Processing', body: 'Learning how coffee is shaped at origin, from cherry to green bean, where flavour really begins.' },
+  { year: '2026', title: '4th Runner-Up', body: 'Stepping onto the competition stage at the Indian Barista Championship.' },
+  { year: 'TODAY', title: 'Mastermind Brews', body: 'A platform and a physical academy in Mulund, sharing coffees, knowledge, and hands-on workshops.' },
+]
+
+/* Photo wall, four columns of moments from the cafe + academy + projects. */
+const ABOUT_GALLERY = [
+  ['/namrata-thakkar.jpg', '/pour-over-coffee.jpg', '/offer-beans.jpg', '/projects/affogato-khar.jpg'],
+  ['/about-team.jpg', '/academy-feature.jpg', '/cafe-food.png', '/projects/grounded-bandra.jpg'],
+  ['/project-cafe.jpg', '/project-beans.jpg', '/offer-academy.png', '/projects/geranium-haven-goa.jpg'],
+  ['/hero-bg.jpg', '/cafe-press-bg.jpg', '/projects/churnd-surat.jpg', '/projects/indulge-creamery-bandra.jpg'],
+]
 
 const ABOUT_ORG_ID = 'https://www.mastermindbrews.com/#organization'
 const ABOUT_SCHEMA = {
@@ -75,6 +106,8 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede,
   )
 }
 
+
+
 export default function AboutUs() {
   usePageMeta({
     title: 'About Mastermind Brews · Namrata Thakkar & the Coffee Academy',
@@ -118,6 +151,17 @@ export default function AboutUs() {
               >
                 The journey, the craft,<br />and the <span className="text-accent-glow">coffee</span>.
               </motion.h1>
+
+              <motion.div
+                className="ed-definitions-line"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.85rem', fontFamily: 'var(--ed-mono)', color: 'var(--ed-blue-ink)', marginTop: '8.px', marginBottom: '24px', opacity: 0.9 }}
+              >
+                <span className="ed-phonetic" style={{ color: '#F6EFE1', fontWeight: 500 }}>/ˈbrʊː/</span>
+                <span className="ed-pos" style={{ fontStyle: 'italic', color: 'rgba(244, 233, 216, 0.5)' }}>(verb)</span>
+                <span className="ed-def-separator" style={{ color: 'rgba(91, 155, 219, 0.3)' }}>•</span>
+                <span className="ed-def-short" style={{ color: 'rgba(244, 233, 216, 0.7)' }}>To extract the botanical soul of the bean through heat and water.</span>
+              </motion.div>
 
               <motion.p
                 className="page-lede"
@@ -166,6 +210,66 @@ export default function AboutUs() {
           </div>
         </StoryPanel>
       </div>
+
+      {/* ===== BY THE NUMBERS (animated counters) ===== */}
+      <section className="ed-stats">
+        <div className="ed-container">
+          <div className="ed-section-label">The Craft, Measured</div>
+          <div className="ed-stats-grid">
+            {ABOUT_STATS.map((s, i) => (
+              <motion.div
+                key={s.label}
+                className="ed-stat"
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="ed-stat-num">
+                  <CountUp to={s.to} suffix={s.suffix || ''} separator={s.separator ?? ','} />
+                </span>
+                <span className="ed-stat-label">{s.label}</span>
+                {s.sub && <span className="ed-stat-sub">{s.sub}</span>}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== THE JOURNEY (draggable timeline) ===== */}
+      <section className="ed-journey">
+        <div className="ed-container">
+          <div className="ed-section-label">The Road Here</div>
+          <KineticHeading as="h2" className="ed-section-title">From physiotherapy to the bar.</KineticHeading>
+          <p className="ed-journey-kicker">Drag through the milestones&mdash;the certifications, the competition stage, and the cafe where it all began.</p>
+        </div>
+        <div data-cursor="drag">
+          <DragScroller className="ed-journey-track" autoDrift={0.22}>
+            {ABOUT_JOURNEY.map((m, i) => (
+              <article key={m.title} className="ed-jcard">
+                <span className="ed-jcard-step">{String(i + 1).padStart(2, '0')}</span>
+                <span className="ed-jcard-year">{m.year}</span>
+                <h3 className="ed-jcard-title">{m.title}</h3>
+                <p className="ed-jcard-body">{m.body}</p>
+              </article>
+            ))}
+          </DragScroller>
+        </div>
+      </section>
+
+      {/* ===== MOMENTS (scrolling photo wall) ===== */}
+      <section className="ed-gallery">
+        <div className="ed-container ed-gallery-head">
+          <div>
+            <div className="ed-section-label">In Frame</div>
+            <KineticHeading as="h2" className="ed-section-title">Moments from the journey.</KineticHeading>
+          </div>
+          <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn with us <ArrowRight size={14} /></Link></Magnetic>
+        </div>
+        <div className="ed-gallery-cols">
+          <ScrollingColumns columns={ABOUT_GALLERY} />
+        </div>
+      </section>
 
       {/* ===== INSTAGRAM TABS ===== */}
       <section className="ed-ig">

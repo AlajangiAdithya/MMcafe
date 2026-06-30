@@ -5,6 +5,11 @@ import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion 
 import { usePageMeta } from '../lib/usePageMeta'
 import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
+import DragScroller from '../components/DragScroller'
+import ScrollingColumns from '../components/ScrollingColumns'
+import CountUp from '../components/CountUp'
+import KineticHeading from '../components/KineticHeading'
+import TiltCard from '../components/TiltCard'
 import '../styles/about-editorial.css'
 
 const ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -37,12 +42,28 @@ const EXPERTISE = [
 
 /* Real consulting projects, the cafes we've built coffee programs with. */
 const PROJECTS = [
-  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', img: '/hero-bg.jpg', tag: 'Manual Brew Bar', body: `Specialty coffee where no one expected it — a brew bar that turned curious locals into regulars.` },
-  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', img: '/projects/grounded-bandra.jpg', tag: 'Menu Design', body: `A menu with a voice of its own — classics, healthier pours, and indulgent drinks built around the bakes.` },
-  { name: 'Affogato', loc: 'Khar', initial: 'A', img: '/projects/affogato-khar.jpg', tag: 'Coffee × Gelato', body: `Italian café culture, done right — espresso worthy of world-class gelato.` },
-  { name: "Churn'd", loc: 'Surat', initial: 'C', img: '/projects/churnd-surat.jpg', tag: 'Beverage Innovation', body: `No gimmicks, big ideas — like a Mango Sticky Rice Iced Latte and a Thai Boba soft serve.` },
-  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', img: '/projects/indulge-creamery-bandra.jpg', tag: 'Espresso & Matcha', body: `Indulgence by design — an espresso- and matcha-led menu for a sweet-toothed crowd.` },
-  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', tag: 'Coffee Program', body: `Beachside coffee with intent — from piña colada cold coffee to proper espresso service.` },
+  { name: 'Cocoa Experience Cafe', loc: 'Virar', initial: 'C', img: '/hero-bg.jpg', tag: 'Manual Brew Bar', body: `Specialty coffee where no one expected it — a brew bar that turned curious locals into regulars.`, details: `Designed manual pour-over bar workflow, sourced specialty equipment, and trained six local baristas on calibration.` },
+  { name: 'Grounded Cafe', loc: 'Bandra', initial: 'G', img: '/projects/grounded-bandra.jpg', tag: 'Menu Design', body: `A menu with a voice of its own — classics, healthier pours, and indulgent drinks built around the bakes.`, details: `Formulated custom espresso recipes matching the pastry lineup, and completed SOP documentation for cafe staff.` },
+  { name: 'Affogato', loc: 'Khar', initial: 'A', img: '/projects/affogato-khar.jpg', tag: 'Coffee × Gelato', body: `Italian café culture, done right — espresso worthy of world-class gelato.`, details: `Calibrated a high-extraction roast profile to pair organically with milk-based gelato fats, balancing acidity.` },
+  { name: "Churn'd", loc: 'Surat', initial: 'C', img: '/projects/churnd-surat.jpg', tag: 'Beverage Innovation', body: `No gimmicks, big ideas — like a Mango Sticky Rice Iced Latte and a Thai Boba soft serve.`, details: `Created and tested proprietary cold syrups, and engineered custom beverage presentation standards.` },
+  { name: 'Indulge Creamery', loc: 'Bandra', initial: 'I', img: '/projects/indulge-creamery-bandra.jpg', tag: 'Espresso & Matcha', body: `Indulgence by design — an espresso- and matcha-led menu for a sweet-toothed crowd.`, details: `Sourced ceremonial-grade matcha, calibrated whisking speeds, and combined hot espresso beverages for a dual menu.` },
+  { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', tag: 'Coffee Program', body: `Beachside coffee with intent — from piña colada cold coffee to proper espresso service.`, details: `Designed custom bar layout for beachside humidity, and established an end-to-end green bean procurement system.` },
+]
+
+/* Animated impact counters for the consultancy work. */
+const CONS_STATS = [
+  { to: 6, label: 'Cafe programs built', sub: 'Across India' },
+  { to: 5, label: 'Cities served', sub: 'Mumbai · Surat · Goa & more' },
+  { to: 5, label: 'Areas of expertise', sub: 'Beans to SOPs' },
+  { to: 100, suffix: '%', label: 'Hands-on delivery', sub: 'On-site & remote' },
+]
+
+/* Photo wall, four columns of the cafes + programs we've shaped. */
+const CONS_GALLERY = [
+  ['/hero-bg.jpg', '/projects/grounded-bandra.jpg', '/pour-over-coffee.jpg', '/projects/churnd-surat.jpg'],
+  ['/projects/affogato-khar.jpg', '/project-cafe.jpg', '/projects/indulge-creamery-bandra.jpg', '/offer-beans.jpg'],
+  ['/projects/geranium-haven-goa.jpg', '/cafe-food.png', '/projects/cocoa-experience-virar.jpg', '/academy-feature.jpg'],
+  ['/project-beans.jpg', '/about-team.jpg', '/cafe-press-bg.jpg', '/offer-academy.png'],
 ]
 
 const PROCESS = [
@@ -201,7 +222,7 @@ export default function Consultancy() {
       <section className="ed-values">
         <div className="ed-container">
           <div className="ed-section-label">Where We Help</div>
-          <h2 className="ed-section-title">Our Expertise</h2>
+          <KineticHeading as="h2" className="ed-section-title">Our Expertise</KineticHeading>
           <div className="ed-values-grid">
             {EXPERTISE.map((s, i) => (
               <motion.div
@@ -223,31 +244,55 @@ export default function Consultancy() {
         </div>
       </section>
 
-      {/* ===== OUR PROJECTS (cafes we've worked with) ===== */}
-      <section className="ed-projects">
+      {/* ===== OUR PROJECTS (draggable tilt showcase) ===== */}
+      <section className="ed-projects cons-projects">
         <div className="ed-container">
           <div className="ed-section-label">Our Projects</div>
-          <h2 className="ed-section-title">Spaces we&rsquo;ve <em>worked with.</em></h2>
-          <div className="ed-proj-grid">
+          <KineticHeading as="h2" className="ed-section-title">Spaces we&rsquo;ve shaped.</KineticHeading>
+          <p className="ed-journey-kicker">Drag through the cafes we&rsquo;ve built coffee programs with&mdash;each card carries its own scope of delivery.</p>
+        </div>
+        <div data-cursor="drag">
+          <DragScroller className="cons-show-track" autoDrift={0.2}>
             {PROJECTS.map((p, i) => (
-              <motion.article
-                key={p.name}
-                className="ed-proj-card"
-                initial={{ opacity: 0, y: 24 }}
+              <TiltCard key={p.name} className="cons-show-card" max={6} scale={1.02} glare={false}>
+                <div className="cons-show-media">
+                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" draggable="false" />
+                  <span className="cons-show-index">0{i + 1}</span>
+                  <span className="cons-show-loc"><MapPin size={11} /> {p.loc}</span>
+                </div>
+                <div className="cons-show-body">
+                  <span className="cons-show-tag">{p.tag}</span>
+                  <h3 className="cons-show-title">{p.name}</h3>
+                  <p className="cons-show-desc">{p.body}</p>
+                  <div className="cons-show-scope">
+                    <span className="cons-show-scope-label">Scope of Delivery</span>
+                    <p>{p.details}</p>
+                  </div>
+                </div>
+              </TiltCard>
+            ))}
+          </DragScroller>
+        </div>
+      </section>
+
+      {/* ===== IMPACT (animated counters) ===== */}
+      <section className="ed-stats cons-stats">
+        <div className="ed-container">
+          <div className="ed-section-label">The Work, in Numbers</div>
+          <div className="ed-stats-grid">
+            {CONS_STATS.map((s, i) => (
+              <motion.div
+                key={s.label}
+                className="ed-stat"
+                initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.55, delay: (i % 3) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="ed-proj-media" data-initial={p.initial}>
-                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" />
-                  <span className="ed-proj-loc"><MapPin size={11} /> {p.loc}</span>
-                </div>
-                <div className="ed-proj-body">
-                  <span className="ed-proj-tag">{p.tag}</span>
-                  <h3 className="ed-proj-title">{p.name}</h3>
-                  <p>{p.body}</p>
-                </div>
-              </motion.article>
+                <span className="ed-stat-num"><CountUp to={s.to} suffix={s.suffix || ''} separator={s.separator ?? ','} /></span>
+                <span className="ed-stat-label">{s.label}</span>
+                {s.sub && <span className="ed-stat-sub">{s.sub}</span>}
+              </motion.div>
             ))}
           </div>
         </div>
@@ -255,6 +300,20 @@ export default function Consultancy() {
 
       {/* ===== PROCESS (pinned scrollytelling) ===== */}
       <PinnedProcess />
+
+      {/* ===== IN THEIR SPACES (scrolling photo wall) ===== */}
+      <section className="ed-gallery cons-gallery">
+        <div className="ed-container ed-gallery-head">
+          <div>
+            <div className="ed-section-label">In Their Spaces</div>
+            <KineticHeading as="h2" className="ed-section-title">Coffee, on the ground.</KineticHeading>
+          </div>
+          <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link></Magnetic>
+        </div>
+        <div className="ed-gallery-cols">
+          <ScrollingColumns columns={CONS_GALLERY} />
+        </div>
+      </section>
 
       {/* ===== WHO IT'S FOR ===== */}
       <SuitedPanel />

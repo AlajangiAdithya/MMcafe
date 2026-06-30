@@ -332,9 +332,64 @@
 }
 
 /* ============================================================
+   SCROLLING COLUMNS, reusable wall of vertically-scrolling photos
+   (wolverineworldwide.com-style). Used by <ScrollingColumns />.
+   Theme-neutral; the loop is seamless because each column renders
+   its images twice and translates exactly one copy's height (-50%),
+   with a uniform margin-bottom (incl. the last) keeping the math exact.
+   ============================================================ */
+.scol {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
+  height: clamp(420px, 60vh, 620px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 11%, #000 89%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 11%, #000 89%, transparent 100%);
+}
+.scol-col {
+  display: block;
+  will-change: transform;
+  animation: scol-scroll linear infinite;
+}
+.scol-col--down { animation-direction: reverse; }
+.scol-col:nth-child(1) { animation-duration: 44s; }
+.scol-col:nth-child(2) { animation-duration: 33s; margin-top: -7%; }
+.scol-col:nth-child(3) { animation-duration: 52s; }
+.scol-col:nth-child(4) { animation-duration: 38s; margin-top: -7%; }
+.scol-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: clamp(12px, 1.4vw, 20px);
+  background: rgba(20, 15, 10, 0.06);
+  box-shadow: 0 14px 34px rgba(20, 15, 10, 0.14);
+  transition: filter 0.4s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.scol:hover .scol-img { filter: brightness(0.82); }
+.scol .scol-img:hover { filter: brightness(1.05); transform: scale(1.03); }
+@keyframes scol-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+@media (max-width: 900px) {
+  .scol { grid-template-columns: repeat(3, 1fr); height: clamp(340px, 48vh, 460px); }
+  .scol-col:nth-child(4) { display: none; }
+}
+@media (max-width: 560px) {
+  .scol { grid-template-columns: repeat(2, 1fr); height: 320px; }
+  .scol-col:nth-child(3) { display: none; }
+}
+
+/* ============================================================
    REDUCED MOTION, kill anything decorative.
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+  .scol-col { animation: none; }
+  .scol:hover .scol-img { filter: none; }
   *,
   *::before,
   *::after {

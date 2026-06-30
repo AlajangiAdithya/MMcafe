@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase } from 'lucide-react'
+import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase, Flame, Compass, Wind } from 'lucide-react'
 import { motion, useInView, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
@@ -205,14 +205,59 @@ function VerticalRow({ v }) {
         <span className="hr-vert-num">{v.num}</span>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={inView ? { opacity: 1, y: 0 } : undefined}
-        transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.1,
+              delayChildren: 0.05
+            }
+          }
+        }}
       >
-        <span className="hr-vert-cat"><v.icon size={13} style={{ display: 'inline', marginRight: 7, verticalAlign: '-2px' }} />{v.cat}</span>
-        <h3 className="hr-vert-title">{v.title}</h3>
-        <p className="hr-vert-body">{v.body}</p>
-        <Link to={v.to} className="hr-vert-link">{v.cta} <ArrowRight size={14} /></Link>
+        <motion.span 
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
+          }}
+          className="hr-vert-cat"
+        >
+          <v.icon size={13} style={{ display: 'inline', marginRight: 7, verticalAlign: '-2px' }} />
+          {v.cat}
+        </motion.span>
+        
+        <motion.h3 
+          variants={{
+            hidden: { opacity: 0, y: 16 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+          }}
+          className="hr-vert-title"
+        >
+          {v.title}
+        </motion.h3>
+        
+        <motion.p 
+          variants={{
+            hidden: { opacity: 0, y: 16 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+          }}
+          className="hr-vert-body"
+        >
+          {v.body}
+        </motion.p>
+        
+        <motion.div
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
+          }}
+        >
+          <Link to={v.to} className="hr-vert-link">
+            {v.cta} <ArrowRight size={14} className="hr-link-arrow" />
+          </Link>
+        </motion.div>
       </motion.div>
     </div>
   )
@@ -358,6 +403,12 @@ function ScrollHero() {
           <motion.div className="hr-hero2-block hr-hero2-text" style={{ opacity: textOpacity, y: textY }}>
             <div className="hr-eyebrow">Mastermind Brews · Mumbai, India</div>
             <h1 className="hr-hero-head">The art of <em>great coffee.</em></h1>
+            <div className="hr-definitions-line" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.85rem', fontFamily: 'var(--hr-mono)', color: 'var(--hr-accent-bright)', marginTop: '-8px', marginBottom: '22px' }}>
+              <span className="hr-phonetic" style={{ color: 'var(--hr-cream)', fontWeight: 500 }}>/ˈkɒfi/</span>
+              <span className="hr-pos" style={{ fontStyle: 'italic', color: 'rgba(244, 233, 216, 0.5)' }}>(noun)</span>
+              <span className="hr-def-separator" style={{ color: 'rgba(176, 116, 51, 0.4)' }}>•</span>
+              <span className="hr-def-short" style={{ color: 'rgba(244, 233, 216, 0.7)' }}>A legendary, golden elixir that connects generations. Feel the soul of craft, in every single pour.</span>
+            </div>
             <p className="hr-hero-sub">
               Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
             </p>
@@ -375,6 +426,187 @@ function ScrollHero() {
     </section>
   )
 }
+function CoffeeAnatomy() {
+  const [active, setActive] = useState(0)
+
+  const layers = [
+    {
+      name: 'Textured Microfoam Veil',
+      phonetic: '/ˈmaɪkrəʊfəʊm/',
+      desc: 'Silky micro-bubbles formed by precision air injection, creating a velvety mouthfeel and sealing in underlying coffee aromas.',
+      science: 'Steamed exactly between 60°C and 65°C to preserve natural lactose sweetness.',
+      pct: '20%',
+      color: 'rgba(239, 225, 207, 0.9)',
+      dotColor: '#efe1cf'
+    },
+    {
+      name: 'Espresso Crema Shield',
+      phonetic: '/ˈkremə/',
+      desc: 'The golden-brown emulsified carbon dioxide bubbles and soluble coffee oils that sit atop a freshly pulled shot.',
+      science: 'Formed at 9-bar pressure, sealing volatile aromatic compounds in the cup.',
+      pct: '12%',
+      color: 'rgba(201, 151, 74, 0.85)',
+      dotColor: '#c9974a'
+    },
+    {
+      name: 'The Espresso Heart',
+      phonetic: '/eˈspresəʊ/',
+      desc: 'The concentrated core liquid carrying dark chocolate notes, caramels, and balanced organic acids.',
+      science: '36g extracted from 18g of double-washed Chikmagalur beans in 28 seconds.',
+      pct: '28%',
+      color: 'rgba(74, 58, 38, 0.95)',
+      dotColor: '#4a3a26'
+    },
+    {
+      name: 'Filtered Water Base',
+      phonetic: '/ˈwɔːtə/',
+      desc: 'Balanced hot water that dilutes and opens the concentrated coffee solids for a lighter drinking body.',
+      science: 'TDS-balanced water (135ppm) at 93°C to unlock the origin notes.',
+      pct: '40%',
+      color: 'rgba(232, 224, 200, 0.35)',
+      dotColor: '#ede0c4'
+    }
+  ]
+
+  const activeLayer = layers[active]
+
+  return (
+    <div className="coffee-anatomy">
+      <div className="anatomy-header">
+        <span className="anatomy-badge">Interactive Anatomy</span>
+        <h3>The Anatomy of a Cup</h3>
+        <p className="anatomy-tagline">Hover or tap on the cup layers or labels to inspect the extraction science</p>
+      </div>
+
+      <div className="anatomy-grid">
+        <div className="anatomy-details">
+          <div className="anatomy-panel">
+            <div className="anatomy-meta">
+              <span className="anatomy-pct">{activeLayer.pct} Vol</span>
+              <span className="anatomy-layer-phonetic">{activeLayer.phonetic}</span>
+            </div>
+            <h4 className="anatomy-layer-name">{activeLayer.name}</h4>
+            <p className="anatomy-layer-desc">{activeLayer.desc}</p>
+            
+            <div className="anatomy-science-box">
+              <span className="science-label">Extraction Science</span>
+              <p className="science-text">{activeLayer.science}</p>
+            </div>
+          </div>
+
+          <div className="anatomy-selector-list">
+            {layers.map((l, idx) => (
+              <button
+                key={l.name}
+                type="button"
+                className={`anatomy-selector-item ${idx === active ? 'active' : ''}`}
+                onMouseEnter={() => setActive(idx)}
+                onClick={() => setActive(idx)}
+              >
+                <span className="selector-dot" style={{ background: l.dotColor }} />
+                <span className="selector-title">{l.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="anatomy-visual">
+          <div className="cup-container">
+            <div className="glass-cup">
+              <div className="cup-handle" />
+              <div className="cup-contents">
+                {layers.map((l, idx) => {
+                  const isWordActive = idx === active
+                  return (
+                    <div
+                      key={l.name}
+                      className={`cup-layer cup-layer--${idx} ${isWordActive ? 'active' : ''}`}
+                      style={{
+                        backgroundColor: l.color,
+                        height: l.pct,
+                        boxShadow: isWordActive ? `inset 0 0 16px rgba(255,255,255,0.2), 0 0 12px ${l.dotColor}` : 'none'
+                      }}
+                      onMouseEnter={() => setActive(idx)}
+                      onClick={() => setActive(idx)}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* PORTFOLIO COLUMNS, wolverineworldwide.com-style "A portfolio built for every
+   cup." Four columns of photos scroll vertically (alternating up/down, varied
+   speeds) beside a headline + CTA. Pure-CSS marquee so it stays alive even when
+   the page isn't scrolling; the loop is seamless because each column renders its
+   images twice and translates exactly one copy's height. Decorative → aria-hidden. */
+const PORTFOLIO_COLUMNS = [
+  ['/hero-bg.jpg', '/project-cafe.jpg', '/pour-over-coffee.jpg', '/projects/affogato-khar.jpg'],
+  ['/offer-beans.jpg', '/cafe-food.png', '/projects/grounded-bandra.jpg', '/academy-feature.jpg'],
+  ['/project-beans.jpg', '/projects/churnd-surat.jpg', '/offer-academy.png', '/projects/geranium-haven-goa.jpg'],
+  ['/about-team.jpg', '/projects/cocoa-experience-virar.jpg', '/projects/indulge-creamery-bandra.jpg', '/cafe-press-bg.jpg'],
+]
+
+function PortfolioColumns() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-15%' })
+  return (
+    <section className="hr-portfolio" ref={ref}>
+      <div className="hr-portfolio-inner">
+        <motion.div
+          className="hr-portfolio-copy"
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } } }}
+        >
+          <motion.div
+            className="hr-label"
+            style={{ color: 'var(--hr-accent-bright)' }}
+            variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            Our Work
+          </motion.div>
+          <motion.h2
+            className="hr-portfolio-head"
+            variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}
+          >
+            A portfolio built for <em>every cup.</em>
+          </motion.h2>
+          <motion.p
+            className="hr-portfolio-sub"
+            variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          >
+            Single-origin roasting, an online barista academy, and full cafe builds&mdash;every part of Mastermind Brews, in one place.
+          </motion.p>
+          <motion.div
+            className="hr-portfolio-cta"
+            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          >
+            <Magnetic>
+              <Link to="/consultancy" className="hr-btn hr-btn-primary">Explore our work <ArrowUpRight size={15} /></Link>
+            </Magnetic>
+          </motion.div>
+        </motion.div>
+
+        <div className="hr-portfolio-cols" aria-hidden="true">
+          {PORTFOLIO_COLUMNS.map((imgs, ci) => (
+            <div key={ci} className={`hr-pf-col${ci % 2 === 1 ? ' hr-pf-col--down' : ''}`}>
+              {[...imgs, ...imgs].map((src, ii) => (
+                <img key={ii} className="hr-pf-img" src={src} alt="" loading="lazy" draggable="false" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 
 export default function Home() {
   usePageMeta({
@@ -441,6 +673,9 @@ export default function Home() {
       {/* ===== HERO, video bg; logo→headline scroll crossfade ===== */}
       <ScrollHero />
 
+      {/* ===== PORTFOLIO (scrolling photo columns + CTA) ===== */}
+      <PortfolioColumns />
+
       <MarqueeStrip items={MARQUEE_TERMS} variant="paper" tall />
 
       {/* ===== THREE VERTICALS ===== */}
@@ -472,6 +707,9 @@ export default function Home() {
               <Link to="/store" className="cap-ritual-link">Discover the coffee <ArrowRight size={14} /></Link>
             </AnimatedSection>
           </div>
+
+          <CoffeeAnatomy />
+
         </div>
       </section>
 
@@ -514,6 +752,8 @@ export default function Home() {
                     key={product.id}
                     className="featured-product has-sheen"
                     variants={fadeUp}
+                    whileHover={prefersReducedMotion ? undefined : { y: -8, scale: 1.015, boxShadow: '0 20px 48px rgba(80, 50, 10, 0.15)' }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
                     onClick={() => setOpenProduct(product)}
                   >
                     <div className="featured-product-image">
@@ -524,13 +764,14 @@ export default function Home() {
                       )}
                       <div className="featured-product-overlay" />
                       <div className="featured-product-quick">
-                        <button
+                        <motion.button
                           type="button"
+                          whileTap={{ scale: 0.95 }}
                           className="btn btn-blue btn-sm full-width"
                           onClick={(e) => { e.stopPropagation(); addItem(product); toast.success(`${product.name} added`) }}
                         >
                           <ShoppingBag size={14} /> Add to cart
-                        </button>
+                        </motion.button>
                       </div>
                     </div>
                     <div className="featured-product-info">
@@ -546,14 +787,15 @@ export default function Home() {
                       {product.weight && <div className="featured-product-weight">{product.weight}</div>}
                       <div className="featured-product-bottom">
                         <span className="featured-product-price">₹{product.price}</span>
-                        <button
+                        <motion.button
                           type="button"
+                          whileTap={{ scale: 0.94 }}
                           className="add-btn"
                           aria-label={`Add ${product.name} to cart`}
                           onClick={(e) => { e.stopPropagation(); addItem(product); toast.success(`${product.name} added`) }}
                         >
                           <ShoppingBag size={16} />
-                        </button>
+                        </motion.button>
                       </div>
                     </div>
                   </motion.article>
@@ -579,13 +821,34 @@ export default function Home() {
       <section className="hr-visit">
         <ParallaxBand />
         <div className="hr-visit-scrim" aria-hidden="true" />
-        <AnimatedSection className="hr-visit-inner">
-          <div className="hr-label" style={{ color: 'var(--hr-accent-bright)' }}>Visit Us</div>
+        <motion.div
+          className="hr-visit-inner"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-15%' }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } }
+          }}
+        >
+          <motion.div
+            className="hr-label"
+            style={{ color: 'var(--hr-accent-bright)' }}
+            variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            Visit Us
+          </motion.div>
           <WordReveal as="h2" text={[{ t: 'A coffee house. ' }, { t: 'A community space.', em: true }]} />
-          <div className="hr-visit-meta">
+          <motion.div
+            className="hr-visit-meta"
+            variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
             <span><MapPin size={14} /> Avior Corporate Park, Mulund West</span>
-          </div>
-          <div className="hr-hero-cta">
+          </motion.div>
+          <motion.div
+            className="hr-hero-cta"
+            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          >
             <Magnetic>
               <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-primary">
                 Get Directions <ArrowUpRight size={15} />
@@ -594,8 +857,8 @@ export default function Home() {
             <Magnetic>
               <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
             </Magnetic>
-          </div>
-        </AnimatedSection>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* ===== CLOSING CTA ===== */}
@@ -606,15 +869,35 @@ export default function Home() {
           <span className="hr-steam-wisp" />
         </span>
         <CoffeeBeans className="hr-cta-beans" aria-hidden="true" />
-        <AnimatedSection>
-          <div className="hr-label">Start Here</div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-12%' }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } }
+          }}
+        >
+          <motion.div
+            className="hr-label"
+            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            Start Here
+          </motion.div>
           <WordReveal as="h2" text={[{ t: 'Your next great ' }, { t: 'cup', em: true }, { t: ' awaits.' }]} />
-          <p>Order single-origin beans, book a workshop, or drop by the bar, wherever you are on the coffee journey, we&rsquo;ll meet you there.</p>
-          <div className="hr-hero-cta">
+          <motion.p
+            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          >
+            Order single-origin beans, book a workshop, or drop by the bar&mdash;wherever you are on the coffee journey, we&rsquo;ll meet you there.
+          </motion.p>
+          <motion.div
+            className="hr-hero-cta"
+            variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          >
             <Magnetic><Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Explore the store</Link></Magnetic>
             <Magnetic><Link to="/about" className="hr-btn hr-btn-ghost">Our Story</Link></Magnetic>
-          </div>
-        </AnimatedSection>
+          </motion.div>
+        </motion.div>
       </section>
 
       {openProduct && (

@@ -12,6 +12,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import CommandPalette from './components/CommandPalette'
 import CoffeeLoader from './components/CoffeeLoader'
 import CursorTrail from './components/CursorTrail'
+import ContextCursor from './components/ContextCursor'
 import ScrollProgress from './components/ScrollProgress'
 import GlobalScrollReveal from './components/GlobalScrollReveal'
 import FloatingBeans from './components/FloatingBeans'
@@ -100,11 +101,12 @@ function AppShell() {
       data-theme={isHome || isAdmin ? undefined : 'espresso'}
     >
       <a href="#main-content" className="skip-link">Skip to content</a>
-      {/* SmoothScroll removed, using native browser scroll */}
+      <SmoothScroll />
       <TitleFlip />
       <ScrollProgress />
       <GlobalScrollReveal />
       <CursorTrail />
+      <ContextCursor />
       <Navbar onOpenSearch={() => setPaletteOpen(true)} />
       <ScrollDockLogo />
       <main id="main-content" className="main-content" tabIndex={-1}>

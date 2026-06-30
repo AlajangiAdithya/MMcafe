@@ -354,3 +354,331 @@
   .cap-mark-track { animation: none; }
   .hr-steam-wisp { animation: none; opacity: 0.4; }
 }
+
+/* Hover transitions and outlines */
+.hr-vert-link:hover .hr-link-arrow {
+  transform: translateX(4px);
+}
+.hr-link-arrow {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+}
+.featured-product:hover {
+  border-color: rgba(176, 116, 51, 0.25) !important;
+}
+
+/* ===== COFFEE ANATOMY WIDGET (Banh Mi Inspired) ===== */
+.coffee-anatomy {
+  margin: clamp(48px, 8vw, 96px) auto 0;
+  max-width: 1040px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: clamp(24px, 5vw, 48px);
+  box-shadow: var(--shadow-3);
+  text-align: left;
+}
+
+.anatomy-header {
+  margin-bottom: clamp(28px, 5vw, 40px);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.anatomy-badge {
+  font-family: var(--hr-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hr-accent-bright);
+}
+
+.anatomy-header h3 {
+  font-family: var(--hr-serif);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 400;
+  color: var(--ink-100);
+  margin: 6px 0 4px;
+}
+
+.anatomy-tagline {
+  font-family: var(--hr-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.anatomy-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: clamp(32px, 6vw, 76px);
+  align-items: center;
+}
+
+.anatomy-panel {
+  min-height: 250px;
+  background: rgba(26, 18, 8, 0.03);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px dashed var(--border);
+  margin-bottom: 24px;
+}
+
+.anatomy-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--hr-mono);
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.anatomy-pct {
+  color: var(--hr-accent-bright);
+  font-weight: 600;
+}
+
+.anatomy-layer-phonetic {
+  color: var(--text-muted);
+}
+
+.anatomy-layer-name {
+  font-family: var(--hr-serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--ink-100);
+  margin: 0 0 10px;
+}
+
+.anatomy-layer-desc {
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  margin: 0 0 20px;
+}
+
+.anatomy-science-box {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.science-label {
+  font-family: var(--hr-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--hr-accent-bright);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.science-text {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.anatomy-selector-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.anatomy-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: left;
+}
+
+.anatomy-selector-item:hover,
+.anatomy-selector-item.active {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.selector-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.selector-title {
+  font-family: var(--hr-serif);
+  font-size: 1.05rem;
+  color: var(--ink-100);
+  font-weight: 500;
+}
+
+/* Glass cup anatomy container */
+.anatomy-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cup-container {
+  position: relative;
+  width: 260px;
+  height: 280px;
+}
+
+.glass-cup {
+  position: relative;
+  width: 90%;
+  height: 100%;
+  border: 4px solid var(--ink-200);
+  border-top: none;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  box-shadow: 0 16px 36px rgba(80, 50, 10, 0.1), inset 0 -12px 24px rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  padding: 4px;
+  overflow: clip;
+}
+
+.cup-handle {
+  position: absolute;
+  right: -32px;
+  top: 50px;
+  width: 44px;
+  height: 110px;
+  border: 4px solid var(--ink-200);
+  border-left: none;
+  border-top-right-radius: 35px;
+  border-bottom-right-radius: 35px;
+  z-index: -1;
+}
+
+.cup-contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  border-bottom-left-radius: 42px;
+  border-bottom-right-radius: 42px;
+  overflow: hidden;
+}
+
+.cup-layer {
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.72;
+}
+
+.cup-layer:hover,
+.cup-layer.active {
+  opacity: 1.0;
+  transform: scaleY(1.02);
+}
+
+@media (max-width: 860px) {
+  .anatomy-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .anatomy-visual {
+    order: -1;
+  }
+}
+
+/* ---------- PORTFOLIO (wolverineworldwide.com-style scrolling photo columns) ---------- */
+.hr-portfolio {
+  position: relative;
+  overflow: hidden;
+  background: #15100a;
+  color: var(--hr-cream);
+  padding: clamp(72px, 11vw, 150px) 0;
+}
+/* soft seam so it reads as a fresh section under the dark hero */
+.hr-portfolio::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; height: 160px;
+  background: linear-gradient(180deg, rgba(10,8,6,0.9), transparent);
+  pointer-events: none; z-index: 3;
+}
+.hr-portfolio-inner {
+  position: relative; z-index: 2;
+  max-width: 1320px; margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+  display: grid; grid-template-columns: 0.82fr 1.18fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+.hr-portfolio-head {
+  font-family: var(--hr-serif); font-weight: 400;
+  font-size: clamp(2.3rem, 5vw, 4.6rem); line-height: 0.98; letter-spacing: -0.025em;
+  color: var(--hr-cream) !important; -webkit-text-fill-color: var(--hr-cream) !important;
+  margin: 16px 0 0; max-width: 12ch;
+}
+.hr-portfolio-head em { font-style: italic; color: var(--hr-accent-bright) !important; -webkit-text-fill-color: var(--hr-accent-bright) !important; }
+.hr-portfolio-sub {
+  margin: 22px 0 0; max-width: 42ch;
+  color: rgba(244, 233, 216, 0.74); font-size: 1.02rem; line-height: 1.65;
+}
+.hr-portfolio-cta { margin-top: clamp(26px, 3.5vw, 38px); }
+
+/* the four scrolling columns */
+.hr-portfolio-cols {
+  position: relative;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
+  height: clamp(440px, 64vh, 660px);
+  overflow: hidden;
+  /* fade the top & bottom edges so images appear/disappear gracefully */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 11%, #000 89%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 11%, #000 89%, transparent 100%);
+}
+.hr-pf-col {
+  display: block;
+  will-change: transform;
+  animation: hr-pf-scroll linear infinite;
+}
+.hr-pf-col--down { animation-direction: reverse; }
+.hr-pf-col:nth-child(1) { animation-duration: 44s; }
+.hr-pf-col:nth-child(2) { animation-duration: 33s; margin-top: -7%; }
+.hr-pf-col:nth-child(3) { animation-duration: 52s; }
+.hr-pf-col:nth-child(4) { animation-duration: 38s; margin-top: -7%; }
+.hr-pf-img {
+  display: block; width: 100%;
+  aspect-ratio: 3 / 4; object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: clamp(12px, 1.4vw, 20px);   /* uniform gap (incl. last) keeps the -50% loop seamless */
+  background: #241a10;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.34);
+  transition: filter 0.4s var(--hr-ease), transform 0.5s var(--hr-ease);
+}
+/* dim the column slightly so the cursor's hovered image pops */
+.hr-portfolio-cols:hover .hr-pf-img { filter: brightness(0.7); }
+.hr-portfolio-cols .hr-pf-img:hover { filter: brightness(1.06); transform: scale(1.03); }
+
+@keyframes hr-pf-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+@media (max-width: 900px) {
+  .hr-portfolio-inner { grid-template-columns: 1fr; gap: clamp(28px, 6vw, 44px); }
+  .hr-portfolio-cols { grid-template-columns: repeat(3, 1fr); height: clamp(360px, 52vh, 460px); }
+  .hr-pf-col:nth-child(4) { display: none; }      /* 3 columns is plenty on tablet */
+}
+@media (max-width: 560px) {
+  .hr-portfolio-cols { grid-template-columns: repeat(2, 1fr); height: 340px; }
+  .hr-pf-col:nth-child(3) { display: none; }       /* 2 columns on phones */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-pf-col { animation: none; }
+  .hr-portfolio-cols:hover .hr-pf-img { filter: none; }
+}

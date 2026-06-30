@@ -75,7 +75,11 @@ export default function DragScroller({ children, className = '', autoDrift = 0 }
     window.addEventListener('mouseup', onUp)
 
     // Map vertical wheel scroll to horizontal pan while the strip is hovered.
+    // When Lenis smooth-scroll owns the page (desktop), stay out of its way:
+    // let vertical wheel scroll the page and native overflow handle sideways
+    // trackpad gestures, otherwise the two fight over the same wheel event.
     const onWheel = (e) => {
+      if (window.__lenis) return
       if (!hoverRef.current) return
       if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
       el.scrollLeft += e.deltaY
