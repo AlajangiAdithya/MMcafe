@@ -4,7 +4,7 @@
 /* ===== RESET ===== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 html:focus-within { scroll-behavior: smooth; }
 
 /* Skip link, visible on focus, lets keyboard users bypass the navbar */
@@ -54,7 +54,15 @@ main:focus { outline: none; }
   .cart-btn,
   .nav-link,
   .siatra-chip {
-    min-height: 40px;
+    min-height: 44px;
+  }
+  /* iOS auto-zooms the page when you focus an input whose font is < 16px —
+     that jarring zoom is a classic "feels bad on mobile". Pin form controls
+     to 16px on touch devices so focusing a field never zooms the viewport. */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
   }
 }
 
