@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Trophy, ArrowRight } from 'lucide-react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
+import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
@@ -76,10 +77,14 @@ const ABOUT_CRUMB = {
 
 /* ============================================================
    StoryPanel, a media panel with a serif title and monospace
-   caption. The media fades in once on entry — nothing else moves.
+   caption. The media clip-reveals on entry and the image drifts
+   gently inside its frame as the panel scrolls (inner parallax).
    ============================================================ */
 function StoryPanel({ kicker, tags, year, title, img, alt, tagline, lede, children }) {
+  const ref = useRef(null)
   const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-5%', '5%'])
 
   return (
     <section className="ed-story">
@@ -92,13 +97,14 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, lede, childr
 
         <div className="ed-story-intro">
           <motion.div
+            ref={ref}
             className="ed-story-media"
-            initial={{ opacity: 0, y: reduced ? 0 : 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={reduced ? { opacity: 0 } : { clipPath: 'inset(10% 10% 10% 10% round 16px)', opacity: 0.4 }}
+            whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
             viewport={{ once: true, margin: '-12%' }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img src={img} alt={alt} loading="lazy" width="877" height="775" />
+            <motion.img src={img} alt={alt} style={reduced ? undefined : { y: imgY, scale: 1.1 }} loading="lazy" width="877" height="775" />
             <span className="ed-story-tag">{tagline}</span>
           </motion.div>
           <p className="ed-story-lede">{lede}</p>
@@ -193,8 +199,8 @@ export default function AboutUs() {
             </span>
           </div>
           <div className="ed-actions">
-            <Link to="/store" className="ed-btn ed-btn-primary">Shop Coffee <ArrowRight size={14} /></Link>
-            <Link to="/workshop" className="ed-btn ed-btn-ghost">Learn Coffee</Link>
+            <Magnetic><Link to="/store" className="ed-btn ed-btn-primary">Shop Coffee <ArrowRight size={14} /></Link></Magnetic>
+            <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn Coffee</Link></Magnetic>
           </div>
         </StoryPanel>
       </div>

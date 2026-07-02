@@ -6,6 +6,8 @@ import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import ProductDetailModal from '../components/ProductDetailModal'
+import Magnetic from '../components/Magnetic'
+import VelocityMarquee from '../components/VelocityMarquee'
 import toast from 'react-hot-toast'
 import '../styles/home-redesign.css'
 
@@ -182,75 +184,119 @@ function VerticalRow({ v }) {
   )
 }
 
-/* Hero — one full-viewport screen: video background, logo, headline, CTAs.
-   No scroll-linked crossfade, no split links, no decorative layers. */
-function Hero() {
+/* ScrollHero — full-viewport video hero: brand logo centred, split
+   "Buy Coffee" (left) / "Learn Coffee" (right) links on the edges.
+   On scroll the logo block rises and fades while the headline block
+   crossfades into its place (sticky over a tall section). */
+function ScrollHero() {
   const reduced = useReducedMotion()
+  const { scrollY } = useScroll()
+
+  const logoOpacity = useTransform(scrollY, [0, 150, 360], [1, 1, 0])
+  const logoY = useTransform(scrollY, [0, 360], [0, -170])
+  const textOpacity = useTransform(scrollY, [340, 520, 680], [0, 1, 1])
+  const textY = useTransform(scrollY, [340, 560], [120, 0])
+  const cueOpacity = useTransform(scrollY, [0, 130], [1, 0])
+
   return (
-    <section className="hr-hero3">
-      <video
-        className="hr-hero3-video"
-        src="/cafe-tour.mp4"
-        poster="/hero-bg.jpg"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-      />
-      <div className="hr-hero3-scrim" aria-hidden="true" />
-      <motion.div
-        className="hr-hero3-inner"
-        initial={reduced ? false : { opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <img className="hr-hero3-logo" src="/logo.png" alt="Mastermind Brews, specialty coffee roastery and academy" />
-        <p className="hero-tagline-pill">
-          <span className="hero-tagline-pill-text">Specialty Coffee · Roastery &amp; Academy · Mumbai, India</span>
-        </p>
-        <h1 className="hr-hero-head">A portfolio built for <em>every cup.</em></h1>
-        <p className="hr-hero-sub">
-          Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
-        </p>
-        <div className="hr-hero-cta">
-          <Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Order Beans</Link>
-          <Link to="/workshop" className="hr-btn hr-btn-ghost"><BookOpen size={16} /> Start Learning</Link>
+    <section className="hr-hero2">
+      <div className="hr-hero2-sticky">
+        <video
+          className="hr-hero2-video"
+          src="/cafe-tour.mp4"
+          poster="/hero-bg.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        <div className="hr-hero2-scrim" aria-hidden="true" />
+
+        {/* Split links — shop on the left, courses on the right */}
+        <motion.div className="hr-hero2-splits" style={{ opacity: logoOpacity, y: logoY }}>
+          <Link to="/store" className="hero-split-link hero-split-link--left" aria-label="Buy Coffee">
+            <span className="hero-split-hint"><ShoppingBag size={18} aria-hidden="true" /><span>Buy Coffee</span></span>
+          </Link>
+          <Link to="/workshop" className="hero-split-link hero-split-link--right" aria-label="Learn Coffee">
+            <span className="hero-split-hint"><BookOpen size={18} aria-hidden="true" /><span>Learn Coffee</span></span>
+          </Link>
+        </motion.div>
+
+        <div className="hr-hero2-stage">
+          {/* Block A — centred logo + tagline */}
+          <motion.div className="hr-hero2-block hr-hero2-logo" style={{ opacity: logoOpacity, y: logoY }}>
+            <motion.div
+              className="hero-logo-spotlight"
+              initial={reduced ? false : { opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            >
+              <img className="hero-logo-spotlight-img" src="/logo.png" alt="Mastermind Brews, specialty coffee roastery and academy" />
+            </motion.div>
+            <p className="hero-tagline-pill">
+              <span className="hero-tagline-pill-text">Specialty Coffee · Roastery &amp; Academy · Mumbai, India</span>
+            </p>
+          </motion.div>
+
+          {/* Block B — headline that takes the logo's place on scroll */}
+          <motion.div className="hr-hero2-block hr-hero2-text" style={{ opacity: textOpacity, y: textY }}>
+            <h1 className="hr-hero-head">A portfolio built for <em>every cup.</em></h1>
+            <p className="hr-hero-sub">
+              Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
+            </p>
+            <div className="hr-hero-cta">
+              <Magnetic><Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Order Beans</Link></Magnetic>
+              <Magnetic><Link to="/workshop" className="hr-btn hr-btn-ghost"><BookOpen size={16} /> Start Learning</Link></Magnetic>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+
+        <motion.div className="hr-hero2-cue" style={{ opacity: cueOpacity }}>
+          <span className="hr-scrollcue">Scroll<span className="hr-scrollcue-line" aria-hidden="true" /></span>
+        </motion.div>
+      </div>
     </section>
   )
 }
 
+/* VisitBackdrop — the visit band's photo pans gently as it crosses the
+   viewport (subtle depth, no scroll-jacking). */
+function VisitBackdrop() {
+  const ref = useRef(null)
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
+  return <motion.div ref={ref} className="hr-visit-bg" style={reduced ? undefined : { y }} aria-hidden="true" />
+}
+
 /* ===== OUR STANDARDS — bento craft grid ===== */
+/* One shared accent keeps the grid cohesive (per-card colors read muddy). */
+const CRAFT_ACCENT = '#DD9E55'
 const CRAFT_ITEMS = [
   {
     num: '01',
     title: 'Single-Origin,\nAlways.',
     body: 'Every bag traces to a named Chikmagalur estate — no blends, no filler. One farmer, one terroir, one honest cup.',
-    color: '#b07433',
     img: '/offer-beans.jpg',
   },
   {
     num: '02',
     title: 'Roasted\nto Profile.',
     body: 'We partner with Bean Rove to develop exclusive roast curves for each lot — consistent down to the gram, every batch.',
-    color: '#c27840',
     img: '/hero-bg.jpg',
   },
   {
     num: '03',
     title: 'Taught by\nChampions.',
     body: 'Our academy is built by competition-placed baristas. Practical, technical, and career-ready — not just hobbyist content.',
-    color: '#9a6b2a',
     img: '/offer-academy.png',
   },
   {
     num: '04',
     title: 'Bar-Quality\nat Home.',
     body: "What ships to your door is what we pour at Mulund. If it doesn't pass our bar, it never leaves our roastery.",
-    color: '#d4894e',
     img: '/project-cafe.jpg',
   },
 ]
@@ -275,7 +321,7 @@ function CraftCard({ item, index }) {
         className="craft-card-glow"
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.55 }}
-        style={{ background: `radial-gradient(ellipse at 30% 90%, ${item.color}30, transparent 62%)` }}
+        style={{ background: `radial-gradient(ellipse at 30% 90%, ${CRAFT_ACCENT}2b, transparent 62%)` }}
       />
       <div className="craft-card-content">
         <span className="craft-card-num">{item.num}</span>
@@ -292,7 +338,7 @@ function CraftCard({ item, index }) {
         <motion.div
           className="craft-card-rule"
           animate={{ scaleX: hovered ? 1 : 0 }}
-          style={{ originX: 0, backgroundColor: item.color }}
+          style={{ originX: 0, backgroundColor: CRAFT_ACCENT }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
@@ -343,8 +389,13 @@ export default function Home() {
 
   return (
     <div className="home home--redesign">
-      {/* ===== HERO ===== */}
-      <Hero />
+      {/* ===== HERO — logo centred, Buy left / Learn right, scroll crossfade ===== */}
+      <ScrollHero />
+
+      {/* ===== SCROLL-VELOCITY MARQUEE ===== */}
+      <VelocityMarquee className="vmq--outline vmq--home">
+        Roasted in Chikmagalur · Specialty Coffee · <em>One cup at a time</em> ·{' '}
+      </VelocityMarquee>
 
       {/* ===== THREE VERTICALS ===== */}
       <section className="hr-verticals">
@@ -448,7 +499,7 @@ export default function Home() {
 
       {/* ===== VISIT THE CAFE ===== */}
       <section className="hr-visit">
-        <div className="hr-visit-bg" aria-hidden="true" />
+        <VisitBackdrop />
         <div className="hr-visit-scrim" aria-hidden="true" />
         <motion.div
           className="hr-visit-inner"
@@ -478,10 +529,14 @@ export default function Home() {
             className="hr-hero-cta"
             variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           >
-            <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-primary">
-              Get Directions <ArrowUpRight size={15} />
-            </a>
-            <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
+            <Magnetic>
+              <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-primary">
+                Get Directions <ArrowUpRight size={15} />
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
+            </Magnetic>
           </motion.div>
         </motion.div>
       </section>

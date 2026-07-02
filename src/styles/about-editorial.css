@@ -1262,50 +1262,85 @@
 .ed-gallery-cols { padding: 0 clamp(20px, 5vw, 64px); }
 
 /* ---------- DRAGGABLE TRACK, kill the base -32px bleed so no page overflow ---------- */
-.ed-journey-track,
-.cons-show-track {
+.ed-journey-track {
   margin: 0;
   padding: 6px clamp(20px, 5vw, 64px) 24px;
 }
 
-/* ---------- PROJECTS, draggable 3D-tilt showcase ---------- */
-.cons-projects { overflow: hidden; }
-.cons-show-card {
-  width: clamp(280px, 34vw, 372px);
-  background: var(--ed-bg);
-  border: 1px solid var(--ed-line);
+/* ---------- PROJECTS — staggered editorial mosaic (separate cards) ---------- */
+.cons-projects { overflow: visible; }
+.cons-mosaic {
+  margin-top: clamp(40px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(28px, 4.5vw, 64px);
+  row-gap: clamp(56px, 8vw, 120px);
+  padding-bottom: clamp(60px, 10vw, 140px);  /* room for the offset column */
+}
+.cons-mosaic-item { will-change: transform; }
+/* second column rides lower — collage rhythm instead of a straight row */
+.cons-mosaic-item:nth-child(even) { margin-top: clamp(64px, 10vw, 150px); }
+.cons-mosaic-media {
+  position: relative;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 18px 44px -28px rgba(30, 23, 18, 0.5);
-  transition: box-shadow 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease);
+  aspect-ratio: 4 / 3;
+  background: var(--ed-bg-2);
+  border: 1px solid var(--ed-line);
+  box-shadow: 0 26px 60px -38px rgba(30, 23, 18, 0.5);
 }
-.cons-show-card:hover { border-color: var(--ed-blue); box-shadow: 0 30px 60px -30px rgba(46, 111, 176, 0.5); }
-.cons-show-card { display: flex; flex-direction: column; }
-.cons-show-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
-.cons-show-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.cons-show-index {
-  position: absolute; top: 12px; left: 14px;
-  font-family: var(--ed-mono); font-size: 0.72rem; letter-spacing: 0.12em;
+/* alternate crops: odd cards landscape, even cards portrait */
+.cons-mosaic-item:nth-child(even) .cons-mosaic-media { aspect-ratio: 4 / 4.6; }
+.cons-mosaic-media img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.8s var(--ed-ease);
+}
+.cons-mosaic-item:hover .cons-mosaic-media img { transform: scale(1.05); }
+.cons-mosaic-index {
+  position: absolute; top: 14px; left: 16px;
+  font-family: var(--ed-mono); font-size: 0.72rem; letter-spacing: 0.14em;
   color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
 }
-.cons-show-loc {
-  position: absolute; bottom: 12px; left: 14px;
+.cons-mosaic-loc {
+  position: absolute; bottom: 14px; left: 16px;
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--ed-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #fff; background: rgba(20, 15, 10, 0.46); padding: 5px 9px; border-radius: 999px;
+  color: #fff; background: rgba(20, 15, 10, 0.46);
+  padding: 5px 10px; border-radius: 999px;
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
 }
-.cons-show-body { padding: 22px 22px 26px; display: flex; flex-direction: column; }
-.cons-show-tag { font-family: var(--ed-mono); font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ed-pink-ink); }
-.cons-show-title { font-family: var(--ed-serif); font-weight: 500; font-size: 1.5rem; line-height: 1.05; color: var(--ed-ink); margin: 6px 0 0; }
-.cons-show-desc { font-size: 0.92rem; line-height: 1.55; color: var(--ed-dim); margin: 8px 0 0; }
-.cons-show-scope { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--ed-line); }
-.cons-show-scope-label {
+.cons-mosaic-body { padding: 20px 6px 0; max-width: 52ch; }
+.cons-mosaic-tag {
+  font-family: var(--ed-mono); font-size: 0.64rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ed-pink-ink);
+}
+.cons-mosaic-title {
+  font-family: var(--ed-serif); font-weight: 500;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem); line-height: 1.05;
+  color: var(--ed-ink) !important; -webkit-text-fill-color: var(--ed-ink) !important;
+  margin: 8px 0 0;
+}
+.cons-mosaic-desc { font-size: 0.96rem; line-height: 1.6; color: var(--ed-dim); margin: 10px 0 0; }
+.cons-mosaic-scope { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--ed-line); }
+.cons-mosaic-scope-label {
   display: block; margin-bottom: 6px;
   font-family: var(--ed-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--ed-blue-ink);
 }
-.cons-show-scope p { font-size: 0.85rem; line-height: 1.5; color: var(--ed-ink); margin: 0; }
+.cons-mosaic-scope p { font-size: 0.88rem; line-height: 1.55; color: var(--ed-ink); margin: 0; }
+@media (max-width: 760px) {
+  .cons-mosaic { grid-template-columns: 1fr; row-gap: clamp(40px, 9vw, 64px); padding-bottom: 0; }
+  .cons-mosaic-item:nth-child(even) { margin-top: 0; }
+  .cons-mosaic-item:nth-child(even) .cons-mosaic-media { aspect-ratio: 4 / 3; }
+}
+
+/* ---------- CONSULTANCY MARQUEE SKIN (client names) ---------- */
+.vmq--cons {
+  --vmq-stroke: rgba(46, 111, 176, 0.4);
+  --vmq-accent: var(--ed-pink-ink);
+  border-bottom: 1px solid var(--ed-line);
+}
 
 /* ============================================================
    EDITORIAL PHOTO GRID — replaces scrolling photo walls

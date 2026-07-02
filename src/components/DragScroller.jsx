@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
  */
 export default function DragScroller({ children, className = '', autoDrift = 0 }) {
   const ref = useRef(null)
-  const driftRef = useRef(0)
+  const barRef = useRef(null)
   const velRef = useRef(0)
   const lastXRef = useRef(0)
   const lastTRef = useRef(0)
@@ -87,6 +87,16 @@ export default function DragScroller({ children, className = '', autoDrift = 0 }
     }
     el.addEventListener('wheel', onWheel, { passive: false })
 
+    // Progress line under the strip — direct DOM write, no re-render.
+    const bar = barRef.current
+    const onScroll = () => {
+      if (!bar) return
+      const max = el.scrollWidth - el.clientWidth
+      bar.style.transform = `scaleX(${max > 0 ? el.scrollLeft / max : 0})`
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+
     return () => {
       cancelAnimationFrame(raf)
       el.removeEventListener('mouseenter', onEnter)
@@ -95,14 +105,18 @@ export default function DragScroller({ children, className = '', autoDrift = 0 }
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseup', onUp)
       el.removeEventListener('wheel', onWheel)
+      el.removeEventListener('scroll', onScroll)
     }
   }, [autoDrift])
 
   return (
-    <div ref={driftRef} className="drag-scroller-wrap">
+    <div className="drag-scroller-wrap">
       <div ref={ref} className={`drag-scroller ${className}`.trim()}>
         {children}
       </div>
+      <span className="drag-progress" aria-hidden="true">
+        <span ref={barRef} className="drag-progress-fill" />
+      </span>
       <span className="drag-scroller-hint" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 9l-3 3 3 3" />

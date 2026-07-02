@@ -254,6 +254,65 @@
 /* (Perpetual heading sheen removed — headings hold a steady color.) */
 
 /* ============================================================
+   VELOCITY MARQUEE — big typographic band driven by scroll
+   velocity (VelocityMarquee.jsx). Skins pick colors per theme
+   via --vmq-* custom properties.
+   ============================================================ */
+.vmq {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: clamp(26px, 4vw, 46px) 0;
+}
+.vmq-track {
+  display: inline-flex;
+  width: max-content;
+  will-change: transform;
+}
+.vmq-copy {
+  display: inline-block;
+  padding-right: 0.6em;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 6.5vw, 5.2rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+.vmq-copy em { font-style: italic; }
+/* solid ink skin */
+.vmq--ink .vmq-copy { color: var(--vmq-ink, rgba(36, 22, 8, 0.85)); }
+.vmq--ink .vmq-copy em { color: var(--vmq-accent, #B07433); }
+/* hollow outline skin */
+.vmq--outline .vmq-copy {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--vmq-stroke, rgba(36, 22, 8, 0.4));
+}
+.vmq--outline .vmq-copy em {
+  color: var(--vmq-accent, #B07433);
+  -webkit-text-stroke: 0;
+}
+
+/* ============================================================
+   DRAG SCROLLER — progress line under draggable strips
+   ============================================================ */
+.drag-progress {
+  display: block;
+  height: 2px;
+  margin: 18px clamp(20px, 5vw, 64px) 0;
+  background: var(--drag-progress-track, rgba(30, 23, 18, 0.1));
+  border-radius: 2px;
+  overflow: hidden;
+}
+.drag-progress-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--drag-progress-fill, #2E6FB0);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ============================================================
    SCROLL INDICATOR PULSE, gentle attention on hero scroll cue.
    ============================================================ */
 .scroll-indicator .scroll-dot {

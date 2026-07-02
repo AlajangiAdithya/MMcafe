@@ -1,9 +1,11 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import JsonLd from '../components/JsonLd'
-import DragScroller from '../components/DragScroller'
+import Magnetic from '../components/Magnetic'
+import VelocityMarquee from '../components/VelocityMarquee'
 import KineticHeading from '../components/KineticHeading'
 import '../styles/about-editorial.css'
 
@@ -70,6 +72,48 @@ const SUITED = [
   'Hotels or co-working spaces serving in-house',
   'Brands wanting trained barista staff',
 ]
+
+/* MosaicCard — one project card in the staggered editorial grid. The whole
+   card drifts a few px against scroll (opposite directions per column) and
+   the photo clip-reveals on entry. */
+function MosaicCard({ p, i }) {
+  const ref = useRef(null)
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const dir = i % 2 === 0 ? 1 : -1
+  const y = useTransform(scrollYProgress, [0, 1], [26 * dir, -26 * dir])
+
+  return (
+    <motion.article ref={ref} className="cons-mosaic-item" style={reduced ? undefined : { y }}>
+      <motion.div
+        className="cons-mosaic-media"
+        initial={reduced ? { opacity: 0 } : { clipPath: 'inset(8% 8% 8% 8% round 18px)', opacity: 0.4 }}
+        whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 18px)', opacity: 1 }}
+        viewport={{ once: true, margin: '-10%' }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" />
+        <span className="cons-mosaic-index">0{i + 1}</span>
+        <span className="cons-mosaic-loc"><MapPin size={11} /> {p.loc}</span>
+      </motion.div>
+      <motion.div
+        className="cons-mosaic-body"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-8%' }}
+        transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <span className="cons-mosaic-tag">{p.tag}</span>
+        <h3 className="cons-mosaic-title">{p.name}</h3>
+        <p className="cons-mosaic-desc">{p.body}</p>
+        <div className="cons-mosaic-scope">
+          <span className="cons-mosaic-scope-label">Scope of Delivery</span>
+          <p>{p.details}</p>
+        </div>
+      </motion.div>
+    </motion.article>
+  )
+}
 
 /* How It Works — a plain numbered list of the four steps. No pinning,
    no scroll-jacking; the content is the section. */
@@ -165,11 +209,16 @@ export default function Consultancy() {
               From a single beverage-menu refresh to a full operations rebuild, the same team that runs Mastermind Brews is available to work with yours.
             </motion.p>
             <motion.div className="cons-hero-cta" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}>
-              <Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link>
+              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link></Magnetic>
             </motion.div>
           </motion.div>
         </div>
       </header>
+
+      {/* ===== SCROLL-VELOCITY MARQUEE — the cafes we've worked with ===== */}
+      <VelocityMarquee className="vmq--outline vmq--cons" baseVelocity={2}>
+        Cocoa Experience · Grounded · Affogato · Churn&rsquo;d · <em>Indulge Creamery</em> · Geranium Haven ·{' '}
+      </VelocityMarquee>
 
       {/* ===== FOUNDER INTRO ===== */}
       <section className="cons-intro">
@@ -212,34 +261,17 @@ export default function Consultancy() {
         </div>
       </section>
 
-      {/* ===== OUR PROJECTS (draggable tilt showcase) ===== */}
+      {/* ===== OUR PROJECTS (staggered editorial mosaic) ===== */}
       <section className="ed-projects cons-projects">
         <div className="ed-container">
           <div className="ed-section-label">Our Projects</div>
           <KineticHeading as="h2" className="ed-section-title">Spaces we&rsquo;ve shaped.</KineticHeading>
-          <p className="ed-journey-kicker">Drag through the cafes we&rsquo;ve built coffee programs with&mdash;each card carries its own scope of delivery.</p>
-        </div>
-        <div data-cursor="drag">
-          <DragScroller className="cons-show-track">
+          <p className="ed-journey-kicker">Six cafes, six different briefs&mdash;each card carries its own scope of delivery.</p>
+          <div className="cons-mosaic">
             {PROJECTS.map((p, i) => (
-              <article key={p.name} className="cons-show-card">
-                <div className="cons-show-media">
-                  <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" draggable="false" />
-                  <span className="cons-show-index">0{i + 1}</span>
-                  <span className="cons-show-loc"><MapPin size={11} /> {p.loc}</span>
-                </div>
-                <div className="cons-show-body">
-                  <span className="cons-show-tag">{p.tag}</span>
-                  <h3 className="cons-show-title">{p.name}</h3>
-                  <p className="cons-show-desc">{p.body}</p>
-                  <div className="cons-show-scope">
-                    <span className="cons-show-scope-label">Scope of Delivery</span>
-                    <p>{p.details}</p>
-                  </div>
-                </div>
-              </article>
+              <MosaicCard key={p.name} p={p} i={i} />
             ))}
-          </DragScroller>
+          </div>
         </div>
       </section>
 
@@ -253,7 +285,7 @@ export default function Consultancy() {
             <div className="ed-section-label">In Their Spaces</div>
             <KineticHeading as="h2" className="ed-section-title">Coffee, on the ground.</KineticHeading>
           </div>
-          <Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link>
+          <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link></Magnetic>
         </div>
         <div className="ed-photo-grid">
           {CONS_GRID.map((p, i) => (
@@ -288,7 +320,7 @@ export default function Consultancy() {
             </div>
             <h2>Tell us what you&rsquo;re <em>building.</em></h2>
             <div className="ed-actions">
-              <Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link>
+              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link></Magnetic>
             </div>
           </motion.div>
         </div>
