@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Trophy, ArrowRight } from 'lucide-react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
-import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
@@ -76,16 +75,11 @@ const ABOUT_CRUMB = {
 }
 
 /* ============================================================
-   StoryPanel, a full-bleed media panel with a serif title,
-   monospace caption and a ghost name. The media clip-reveals on
-   entry; the image + ghost word parallax as the panel scrolls.
+   StoryPanel, a media panel with a serif title and monospace
+   caption. The media fades in once on entry — nothing else moves.
    ============================================================ */
-function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede, children }) {
-  const ref = useRef(null)
+function StoryPanel({ kicker, tags, year, title, img, alt, tagline, lede, children }) {
   const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['-6%', '6%'])
-  const ghostX = useTransform(scrollYProgress, [0, 1], reduced ? ['0%', '0%'] : ['30%', '-30%'])
 
   return (
     <section className="ed-story">
@@ -98,16 +92,14 @@ function StoryPanel({ kicker, tags, year, title, img, alt, tagline, ghost, lede,
 
         <div className="ed-story-intro">
           <motion.div
-            ref={ref}
             className="ed-story-media"
-            initial={reduced ? { opacity: 0 } : { clipPath: 'inset(14% 14% 14% 14% round 16px)', opacity: 0.35 }}
-            whileInView={reduced ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)', opacity: 1 }}
+            initial={{ opacity: 0, y: reduced ? 0 : 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-12%' }}
-            transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.img src={img} alt={alt} style={{ y: imgY, scale: 1.12 }} loading="lazy" width="877" height="775" />
+            <img src={img} alt={alt} loading="lazy" width="877" height="775" />
             <span className="ed-story-tag">{tagline}</span>
-            <motion.span className="ed-story-ghost" style={{ x: ghostX }} aria-hidden="true">{ghost}</motion.span>
           </motion.div>
           <p className="ed-story-lede">{lede}</p>
         </div>
@@ -164,17 +156,6 @@ export default function AboutUs() {
                 The journey, the craft,<br />and the <span className="text-accent-glow">coffee</span>.
               </motion.h1>
 
-              <motion.div
-                className="ed-definitions-line"
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.85rem', fontFamily: 'var(--ed-mono)', color: 'var(--ed-blue-ink)', marginTop: '8.px', marginBottom: '24px', opacity: 0.9 }}
-              >
-                <span className="ed-phonetic" style={{ color: '#F6EFE1', fontWeight: 500 }}>/ˈbrʊː/</span>
-                <span className="ed-pos" style={{ fontStyle: 'italic', color: 'rgba(244, 233, 216, 0.5)' }}>(verb)</span>
-                <span className="ed-def-separator" style={{ color: 'rgba(91, 155, 219, 0.3)' }}>•</span>
-                <span className="ed-def-short" style={{ color: 'rgba(244, 233, 216, 0.7)' }}>To extract the botanical soul of the bean through heat and water.</span>
-              </motion.div>
-
               <motion.p
                 className="page-lede"
                 variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}
@@ -182,10 +163,6 @@ export default function AboutUs() {
               >
                 Hi, I&rsquo;m Namrata Thakkar. This is how coffee became craft, and craft became purpose through Mastermind Brews.
               </motion.p>
-
-              <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.2 } } }}>
-                <span className="ed-scrollcue"><span className="ed-mouse" /> Scroll to explore</span>
-              </motion.div>
             </motion.div>
           </motion.div>
         </div>
@@ -201,7 +178,6 @@ export default function AboutUs() {
           img="/namrata-thakkar.jpg"
           alt="Namrata Thakkar, founder of Mastermind Brews and certified barista, at the bar in Mulund, Mumbai"
           tagline="The Brewer"
-          ghost="NAMRATA"
           lede="I come from a background in physiotherapy. When my family set out to build a cafe in Mulund, Mumbai, alongside the bicycle studio my father had always dreamed of, I decided that if we were going to serve coffee, I wanted to truly understand it, as a craft, not just a menu item."
         >
           <div className="ed-story-text">
@@ -217,8 +193,8 @@ export default function AboutUs() {
             </span>
           </div>
           <div className="ed-actions">
-            <Magnetic><Link to="/store" className="ed-btn ed-btn-primary">Shop Coffee <ArrowRight size={14} /></Link></Magnetic>
-            <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn Coffee</Link></Magnetic>
+            <Link to="/store" className="ed-btn ed-btn-primary">Shop Coffee <ArrowRight size={14} /></Link>
+            <Link to="/workshop" className="ed-btn ed-btn-ghost">Learn Coffee</Link>
           </div>
         </StoryPanel>
       </div>
@@ -257,7 +233,7 @@ export default function AboutUs() {
           <p className="ed-journey-kicker">Drag through the milestones&mdash;the certifications, the competition stage, and the cafe where it all began.</p>
         </div>
         <div data-cursor="drag">
-          <DragScroller className="ed-journey-track" autoDrift={0.22}>
+          <DragScroller className="ed-journey-track">
             {ABOUT_JOURNEY.map((m, i) => (
               <article key={m.title} className="ed-jcard">
                 <span className="ed-jcard-step">{String(i + 1).padStart(2, '0')}</span>
@@ -277,7 +253,7 @@ export default function AboutUs() {
             <div className="ed-section-label">In Frame</div>
             <KineticHeading as="h2" className="ed-section-title">Moments from the journey.</KineticHeading>
           </div>
-          <Magnetic><Link to="/workshop" className="ed-btn ed-btn-ghost">Learn with us <ArrowRight size={14} /></Link></Magnetic>
+          <Link to="/workshop" className="ed-btn ed-btn-ghost">Learn with us <ArrowRight size={14} /></Link>
         </div>
         <div className="ed-photo-grid">
           {ABOUT_GRID.map((p, i) => (

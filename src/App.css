@@ -257,26 +257,7 @@ ul { list-style: none; }
 
 ::selection { background: var(--accent); color: #1a1208; }
 
-/* ===== CUSTOM COFFEE CURSOR =====
-   Bean for the default arrow, cup for any interactive element.
-   PNG hotspot coordinates are SVG-native; browsers handle scaling. */
-html, body {
-  cursor: url('/cursor/bean.svg') 14 14, auto;
-}
-a, button, [role="button"], .btn, .nav-link, .cart-btn, .icon-btn,
-input[type="submit"], input[type="button"], summary, label[for], select,
-.signup-btn, .login-btn, .surface--interactive {
-  cursor: url('/cursor/cup.svg') 16 16, pointer;
-}
-input[type="text"], input[type="email"], input[type="password"],
-input[type="number"], input[type="search"], input[type="tel"],
-input[type="url"], textarea {
-  cursor: text;
-}
-@media (hover: none), (pointer: coarse) {
-  /* Don't override the system cursor on touch devices */
-  html, body, a, button, .btn { cursor: auto; }
-}
+/* System cursors everywhere — novelty bean/cup cursors removed. */
 
 .app { min-height: 100vh; display: flex; flex-direction: column; }
 .main-content { flex: 1; padding-top: var(--nav-height); }
@@ -15621,9 +15602,7 @@ html {
 }
 
 /* ============================================================
-   HERO LOGO-ONLY SPOTLIGHT
-   The logo is the entire centerpiece. Multiple stacked layers
-   create a luminous, cinematic highlight.
+   HERO LOGO — clean centerpiece, one quiet shadow, no glow stack.
    ============================================================ */
 .hero--logo-only .hero-logo-only-content {
   padding: 0;
@@ -15635,124 +15614,20 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Wide lockup logo: size by width and let height follow the artwork so the
-     glow hugs the logo and the whole mark sits dead-centre in the hero. */
-  width: clamp(340px, 58vw, 740px);
+  width: clamp(320px, 50vw, 640px);
   height: auto;
-  aspect-ratio: 5 / 2;
-  isolation: isolate;
 }
 
-/* Outermost wide aura, gentle gold wash that lifts the whole frame */
-.hero-logo-spotlight-aura {
-  position: absolute;
-  inset: -32%;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(217, 168, 88, 0.28) 0%,
-    rgba(201, 151, 74, 0.12) 28%,
-    rgba(201, 151, 74, 0.04) 50%,
-    rgba(201, 151, 74, 0) 72%);
-  filter: blur(28px);
-  pointer-events: none;
-  z-index: 0;
-  animation: heroLogoAura 7s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes heroLogoAura {
-  0%, 100% { transform: scale(1); opacity: 0.92; }
-  50% { transform: scale(1.06); opacity: 1; }
-}
-
-/* Inner halo, tighter, brighter, sits just behind the logo */
-.hero-logo-spotlight-halo {
-  position: absolute;
-  inset: -8%;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(245, 213, 151, 0.55) 0%,
-    rgba(217, 168, 88, 0.32) 22%,
-    rgba(201, 151, 74, 0.12) 44%,
-    rgba(201, 151, 74, 0) 68%);
-  filter: blur(16px);
-  pointer-events: none;
-  z-index: 1;
-  animation: heroLogoHalo 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes heroLogoHalo {
-  0%, 100% { opacity: 0.9; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
-}
-
-/* Slow conic shine, a tasteful sweep behind the logo */
-.hero-logo-spotlight-shine {
-  position: absolute;
-  inset: 4%;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    rgba(217, 168, 88, 0) 0deg,
-    rgba(245, 213, 151, 0.18) 60deg,
-    rgba(217, 168, 88, 0.32) 90deg,
-    rgba(245, 213, 151, 0.18) 120deg,
-    rgba(217, 168, 88, 0) 180deg,
-    rgba(217, 168, 88, 0) 360deg);
-  filter: blur(10px);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.55;
-  animation: heroLogoShine 14s linear infinite;
-}
-
-@keyframes heroLogoShine {
-  to { transform: rotate(360deg); }
-}
-
-/* Two concentric expanding rings, subtle, low opacity */
-.hero-logo-spotlight-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(217, 168, 88, 0.28);
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-}
-
-.hero-logo-spotlight-ring--1 {
-  animation: heroLogoRing 5.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
-.hero-logo-spotlight-ring--2 {
-  animation: heroLogoRing 5.5s cubic-bezier(0.16, 1, 0.3, 1) infinite 2.75s;
-}
-
-@keyframes heroLogoRing {
-  0% { transform: scale(0.92); opacity: 0; border-color: rgba(245, 213, 151, 0.55); }
-  20% { opacity: 0.7; }
-  100% { transform: scale(1.55); opacity: 0; border-color: rgba(201, 151, 74, 0.0); }
-}
-
-/* The logo itself, drop shadows give it gold glow lift */
 .hero-logo-spotlight-img {
   position: relative;
-  z-index: 3;
   width: 100%;
   height: auto;
-  filter:
-    drop-shadow(0 0 32px rgba(245, 213, 151, 0.85))
-    drop-shadow(0 0 80px rgba(217, 168, 88, 0.55))
-    drop-shadow(0 0 160px rgba(201, 151, 74, 0.35));
-  animation: heroLogoFloat 8s ease-in-out infinite;
-}
-
-@keyframes heroLogoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.45));
 }
 
 @media (max-width: 720px) {
   .hero-logo-spotlight {
-    width: clamp(260px, 86vw, 440px);
+    width: clamp(250px, 82vw, 420px);
     height: auto;
   }
 }
@@ -16053,75 +15928,35 @@ html {
   }
 }
 
-/* ---------- Reduced motion: stop the logo-spotlight animations ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .hero-logo-spotlight-aura,
-  .hero-logo-spotlight-halo,
-  .hero-logo-spotlight-shine,
-  .hero-logo-spotlight-ring,
-  .hero-logo-spotlight-img {
-    animation: none !important;
-  }
-}
-
 /* ============================================================
-   HERO TAGLINE PILL, glass, high-contrast text
+   HERO TAGLINE — quiet letterspaced line under the logo.
    ============================================================ */
 .hero-tagline-pill {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  margin: 36px auto 0;
-  padding: 12px 26px;
-  border-radius: 999px;
-  background: rgba(20, 14, 9, 0.55);
-  backdrop-filter: blur(20px) saturate(1.45);
-  -webkit-backdrop-filter: blur(20px) saturate(1.45);
-  border: 1px solid rgba(217, 168, 88, 0.45);
-  box-shadow:
-    0 10px 30px -10px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  color: #f7ecd9;
-  letter-spacing: 0.16em;
+  justify-content: center;
+  margin: 30px auto 0;
+  color: rgba(247, 236, 217, 0.82);
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  font-family: 'Inter', sans-serif;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
   white-space: nowrap;
   position: relative;
   z-index: 5;
 }
-.hero-tagline-pill-text {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  color: #f7ecd9;
-}
-.hero-tagline-pill-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f0c477, #c9974a);
-  box-shadow:
-    0 0 0 1px rgba(217, 168, 88, 0.35),
-    0 0 12px rgba(217, 168, 88, 0.7);
-  flex-shrink: 0;
-}
+.hero-tagline-pill-text { color: inherit; }
 @media (max-width: 720px) {
   .hero-tagline-pill {
     font-size: 9.5px;
-    padding: 10px 18px;
-    letter-spacing: 0.12em;
-    gap: 10px;
-    margin-top: 28px;
+    letter-spacing: 0.2em;
+    margin-top: 24px;
     white-space: normal;
     text-align: center;
     max-width: 90vw;
-  }
-  .hero-tagline-pill-text { line-height: 1.5; }
-}
-@media (max-width: 420px) {
-  .hero-tagline-pill {
-    font-size: 9px;
-    padding: 9px 14px;
+    line-height: 1.6;
   }
 }
 

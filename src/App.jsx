@@ -12,11 +12,9 @@ import CookieConsent from './components/CookieConsent'
 import ErrorBoundary from './components/ErrorBoundary'
 import CommandPalette from './components/CommandPalette'
 import CoffeeLoader from './components/CoffeeLoader'
-import CursorTrail from './components/CursorTrail'
 import ContextCursor from './components/ContextCursor'
 import ScrollProgress from './components/ScrollProgress'
 import GlobalScrollReveal from './components/GlobalScrollReveal'
-import FloatingBeans from './components/FloatingBeans'
 import SmoothScroll from './components/SmoothScroll'
 import TitleFlip from './components/TitleFlip'
 import ScrollDockLogo from './components/ScrollDockLogo'
@@ -106,7 +104,6 @@ function AppShell() {
       <TitleFlip />
       <ScrollProgress />
       <GlobalScrollReveal />
-      <CursorTrail />
       <ContextCursor />
       <Navbar onOpenSearch={() => setPaletteOpen(true)} />
       <ScrollDockLogo />

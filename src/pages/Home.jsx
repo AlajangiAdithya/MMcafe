@@ -1,25 +1,13 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase, Flame, Compass, Wind } from 'lucide-react'
-import { motion, useInView, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase } from 'lucide-react'
+import { motion, useInView, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
 import { usePageMeta } from '../lib/usePageMeta'
 import ProductDetailModal from '../components/ProductDetailModal'
-import Magnetic from '../components/Magnetic'
-import MarqueeStrip from '../components/MarqueeStrip'
-import VaporizeTextCycle, { Tag } from '@/components/ui/vapour-text-effect'
 import toast from 'react-hot-toast'
 import '../styles/home-redesign.css'
-
-const MARQUEE_TERMS = [
-  { en: 'ROASTED IN CHIKMAGALUR' },
-  { en: 'SPECIALTY COFFEE' },
-  { en: 'ONE CUP AT A TIME' },
-  { en: 'BEAN ROVE PROFILES' },
-  { en: 'OPEN ALL DAYS · 08:30 – 24:00' },
-  { en: 'CRAFTED BY HAND' },
-]
 
 const VERTICALS = [
   {
@@ -94,75 +82,6 @@ function WordReveal({ text, className, as = 'h2' }) {
         </span>
       ))}
     </MotionTag>
-  )
-}
-
-/* ScrollFlowLines: decorative wavy lines that "draw" themselves (pathLength 0→1)
-   in sync with how far the section has scrolled through the viewport. A spring
-   keeps the flow smooth. Returns nothing when reduced motion is preferred. */
-function ScrollFlowLines({ className, stroke = 'rgba(176,116,51,0.28)' }) {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const draw = useSpring(scrollYProgress, { stiffness: 70, damping: 24, mass: 0.5 })
-  if (reduced) return null
-  const paths = [
-    'M-40,150 C220,60 380,250 640,150 900,50 1060,250 1240,150',
-    'M-40,400 C200,300 420,500 660,400 900,300 1080,500 1240,400',
-    'M-40,650 C220,560 380,760 640,650 900,540 1060,760 1240,650',
-  ]
-  return (
-    <svg
-      ref={ref}
-      className={`flow-lines ${className || ''}`}
-      viewBox="0 0 1200 800"
-      preserveAspectRatio="none"
-      fill="none"
-      aria-hidden="true"
-    >
-      {paths.map((d, i) => (
-        <motion.path
-          key={i}
-          d={d}
-          stroke={stroke}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          style={{ pathLength: draw, opacity: draw }}
-        />
-      ))}
-    </svg>
-  )
-}
-
-/* Bean: a single coffee-bean glyph (ellipse + the signature curved crease). */
-function Bean({ size = 26, rotate = 0, className, style }) {
-  return (
-    <svg
-      className={className}
-      style={style}
-      width={size}
-      height={size}
-      viewBox="0 0 32 32"
-      fill="none"
-      aria-hidden="true"
-    >
-      <g transform={`rotate(${rotate} 16 16)`}>
-        <ellipse cx="16" cy="16" rx="9" ry="13" fill="currentColor" />
-        <path d="M16 4.5C12 9 12 23 16 27.5" stroke="var(--bean-crease, rgba(255,247,230,0.55))" strokeWidth="1.4" strokeLinecap="round" fill="none" />
-      </g>
-    </svg>
-  )
-}
-
-/* CoffeeBeans: a scattered cluster of beans used as a section decoration. */
-function CoffeeBeans({ className }) {
-  return (
-    <span className={`coffee-beans ${className || ''}`} aria-hidden="true">
-      <Bean size={30} rotate={-18} className="coffee-bean coffee-bean--1" />
-      <Bean size={22} rotate={32} className="coffee-bean coffee-bean--2" />
-      <Bean size={26} rotate={8} className="coffee-bean coffee-bean--3" />
-      <Bean size={18} rotate={-40} className="coffee-bean coffee-bean--4" />
-    </span>
   )
 }
 
@@ -263,196 +182,43 @@ function VerticalRow({ v }) {
   )
 }
 
-/* RitualOvals, two capsule images that drift in opposite directions on scroll
-   to give the section depth. */
-function RitualOvals() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-12%' })
+/* Hero — one full-viewport screen: video background, logo, headline, CTAs.
+   No scroll-linked crossfade, no split links, no decorative layers. */
+function Hero() {
   const reduced = useReducedMotion()
-  const yA = useParallax(ref, 70)
-  const yB = useParallax(ref, -90)
   return (
-    <div className="cap-ovals" ref={ref}>
+    <section className="hr-hero3">
+      <video
+        className="hr-hero3-video"
+        src="/cafe-tour.mp4"
+        poster="/hero-bg.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+      <div className="hr-hero3-scrim" aria-hidden="true" />
       <motion.div
-        className="cap-oval" style={{ y: yA }}
-        initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.86 }}
-        animate={inView ? { opacity: 1, scale: 1 } : undefined}
+        className="hr-hero3-inner"
+        initial={reduced ? false : { opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       >
-        <img src="/pour-over-coffee.jpg" alt="A slow pour-over brew at Mastermind Brews" loading="lazy" />
-      </motion.div>
-      <motion.div
-        className="cap-oval" style={{ y: yB }}
-        initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.86 }}
-        animate={inView ? { opacity: 1, scale: 1 } : undefined}
-        transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <img src="/offer-beans.jpg" alt="Single-origin Chikmagalur coffee beans" loading="lazy" />
-      </motion.div>
-    </div>
-  )
-}
-
-/* ParallaxBand, cinematic background image that pans slowly as the band scrolls
-   through the viewport (used by the "Visit the cafe" section). */
-function ParallaxBand() {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.12, 1.18, 1.12])
-  return (
-    <motion.div
-      ref={ref}
-      className="hr-visit-bg"
-      aria-hidden="true"
-      style={reduced ? undefined : { y, scale }}
-    />
-  )
-}
-
-/* ScrollPill, the giant-wordmark section's inset image grows and lifts slightly
-   as it crosses the viewport. */
-function ScrollPill() {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.82, 1, 0.92])
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60])
-  return (
-    <motion.div
-      ref={ref}
-      className="cap-mark-pill"
-      role="img"
-      aria-label="Inside Mastermind Bicycle Cafe in Mulund"
-      style={reduced ? { backgroundImage: 'url(/project-cafe.jpg)' } : { backgroundImage: 'url(/project-cafe.jpg)', scale, y }}
-    >
-      <span className="cap-mark-pill-scrim" aria-hidden="true" />
-      <span className="cap-mark-pill-cap">Roastery &amp; Academy · Mulund</span>
-    </motion.div>
-  )
-}
-
-/* ScrollHero, single hero with an autoplaying video background. At the top
-   it shows the brand logo + split "Buy / Learn" links; as you scroll they rise
-   and fade out while the "The art of great coffee" headline block fades up into
-   their place. Pure scroll-linked crossfade (sticky over a tall section). */
-function ScrollHero() {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  // Drive the crossfade off absolute window scroll (px), the hero sits at the
-  // very top of the page, so this is unambiguous and frame-accurate.
-  const { scrollY } = useScroll()
-
-  const logoOpacity = useTransform(scrollY, [0, 150, 360], [1, 1, 0])
-  const logoY = useTransform(scrollY, [0, 360], [0, -170])
-  const textOpacity = useTransform(scrollY, [340, 520, 680], [0, 1, 1])
-  const textY = useTransform(scrollY, [340, 560], [120, 0])
-  const cueOpacity = useTransform(scrollY, [0, 130], [1, 0])
-
-  return (
-    <section className="hr-hero2" ref={ref}>
-      <div className="hr-hero2-sticky">
-        <video
-          className="hr-hero2-video"
-          src="/cafe-tour.mp4"
-          poster="/hero-bg.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-        />
-        <div className="hr-hero2-scrim" aria-hidden="true" />
-
-        {/* Split links, rise & fade with the logo */}
-        <motion.div className="hr-hero2-splits" style={{ opacity: logoOpacity, y: logoY }}>
-          <Link to="/store" className="hero-split-link hero-split-link--left" aria-label="Buy Coffee">
-            <span className="hero-split-hint"><ShoppingBag size={18} aria-hidden="true" /><span>Buy Coffee</span></span>
-          </Link>
-          <Link to="/workshop" className="hero-split-link hero-split-link--right" aria-label="Learn Coffee">
-            <span className="hero-split-hint"><BookOpen size={18} aria-hidden="true" /><span>Learn Coffee</span></span>
-          </Link>
-        </motion.div>
-
-        <div className="hr-hero2-stage">
-          {/* Block A, logo + tagline pill */}
-          <motion.div className="hr-hero2-block hr-hero2-logo" style={{ opacity: logoOpacity, y: logoY }}>
-            <motion.div
-              className="hero-logo-spotlight"
-              initial={reduced ? false : { opacity: 0, scale: 0.9, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            >
-              <span className="hero-logo-spotlight-aura" aria-hidden="true" />
-              <span className="hero-logo-spotlight-halo" aria-hidden="true" />
-              <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--1" aria-hidden="true" />
-              <span className="hero-logo-spotlight-ring hero-logo-spotlight-ring--2" aria-hidden="true" />
-              <span className="hero-logo-spotlight-shine" aria-hidden="true" />
-              <img className="hero-logo-spotlight-img" src="/logo.png" alt="Mastermind Brews, specialty coffee roastery and academy" />
-            </motion.div>
-            <div className="hero-tagline-pill">
-              <span className="hero-tagline-pill-dot" aria-hidden="true" />
-              <span className="hero-tagline-pill-text">Specialty Coffee · Roastery &amp; Academy · Mumbai, India</span>
-              <span className="hero-tagline-pill-dot" aria-hidden="true" />
-            </div>
-          </motion.div>
-
-          {/* Block B, headline that takes the logo's place on scroll */}
-          <motion.div className="hr-hero2-block hr-hero2-text" style={{ opacity: textOpacity, y: textY }}>
-            <div className="hr-eyebrow">Mastermind Brews · Mumbai, India</div>
-            <h1 className="hr-hero-head">A portfolio built for <em>every cup.</em></h1>
-            <p className="hr-hero-sub">
-              Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
-            </p>
-            <div className="hr-hero-cta">
-              <Magnetic><Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Order Beans</Link></Magnetic>
-              <Magnetic><Link to="/workshop" className="hr-btn hr-btn-ghost"><BookOpen size={16} /> Start Learning</Link></Magnetic>
-            </div>
-          </motion.div>
+        <img className="hr-hero3-logo" src="/logo.png" alt="Mastermind Brews, specialty coffee roastery and academy" />
+        <p className="hero-tagline-pill">
+          <span className="hero-tagline-pill-text">Specialty Coffee · Roastery &amp; Academy · Mumbai, India</span>
+        </p>
+        <h1 className="hr-hero-head">A portfolio built for <em>every cup.</em></h1>
+        <p className="hr-hero-sub">
+          Single-origin Chikmagalur beans, an online barista academy, and a cafe in Mulund where it all began.
+        </p>
+        <div className="hr-hero-cta">
+          <Link to="/store" className="hr-btn hr-btn-primary"><ShoppingBag size={16} /> Order Beans</Link>
+          <Link to="/workshop" className="hr-btn hr-btn-ghost"><BookOpen size={16} /> Start Learning</Link>
         </div>
-
-        <motion.div className="hr-hero2-cue" style={{ opacity: cueOpacity }}>
-          <span className="hr-scrollcue"><span className="hr-mouse" /> Scroll</span>
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-/* FLOATING IMAGES — scattered draggable photo cluster above the "Visit Us" section */
-const FLOAT_IMAGES = [
-  { src: '/hero-bg.jpg',            x: '3%',  y: '8%',  rotate: -8, w: 195 },
-  { src: '/pour-over-coffee.jpg',   x: '24%', y: '22%', rotate:  5, w: 225 },
-  { src: '/namrata-thakkar.jpg',    x: '49%', y: '4%',  rotate: -3, w: 185 },
-  { src: '/about-team.jpg',         x: '70%', y: '16%', rotate:  9, w: 210 },
-]
-
-function FloatingImages() {
-  return (
-    <section className="hr-float-section" aria-hidden="true">
-      <div className="hr-float-zone">
-        {FLOAT_IMAGES.map((img, i) => (
-          <motion.div
-            key={i}
-            className="hr-float-card"
-            style={{ left: img.x, top: img.y, width: img.w }}
-            drag
-            dragConstraints={{ left: -90, right: 90, top: -90, bottom: 90 }}
-            dragElastic={0.14}
-            whileDrag={{ scale: 1.07, zIndex: 20 }}
-            whileHover={{ scale: 1.04 }}
-            initial={{ opacity: 0, scale: 0.82, rotate: img.rotate * 1.6 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: img.rotate }}
-            viewport={{ once: true, margin: '-12%' }}
-            transition={{ duration: 0.85, delay: i * 0.11, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <img src={img.src} alt="" loading="lazy" draggable="false" />
-          </motion.div>
-        ))}
-      </div>
-      <p className="hr-float-hint">grab &amp; move</p>
+      </motion.div>
     </section>
   )
 }
@@ -565,9 +331,6 @@ export default function Home() {
   const [featuredLoading, setFeaturedLoading] = useState(true)
   const [openProduct, setOpenProduct] = useState(null)
   const prefersReducedMotion = useReducedMotion()
-  const [showIntro, setShowIntro] = useState(
-    () => !sessionStorage.getItem('mm-intro') && !prefersReducedMotion,
-  )
 
   useEffect(() => {
     let cancelled = false
@@ -578,78 +341,18 @@ export default function Home() {
     return () => { cancelled = true }
   }, [])
 
-  const handleVaporizeEnd = useCallback(() => {
-    sessionStorage.setItem('mm-intro', '1')
-    setShowIntro(false)
-  }, [])
-
   return (
     <div className="home home--redesign">
-      {/* ===== VAPOUR TEXT INTRO (preloader) ===== */}
-      <AnimatePresence>
-        {showIntro && (
-          <motion.div
-            key="intro-overlay"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: 'fixed', inset: 0, zIndex: 9999, background: '#0a0908', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <div style={{ width: '90vw', maxWidth: '900px', height: '100px' }}>
-              <VaporizeTextCycle
-                texts={['Ride Hard / Eat Easy']}
-                font={{ fontFamily: "'Yanone Kaffeesatz', sans-serif", fontSize: '68px', fontWeight: 600 }}
-                color="rgb(248, 245, 242)"
-                spread={5}
-                density={7}
-                animation={{ vaporizeDuration: 0.7, fadeInDuration: 0.1, waitDuration: 0.05 }}
-                direction="left-to-right"
-                alignment="center"
-                tag={Tag.H1}
-                startDelay={400}
-                loop={false}
-                onVaporizeEnd={handleVaporizeEnd}
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ===== HERO, video bg; logo→headline scroll crossfade ===== */}
-      <ScrollHero />
-
-      <MarqueeStrip items={MARQUEE_TERMS} variant="paper" tall />
+      {/* ===== HERO ===== */}
+      <Hero />
 
       {/* ===== THREE VERTICALS ===== */}
       <section className="hr-verticals">
-        <ScrollFlowLines className="hr-vert-lines" stroke="rgba(176,116,51,0.22)" />
         <div className="hr-vert-head">
-          <CoffeeBeans className="hr-vert-beans" />
           <AnimatedSection><div className="hr-label">What We Do</div></AnimatedSection>
           <WordReveal className="hr-section-title" text={[{ t: 'Three ways to ' }, { t: 'love coffee.', em: true }]} />
         </div>
         {VERTICALS.map((v) => <VerticalRow key={v.num} v={v} />)}
-      </section>
-
-      {/* ===== THE RITUAL, capsule-oval editorial (capsules.moyra.co-style) ===== */}
-      <section className="cap-ritual">
-        <ScrollFlowLines className="cap-ritual-lines" stroke="rgba(221,158,85,0.32)" />
-        <div className="cap-wrap">
-          <AnimatedSection>
-            <div className="hr-label" style={{ color: 'var(--hr-accent-bright)' }}>The Ritual</div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.08}>
-            <h2 className="cap-ritual-head">Closer to the bean. <em>Closer to the cup.</em></h2>
-            <p className="cap-ritual-kicker">Every cup is a small ceremony, from cherry to crema.</p>
-          </AnimatedSection>
-          <div className="cap-ritual-grid">
-            <RitualOvals />
-            <AnimatedSection className="cap-ritual-text" delay={0.15}>
-              <p>A place to slow down, where single-origin beans, careful roasting, and a steady pour turn a simple cup into a small, daily ceremony.</p>
-              <Link to="/store" className="cap-ritual-link">Discover the coffee <ArrowRight size={14} /></Link>
-            </AnimatedSection>
-          </div>
-        </div>
       </section>
 
       {/* ===== FEATURED COFFEE ===== */}
@@ -661,9 +364,7 @@ export default function Home() {
                 <AnimatedSection><div className="hr-label">Best Sellers</div></AnimatedSection>
                 <WordReveal className="hr-section-title" text={[{ t: 'Daily brews, ' }, { t: 'bagged.', em: true }]} />
               </div>
-              <Magnetic strength={0.3}>
-                <Link to="/store" className="hr-vert-link">View all <ArrowRight size={14} /></Link>
-              </Magnetic>
+              <Link to="/store" className="hr-vert-link">View all <ArrowRight size={14} /></Link>
             </div>
             {featuredLoading ? (
               <div className="featured-grid">
@@ -745,22 +446,10 @@ export default function Home() {
         </section>
       )}
 
-      {/* ===== GIANT WORDMARK + INSET PILL (capsules.moyra.co-style) ===== */}
-      <section className="cap-mark" aria-label="Mastermind Brews">
-        <div className="cap-mark-track" aria-hidden="true">
-          <span>Mastermind Brews ·</span>
-          <span>Mastermind Brews ·</span>
-          <span>Mastermind Brews ·</span>
-          <span>Mastermind Brews ·</span>
-        </div>
-        <ScrollPill />
-      </section>
-
-      {/* ===== VISIT THE CAFE (cinematic band) with floating images ===== */}
+      {/* ===== VISIT THE CAFE ===== */}
       <section className="hr-visit">
-        <ParallaxBand />
+        <div className="hr-visit-bg" aria-hidden="true" />
         <div className="hr-visit-scrim" aria-hidden="true" />
-        <FloatingImages />
         <motion.div
           className="hr-visit-inner"
           initial="hidden"
@@ -789,14 +478,10 @@ export default function Home() {
             className="hr-hero-cta"
             variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           >
-            <Magnetic>
-              <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-primary">
-                Get Directions <ArrowUpRight size={15} />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
-            </Magnetic>
+            <a href="https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-primary">
+              Get Directions <ArrowUpRight size={15} />
+            </a>
+            <a href="https://www.mastermindbrews.com/" target="_blank" rel="noopener noreferrer" className="hr-btn hr-btn-ghost">Cafe Website</a>
           </motion.div>
         </motion.div>
       </section>

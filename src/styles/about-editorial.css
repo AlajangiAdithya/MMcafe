@@ -100,42 +100,6 @@
   background: var(--ed-blue);
   box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
 }
-/* scrollcue/mouse on the dark hero only (global stays dark for the light
-   Consultancy heroes that reuse .ed-scrollcue) */
-.about-editorial .about-hero .ed-scrollcue { color: rgba(244, 236, 221, 0.72); }
-.about-editorial .about-hero .ed-mouse { border-color: rgba(244, 236, 221, 0.5); }
-
-.ed-scrollcue {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 34px;
-  font-family: var(--ed-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ed-dim);
-}
-.ed-mouse {
-  width: 20px; height: 32px;
-  border: 1.5px solid rgba(30, 23, 18, 0.32);
-  border-radius: 12px;
-  position: relative;
-}
-.ed-mouse::before {
-  content: '';
-  position: absolute; left: 50%; top: 6px;
-  width: 3px; height: 6px; border-radius: 2px;
-  background: var(--ed-blue);
-  transform: translateX(-50%);
-  animation: ed-mousedot 1.6s ease-in-out infinite;
-}
-@keyframes ed-mousedot {
-  0% { opacity: 0; transform: translate(-50%, 0); }
-  30% { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%, 11px); }
-}
-
 /* ---------- EDITORIAL HERO (used by Our Projects) ---------- */
 .ed-hero { padding: clamp(70px, 12vw, 150px) 0 clamp(40px, 7vw, 90px); }
 .ed-hero-title { font-size: clamp(2.7rem, 8vw, 6rem) !important; line-height: 0.96; }
@@ -220,12 +184,6 @@
   padding: 16px 28px;
   box-shadow: 0 16px 40px -16px rgba(91, 155, 219, 0.55);
 }
-.consultancy-page .cons-hero-cue {
-  margin-top: clamp(34px, 5vw, 52px);
-  display: flex; justify-content: center;
-}
-.consultancy-page .cons-hero-cue .ed-scrollcue { margin-top: 0; }
-
 @media (prefers-reduced-motion: reduce) {
   .consultancy-page .cons-hero-bg { transform: none !important; }
 }
@@ -238,27 +196,6 @@
   padding-bottom: 14px; border-bottom: 1px solid var(--ed-line);
 }
 .ed-suited-list li svg { color: var(--ed-blue); flex-shrink: 0; margin-top: 4px; }
-
-/* Pinned-process line content (Our Projects) */
-.ed-pin-step-num { display: block; font-family: var(--ed-mono); font-size: 0.78rem; letter-spacing: 0.24em; color: var(--ed-blue-ink); margin-bottom: clamp(14px, 2.4vh, 22px); }
-.ed-pin-step-title {
-  display: block;
-  font-family: var(--ed-serif);
-  font-size: clamp(1.9rem, 4.4vw, 3rem);
-  line-height: 1.04;
-  max-width: 16ch;
-}
-.ed-pin-step-body {
-  display: block;
-  margin-top: clamp(16px, 2.6vh, 26px);
-  font-family: var(--ed-mono);
-  font-size: clamp(0.8rem, 1.1vw, 0.96rem);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  color: var(--ed-dim);
-  max-width: 40ch;
-}
 
 /* ---------- STORY PANELS (editorial) ---------- */
 .ed-stories { padding: clamp(20px, 4vw, 60px) 0 0; }
@@ -319,22 +256,6 @@
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   will-change: transform;
-}
-.ed-story-ghost {
-  position: absolute;
-  left: 50%;
-  bottom: -6%;
-  transform: translateX(-50%);
-  font-family: var(--ed-serif);
-  font-weight: 600;
-  font-size: clamp(3.5rem, 17vw, 15rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: rgba(255, 255, 255, 0.22);
-  mix-blend-mode: overlay;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
 }
 .ed-story-tag {
   position: absolute; top: 16px; left: 16px;
@@ -660,86 +581,6 @@
 @media (max-width: 920px) { .ed-proj-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .ed-proj-grid { grid-template-columns: 1fr; } }
 
-/* ---------- PINNED SCROLLY (Our Projects · How It Works) ---------- */
-.ed-pin { position: relative; height: 380vh; }
-.ed-pin-sticky {
-  position: sticky; top: 0;
-  height: 100vh; min-height: 600px;
-  overflow: hidden;
-  display: grid; place-items: center;
-}
-.ed-pin-bg {
-  position: absolute; inset: -8% 0;
-  background-size: cover; background-position: center;
-  will-change: transform;
-}
-.ed-pin-scrim {
-  position: absolute; inset: 0;
-  /* Bright cream wash over the photo so the section reads light and airy,
-     with faint blue/pink glows for brand depth. Dark ink text sits on top. */
-  background:
-    linear-gradient(180deg, rgba(252, 251, 247, 0.9) 0%, rgba(252, 251, 247, 0.76) 45%, rgba(252, 251, 247, 0.95) 100%),
-    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(91, 155, 219, 0.07), transparent 72%),
-    radial-gradient(ellipse 70% 60% at 72% 82%, rgba(214, 124, 142, 0.07), transparent 72%);
-}
-.ed-pin-ghost {
-  position: absolute; left: 0; right: 0; top: 50%;
-  transform: translateY(-50%);
-  text-align: center;
-  font-family: var(--ed-serif); font-weight: 600;
-  font-size: clamp(5rem, 23vw, 22rem);
-  line-height: 1; letter-spacing: -0.04em;
-  color: rgba(46, 111, 176, 0.10);
-  pointer-events: none; user-select: none;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.6s var(--ed-ease);
-}
-.ed-pin-ghost.is-active { opacity: 1; }
-.ed-pin-inner {
-  position: relative; z-index: 2; text-align: center;
-  width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 24px;
-}
-.ed-pin-eyebrow {
-  font-family: var(--ed-mono);
-  font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase;
-  color: var(--ed-blue-ink);
-  margin-bottom: clamp(28px, 5vh, 52px);
-}
-.ed-pin-stage { position: relative; width: 100%; height: clamp(340px, 48vh, 470px); }
-.ed-pin-line {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 0 24px; text-align: center;
-  font-family: var(--ed-serif); font-weight: 360;
-  color: var(--ed-ink);
-  /* hidden until its scroll band is active; full opacity when shown so the
-     text is always clearly readable (active step toggled from JS) */
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.5s var(--ed-ease), transform 0.6s var(--ed-ease);
-  pointer-events: none;
-}
-.ed-pin-line.is-active {
-  opacity: 1;
-  transform: translateY(0);
-}
-.ed-pin-line em { font-style: italic; color: var(--ed-pink-ink); }
-.ed-pin-cue {
-  position: absolute; bottom: 30px; left: 50%;
-  transform: translateX(-50%);
-}
-.ed-pin-dots {
-  display: flex; justify-content: center; gap: 10px;
-  margin-top: clamp(34px, 5vh, 60px);
-}
-.ed-pin-dots span {
-  width: 7px; height: 7px; border-radius: 999px;
-  background: rgba(30, 23, 18, 0.18);
-  transition: background 0.4s var(--ed-ease), transform 0.4s var(--ed-ease);
-}
-.ed-pin-dots span.is-active { background: var(--ed-blue); transform: scale(1.35); }
-
 /* ---------- VALUES (editorial light) ---------- */
 .ed-values { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
 .ed-section-label {
@@ -890,23 +731,14 @@
 }
 .about-page .ed-story-intro .ed-story-lede { margin: 0; }
 .about-page .ed-story-body { max-width: 760px; }
-.about-page .ed-story-ghost {
-  font-size: clamp(2.2rem, 8vw, 4.2rem);
-  bottom: 5%;
-  color: rgba(246, 239, 225, 0.4);
-  mix-blend-mode: normal;
-  text-shadow: 0 2px 26px rgba(0, 0, 0, 0.55);
-  letter-spacing: 0.01em;
-}
 @media (max-width: 820px) {
   .about-page .ed-story-intro { grid-template-columns: 1fr; gap: 26px; }
   .about-page .ed-story-media { max-width: 420px; }
 }
 
 /* ============================================================
-   CONSULTANCY · dark scrims (hero + How It Works)
-   Swap the bright cream washes for a black translucent layer so the
-   cafe photo reads through a dark overlay instead of a white one.
+   CONSULTANCY · dark hero scrim
+   The cafe photo reads through a dark overlay; cream type on top.
    ============================================================ */
 .consultancy-page .cons-hero-bg {
   filter: saturate(1) brightness(0.92);
@@ -929,36 +761,6 @@
 }
 .consultancy-page .cons-hero-lede { color: rgba(245, 238, 225, 0.86); }
 .consultancy-page .cons-hero .cons-eyebrow { color: #9FC6EC; }
-.consultancy-page .cons-hero .ed-scrollcue { color: rgba(245, 238, 225, 0.72); }
-.consultancy-page .cons-hero .ed-mouse { border-color: rgba(245, 238, 225, 0.5); }
-
-.consultancy-page .ed-pin-scrim {
-  background:
-    linear-gradient(180deg, rgba(10, 8, 6, 0.72) 0%, rgba(10, 8, 6, 0.58) 45%, rgba(10, 8, 6, 0.82) 100%),
-    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(91, 155, 219, 0.1), transparent 72%),
-    radial-gradient(ellipse 70% 60% at 72% 82%, rgba(214, 124, 142, 0.1), transparent 72%);
-}
-/* Light-up the How It Works content on the dark layer */
-.consultancy-page .ed-pin-eyebrow { color: #9FC6EC; }
-.consultancy-page .ed-pin-line { color: #F6EFE1; }
-.consultancy-page .ed-pin-line em { color: #ECA9B8; }
-.consultancy-page .ed-pin-step-num { color: #9FC6EC; }
-.consultancy-page .ed-pin-step-body { color: rgba(245, 238, 225, 0.78); }
-.consultancy-page .ed-pin-ghost { color: rgba(246, 239, 225, 0.1); }
-.consultancy-page .ed-pin-dots span { background: rgba(245, 238, 225, 0.3); }
-.consultancy-page .ed-pin-dots span.is-active { background: var(--ed-blue); }
-.consultancy-page .ed-pin-cue .ed-scrollcue { color: rgba(245, 238, 225, 0.7); }
-.consultancy-page .ed-pin-cue .ed-mouse { border-color: rgba(245, 238, 225, 0.5); }
-
-/* ---------- REDUCED MOTION: unpin, show all lines ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .ed-pin { height: auto; }
-  .ed-pin-sticky { position: relative; height: auto; min-height: 0; padding: clamp(60px, 9vw, 110px) 0; }
-  .ed-pin-stage { height: auto; display: flex; flex-direction: column; gap: 22px; }
-  .ed-pin-line { position: relative; inset: auto; opacity: 1 !important; transform: none !important; transition: none; }
-  .ed-pin-ghost { display: none; }
-  .ed-pin-dots { display: none; }
-}
 
 /* ============================================================
    ABOUT · INDULGENT TREATMENT (brand blue + pink, highlighted)
@@ -981,84 +783,26 @@
   --bc-grad-soft: linear-gradient(135deg, rgba(91, 155, 219, 0.22), rgba(214, 124, 142, 0.2));
 }
 
-/* ---- shared blue→pink gradient-text helper (story + IG titles) ---- */
-.about-page .ed-stories .ed-story-title em,
-.about-page .ed-ig .ed-section-title em {
-  font-style: italic;
-  background: var(--bc-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-  text-shadow: none;
-}
-
 /* ============================================================
    1 · FOUNDER STORY PANEL  ("Coffee was never the plan.")
+   Quiet editorial treatment — single hairline, no gradient bling.
    ============================================================ */
 .about-page .ed-stories .ed-story {
   position: relative;
-  /* blue/pink hairline + a soft brand glow rising from the section top */
-  border-top: 1px solid rgba(46, 111, 176, 0.28);
-  background:
-    radial-gradient(120% 70% at 50% -8%, rgba(91, 155, 219, 0.12), transparent 60%);
-}
-
-/* eyebrow "ABOUT" → blue pill with a lit blue→pink dot */
-.about-page .ed-stories .ed-story-index {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 7px 15px 7px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(91, 155, 219, 0.55);
-  background: var(--bc-grad-soft);
-  color: var(--bc-blue-ink);
-  letter-spacing: 0.26em;
-  font-size: 0.62rem;
-}
-.about-page .ed-stories .ed-story-index::before {
-  content: "";
-  width: 7px; height: 7px; border-radius: 999px;
-  background: linear-gradient(135deg, #5B9BDB, #D67C8E);
-  box-shadow: 0 0 12px rgba(91, 155, 219, 0.9);
+  border-top: 1px solid var(--ed-line);
 }
 
 /* meta block → muted ink */
 .about-page .ed-stories .ed-story-meta { color: var(--bc-mocha); }
 
-/* portrait frame: blue/pink gradient ring + glow + soft vignette */
+/* portrait: simple frame, one soft shadow */
 .about-page .ed-stories .ed-story-media {
-  border: 1.5px solid rgba(91, 155, 219, 0.55);
-  box-shadow:
-    0 30px 70px -34px rgba(46, 111, 176, 0.55),
-    0 0 0 1px rgba(214, 124, 142, 0.25),
-    inset 0 0 0 6px rgba(246, 239, 225, 0.5);
+  border: 1px solid var(--ed-line);
+  box-shadow: 0 24px 56px -36px rgba(30, 23, 18, 0.45);
   background: var(--bc-dark);
 }
-.about-page .ed-stories .ed-story-media::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(75% 55% at 50% 0%, rgba(91, 155, 219, 0.18), transparent 55%),
-    radial-gradient(60% 50% at 90% 100%, rgba(214, 124, 142, 0.2), transparent 60%),
-    linear-gradient(180deg, transparent 42%, rgba(14, 11, 9, 0.5) 100%);
-}
-/* "The Brewer" tag pill → blue→pink gradient */
-.about-page .ed-stories .ed-story-tag {
-  color: #fff;
-  background: var(--bc-grad);
-  border: 1px solid rgba(246, 239, 225, 0.35);
-  box-shadow: 0 8px 22px -10px rgba(46, 111, 176, 0.8);
-}
-/* ghost name reads as cream */
-.about-page .ed-stories .ed-story-ghost {
-  color: rgba(246, 239, 225, 0.52);
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6);
-}
 
-/* lede: italic serif with a blue→pink accent bar */
+/* lede: italic serif with a single accent bar */
 .about-page .ed-stories .ed-story-intro .ed-story-lede {
   position: relative;
   padding-left: clamp(18px, 2vw, 28px);
@@ -1067,14 +811,13 @@
   content: "";
   position: absolute; left: 0; top: 6px; bottom: 6px;
   width: 3px; border-radius: 3px;
-  background: var(--bc-grad);
+  background: var(--bc-blue);
 }
 
 /* body emphasis + links in brand tones */
 .about-page .ed-stories .ed-story-text strong {
   color: var(--bc-blue-ink);
   font-weight: 600;
-  background: linear-gradient(transparent 78%, rgba(91, 155, 219, 0.16) 0);
 }
 .about-page .ed-stories .ed-story-text a {
   color: var(--bc-blue-ink);
@@ -1116,34 +859,19 @@
   .about-page .ed-stories .ed-actions { flex-direction: row; align-items: center; }
 }
 
-/* ---- editorial body typography (lead drop-cap + closing pull line) ---- */
+/* ---- editorial body typography ---- */
 .about-page .ed-stories .ed-story-text p { font-size: 1.04rem; }
-
-/* lead paragraph: richer ink + a blue→pink gradient drop cap */
 .about-page .ed-stories .ed-story-text p:first-child {
   color: var(--bc-ink);
   font-size: 1.1rem;
   line-height: 1.7;
 }
-.about-page .ed-stories .ed-story-text p:first-child::first-letter {
-  float: left;
-  margin: 6px 14px 0 0;
-  font-family: var(--ed-serif);
-  font-weight: 500;
-  font-size: 3.6em;
-  line-height: 0.78;
-  background: var(--bc-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
 
-/* closing line: serif-italic pull statement, set off by a brand divider */
+/* closing line: serif-italic pull statement, set off by a hairline */
 .about-page .ed-stories .ed-story-text p:last-child {
   margin-top: clamp(24px, 3.4vw, 36px);
   padding-top: clamp(22px, 3vw, 30px);
-  border-top: 1px solid rgba(91, 155, 219, 0.28);
+  border-top: 1px solid var(--ed-line);
   font-family: var(--ed-serif);
   font-style: italic;
   font-weight: 360;
@@ -1153,40 +881,15 @@
   color: var(--bc-ink);
 }
 
-/* championship badge → blue/pink chip */
-.about-page .ed-stories .ed-badge {
-  border: 1px solid rgba(91, 155, 219, 0.5);
-  background: var(--bc-grad-soft);
-  box-shadow: 0 16px 40px -26px rgba(46, 111, 176, 0.65);
-}
-.about-page .ed-stories .ed-badge-icon {
-  background: var(--bc-grad);
-  color: #fff;
-  box-shadow: 0 8px 18px -8px rgba(192, 86, 110, 0.85);
-}
+/* championship badge — quiet blue chip */
 .about-page .ed-stories .ed-badge-num { color: var(--bc-ink); }
-
-/* primary CTA → blue→pink gradient with colored glow */
-.about-page .ed-stories .ed-btn-primary {
-  background: var(--bc-grad);
-  box-shadow: 0 16px 38px -16px rgba(46, 111, 176, 0.7);
-}
-.about-page .ed-stories .ed-btn-primary:hover {
-  box-shadow: 0 20px 48px -16px rgba(192, 86, 110, 0.78);
-}
-.about-page .ed-stories .ed-btn-ghost:hover {
-  border-color: var(--bc-blue);
-  color: var(--bc-blue-ink);
-}
 
 /* ============================================================
    2 · "FOLLOW THE JOURNEY"  ·  premium Instagram tabs
    ============================================================ */
 .about-page .ed-ig {
   position: relative;
-  border-top: 1px solid rgba(46, 111, 176, 0.28);
-  background:
-    radial-gradient(110% 80% at 50% 0%, rgba(91, 155, 219, 0.1), transparent 58%);
+  border-top: 1px solid var(--ed-line);
 }
 
 .ig-tabs { margin-top: clamp(30px, 4vw, 50px); }
@@ -1247,13 +950,12 @@
     0 12px 26px -14px rgba(46, 111, 176, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
-/* lit blue→pink indicator bar under the active tab */
+/* indicator bar under the active tab */
 .ig-tab[data-state="active"]::after {
   content: "";
-  position: absolute; left: 22%; right: 22%; bottom: 6px; height: 3px;
-  border-radius: 3px;
-  background: var(--bc-grad);
-  box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
+  position: absolute; left: 22%; right: 22%; bottom: 6px; height: 2px;
+  border-radius: 2px;
+  background: var(--bc-blue);
 }
 .about-page .ig-tab[data-state="active"] .ig-tab-name { color: var(--bc-ink); }
 .about-page .ig-tab[data-state="active"] .ig-tab-role { color: var(--bc-pink-ink); }
@@ -1425,13 +1127,12 @@
 
 /* ---------- INTERACTIVE POLISH ---------- */
 
-/* Value row hover lift */
+/* Value row hover tint */
 .ed-value {
-  transition: background 0.4s var(--ed-ease), transform 0.35s var(--ed-ease), box-shadow 0.35s var(--ed-ease);
+  transition: background 0.4s var(--ed-ease);
 }
 .ed-value:hover {
   background: rgba(91, 155, 219, 0.04);
-  transform: translateX(6px);
 }
 
 /* Badge shimmer */
@@ -1487,27 +1188,10 @@
   transform: translateX(4px);
 }
 
-/* Scroll cue pulse */
-.ed-scrollcue .ed-mouse {
-  animation: ed-mouse-pulse 2s ease-in-out infinite;
-}
-@keyframes ed-mouse-pulse {
-  0%, 100% { opacity: 0.6; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(3px); }
-}
-
 /* ============================================================
    INTERACTIVITY PASS, kinetic headings, stat counters, draggable
    journey timeline, and a scrolling photo wall, all on the LIGHT theme.
    ============================================================ */
-
-/* Recolour the kinetic-heading sheen from gold → the light theme's blue */
-.about-editorial .kinetic-heading .kh-word-inner {
-  background-image: linear-gradient(100deg,
-    currentColor 0%, currentColor 42%,
-    var(--ed-blue) 50%,
-    currentColor 58%, currentColor 100%);
-}
 
 /* ---------- BY THE NUMBERS (animated counters) ---------- */
 .ed-stats {
@@ -1596,7 +1280,7 @@
   transition: box-shadow 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease);
 }
 .cons-show-card:hover { border-color: var(--ed-blue); box-shadow: 0 30px 60px -30px rgba(46, 111, 176, 0.5); }
-.cons-show-card .tilt-card-inner { display: flex; flex-direction: column; height: 100%; }
+.cons-show-card { display: flex; flex-direction: column; }
 .cons-show-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
 .cons-show-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cons-show-index {
@@ -1786,14 +1470,6 @@
   box-shadow: 0 18px 48px -20px rgba(46, 111, 176, 0.18);
   transform: translateY(-4px) !important;
 }
-.cons-expertise-ghost {
-  position: absolute; bottom: -0.1em; right: 0.1em;
-  font-family: var(--ed-serif); font-weight: 700;
-  font-size: clamp(5rem, 9vw, 9rem); line-height: 1;
-  color: rgba(40, 22, 8, 0.04); pointer-events: none; user-select: none;
-  transition: color 0.4s var(--ed-ease);
-}
-.cons-expertise-card:hover .cons-expertise-ghost { color: rgba(46, 111, 176, 0.07); }
 .cons-expertise-grid.ed-values-grid {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: clamp(12px, 2vw, 18px);

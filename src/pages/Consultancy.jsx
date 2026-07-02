@@ -1,14 +1,10 @@
-import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
-import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
-import TiltCard from '../components/TiltCard'
-import MarqueeStrip from '../components/MarqueeStrip'
 import '../styles/about-editorial.css'
 
 const ORG_ID = 'https://www.mastermindbrews.com/#organization'
@@ -30,15 +26,6 @@ const CONS_CRUMB = {
     { '@type': 'ListItem', position: 2, name: 'Our Projects', item: 'https://www.mastermindbrews.com/consultancy' },
   ],
 }
-
-const CAFE_MARQUEE = [
-  { en: 'COCOA EXPERIENCE CAFE · VIRAR' },
-  { en: 'GROUNDED · BANDRA' },
-  { en: 'AFFOGATO · KHAR' },
-  { en: "CHURN'D · SURAT" },
-  { en: 'INDULGE CREAMERY · BANDRA' },
-  { en: 'GERANIUM HAVEN · GOA' },
-]
 
 const EXPERTISE = [
   { title: 'Understanding Coffee', body: 'In-depth training on the basics of coffee and the principles of brewing, so your team works from real knowledge.' },
@@ -70,10 +57,10 @@ const CONS_GRID = [
 ]
 
 const PROCESS = [
-  { ghost: 'LISTEN', num: '01', title: 'Discovery Call', body: 'We listen. Tell us about the space, the vision, and the constraints.' },
-  { ghost: 'MAP', num: '02', title: 'Site & Concept Audit', body: 'A visit or remote review maps the gap between where you are and where you want to be.' },
-  { ghost: 'PLAN', num: '03', title: 'Engagement Plan', body: 'A scoped proposal with timelines, deliverables, and a clear price.' },
-  { ghost: 'BUILD', num: '04', title: 'Execution & Handover', body: 'We build it with you, then leave you with a team and a system that runs without us.' },
+  { num: '01', title: 'Discovery Call', body: 'We listen. Tell us about the space, the vision, and the constraints.' },
+  { num: '02', title: 'Site & Concept Audit', body: 'A visit or remote review maps the gap between where you are and where you want to be.' },
+  { num: '03', title: 'Engagement Plan', body: 'A scoped proposal with timelines, deliverables, and a clear price.' },
+  { num: '04', title: 'Execution & Handover', body: 'We build it with you, then leave you with a team and a system that runs without us.' },
 ]
 
 const SUITED = [
@@ -84,50 +71,31 @@ const SUITED = [
   'Brands wanting trained barista staff',
 ]
 
-/* The pinned "How It Works" steps are driven by an ACTIVE INDEX derived from
-   scroll progress, NOT by per-step scroll-linked opacity. This guarantees
-   exactly one step is on screen at FULL opacity (always readable), and it only
-   changes once its scroll band is actually reached, no early/partial fades and
-   no out-of-[0,1] WAAPI offset risk. The crossfade itself is plain CSS. */
-function PinnedProcess() {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [1.05, 1.18])
-  const [active, setActive] = useState(0)
-
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    const idx = Math.min(PROCESS.length - 1, Math.max(0, Math.floor(v * PROCESS.length)))
-    setActive((prev) => (prev === idx ? prev : idx))
-  })
-
+/* How It Works — a plain numbered list of the four steps. No pinning,
+   no scroll-jacking; the content is the section. */
+function ProcessSection() {
   return (
-    <section className="ed-pin" ref={ref}>
-      <div className="ed-pin-sticky">
-        <motion.div className="ed-pin-bg" style={{ backgroundImage: 'url(/about-team.jpg)', scale: bgScale }} />
-        <div className="ed-pin-scrim" />
-        {PROCESS.map((step, i) => (
-          <span key={step.ghost} className={`ed-pin-ghost${i === active ? ' is-active' : ''}`} aria-hidden="true">{step.ghost}</span>
-        ))}
-        <div className="ed-pin-inner">
-          <div className="ed-pin-eyebrow">How It Works</div>
-          <div className="ed-pin-stage">
-            {PROCESS.map((step, i) => (
-              <div key={step.num} className={`ed-pin-line${i === active ? ' is-active' : ''}`}>
-                <span className="ed-pin-step-num">{step.num}</span>
-                <span className="ed-pin-step-title">{step.title}</span>
-                <span className="ed-pin-step-body">{step.body}</span>
+    <section className="ed-pillars cons-process">
+      <div className="ed-container">
+        <div className="ed-section-label">How It Works</div>
+        <KineticHeading as="h2" className="ed-section-title">Four steps, start to handover.</KineticHeading>
+        <div className="ed-pillars-list">
+          {PROCESS.map((step, i) => (
+            <motion.div
+              key={step.num}
+              className="ed-pillar"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="ed-pillar-num">{step.num}</span>
+              <div>
+                <h3 className="ed-pillar-title">{step.title}</h3>
+                <p className="ed-pillar-body">{step.body}</p>
               </div>
-            ))}
-          </div>
-          <div className="ed-pin-dots" aria-hidden="true">
-            {PROCESS.map((step, i) => (
-              <span key={step.num} className={i === active ? 'is-active' : ''} />
-            ))}
-          </div>
-        </div>
-        <div className="ed-pin-cue">
-          <span className="ed-scrollcue"><span className="ed-mouse" /> Scroll through the process</span>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -197,17 +165,11 @@ export default function Consultancy() {
               From a single beverage-menu refresh to a full operations rebuild, the same team that runs Mastermind Brews is available to work with yours.
             </motion.p>
             <motion.div className="cons-hero-cta" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}>
-              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link></Magnetic>
-            </motion.div>
-            <motion.div className="cons-hero-cue" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.8, delay: 0.2 } } }}>
-              <span className="ed-scrollcue"><span className="ed-mouse" /> Scroll to explore</span>
+              <Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link>
             </motion.div>
           </motion.div>
         </div>
       </header>
-
-      {/* ===== CAFE NAME MARQUEE ===== */}
-      <MarqueeStrip items={CAFE_MARQUEE} variant="dark" speed={28} />
 
       {/* ===== FOUNDER INTRO ===== */}
       <section className="cons-intro">
@@ -238,9 +200,7 @@ export default function Consultancy() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -4 }}
               >
-                <span className="cons-expertise-ghost">0{i + 1}</span>
                 <div className="ed-value-head">
                   <span className="ed-value-num">0{i + 1}</span>
                   <h3>{s.title}</h3>
@@ -260,9 +220,9 @@ export default function Consultancy() {
           <p className="ed-journey-kicker">Drag through the cafes we&rsquo;ve built coffee programs with&mdash;each card carries its own scope of delivery.</p>
         </div>
         <div data-cursor="drag">
-          <DragScroller className="cons-show-track" autoDrift={0.2}>
+          <DragScroller className="cons-show-track">
             {PROJECTS.map((p, i) => (
-              <TiltCard key={p.name} className="cons-show-card" max={6} scale={1.02} glare={false}>
+              <article key={p.name} className="cons-show-card">
                 <div className="cons-show-media">
                   <img src={p.img} alt={`${p.name}, ${p.loc}, a Mastermind Brews cafe project`} loading="lazy" draggable="false" />
                   <span className="cons-show-index">0{i + 1}</span>
@@ -277,14 +237,14 @@ export default function Consultancy() {
                     <p>{p.details}</p>
                   </div>
                 </div>
-              </TiltCard>
+              </article>
             ))}
           </DragScroller>
         </div>
       </section>
 
-      {/* ===== PROCESS (pinned scrollytelling) ===== */}
-      <PinnedProcess />
+      {/* ===== PROCESS ===== */}
+      <ProcessSection />
 
       {/* ===== IN THEIR SPACES (editorial photo grid) ===== */}
       <section className="ed-gallery cons-gallery">
@@ -293,7 +253,7 @@ export default function Consultancy() {
             <div className="ed-section-label">In Their Spaces</div>
             <KineticHeading as="h2" className="ed-section-title">Coffee, on the ground.</KineticHeading>
           </div>
-          <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link></Magnetic>
+          <Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link>
         </div>
         <div className="ed-photo-grid">
           {CONS_GRID.map((p, i) => (
@@ -328,7 +288,7 @@ export default function Consultancy() {
             </div>
             <h2>Tell us what you&rsquo;re <em>building.</em></h2>
             <div className="ed-actions">
-              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link></Magnetic>
+              <Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link>
             </div>
           </motion.div>
         </div>
