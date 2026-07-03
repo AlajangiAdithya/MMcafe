@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Briefcase, ArrowRight, Check, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, MapPin, Mail, Phone } from 'lucide-react'
+import { InstagramIcon } from '../components/InstagramShowcase'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import JsonLd from '../components/JsonLd'
@@ -48,14 +49,12 @@ const PROJECTS = [
 ]
 
 
-/* Editorial photo grid — 6 shots from the cafes we've built programs with. */
-const CONS_GRID = [
-  { src: '/projects/grounded-bandra.jpg',        alt: 'Grounded Cafe, Bandra' },
-  { src: '/projects/affogato-khar.jpg',           alt: 'Affogato Cafe, Khar' },
-  { src: '/projects/churnd-surat.jpg',            alt: "Churn'd, Surat" },
-  { src: '/pour-over-coffee.jpg',                 alt: 'Pour-over coffee service' },
-  { src: '/hero-bg.jpg',                          alt: 'Mastermind specialty coffee' },
-  { src: '/projects/geranium-haven-goa.jpg',      alt: 'Geranium Haven, Arambol, Goa' },
+/* Direct channels for the "Start a Project" contact panel. */
+const CHANNELS = [
+  { label: 'Email us', value: 'hello@mastermindcafe.in', href: 'mailto:hello@mastermindcafe.in', icon: Mail, external: false },
+  { label: 'Call or WhatsApp', value: '+91 85918 50161', href: 'tel:+918591850161', icon: Phone, external: false },
+  { label: 'DM the brand', value: '@mastermindbrews', href: 'https://www.instagram.com/mastermindbrews/', icon: InstagramIcon, external: true },
+  { label: 'Visit us', value: 'Avior Corporate Park, Mulund West', href: 'https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund', icon: MapPin, external: true },
 ]
 
 const PROCESS = [
@@ -278,51 +277,56 @@ export default function Consultancy() {
       {/* ===== PROCESS ===== */}
       <ProcessSection />
 
-      {/* ===== IN THEIR SPACES (editorial photo grid) ===== */}
-      <section className="ed-gallery cons-gallery">
-        <div className="ed-container ed-gallery-head">
-          <div>
-            <div className="ed-section-label">In Their Spaces</div>
-            <KineticHeading as="h2" className="ed-section-title">Coffee, on the ground.</KineticHeading>
-          </div>
-          <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Start a project <ArrowRight size={14} /></Link></Magnetic>
-        </div>
-        <div className="ed-photo-grid">
-          {CONS_GRID.map((p, i) => (
-            <motion.div
-              key={i}
-              className="ed-photo-grid-item"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <img src={p.src} alt={p.alt} loading="lazy" />
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
       {/* ===== WHO IT'S FOR ===== */}
       <SuitedPanel />
 
-      {/* ===== CLOSING CTA ===== */}
-      <section className="ed-cta">
+      {/* ===== START A PROJECT (contact panel) ===== */}
+      <section className="cons-contact">
         <div className="ed-container">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="ed-section-label" style={{ marginBottom: 18 }}>
-              <Briefcase size={13} style={{ display: 'inline', marginRight: 6 }} /> Let&rsquo;s Build
-            </div>
-            <h2>Tell us what you&rsquo;re <em>building.</em></h2>
-            <div className="ed-actions">
-              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Contact Us <ArrowRight size={14} /></Link></Magnetic>
-            </div>
-          </motion.div>
+          <div className="cons-contact-grid">
+            <motion.div
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="ed-section-label">Start a Project</div>
+              <KineticHeading as="h2" className="ed-section-title cons-contact-title">Have a space <em>in mind?</em></KineticHeading>
+              <p className="cons-contact-lede">
+                Tell us about the site, the vision, and the constraints. We&rsquo;ll come back
+                with honest next steps&mdash;usually within 48 hours.
+              </p>
+              <div className="cons-contact-cta">
+                <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link></Magnetic>
+              </div>
+              <span className="cons-contact-note">Menu design · Operations · Training · Audits</span>
+            </motion.div>
+
+            <motion.div
+              className="cons-channels"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
+            >
+              {CHANNELS.map((c) => (
+                <motion.a
+                  key={c.label}
+                  className="cons-channel"
+                  href={c.href}
+                  {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } }}
+                >
+                  <span className="cons-channel-icon"><c.icon size={17} /></span>
+                  <span>
+                    <span className="cons-channel-label">{c.label}</span>
+                    <span className="cons-channel-value">{c.value}</span>
+                  </span>
+                  <span className="cons-channel-arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
+                </motion.a>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>

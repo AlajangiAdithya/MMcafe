@@ -125,12 +125,15 @@ export async function payAndVerify(opts) {
       theme: { color: '#1a1a2e' },
       handler: async (resp) => {
         try {
-          // 3) Server verifies the signature and writes the order/enrollment
+          // 3) Server verifies the signature and writes the order/enrollment.
+          // What was bought (kind/items/course/book/coupon) is read from the
+          // Razorpay order's server-set notes — only the shipping address
+          // travels from the client.
           const result = await callFn('payment-verify', {
             razorpay_order_id: resp.razorpay_order_id,
             razorpay_payment_id: resp.razorpay_payment_id,
             razorpay_signature: resp.razorpay_signature,
-            kind, items, courseId, bookId, couponCode, shippingAddress,
+            shippingAddress,
           })
           onSuccess?.({ ...result, paymentId: resp.razorpay_payment_id, total: order.amount })
         } catch (e) {

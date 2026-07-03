@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Lock, Eye, EyeOff, AlertTriangle } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import toast from 'react-hot-toast'
@@ -7,8 +7,14 @@ import SteamWisps from '../components/SteamWisps'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
-  const [params] = useSearchParams()
-  const token = params.get('token') || ''
+
+  // Supabase's native recovery: clicking the emailed link lands here with a
+  // recovery token in the URL that supabase-js exchanges into a short-lived
+  // session (and fires PASSWORD_RECOVERY). We only let the user set a new
+  // password once that recovery session exists — the token is never exposed
+  // to the page, so it can't be forged.
+  const [ready, setReady] = useState(false)
+  const [checking, setChecking] = useState(true)
 
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -16,17 +22,30 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (token) return
-  }, [token])
+    let done = false
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' || (session && event === 'SIGNED_IN')) {
+        done = true
+        setReady(true)
+        setChecking(false)
+      }
+    })
+    // Fallback: the session may already be established by the time we subscribe.
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) { setReady(true) }
+      if (!done) setChecking(false)
+    })
+    return () => sub.subscription.unsubscribe()
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!token) {
+    if (!ready) {
       toast.error('Reset link is missing or invalid')
       return
     }
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters')
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters')
       return
     }
     if (password !== confirm) {
@@ -35,10 +54,7 @@ export default function ResetPassword() {
     }
     setLoading(true)
     try {
-      const { error } = await supabase.rpc('complete_password_reset', {
-        p_token: token,
-        p_new_password: password,
-      })
+      const { error } = await supabase.auth.updateUser({ password })
       if (error) throw error
       toast.success('Password updated. Please sign in with your new password.')
       try { await supabase.auth.signOut() } catch { /* ignore */ }
@@ -52,9 +68,9 @@ export default function ResetPassword() {
 
   return (
     <div className="auth-page">
-      <div 
-        className="auth-page-bg" 
-        style={{ backgroundImage: 'url(https://lh3.googleusercontent.com/2a1PknT-0zZ7ZMBKxxFRpT0Pv9k75IyIElNU5GtBd7sXY3tOFQ5xG5ozg_IijExfnzCJN30XUbOeXhide-INJTDxnaP4ToyG-XypCG_eig=w1200-rw)' }} 
+      <div
+        className="auth-page-bg"
+        style={{ backgroundImage: 'url(/pour-over-coffee.jpg)' }}
       />
       <div className="auth-page-overlay" />
       <SteamWisps count={5} seed={77} />
@@ -68,10 +84,14 @@ export default function ResetPassword() {
           <p>Set your new secure password</p>
         </div>
 
-        {!token ? (
+        {checking ? (
+          <div style={{ textAlign: 'center', color: 'var(--ink-300)' }}>
+            <p style={{ fontWeight: '500' }}>Verifying your reset link…</p>
+          </div>
+        ) : !ready ? (
           <div style={{ textAlign: 'center', color: 'var(--ink-300)' }}>
             <AlertTriangle size={40} style={{ color: 'var(--accent-deep)', marginBottom: '16px', display: 'inline-block' }} />
-            <p style={{ marginBottom: '24px', fontWeight: '500' }}>This reset link is missing or invalid.</p>
+            <p style={{ marginBottom: '24px', fontWeight: '500' }}>This reset link is missing, expired or invalid.</p>
             <Link to="/forgot-password" className="btn auth-glass-submit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               Request New Link
             </Link>

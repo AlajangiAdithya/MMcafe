@@ -7,7 +7,7 @@ import Magnetic from '../components/Magnetic'
 import JsonLd from '../components/JsonLd'
 import DragScroller from '../components/DragScroller'
 import KineticHeading from '../components/KineticHeading'
-import InstagramTabs from '@/components/ui/instagram-tabs'
+import InstagramShowcase from '../components/InstagramShowcase'
 import '../styles/about-editorial.css'
 
 
@@ -20,16 +20,6 @@ const ABOUT_JOURNEY = [
   { year: 'ETHIOPIA', title: 'Q Processing', body: 'Learning how coffee is shaped at origin, from cherry to green bean, where flavour really begins.' },
   { year: '2026', title: '4th Runner-Up', body: 'Stepping onto the competition stage at the Indian Barista Championship.' },
   { year: 'TODAY', title: 'Mastermind Brews', body: 'A platform and a physical academy in Mulund, sharing coffees, knowledge, and hands-on workshops.' },
-]
-
-/* Editorial photo grid — 6 moments from the cafe, academy & journey. */
-const ABOUT_GRID = [
-  { src: '/namrata-thakkar.jpg',         alt: 'Namrata Thakkar, founder of Mastermind Brews' },
-  { src: '/pour-over-coffee.jpg',        alt: 'Pour-over brewing at Mastermind Brews' },
-  { src: '/about-team.jpg',              alt: 'The Mastermind Brews team' },
-  { src: '/academy-feature.jpg',         alt: 'Barista academy session' },
-  { src: '/project-cafe.jpg',            alt: 'Mastermind Bicycle Cafe & Bar, Mulund' },
-  { src: '/cafe-food.png',               alt: 'Food at Mastermind Bicycle Cafe' },
 ]
 
 /* Three founding principles, paradisoinstitute.org-style pillar structure. */
@@ -252,37 +242,30 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ===== IN FRAME (editorial photo grid) ===== */}
-      <section className="ed-gallery">
-        <div className="ed-container ed-gallery-head">
-          <div>
-            <div className="ed-section-label">In Frame</div>
-            <KineticHeading as="h2" className="ed-section-title">Moments from the journey.</KineticHeading>
+      {/* ===== THE BELIEF (founder pull-quote) ===== */}
+      <section className="ed-quote">
+        <div className="ed-container">
+          <span className="ed-quote-mark" aria-hidden="true">&ldquo;</span>
+          <KineticHeading as="h2" className="ed-quote-text">
+            Coffee is no longer just a drink. It is craft, science, sport, and a way of bringing people together.
+          </KineticHeading>
+          <div className="ed-quote-attr">
+            <span className="ed-quote-name">Namrata Thakkar</span>
+            <span className="ed-quote-role">Founder, Mastermind Brews</span>
           </div>
-          <Link to="/workshop" className="ed-btn ed-btn-ghost">Learn with us <ArrowRight size={14} /></Link>
-        </div>
-        <div className="ed-photo-grid">
-          {ABOUT_GRID.map((p, i) => (
-            <motion.div
-              key={i}
-              className="ed-photo-grid-item"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <img src={p.src} alt={p.alt} loading="lazy" />
-            </motion.div>
-          ))}
+          <div className="ed-actions ed-quote-actions">
+            <Magnetic><Link to="/workshop" className="ed-btn ed-btn-primary">Join a workshop <ArrowRight size={14} /></Link></Magnetic>
+            <Magnetic><Link to="/contact" className="ed-btn ed-btn-ghost">Visit the academy</Link></Magnetic>
+          </div>
         </div>
       </section>
 
-      {/* ===== INSTAGRAM TABS ===== */}
+      {/* ===== FOLLOW THE JOURNEY (hover list + cursor preview) ===== */}
       <section className="ed-ig">
         <div className="ed-container">
           <div className="ed-section-label">Follow the Journey</div>
           <h2 className="ed-section-title">Three places, <em>one craft.</em></h2>
-          <InstagramTabs />
+          <InstagramShowcase />
         </div>
       </section>
     </div>

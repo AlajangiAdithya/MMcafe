@@ -121,6 +121,13 @@ serve(async (req) => {
       amount = subtotal + shipping - discount
       description = `${items.length} item(s)`
       notes.kind = 'cart'
+      // Compact item snapshot ("id x qty" pairs). payment-verify re-reads THIS
+      // (never the client body) so the goods delivered always match the goods
+      // that were priced into this order.
+      notes.items = items.map((i) => `${Number(i.id)}x${Number(i.qty)}`).join(',')
+      if (notes.items.length > 500) {
+        return json({ error: 'Cart has too many distinct items' }, 400)
+      }
     } else if (kind === 'course') {
       if (!courseId) return json({ error: 'Missing courseId' }, 400)
       const { data: course, error } = await admin

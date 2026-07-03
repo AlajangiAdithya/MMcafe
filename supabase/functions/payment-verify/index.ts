@@ -35,6 +35,14 @@ async function hmacSha256Hex(secret: string, message: string): Promise<string> {
   return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, '0')).join('')
 }
 
+// Constant-time string compare (avoids signature timing leaks)
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405)
@@ -61,12 +69,7 @@ serve(async (req) => {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      kind,
-      items,
-      courseId,
-      bookId,
       shippingAddress,
-      couponCode,
     } = body as any
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -77,7 +80,7 @@ serve(async (req) => {
       RZP_KEY_SECRET,
       `${razorpay_order_id}|${razorpay_payment_id}`,
     )
-    if (expected !== razorpay_signature) {
+    if (!safeEqual(expected, String(razorpay_signature))) {
       return json({ error: 'Signature mismatch' }, 400)
     }
 
@@ -93,15 +96,36 @@ serve(async (req) => {
 
     const amount = ordData.amount / 100 // INR
 
+    // ===== TRUST BOUNDARY =====
+    // Everything that determines WHAT was bought comes from the order's
+    // server-set notes (written by payment-order), never from the client
+    // body. A valid signature for a cheap order must not be redeemable
+    // against a different (more expensive) product, cart, or user.
+    const notes = (ordData.notes || {}) as Record<string, string>
+    if (!notes.user_id || notes.user_id !== user.id) {
+      return json({ error: 'Order does not belong to this user' }, 403)
+    }
+    const kind = notes.kind
+
     if (kind === 'cart') {
+      // Reconstruct the cart from the notes snapshot set at order time.
+      const items = (notes.items || '')
+        .split(',')
+        .map((pair) => {
+          const [id, qty] = pair.split('x').map(Number)
+          return { id, qty }
+        })
+        .filter((i) => Number.isFinite(i.id) && i.id > 0 && Number.isFinite(i.qty) && i.qty > 0)
+      if (items.length === 0) return json({ error: 'Order has no items' }, 400)
+
       // Re-load product names/images for snapshot
-      const ids = (items || []).map((i: any) => Number(i.id))
+      const ids = items.map((i) => Number(i.id))
       const { data: products } = await admin
         .from('products')
         .select('id, name, price, image')
         .in('id', ids)
       const pmap = new Map((products || []).map((p) => [Number(p.id), p]))
-      const itemsSnapshot = (items || []).map((i: any) => {
+      const itemsSnapshot = items.map((i) => {
         const p = pmap.get(Number(i.id))
         return {
           id: i.id,
@@ -112,11 +136,12 @@ serve(async (req) => {
         }
       })
 
-      // Resolve coupon id (server-validated) so RPC can bump uses atomically
+      // Resolve coupon id from the order notes (server-validated at order
+      // time) so the RPC can bump uses atomically.
       let couponId: number | null = null
-      if (couponCode) {
+      if (notes.coupon_code) {
         const { data: vc } = await admin.rpc('validate_coupon', {
-          p_code: couponCode,
+          p_code: notes.coupon_code,
           p_subtotal: itemsSnapshot.reduce((s, i) => s + i.price * i.qty, 0),
         })
         const row = (vc as any[])?.[0]
@@ -139,7 +164,8 @@ serve(async (req) => {
     }
 
     if (kind === 'course') {
-      if (!courseId) return json({ error: 'Missing courseId' }, 400)
+      const courseId = Number(notes.course_id)
+      if (!courseId) return json({ error: 'Order has no course' }, 400)
       const { error: enrErr } = await admin.from('enrollments').upsert(
         { user_id: user.id, course_id: courseId, payment_id: razorpay_payment_id },
         { onConflict: 'user_id,course_id', ignoreDuplicates: true },
@@ -149,7 +175,8 @@ serve(async (req) => {
     }
 
     if (kind === 'book') {
-      if (!bookId) return json({ error: 'Missing bookId' }, 400)
+      const bookId = Number(notes.book_id)
+      if (!bookId) return json({ error: 'Order has no book' }, 400)
       // Permanent entitlement. Idempotent on (user_id, book_id) so a webhook
       // retry or double-submit can't create duplicate purchases.
       const { error: bpErr } = await admin.from('book_purchases').upsert(

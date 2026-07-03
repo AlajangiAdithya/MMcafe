@@ -349,140 +349,10 @@
 .ed-badge-num { font-family: var(--ed-serif); font-size: 1.05rem; color: var(--ed-ink); font-weight: 600; }
 .ed-badge-label { font-family: var(--ed-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ed-dim); }
 
-/* ---------- INSTAGRAM TABS (About, bottom) ---------- */
+/* ---------- FOLLOW THE JOURNEY (About, bottom) ---------- */
 .ed-ig { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
-.ed-ig-grid {
-  margin-top: clamp(32px, 5vw, 56px);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2.4vw, 28px);
-}
-.ed-ig-card {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
-  padding: clamp(22px, 2.6vw, 34px);
-  border: 1px solid var(--ed-line);
-  border-radius: 20px;
-  background: var(--ed-bg);
-  transition: transform 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease), box-shadow 0.4s var(--ed-ease);
-}
-.ed-ig-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(214, 124, 142, 0.5);
-  box-shadow: 0 18px 42px -22px rgba(46, 111, 176, 0.4);
-}
-.ed-ig-icon {
-  width: 46px; height: 46px; border-radius: 14px;
-  display: grid; place-items: center;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--ed-blue), var(--ed-pink));
-}
-.ed-ig-role {
-  font-family: var(--ed-mono);
-  font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--ed-blue-ink);
-}
-.ed-ig-name {
-  font-family: var(--ed-serif); font-weight: 400;
-  font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.1;
-  color: var(--ed-ink); margin: 0;
-}
-.ed-ig-handle {
-  margin-top: auto;
-  font-family: var(--ed-mono); font-size: 0.82rem;
-  color: var(--ed-dim);
-  display: inline-flex; align-items: center; gap: 7px;
-  transition: color 0.3s var(--ed-ease);
-}
-.ed-ig-card:hover .ed-ig-handle { color: var(--ed-pink-ink); }
-@media (max-width: 820px) { .ed-ig-grid { grid-template-columns: 1fr; } }
-
-/* ---------- FOLLOW THE JOURNEY · image cards (About, bottom) ---------- */
-.ig-journey-grid {
-  margin-top: clamp(32px, 5vw, 56px);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(18px, 2.6vw, 30px);
-}
-.ig-journey-card {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--ed-line);
-  border-radius: 20px;
-  overflow: hidden;
-  background: var(--ed-bg);
-  transition: transform 0.45s var(--ed-ease), border-color 0.45s var(--ed-ease), box-shadow 0.45s var(--ed-ease);
-}
-.ig-journey-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(214, 124, 142, 0.5);
-  box-shadow: 0 26px 54px -28px rgba(46, 111, 176, 0.42);
-}
-.ig-journey-media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-.ig-journey-media img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 0.6s var(--ed-ease);
-}
-.ig-journey-card:hover .ig-journey-media img { transform: scale(1.06); }
-.ig-journey-media::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 45%, rgba(10, 8, 6, 0.5) 100%);
-}
-.ig-journey-role {
-  position: absolute; left: 14px; bottom: 12px; z-index: 1;
-  font-family: var(--ed-mono);
-  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--ed-blue), var(--ed-pink));
-  padding: 6px 12px; border-radius: 999px;
-}
-.ig-journey-body {
-  display: flex; flex-direction: column; gap: 10px;
-  padding: clamp(20px, 2.2vw, 28px);
-}
-.ig-journey-body .ed-ig-name { margin: 0; }
-.ig-journey-handle {
-  margin-top: 6px;
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--ed-mono); font-size: 0.84rem;
-  color: var(--ed-blue-ink);
-  transition: color 0.3s var(--ed-ease);
-}
-.ig-journey-card:hover .ig-journey-handle { color: var(--ed-pink-ink); }
-@media (max-width: 820px) {
-  .ig-journey-grid { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; }
-}
-
-/* ---------- INSTAGRAM · shadcn Tabs (About, bottom) ---------- */
 .ed-ig .ed-section-label,
 .ed-ig .ed-section-title { text-align: center; }
-.ig-tabs { margin-top: clamp(30px, 4vw, 48px); }
-.ig-tabs [role="tab"] { font-family: var(--ed-mono); cursor: pointer; }
-.ig-tab-blurb {
-  max-width: 34ch;
-  margin: 0;
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--ed-dim);
-}
-@keyframes ig-panel-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* CSS keyframe only for the reduced-motion / non-pinned fallback.
-   In the pinned scroll version, Framer Motion drives the panel (see .ig-stage). */
-.ig-tabs:not(.ig-scroll) .ig-tab-panel[data-state="active"] {
-  animation: ig-panel-in 0.5s var(--ed-ease) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .ig-tabs:not(.ig-scroll) .ig-tab-panel[data-state="active"] { animation: none; }
-}
 
 /* ---------- OUR PROJECTS (Consultancy, cafe grid) ---------- */
 .ed-projects { padding: clamp(56px, 9vw, 120px) 0; border-top: 1px solid var(--ed-line); }
@@ -638,18 +508,6 @@
   .ed-value { grid-template-columns: 1fr; gap: 12px; }
   .ed-value p { padding-left: calc(0.72rem * 3.6); }
 }
-
-/* ---------- CLOSING CTA ---------- */
-.ed-cta { padding: clamp(64px, 10vw, 150px) 0; border-top: 1px solid var(--ed-line); text-align: center; }
-.ed-cta h2 {
-  font-family: var(--ed-serif); font-weight: 400;
-  font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1; letter-spacing: -0.02em;
-  color: var(--ed-ink) !important; -webkit-text-fill-color: var(--ed-ink) !important;
-  margin: 0 0 20px;
-}
-.ed-cta h2 em { font-style: italic; color: var(--ed-pink-ink) !important; -webkit-text-fill-color: var(--ed-pink-ink) !important; }
-.ed-cta p { color: var(--ed-dim); font-size: 1.1rem; max-width: 620px; margin: 0 auto 36px; line-height: 1.6; }
-.ed-cta .ed-actions { justify-content: center; }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px) {
@@ -892,239 +750,6 @@
   border-top: 1px solid var(--ed-line);
 }
 
-.ig-tabs { margin-top: clamp(30px, 4vw, 50px); }
-
-/* ---- segmented tab list ---- */
-.ig-tablist {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 6px;
-  border-radius: 18px;
-  border: 1px solid rgba(91, 155, 219, 0.35);
-  background:
-    linear-gradient(180deg, rgba(246, 239, 225, 0.7), rgba(245, 238, 224, 0.4));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-.ig-tab {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 13px 10px;
-  border: 1px solid transparent;
-  border-radius: 13px;
-  background: transparent;
-  cursor: pointer;
-  text-align: center;
-  overflow: hidden;
-  transition: background 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease),
-    box-shadow 0.4s var(--ed-ease), transform 0.2s var(--ed-ease);
-}
-.ig-tab:hover { background: rgba(91, 155, 219, 0.08); }
-.ig-tab:active { transform: scale(0.985); }
-.ig-tab:focus-visible {
-  outline: 2px solid var(--bc-blue);
-  outline-offset: 2px;
-}
-.ig-tab-role {
-  font-family: var(--ed-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--bc-blue-ink);
-}
-.ig-tab-name {
-  font-family: var(--ed-serif);
-  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
-  line-height: 1.1;
-  color: var(--bc-mocha);
-}
-.ig-tab[data-state="active"] {
-  background: linear-gradient(180deg, #ffffff, #f4f8fd);
-  border-color: rgba(91, 155, 219, 0.55);
-  box-shadow:
-    0 12px 26px -14px rgba(46, 111, 176, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-/* indicator bar under the active tab */
-.ig-tab[data-state="active"]::after {
-  content: "";
-  position: absolute; left: 22%; right: 22%; bottom: 6px; height: 2px;
-  border-radius: 2px;
-  background: var(--bc-blue);
-}
-.about-page .ig-tab[data-state="active"] .ig-tab-name { color: var(--bc-ink); }
-.about-page .ig-tab[data-state="active"] .ig-tab-role { color: var(--bc-pink-ink); }
-
-/* ---- active panel: editorial split (image + content) ---- */
-.ig-tab-panel {
-  margin-top: clamp(22px, 3vw, 36px);
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(20px, 3vw, 44px);
-  align-items: stretch;
-  padding: clamp(14px, 1.6vw, 18px);
-  border-radius: 26px;
-  border: 1px solid rgba(91, 155, 219, 0.32);
-  background:
-    linear-gradient(135deg, rgba(91, 155, 219, 0.08), rgba(252, 251, 247, 0.94) 45%, rgba(214, 124, 142, 0.08));
-  box-shadow: 0 34px 80px -44px rgba(46, 111, 176, 0.6);
-}
-.ig-tab-panel[hidden] { display: none; }
-
-.ig-panel-media {
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  aspect-ratio: 5 / 4;
-  background: var(--bc-dark);
-}
-.ig-panel-media img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transform: scale(1.02);
-  transition: transform 0.8s var(--ed-ease);
-}
-.ig-tab-panel[data-state="active"] .ig-panel-media img { transform: scale(1); }
-.ig-panel-media::after {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(65% 45% at 50% 0%, rgba(91, 155, 219, 0.2), transparent 55%),
-    radial-gradient(55% 45% at 95% 100%, rgba(214, 124, 142, 0.22), transparent 60%),
-    linear-gradient(180deg, transparent 42%, rgba(14, 11, 9, 0.6) 100%);
-}
-.ig-panel-tag {
-  position: absolute; left: 16px; bottom: 16px; z-index: 1;
-  font-family: var(--ed-mono);
-  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: #fff;
-  background: var(--bc-grad);
-  border: 1px solid rgba(246, 239, 225, 0.35);
-  box-shadow: 0 8px 22px -10px rgba(46, 111, 176, 0.85);
-  padding: 7px 14px; border-radius: 999px;
-}
-
-.ig-panel-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 14px;
-  padding: clamp(10px, 2vw, 26px) clamp(8px, 1.6vw, 20px);
-}
-.ig-panel-kicker {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--ed-mono);
-  font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--bc-blue-ink);
-}
-.about-page .ig-panel-name {
-  font-family: var(--ed-serif);
-  font-weight: 400;
-  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--bc-ink) !important;
-  -webkit-text-fill-color: var(--bc-ink) !important;
-  margin: 0;
-}
-.ig-panel-blurb {
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: var(--bc-mocha);
-  max-width: 44ch;
-  margin: 0;
-}
-.ig-panel-note {
-  font-family: var(--ed-mono);
-  font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--bc-pink-ink);
-  padding-top: 4px;
-  border-top: 1px solid rgba(91, 155, 219, 0.3);
-}
-.ig-panel-btn {
-  display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 6px;
-  padding: 14px 24px;
-  border-radius: 999px;
-  font-family: var(--ed-mono);
-  font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #fff;
-  background: var(--bc-grad);
-  box-shadow: 0 16px 38px -16px rgba(46, 111, 176, 0.7);
-  transition: filter 0.3s var(--ed-ease), box-shadow 0.3s var(--ed-ease), transform 0.3s var(--ed-ease);
-}
-.ig-panel-btn svg { transition: transform 0.3s var(--ed-ease); }
-.ig-panel-btn:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 22px 48px -16px rgba(192, 86, 110, 0.8);
-}
-.ig-panel-btn:hover svg { transform: translateX(4px); }
-
-/* responsive: stack tabs + panel */
-@media (max-width: 820px) {
-  .ig-tab-panel { grid-template-columns: 1fr; }
-  .ig-tab-name { font-size: 0.92rem; }
-}
-@media (max-width: 540px) {
-  .ig-tablist { grid-template-columns: 1fr; gap: 5px; }
-  .ig-tab { flex-direction: row; justify-content: center; gap: 8px; padding: 11px; }
-}
-
-/* ---- scroll-driven pin: scroll advances through all 3 accounts ---- */
-.ig-scroll {
-  /* tall track gives the pinned panel room to scrub through the 3 tabs */
-  position: relative;
-  height: 300vh;
-  margin-top: clamp(30px, 4vw, 50px);
-}
-.ig-sticky {
-  position: sticky;
-  top: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: clamp(18px, 2.4vw, 30px);
-  padding: clamp(56px, 8vh, 96px) 0;
-}
-.ig-stage { position: relative; width: 100%; }
-/* keep height stable while panels swap so the pin doesn't jitter */
-.ig-scroll .ig-tab-panel { margin-top: 0; }
-
-/* progress rail: 3 dots tracking which account the scroll is on */
-.ig-progress {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-.ig-progress-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: rgba(91, 155, 219, 0.3);
-  transition: background 0.4s var(--ed-ease), transform 0.4s var(--ed-ease),
-    box-shadow 0.4s var(--ed-ease), width 0.4s var(--ed-ease);
-}
-.ig-progress-dot[data-state="done"] { background: var(--bc-pink-ink); }
-.ig-progress-dot[data-state="active"] {
-  width: 30px;
-  background: var(--bc-grad);
-  box-shadow: 0 0 12px rgba(91, 155, 219, 0.7);
-}
-
-@media (max-width: 540px) {
-  /* shorter track + auto height so phones aren't stuck scroll-jacking */
-  .ig-scroll { height: 280vh; }
-  .ig-sticky { min-height: 100vh; padding: clamp(40px, 6vh, 72px) 0; }
-}
-
 /* ---------- INTERACTIVE POLISH ---------- */
 
 /* Value row hover tint */
@@ -1163,30 +788,7 @@
   transform: translateY(0) scale(0.97);
 }
 
-/* Instagram tab hover states */
-.ig-tab {
-  transition: background 0.3s var(--ed-ease), color 0.3s var(--ed-ease), transform 0.25s var(--ed-ease);
-}
-.ig-tab:hover {
-  transform: translateY(-1px);
-}
-
-/* Instagram panel image hover zoom */
-.ig-panel-media img {
-  transition: transform 0.6s var(--ed-ease);
-}
-.ig-panel-media:hover img {
-  transform: scale(1.04);
-}
-
-/* Instagram follow button arrow slide */
-.ig-panel-btn svg {
-  transition: transform 0.25s var(--ed-ease);
-  display: inline-block;
-}
-.ig-panel-btn:hover svg {
-  transform: translateX(4px);
-}
+/* (Old Instagram tab hover rules removed with the tabs component.) */
 
 /* ============================================================
    INTERACTIVITY PASS, kinetic headings, stat counters, draggable
@@ -1248,18 +850,7 @@
 /* light-theme drag hint colour */
 .about-editorial .drag-scroller-hint { color: var(--ed-dim); }
 
-/* ---------- MOMENTS / GALLERY ---------- */
-.ed-gallery {
-  padding: clamp(56px, 9vw, 120px) 0;
-  background: var(--ed-bg-2);
-  border-top: 1px solid var(--ed-line);
-  overflow: visible; /* grid items scale on hover — don't clip */
-}
-.ed-gallery-head {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 52px);
-}
-.ed-gallery-cols { padding: 0 clamp(20px, 5vw, 64px); }
+/* (Photo-grid gallery sections replaced by the quote band / contact panel.) */
 
 /* ---------- DRAGGABLE TRACK, kill the base -32px bleed so no page overflow ---------- */
 .ed-journey-track {
@@ -1343,49 +934,201 @@
 }
 
 /* ============================================================
-   EDITORIAL PHOTO GRID — replaces scrolling photo walls
-   6-item mosaic: items 1 & 3 are tall (span 2 rows), item 5
-   is wide (span 2 cols). Inspired by editorial print layouts.
+   PULL QUOTE (About) — founder statement, replaces the photo grid
    ============================================================ */
-.ed-photo-grid {
-  padding: 0 clamp(20px, 5vw, 64px);
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr 1fr;
-  gap: clamp(10px, 1.2vw, 14px);
+.ed-quote {
+  padding: clamp(64px, 10vw, 140px) 0;
+  background: var(--ed-bg-2);
+  border-top: 1px solid var(--ed-line);
+  text-align: center;
 }
-.ed-photo-grid-item {
-  overflow: hidden;
-  border-radius: 14px;
-  background: var(--ed-line);
+.ed-quote-mark {
   display: block;
+  font-family: var(--ed-serif);
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 0.4;
+  color: var(--ed-blue);
+  margin-bottom: 20px;
 }
-.ed-photo-grid-item img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 0.65s var(--ed-ease);
+.ed-quote .ed-quote-text {
+  font-family: var(--ed-serif);
+  font-weight: 360;
+  font-style: italic;
+  font-size: clamp(1.7rem, 3.6vw, 3.1rem);
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+  color: var(--ed-ink) !important;
+  -webkit-text-fill-color: var(--ed-ink) !important;
+  max-width: 26ch;
+  margin: 0 auto;
 }
-.ed-photo-grid-item:hover img { transform: scale(1.05); }
-.ed-photo-grid-item:nth-child(1) { grid-column: 1; grid-row: 1 / 3; min-height: 480px; }
-.ed-photo-grid-item:nth-child(2) { grid-column: 2; grid-row: 1; aspect-ratio: 4/3; }
-.ed-photo-grid-item:nth-child(3) { grid-column: 3; grid-row: 1 / 3; min-height: 480px; }
-.ed-photo-grid-item:nth-child(4) { grid-column: 2; grid-row: 2; aspect-ratio: 4/3; }
-.ed-photo-grid-item:nth-child(5) { grid-column: 1 / 3; grid-row: 3; aspect-ratio: 16/7; }
-.ed-photo-grid-item:nth-child(6) { grid-column: 3; grid-row: 3; aspect-ratio: 4/3; }
+.ed-quote-attr {
+  margin-top: clamp(26px, 3.6vw, 44px);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.ed-quote-attr::before {
+  content: '';
+  width: 44px; height: 1px;
+  background: rgba(30, 23, 18, 0.25);
+  margin-bottom: 14px;
+}
+.ed-quote-name { font-family: var(--ed-serif); font-size: 1.15rem; color: var(--ed-ink); }
+.ed-quote-role {
+  font-family: var(--ed-mono); font-size: 0.64rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ed-dim);
+}
+.ed-quote-actions { justify-content: center; margin-top: clamp(26px, 3.6vw, 40px); }
 
-@media (max-width: 768px) {
-  .ed-photo-grid { grid-template-columns: 1fr 1fr; }
-  .ed-photo-grid-item {
-    grid-column: auto !important; grid-row: auto !important;
-    min-height: 0 !important; aspect-ratio: 4/3;
-  }
-  .ed-photo-grid-item:nth-child(1),
-  .ed-photo-grid-item:nth-child(3) { aspect-ratio: 3/4; }
-  .ed-photo-grid-item:nth-child(5) { grid-column: span 2 !important; aspect-ratio: 16/9; }
+/* ============================================================
+   START A PROJECT (Consultancy) — contact panel, replaces the
+   photo grid + closing CTA
+   ============================================================ */
+.cons-contact {
+  padding: clamp(64px, 10vw, 140px) 0;
+  background: var(--ed-bg-2);
+  border-top: 1px solid var(--ed-line);
 }
-@media (max-width: 480px) {
-  .ed-photo-grid { grid-template-columns: 1fr; }
-  .ed-photo-grid-item { aspect-ratio: 4/3 !important; }
-  .ed-photo-grid-item:nth-child(5) { grid-column: auto !important; }
+.cons-contact-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(36px, 6vw, 96px);
+  align-items: center;
+}
+.consultancy-page .cons-contact .ed-section-label,
+.consultancy-page .cons-contact .cons-contact-title { text-align: left; }
+.cons-contact-lede {
+  margin: clamp(18px, 2.6vw, 28px) 0 0;
+  color: var(--ed-dim);
+  font-size: 1.05rem; line-height: 1.7;
+  max-width: 44ch;
+}
+.cons-contact-cta { margin-top: clamp(24px, 3.4vw, 38px); }
+.cons-contact-note {
+  display: block; margin-top: 18px;
+  font-family: var(--ed-mono); font-size: 0.66rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ed-dim);
+}
+.cons-channels { display: flex; flex-direction: column; border-top: 1px solid var(--ed-line); }
+.cons-channel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(14px, 2vw, 24px);
+  padding: clamp(18px, 2.4vw, 26px) 6px;
+  border-bottom: 1px solid var(--ed-line);
+  transition: background 0.35s var(--ed-ease), padding-left 0.35s var(--ed-ease);
+}
+.cons-channel:hover { background: rgba(91, 155, 219, 0.05); padding-left: 16px; }
+.cons-channel-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center;
+  color: var(--ed-blue-ink);
+  background: rgba(91, 155, 219, 0.1);
+  border: 1px solid rgba(91, 155, 219, 0.25);
+  transition: background 0.35s var(--ed-ease), color 0.35s var(--ed-ease), border-color 0.35s var(--ed-ease);
+}
+.cons-channel:hover .cons-channel-icon { background: var(--ed-blue); border-color: var(--ed-blue); color: #fff; }
+.cons-channel-label {
+  display: block;
+  font-family: var(--ed-mono); font-size: 0.62rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ed-dim);
+}
+.cons-channel-value {
+  display: block; margin-top: 3px;
+  font-family: var(--ed-serif);
+  font-size: clamp(1.02rem, 1.6vw, 1.3rem);
+  color: var(--ed-ink);
+}
+.cons-channel-arrow { color: var(--ed-blue-ink); transition: transform 0.3s var(--ed-ease); }
+.cons-channel:hover .cons-channel-arrow { transform: translate(3px, -3px); }
+@media (max-width: 860px) {
+  .cons-contact-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+/* ============================================================
+   INSTAGRAM SHOWCASE (About) — hover list + cursor-following
+   photo preview (InstagramShowcase.jsx)
+   ============================================================ */
+.igx {
+  position: relative;
+  margin-top: clamp(30px, 4vw, 52px);
+  border-top: 1px solid var(--ed-line);
+  text-align: left;
+}
+.igx-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: clamp(16px, 2.6vw, 36px);
+  padding: clamp(24px, 3.4vw, 40px) 6px;
+  border-bottom: 1px solid var(--ed-line);
+  transition: opacity 0.35s var(--ed-ease), padding-left 0.4s var(--ed-ease), background 0.35s var(--ed-ease);
+}
+.igx-row.is-dim { opacity: 0.3; }
+.igx-row.is-active { padding-left: clamp(10px, 1.6vw, 22px); background: rgba(91, 155, 219, 0.04); }
+.igx-index { font-family: var(--ed-mono); font-size: 0.7rem; letter-spacing: 0.16em; color: var(--ed-blue-ink); }
+.igx-role {
+  display: block;
+  font-family: var(--ed-mono); font-size: 0.62rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ed-pink-ink);
+}
+.igx-name {
+  display: block; margin-top: 6px;
+  font-family: var(--ed-serif); font-weight: 400;
+  font-size: clamp(1.5rem, 3.6vw, 2.8rem);
+  line-height: 1.02; letter-spacing: -0.02em;
+  color: var(--ed-ink);
+  transition: color 0.3s var(--ed-ease);
+}
+.igx-row.is-active .igx-name { color: var(--ed-blue-ink); }
+.igx-handle { font-family: var(--ed-mono); font-size: 0.8rem; color: var(--ed-dim); }
+.igx-arrow { display: inline-flex; color: var(--ed-blue-ink); transition: transform 0.35s var(--ed-ease); }
+.igx-row.is-active .igx-arrow { transform: translate(4px, -4px); }
+.igx-thumb { display: none; }
+.igx-preview {
+  position: absolute; left: 0; top: 0; z-index: 5;
+  width: clamp(220px, 24vw, 300px);
+  aspect-ratio: 4 / 5;
+  margin-left: calc(clamp(220px, 24vw, 300px) / -2);
+  margin-top: calc(clamp(220px, 24vw, 300px) * 1.25 / -2);
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 34px 80px -30px rgba(30, 23, 18, 0.55);
+  border: 1px solid rgba(252, 251, 247, 0.5);
+  background: var(--ed-bg-2);
+}
+.igx-preview img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.35s var(--ed-ease);
+}
+.igx-preview-tag {
+  position: absolute; left: 12px; bottom: 12px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ed-mono); font-size: 0.6rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: #fff; background: rgba(20, 15, 10, 0.5);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  padding: 6px 11px; border-radius: 999px;
+}
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .igx-preview { display: none; }
+}
+@media (hover: none), (pointer: coarse) {
+  .igx-row { grid-template-columns: 1fr auto auto; }
+  .igx-index { display: none; }
+  .igx-thumb { display: block; width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
+}
+@media (max-width: 560px) {
+  .igx-handle { display: none; }
 }
 
 /* ============================================================

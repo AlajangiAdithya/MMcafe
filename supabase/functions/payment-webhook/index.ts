@@ -109,29 +109,41 @@ serve(async (req) => {
     }
 
     if (kind === 'cart') {
-      // Webhook arrives without the original cart items. Reconstruct from cart_items.
-      // If payment-verify already ran and cleared the cart, the idempotency check
-      // inside the RPC (orders_payment_id_unique) will short-circuit anyway.
-      const { data: cartRows } = await admin
-        .from('cart_items')
-        .select('product_id, qty')
-        .eq('user_id', userId)
+      // Preferred source of truth: the compact items snapshot payment-order
+      // wrote into the Razorpay order notes ("id x qty" pairs). Falls back to
+      // the user's cart_items rows for orders created before that change.
+      // If payment-verify already ran, the idempotency check inside the RPC
+      // (orders_payment_id_unique) short-circuits anyway.
+      let pairs = (notes.items || '')
+        .split(',')
+        .map((s: string) => {
+          const [id, qty] = s.split('x').map(Number)
+          return { id, qty }
+        })
+        .filter((i: any) => Number.isFinite(i.id) && i.id > 0 && Number.isFinite(i.qty) && i.qty > 0)
 
-      if (!cartRows || cartRows.length === 0) {
-        // Cart already cleared — verify path most likely succeeded. Nothing to do.
-        return new Response(JSON.stringify({ ok: true, ignored: 'cart empty (likely already processed)' }))
+      if (pairs.length === 0) {
+        const { data: cartRows } = await admin
+          .from('cart_items')
+          .select('product_id, qty')
+          .eq('user_id', userId)
+        if (!cartRows || cartRows.length === 0) {
+          // Cart already cleared — verify path most likely succeeded. Nothing to do.
+          return new Response(JSON.stringify({ ok: true, ignored: 'cart empty (likely already processed)' }))
+        }
+        pairs = cartRows.map((r: any) => ({ id: Number(r.product_id), qty: Number(r.qty) }))
       }
 
-      const ids = cartRows.map((r: any) => Number(r.product_id))
+      const ids = pairs.map((r: any) => Number(r.id))
       const { data: products } = await admin
         .from('products')
         .select('id, name, price, image')
         .in('id', ids)
       const pmap = new Map((products || []).map((p: any) => [Number(p.id), p]))
-      const itemsSnapshot = cartRows.map((r: any) => {
-        const p = pmap.get(Number(r.product_id))
+      const itemsSnapshot = pairs.map((r: any) => {
+        const p = pmap.get(Number(r.id))
         return {
-          id: r.product_id,
+          id: r.id,
           name: p?.name || '',
           price: Number(p?.price || 0),
           qty: Number(r.qty),
