@@ -15616,13 +15616,42 @@ html {
   justify-content: center;
   width: clamp(320px, 50vw, 640px);
   height: auto;
+  isolation: isolate;
+}
+
+/* Soft warm glow behind the mark so it lifts off the dark video bg. */
+.hero-logo-spotlight::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(221, 158, 85, 0.42) 0%,
+    rgba(217, 168, 88, 0.22) 30%,
+    rgba(201, 151, 74, 0.08) 52%,
+    rgba(201, 151, 74, 0) 72%);
+  filter: blur(26px);
+  z-index: -1;
+  pointer-events: none;
+  animation: heroLogoGlow 6s ease-in-out infinite;
+}
+
+@keyframes heroLogoGlow {
+  0%, 100% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
 }
 
 .hero-logo-spotlight-img {
   position: relative;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.45));
+  filter:
+    drop-shadow(0 0 34px rgba(245, 213, 151, 0.45))
+    drop-shadow(0 10px 40px rgba(0, 0, 0, 0.45));
 }
 
 @media (max-width: 720px) {
@@ -15630,6 +15659,10 @@ html {
     width: clamp(250px, 82vw, 420px);
     height: auto;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-spotlight::before { animation: none; }
 }
 
 /* ============================================================

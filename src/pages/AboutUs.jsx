@@ -179,7 +179,6 @@ export default function AboutUs() {
           <div className="ed-story-text">
             <p>That took me into professional training, SCA certifications in <strong>Barista Skills &amp; Brewing</strong>, a <strong>CVA in Thailand</strong> to understand sensory evaluation and flavour, and <strong>Q Processing in Ethiopia</strong> to learn how coffee is shaped at origin. Along the way I stepped onto the competition stage, placing as <strong>4th Runner-Up at the 2026 Indian Barista Championship</strong>.</p>
             <p>Mastermind Brews was born from that journey. Today it is both a platform and a physical academy in Mulund, Mumbai, where I share coffees, brewing knowledge, and hands-on workshops, in the hope of making specialty coffee more approachable and helping others learn faster than I did.</p>
-            <p>For me, coffee is no longer just a drink. It is craft, science, sport, and a way of bringing people together.</p>
           </div>
           <div className="ed-badge">
             <span className="ed-badge-icon"><Trophy size={18} /></span>
