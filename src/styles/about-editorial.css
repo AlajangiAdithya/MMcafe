@@ -981,72 +981,23 @@
 .ed-quote-actions { justify-content: center; margin-top: clamp(26px, 3.6vw, 40px); }
 
 /* ============================================================
-   START A PROJECT (Consultancy) — contact panel, replaces the
-   photo grid + closing CTA
+   CLOSING CTA (Consultancy)
    ============================================================ */
-.cons-contact {
+.ed-cta {
   padding: clamp(64px, 10vw, 140px) 0;
   background: var(--ed-bg-2);
   border-top: 1px solid var(--ed-line);
+  text-align: center;
 }
-.cons-contact-grid {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(36px, 6vw, 96px);
-  align-items: center;
-}
-.consultancy-page .cons-contact .ed-section-label,
-.consultancy-page .cons-contact .cons-contact-title { text-align: left; }
-.cons-contact-lede {
-  margin: clamp(18px, 2.6vw, 28px) 0 0;
+.consultancy-page .ed-cta .ed-section-label,
+.consultancy-page .ed-cta .ed-section-title { text-align: center; }
+.ed-cta-lede {
+  margin: clamp(18px, 2.6vw, 30px) auto 0;
   color: var(--ed-dim);
-  font-size: 1.05rem; line-height: 1.7;
-  max-width: 44ch;
+  font-size: 1.08rem; line-height: 1.7;
+  max-width: 52ch;
 }
-.cons-contact-cta { margin-top: clamp(24px, 3.4vw, 38px); }
-.cons-contact-note {
-  display: block; margin-top: 18px;
-  font-family: var(--ed-mono); font-size: 0.66rem;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ed-dim);
-}
-.cons-channels { display: flex; flex-direction: column; border-top: 1px solid var(--ed-line); }
-.cons-channel {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: clamp(14px, 2vw, 24px);
-  padding: clamp(18px, 2.4vw, 26px) 6px;
-  border-bottom: 1px solid var(--ed-line);
-  transition: background 0.35s var(--ed-ease), padding-left 0.35s var(--ed-ease);
-}
-.cons-channel:hover { background: rgba(91, 155, 219, 0.05); padding-left: 16px; }
-.cons-channel-icon {
-  width: 42px; height: 42px; border-radius: 12px;
-  display: grid; place-items: center;
-  color: var(--ed-blue-ink);
-  background: rgba(91, 155, 219, 0.1);
-  border: 1px solid rgba(91, 155, 219, 0.25);
-  transition: background 0.35s var(--ed-ease), color 0.35s var(--ed-ease), border-color 0.35s var(--ed-ease);
-}
-.cons-channel:hover .cons-channel-icon { background: var(--ed-blue); border-color: var(--ed-blue); color: #fff; }
-.cons-channel-label {
-  display: block;
-  font-family: var(--ed-mono); font-size: 0.62rem;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ed-dim);
-}
-.cons-channel-value {
-  display: block; margin-top: 3px;
-  font-family: var(--ed-serif);
-  font-size: clamp(1.02rem, 1.6vw, 1.3rem);
-  color: var(--ed-ink);
-}
-.cons-channel-arrow { color: var(--ed-blue-ink); transition: transform 0.3s var(--ed-ease); }
-.cons-channel:hover .cons-channel-arrow { transform: translate(3px, -3px); }
-@media (max-width: 860px) {
-  .cons-contact-grid { grid-template-columns: 1fr; gap: 36px; }
-}
+.ed-cta .ed-actions { justify-content: center; margin-top: clamp(24px, 3.4vw, 38px); }
 
 /* ============================================================
    INSTAGRAM SHOWCASE (About) — hover list + cursor-following

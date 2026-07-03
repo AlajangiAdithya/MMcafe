@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Check, MapPin, Mail, Phone } from 'lucide-react'
-import { InstagramIcon } from '../components/InstagramShowcase'
+import { ArrowRight, Check, MapPin } from 'lucide-react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { usePageMeta } from '../lib/usePageMeta'
 import JsonLd from '../components/JsonLd'
@@ -48,14 +47,6 @@ const PROJECTS = [
   { name: 'Geranium Haven', loc: 'Arambol, Goa', initial: 'G', img: '/projects/geranium-haven-goa.jpg', tag: 'Coffee Program', body: `Beachside coffee with intent — from piña colada cold coffee to proper espresso service.`, details: `Designed custom bar layout for beachside humidity, and established an end-to-end green bean procurement system.` },
 ]
 
-
-/* Direct channels for the "Start a Project" contact panel. */
-const CHANNELS = [
-  { label: 'Email us', value: 'hello@mastermindcafe.in', href: 'mailto:hello@mastermindcafe.in', icon: Mail, external: false },
-  { label: 'Call or WhatsApp', value: '+91 85918 50161', href: 'tel:+918591850161', icon: Phone, external: false },
-  { label: 'DM the brand', value: '@mastermindbrews', href: 'https://www.instagram.com/mastermindbrews/', icon: InstagramIcon, external: true },
-  { label: 'Visit us', value: 'Avior Corporate Park, Mulund West', href: 'https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund', icon: MapPin, external: true },
-]
 
 const PROCESS = [
   { num: '01', title: 'Discovery Call', body: 'We listen. Tell us about the space, the vision, and the constraints.' },
@@ -280,53 +271,25 @@ export default function Consultancy() {
       {/* ===== WHO IT'S FOR ===== */}
       <SuitedPanel />
 
-      {/* ===== START A PROJECT (contact panel) ===== */}
-      <section className="cons-contact">
+      {/* ===== CLOSING CTA ===== */}
+      <section className="ed-cta">
         <div className="ed-container">
-          <div className="cons-contact-grid">
-            <motion.div
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="ed-section-label">Start a Project</div>
-              <KineticHeading as="h2" className="ed-section-title cons-contact-title">Have a space <em>in mind?</em></KineticHeading>
-              <p className="cons-contact-lede">
-                Tell us about the site, the vision, and the constraints. We&rsquo;ll come back
-                with honest next steps&mdash;usually within 48 hours.
-              </p>
-              <div className="cons-contact-cta">
-                <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link></Magnetic>
-              </div>
-              <span className="cons-contact-note">Menu design · Operations · Training · Audits</span>
-            </motion.div>
-
-            <motion.div
-              className="cons-channels"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
-            >
-              {CHANNELS.map((c) => (
-                <motion.a
-                  key={c.label}
-                  className="cons-channel"
-                  href={c.href}
-                  {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } }}
-                >
-                  <span className="cons-channel-icon"><c.icon size={17} /></span>
-                  <span>
-                    <span className="cons-channel-label">{c.label}</span>
-                    <span className="cons-channel-value">{c.value}</span>
-                  </span>
-                  <span className="cons-channel-arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
-                </motion.a>
-              ))}
-            </motion.div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="ed-section-label">Let&rsquo;s Build</div>
+            <KineticHeading as="h2" className="ed-section-title">Have a space <em>in mind?</em></KineticHeading>
+            <p className="ed-cta-lede">
+              Tell us about the site, the vision, and the constraints. We&rsquo;ll come back
+              with honest next steps&mdash;usually within 48 hours.
+            </p>
+            <div className="ed-actions">
+              <Magnetic><Link to="/contact" className="ed-btn ed-btn-primary">Start a Conversation <ArrowRight size={14} /></Link></Magnetic>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>

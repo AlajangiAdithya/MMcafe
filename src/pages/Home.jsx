@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase } from 'lucide-react'
+import { ShoppingBag, BookOpen, ArrowRight, ArrowUpRight, MapPin, Package, Coffee, GraduationCap, Briefcase, Mail, Phone } from 'lucide-react'
 import { motion, useInView, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 import { getFeaturedProducts } from '../lib/database'
@@ -8,8 +8,17 @@ import { usePageMeta } from '../lib/usePageMeta'
 import ProductDetailModal from '../components/ProductDetailModal'
 import Magnetic from '../components/Magnetic'
 import VelocityMarquee from '../components/VelocityMarquee'
+import { InstagramIcon } from '../components/InstagramShowcase'
 import toast from 'react-hot-toast'
 import '../styles/home-redesign.css'
+
+/* Direct channels for the "Start a Project" contact panel. */
+const CHANNELS = [
+  { label: 'Email us', value: 'hello@mastermindcafe.in', href: 'mailto:hello@mastermindcafe.in', icon: Mail, external: false },
+  { label: 'Call or WhatsApp', value: '+91 85918 50161', href: 'tel:+918591850161', icon: Phone, external: false },
+  { label: 'DM the brand', value: '@mastermindbrews', href: 'https://www.instagram.com/mastermindbrews/', icon: InstagramIcon, external: true },
+  { label: 'Visit us', value: 'Avior Corporate Park, Mulund West', href: 'https://maps.google.com/?q=Mastermind+Bicycle+Cafe+Mulund', icon: MapPin, external: true },
+]
 
 const VERTICALS = [
   {
@@ -543,6 +552,60 @@ export default function Home() {
 
       {/* ===== OUR STANDARDS (bento craft grid) ===== */}
       <CraftSection />
+
+      {/* ===== START A PROJECT (contact panel) ===== */}
+      <section className="hr-contact">
+        <div className="hr-contact-wrap">
+          <div className="hr-contact-grid">
+            <motion.div
+              className="hr-contact-lead"
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="hr-label">Start a Project</div>
+              <h2 className="hr-section-title">Have a space <em>in mind?</em></h2>
+              <p className="hr-contact-lede">
+                Menu and beverage design, operations, barista training and quality audits &mdash;
+                the same team that runs Mastermind, available to build your coffee program.
+                Tell us the site, the vision and the constraints; we&rsquo;ll come back with honest
+                next steps, usually within 48 hours.
+              </p>
+              <div className="hr-hero-cta">
+                <Magnetic><Link to="/consultancy" className="hr-btn hr-btn-primary">See Our Work <ArrowRight size={15} /></Link></Magnetic>
+                <Magnetic><Link to="/contact" className="hr-btn hr-btn-ghost">Start a Conversation</Link></Magnetic>
+              </div>
+              <span className="hr-contact-note">Menu design · Operations · Training · Audits</span>
+            </motion.div>
+
+            <motion.div
+              className="hr-channels"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
+            >
+              {CHANNELS.map((c) => (
+                <motion.a
+                  key={c.label}
+                  className="hr-channel"
+                  href={c.href}
+                  {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } } }}
+                >
+                  <span className="hr-channel-icon"><c.icon size={17} /></span>
+                  <span>
+                    <span className="hr-channel-label">{c.label}</span>
+                    <span className="hr-channel-value">{c.value}</span>
+                  </span>
+                  <span className="hr-channel-arrow" aria-hidden="true"><ArrowUpRight size={18} /></span>
+                </motion.a>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {openProduct && (
         <ProductDetailModal
